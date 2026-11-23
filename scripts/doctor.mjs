@@ -2,7 +2,7 @@
 // `npm run doctor`: cek kesehatan tools, akun, dan env proyek. HANYA MEMBACA, tidak mengubah apa pun.
 // Kebutuhan mengikuti fase di TODO.md: yang belum waktunya ditandai ⏳, bukan ❌.
 // Nilai rahasia tidak pernah dicetak. Desain: docs/51 §4–5 & §7, ADR-014
-import { execFileSync, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +12,7 @@ import { exitCode, formatReport, gate } from './lib/report.mjs';
 import { currentTask, isRequiredNow } from './lib/tasks.mjs';
 import {
   GITHUB_ACCOUNT,
+  githubScopes,
   ROOT,
   VERCEL_CONFIG_DIR,
   findSupabase,
@@ -145,25 +146,6 @@ function checkGit(env) {
       fix: 'npm run setup',
     },
   ];
-}
-
-/** Scope token dibaca dari header respons API (tanpa menampilkan token). */
-function githubScopes(token) {
-  try {
-    const headers = execFileSync('gh', ['api', '-i', 'user', '--jq', '.login'], {
-      encoding: 'utf8',
-      env: { ...process.env, GH_TOKEN: token },
-      stdio: ['ignore', 'pipe', 'ignore'],
-      timeout: 20_000,
-    });
-    const scopes = /^x-oauth-scopes:\s*(.*)$/im.exec(headers)?.[1] ?? '';
-    return scopes
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
-  } catch {
-    return null;
-  }
 }
 
 /** @returns {CheckResult[]} */

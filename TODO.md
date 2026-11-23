@@ -41,7 +41,7 @@
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
-**Sedang dikerjakan:** —
+**Sedang dikerjakan:** P0-12
 **Task berikutnya:** P0-12
 
 ---
@@ -60,7 +60,7 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 - [x] **P0-10a** Script `npm run doctor` (cek tools, akun, env per fase, tanpa menampilkan rahasia) + pre-commit `gitleaks` · Ref: 51 · ✅ 2026-11-23 · doctor per fase (11 ok/0 gagal), gitleaks 8.30.1 di .tools (checksum diverifikasi), hook pre-commit menolak token palsu, riwayat 11 commit bersih
 - [x] **P0-10b** Script `npm run setup` (git identitas, GitHub repo (public selama dev, ADR-010), Vercel link + env) idempotent · Ref: 51 · ✅ 2026-11-23 · setup 7 ok/0 gagal & idempotent (2x run tanpa perubahan); project Vercel buahbatu-story ter-link (akun buahbatu); doctor 14 ok
 - [x] **P0-11** Playwright + test hook `window.__BB__` + smoke E2E + snapshot visual + emulasi HP landscape + `npm run verify` · Ref: 50 · ✅ 2026-11-23 · Playwright 1.64.1, hook __BB__ (tidak ada di build prod), 25 E2E di desktop+Android+iPhone landscape, 6 baseline snapshot dinilai, npm run verify hijau
-- [ ] **P0-12** GitHub Actions CI (`verify`) + deploy Preview/Production otomatis + smoke test URL + rollback · Ref: 51, 50
+- [~] **P0-12** GitHub Actions CI (`verify`) + deploy Preview/Production otomatis + smoke test URL + rollback · Ref: 51, 50 · 🟡 2026-11-23
 - [ ] **P0-13** Jalankan `npm run setup` end-to-end → push pertama → title screen online di Vercel (dibuktikan smoke E2E ke URL production) · Ref: 51
 
 **Kriteria selesai P0:** `npm run verify` hijau; push ke `main` otomatis memakai akun proyek ini, lolos CI, dan ter-deploy; smoke E2E ke URL production lolos. User hanya mengisi token di `.env.local`.

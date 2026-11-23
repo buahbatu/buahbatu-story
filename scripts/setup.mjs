@@ -3,6 +3,7 @@
 // sudah beres dilewati). Login yang butuh klik dibuka di browser (LOGIN_CHROME_PROFILE).
 // Nilai rahasia tidak pernah dicetak. Desain: docs/51 §2a, §5, ADR-010, ADR-014
 import { spawn, spawnSync } from 'node:child_process';
+import { randomBytes } from 'node:crypto';
 import { clearTimeout, setTimeout } from 'node:timers';
 import { copyFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -12,8 +13,10 @@ import { installHooks } from './hooks.mjs';
 import { openUrl, pickDeviceCode, pickLoginUrl } from './lib/browser.mjs';
 import { readEnvFile, upsertEnv } from './lib/env.mjs';
 import { exitCode, formatReport } from './lib/report.mjs';
+import { currentTask, isRequiredNow } from './lib/tasks.mjs';
 import {
   GITHUB_ACCOUNT,
+  githubScopes,
   ROOT,
   VERCEL_CONFIG_DIR,
   findVercel,
@@ -192,6 +195,44 @@ async function ensureGithubLogin() {
   return Boolean(tryGithubToken());
 }
 
+/** Scope token GitHub yang dibutuhkan + task mulai berlakunya. */
+const GITHUB_SCOPES = [{ scope: 'workflow', from: 'P0-12', why: 'push file GitHub Actions' }];
+
+async function stepGithubScopes() {
+  const now = currentTask(readFileSync(join(ROOT, 'TODO.md'), 'utf8'));
+  const needed = GITHUB_SCOPES.filter(({ from }) => isRequiredNow(now, from)).map(({ scope }) => scope);
+  const token = tryGithubToken();
+  const have = token ? (githubScopes(token) ?? []) : [];
+  const missing = needed.filter((scope) => !have.includes(scope));
+  if (missing.length === 0) return step('GitHub scope token', { detail: have.join(', ') });
+
+  // `gh auth refresh` bekerja pada akun AKTIF: pindah sementara ke akun proyek, lalu kembalikan.
+  const withoutToken = { ...process.env, GH_TOKEN: '', GITHUB_TOKEN: '' };
+  const previous = sh('gh', ['api', 'user', '--jq', '.login'], { env: withoutToken }).out;
+  console.log(`🔐 Akun ${GITHUB_ACCOUNT} perlu izin tambahan: ${missing.join(', ')}…`);
+  sh('gh', ['auth', 'switch', '-h', 'github.com', '-u', GITHUB_ACCOUNT], { env: withoutToken });
+  await interactiveLogin(
+    'gh',
+    ['auth', 'refresh', '-h', 'github.com', '--clipboard', ...missing.flatMap((s) => ['-s', s])],
+    {
+      env: { GH_TOKEN: '', GITHUB_TOKEN: '', GH_BROWSER: 'none' },
+      deviceUrl: () => 'https://github.com/login/device',
+    },
+  );
+  if (previous && previous !== GITHUB_ACCOUNT) {
+    sh('gh', ['auth', 'switch', '-h', 'github.com', '-u', previous], { env: withoutToken });
+  }
+  const after = githubScopes(tryGithubToken() ?? '') ?? [];
+  const still = needed.filter((scope) => !after.includes(scope));
+  return still.length === 0
+    ? step('GitHub scope token', { detail: `ditambah: ${missing.join(', ')}` })
+    : step('GitHub scope token', {
+        status: 'fail',
+        detail: `belum ada: ${still.join(', ')}`,
+        fix: 'selesaikan otorisasi di browser, lalu ulangi npm run setup',
+      });
+}
+
 async function stepGithub() {
   if (!(await ensureGithubLogin())) {
     return step(`GitHub akun ${GITHUB_ACCOUNT}`, {
@@ -274,6 +315,135 @@ function stepVercelLink(vercel) {
   return step('Vercel project', { detail: `${detail}${saved.length ? ', ID disimpan ke .env.local' : ''}` });
 }
 
+const VERCEL_TOKEN_PAGE = 'https://vercel.com/account/settings/tokens';
+
+/** Token Vercel untuk CI (Vercel tidak mengizinkan token dibuat lewat CLI → user membuatnya). */
+async function stepVercelToken() {
+  const now = currentTask(readFileSync(join(ROOT, 'TODO.md'), 'utf8'));
+  const token = env().VERCEL_TOKEN;
+  if (!token) {
+    if (!isRequiredNow(now, 'P0-12'))
+      return step('VERCEL_TOKEN (untuk CI)', { status: 'later', detail: 'P0-12' });
+    openUrl(VERCEL_TOKEN_PAGE, loginProfile());
+    return step('VERCEL_TOKEN (untuk CI)', {
+      status: 'fail',
+      detail: `halaman token dibuka: ${VERCEL_TOKEN_PAGE}`,
+      fix: 'buat token (nama: buahbatu-story-ci, scope: akun proyek, expiration sesuai selera) → tempel di .env.local baris VERCEL_TOKEN= → ulangi npm run setup',
+    });
+  }
+  const { VERCEL_PROJECT_ID: id, VERCEL_ORG_ID: org } = env();
+  const team = org?.startsWith('team_') ? `?teamId=${org}` : '';
+  const response = await fetch(`https://api.vercel.com/v9/projects/${id}${team}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok)
+    return step('VERCEL_TOKEN (untuk CI)', {
+      status: 'fail',
+      detail: `tidak bisa mengakses project (HTTP ${response.status})`,
+      fix: `buat ulang token dengan scope akun/project buahbatu di ${VERCEL_TOKEN_PAGE}`,
+    });
+  const { name } = await response.json();
+  return step('VERCEL_TOKEN (untuk CI)', { detail: `valid, akses project ${name}` });
+}
+
+const BASE62 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+/**
+ * Secret bypass 32 karakter alfanumerik (format wajib Vercel: ^[a-zA-Z0-9]{32}$). Murni.
+ * @param {Uint8Array} bytes minimal 32 byte acak
+ */
+export function bypassSecretFrom(bytes) {
+  if (bytes.length < 32) throw new Error('butuh 32 byte acak');
+  // 248 = kelipatan 62 terbesar ≤ 256; byte ≥ 248 dibuang supaya distribusi tidak bias.
+  return [...bytes]
+    .filter((b) => b < 248)
+    .slice(0, 32)
+    .map((b) => BASE62[b % 62])
+    .join('');
+}
+
+function newBypassSecret() {
+  for (;;) {
+    const secret = bypassSecretFrom(randomBytes(64));
+    if (/^[a-zA-Z0-9]{32}$/.test(secret)) return secret;
+  }
+}
+
+/**
+ * "Protection Bypass for Automation": smoke test CI bisa membuka URL Preview yang dilindungi login
+ * Vercel. Secret dibuat di sini (tahu nilainya pasti), didaftarkan lewat REST API, disimpan di .env.local.
+ * Docs: vercel.com/docs/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation
+ */
+async function stepVercelBypass() {
+  const values = env();
+  if (values.VERCEL_AUTOMATION_BYPASS_SECRET)
+    return step('Vercel bypass untuk smoke test', { detail: 'sudah ada' });
+  if (!values.VERCEL_TOKEN || !values.VERCEL_PROJECT_ID) {
+    return step('Vercel bypass untuk smoke test', {
+      status: 'fail',
+      fix: 'butuh VERCEL_TOKEN & project ter-link',
+    });
+  }
+  const secret = newBypassSecret();
+  const team = values.VERCEL_ORG_ID?.startsWith('team_') ? `?teamId=${values.VERCEL_ORG_ID}` : '';
+  const response = await fetch(
+    `https://api.vercel.com/v1/projects/${values.VERCEL_PROJECT_ID}/protection-bypass${team}`,
+    {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${values.VERCEL_TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ generate: { secret, note: 'CI smoke test (npm run setup)' } }),
+    },
+  );
+  if (!response.ok) {
+    return step('Vercel bypass untuk smoke test', {
+      status: 'fail',
+      detail: `API Vercel HTTP ${response.status}`,
+      fix: 'cek izin token (harus akses ke project), lalu ulangi npm run setup',
+    });
+  }
+  saveEnv({ VERCEL_AUTOMATION_BYPASS_SECRET: secret });
+  return step('Vercel bypass untuk smoke test', { detail: 'dibuat & disimpan ke .env.local' });
+}
+
+/** Secret GitHub Actions yang dibutuhkan CI (docs/51 §5 langkah 6). Nilai lewat stdin, tidak dicetak. */
+export const CI_SECRETS = [
+  'VERCEL_TOKEN',
+  'VERCEL_ORG_ID',
+  'VERCEL_PROJECT_ID',
+  'VERCEL_AUTOMATION_BYPASS_SECRET',
+];
+
+function stepCiSecrets() {
+  const values = env();
+  const token = tryGithubToken();
+  if (!token) return step('GitHub Actions secrets', { status: 'fail', fix: 'login GitHub dulu' });
+  const ghEnv = { env: { ...process.env, GH_TOKEN: token } };
+  const repo = `${values.GH_OWNER ?? GITHUB_ACCOUNT}/${REPO_NAME}`;
+  const existing = new Set(
+    sh('gh', ['secret', 'list', '--repo', repo, '--json', 'name', '--jq', '.[].name'], ghEnv).out.split('\n'),
+  );
+  const force = process.argv.includes('--refresh-secrets');
+  const toSet = CI_SECRETS.filter((name) => values[name] && (force || !existing.has(name)));
+  const missingValue = CI_SECRETS.filter((name) => !values[name] && !existing.has(name));
+  const failed = toSet.filter(
+    (name) => !sh('gh', ['secret', 'set', name, '--repo', repo], { ...ghEnv, input: values[name] }).ok,
+  );
+  if (failed.length > 0)
+    return step('GitHub Actions secrets', { status: 'fail', detail: `gagal: ${failed.join(', ')}` });
+  if (missingValue.length > 0) {
+    return step('GitHub Actions secrets', {
+      status: 'fail',
+      detail: `belum ada nilainya: ${missingValue.join(', ')}`,
+      fix: 'lengkapi langkah sebelumnya, lalu ulangi npm run setup',
+    });
+  }
+  return step('GitHub Actions secrets', {
+    detail: toSet.length
+      ? `di-set: ${toSet.join(', ')}`
+      : 'sudah lengkap (pakai --refresh-secrets untuk menimpa)',
+  });
+}
+
 function stepVercelEnv(vercel) {
   const values = env();
   const names = envsToSync(values);
@@ -300,7 +470,13 @@ function stepVercelEnv(vercel) {
 
 export async function runSetup() {
   /** @type {CheckResult[]} */
-  const results = [stepEnvFile(), await stepTools(), stepGitLocal(), await stepGithub()];
+  const results = [
+    stepEnvFile(),
+    await stepTools(),
+    stepGitLocal(),
+    await stepGithub(),
+    await stepGithubScopes(),
+  ];
   const vercel = findVercel();
   if (!vercel) {
     results.push(step('Vercel CLI', { status: 'fail', fix: 'npm install --global vercel' }));
@@ -309,10 +485,10 @@ export async function runSetup() {
     results.push(login);
     if (login.status === 'ok') results.push(stepVercelLink(vercel), stepVercelEnv(vercel));
   }
-  results.push(
-    step('Supabase (project, migrasi, akun tes)', { status: 'later', detail: 'P5-01' }),
-    step('CI secrets & deploy pertama', { status: 'later', detail: 'P0-12 / P0-13' }),
-  );
+  const token = await stepVercelToken();
+  results.push(token);
+  if (token.status === 'ok') results.push(await stepVercelBypass(), stepCiSecrets());
+  results.push(step('Supabase (project, migrasi, akun tes)', { status: 'later', detail: 'P5-01' }));
   return results;
 }
 

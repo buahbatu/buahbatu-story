@@ -91,6 +91,7 @@ Pilih salah satu (ikuti pola proyek lain):
 | `SUPABASE_SERVICE_ROLE_KEY` | Sama seperti di atas |
 | `CRON_SECRET` | Di-generate acak |
 | `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` | Dari `.vercel/project.json` setelah `vercel link` |
+| `VERCEL_AUTOMATION_BYPASS_SECRET` | Di-generate acak (32 alfanumerik) lalu didaftarkan via `PATCH /v1/projects/{id}/protection-bypass`, supaya smoke test CI bisa membuka URL Preview yang dilindungi login Vercel |
 | `TEST_A_EMAIL/PASSWORD`, `TEST_B_EMAIL/PASSWORD` | Di-generate + dibuat via Supabase Admin API (akun khusus tes) |
 | Env di Vercel (Production & Preview) | `vercel env add <NAMA> production|preview` (nilai lewat stdin) |
 | Secret di GitHub Actions | `gh secret set <NAMA>` |

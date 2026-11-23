@@ -1,0 +1,121 @@
+name: CI & Deploy
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  NODE_VERSION: '24'
+  VERCEL_CLI_VERSION: '59.5.0'
+
+jobs:
+  verify:
+    name: Verify (gitleaks · lint · typecheck · unit · build · E2E)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: gitleaks
+        run: npm run tools && .tools/gitleaks/gitleaks git --redact --no-banner .
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Baseline snapshot Linux (hanya kalau belum ada)
+        id: baseline
+        run: |
+          if ls e2e/__screenshots__/*/*-linux.png >/dev/null 2>&1; then echo "created=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          npx playwright test e2e/visual.spec.ts --update-snapshots=all
+          echo "created=true" >> "$GITHUB_OUTPUT"
+          echo "### 📸 Baseline Linux dibuat di run ini, unggah sebagai artifact snapshots-linux untuk di-review & di-commit" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: steps.baseline.outputs.created == 'true'
+        with:
+          name: snapshots-linux
+          path: e2e/__screenshots__/**/*-linux.png
+          retention-days: 14
+      - run: npm run e2e
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  deploy:
+    name: Deploy ${{ github.ref == 'refs/heads/main' && 'Production' || 'Preview' }}
+    needs: verify
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+      TARGET: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm install --global vercel@${{ env.VERCEL_CLI_VERSION }}
+      - name: Production aktif sebelumnya
+        id: previous
+        if: env.TARGET == 'production'
+        run: |
+          team=""; case "$VERCEL_ORG_ID" in team_*) team="&teamId=$VERCEL_ORG_ID";; esac
+          uid=$(curl -fsS -H "Authorization: Bearer $VERCEL_TOKEN" "https://api.vercel.com/v6/deployments?projectId=$VERCEL_PROJECT_ID&target=production&state=READY&limit=1$team" | jq -r '.deployments[0].uid // empty')
+          echo "uid=$uid" >> "$GITHUB_OUTPUT"
+      - name: Build & deploy ${{ env.TARGET }}
+        id: deploy
+        run: |
+          prod=""; [ "$TARGET" = production ] && prod="--prod"
+          vercel pull --yes --environment="$TARGET" --token="$VERCEL_TOKEN"
+          vercel build $prod --token="$VERCEL_TOKEN"
+          url=$(vercel deploy --prebuilt $prod --token="$VERCEL_TOKEN")
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "### 🚀 Deploy $TARGET: $url" >> "$GITHUB_STEP_SUMMARY"
+      - run: npx playwright install --with-deps chromium
+      - name: Smoke test URL deploy
+        id: smoke
+        env:
+          DEPLOY_URL: ${{ steps.deploy.outputs.url }}
+        run: npx playwright test --config playwright.deploy.config.ts
+      - name: Rollback production
+        if: failure() && steps.smoke.outcome == 'failure' && env.TARGET == 'production'
+        env:
+          PREVIOUS: ${{ steps.previous.outputs.uid }}
+        run: |
+          if [ -z "$PREVIOUS" ]; then echo "### ⚠️ Smoke gagal di deploy pertama, tidak ada target rollback" >> "$GITHUB_STEP_SUMMARY"; exit 1; fi
+          vercel rollback "$PREVIOUS" --yes --token="$VERCEL_TOKEN"
+          echo "### ⏪ Smoke gagal, production di-rollback ke $PREVIOUS" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: failure()
+        with:
+          name: smoke-report-${{ env.TARGET }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

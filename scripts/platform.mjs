@@ -34,6 +34,29 @@ export function tryGithubToken() {
   }
 }
 
+/**
+ * Scope token GitHub dari header respons API (token tidak pernah dicetak), atau null kalau ditolak.
+ * @param {string} token
+ * @returns {string[] | null}
+ */
+export function githubScopes(token) {
+  try {
+    const headers = execFileSync('gh', ['api', '-i', 'user', '--jq', '.login'], {
+      encoding: 'utf8',
+      env: { ...process.env, GH_TOKEN: token },
+      stdio: ['ignore', 'pipe', 'ignore'],
+      timeout: 20_000,
+    });
+    const scopes = /^x-oauth-scopes:\s*(.*)$/im.exec(headers)?.[1] ?? '';
+    return scopes
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+  } catch {
+    return null;
+  }
+}
+
 /** [perintah, argumen awal] untuk Vercel CLI, atau null kalau belum terpasang. */
 export function findVercel() {
   if (process.platform !== 'win32') return ['vercel', []];
