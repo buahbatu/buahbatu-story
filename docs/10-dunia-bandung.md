@@ -71,6 +71,12 @@ Gedung Sate · Jalan Braga (fasad kolonial + lampu jalan) · Gedung Merdeka · M
 
 Gaya: LPC 32px, palet hangat, ikuti `42-aset-lisensi.md`.
 
+### Aturan detail peta (permintaan user, 2026-11-24)
+- **Peta luas dan detail**, bukan petak kosong. Setiap area punya **identitas visual sendiri** (palet, material jalan/atap, vegetasi, properti jalanan) sehingga pemain langsung tahu sedang di mana. Contoh: Lembang = kayu, kebun, kabut; Braga = fasad kolonial krem, lampu jalan kuning, trotoar batu; Buahbatu = rumah kompleks, warung, gerobak jajanan.
+- **Setiap bangunan berbeda.** Tidak ada bangunan "copy-paste": bentuk, warna, atap, pintu/jendela, papan nama, dan detail depan (pot, sepeda, jemuran, kursi) divariasikan. Kalau memakai komponen modular, kombinasinya harus unik per bangunan.
+- Detail kecil yang membuat hidup: tanda jalan, tiang listrik, pot bunga, gerobak, kucing liar, bayangan pohon.
+- Konsekuensi: kebutuhan art besar; dikerjakan bertahap per area (P1-02 prototipe, P12 & P15 final) dan bergantung pada keputusan gaya grafik (`42`).
+
 ## 6. Konvensi Tiled (WAJIB)
 - Tile size: **32×32**. Ukuran area outdoor: 60×40 sampai 100×70 tile.
 - Format export: **JSON (.tmj)** → `public/assets/maps/<areaId>.tmj`.

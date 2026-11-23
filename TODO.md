@@ -41,7 +41,7 @@
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
-**Sedang dikerjakan:** —
+**Sedang dikerjakan:** P1-01
 **Task berikutnya:** P1-01
 
 ---
@@ -68,7 +68,7 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 ---
 
 ## P1 · Fondasi Dunia & Gerak
-- [ ] **P1-01** Pipeline Tiled: konvensi layer, loader map `.tmj`, tileset LPC placeholder · Ref: 10, 42
+- [~] **P1-01** Pipeline Tiled: konvensi layer, loader map `.tmj`, tileset LPC placeholder · Ref: 10, 42 · 🟡 2026-11-23
 - [ ] **P1-02** Map prototipe `lembang` (kecil) + `kos_a` interior + `buahbatu` (kecil) + interior rumah Michelle · Ref: 10
 - [ ] **P1-03** Abstraksi input → Action (keyboard dulu) · Ref: 40
 - [ ] **P1-04** Entity Player: gerak 8 arah, lari, animasi idle/walk (sprite LPC placeholder) · Ref: 15
@@ -338,3 +338,4 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 - Kafe milik sendiri bisa didekor penuh
 - Mini "TikTok" in-game: rekam GIF momen berdua
 - *(teknis, dari P0-08)* Teks Phaser pakai **BitmapText** (font pixel di-bake jadi atlas) supaya tepi huruf 100% tajam; `fillText` canvas masih memberi antialias 1 px di tepi glyph. Cocok digarap bareng pipeline aset P1-01.
+- *(dari user, dikerjakan bareng P5-04)* Layar judul beranimasi: huruf judul bergelombang pelan, subtitle muncul pelan, awan/parallax & kilau stroberi; hormati `prefers-reduced-motion`.
