@@ -58,6 +58,11 @@ export function installIntegerScaling(game: Phaser.Game): () => void {
     frame = 0;
     const { zoom } = currentScale();
     if (game.scale.zoom !== zoom) game.scale.setZoom(zoom);
+    // Overlay Preact memakai ukuran & zoom yang sama supaya UI juga tajam per pixel fisik.
+    const root = document.documentElement.style;
+    root.setProperty('--zoom', String(zoom));
+    root.setProperty('--game-w', `${GAME_WIDTH * zoom}px`);
+    root.setProperty('--game-h', `${GAME_HEIGHT * zoom}px`);
   };
   const schedule = () => {
     if (frame === 0) frame = requestAnimationFrame(apply);

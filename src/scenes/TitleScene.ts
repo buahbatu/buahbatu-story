@@ -1,20 +1,23 @@
-// Title (placeholder): latar bukit Lembang, judul, tagline, versi.
-// Login & pilih household menyusul di P5-04 (Preact overlay). Desain: docs/02-arsitektur.md §6, docs/50 §9
+// Title (placeholder): latar bukit Lembang, judul, tagline. Versi tampil di overlay Preact.
+// Login & pilih household menyusul di P5-04 (Preact overlay). Desain: docs/02-arsitektur.md §6, docs/40 §1
 import * as Phaser from 'phaser';
 
 import { TILE_SIZE as TILE } from '../config/constants';
 import { GAME_HEIGHT as H, GAME_WIDTH as W } from '../config/game';
 import { PALETTE, css } from '../config/palette';
+import { FONT } from '../config/ui';
 import { t } from '../content/i18n';
+import { setActiveScene } from '../ui/uiState';
 import { SCENE } from './keys';
+import { snapToPixel } from './pixelText';
 
+/** Ukuran font kelipatan desain font-nya (Press Start 2P = 8px) supaya tepi huruf tajam. */
 const LAYOUT = {
-  titleY: 84,
-  titleSize: 28,
-  taglineSize: 12,
-  noteSize: 10,
-  lineGap: 8,
-  margin: 6,
+  titleY: 80,
+  titleSize: 24,
+  taglineSize: 16,
+  noteSize: 12,
+  lineGap: 10,
 } as const;
 
 export class TitleScene extends Phaser.Scene {
@@ -23,46 +26,47 @@ export class TitleScene extends Phaser.Scene {
   }
 
   create(): void {
+    setActiveScene(SCENE.title);
     this.drawBackdrop();
 
     const shadow = css(PALETTE.night);
-    const title = this.add
-      .text(W / 2, LAYOUT.titleY, t('game.title'), {
-        color: css(PALETTE.cream),
-        fontSize: `${LAYOUT.titleSize}px`,
-        fontStyle: 'bold',
-      })
-      .setOrigin(0.5)
-      .setShadow(2, 2, shadow, 0, false, true);
+    const title = snapToPixel(
+      this.add
+        .text(W / 2, LAYOUT.titleY, t('game.title'), {
+          fontFamily: `"${FONT.title}"`,
+          fontSize: `${LAYOUT.titleSize}px`,
+          color: css(PALETTE.cream),
+        })
+        .setOrigin(0.5)
+        .setShadow(2, 2, shadow, 0, false, true),
+    );
 
-    this.add
-      .text(W / 2, title.y + title.height / 2 + LAYOUT.lineGap, t('title.tagline'), {
-        color: css(PALETTE.cream),
-        fontSize: `${LAYOUT.taglineSize}px`,
-      })
-      .setOrigin(0.5, 0)
-      .setShadow(1, 1, shadow, 0, false, true);
+    snapToPixel(
+      this.add
+        .text(W / 2, title.y + title.height + LAYOUT.lineGap, t('title.tagline'), {
+          fontFamily: `"${FONT.body}"`,
+          fontSize: `${LAYOUT.taglineSize}px`,
+          color: css(PALETTE.cream),
+        })
+        .setOrigin(0.5, 0)
+        .setShadow(1, 1, shadow, 0, false, true),
+    );
 
-    this.add
-      .text(W / 2, H - TILE * 3 - LAYOUT.lineGap * 3, t('title.comingSoon'), {
-        color: css(PALETTE.cream),
-        fontSize: `${LAYOUT.noteSize}px`,
-      })
-      .setOrigin(0.5, 1)
-      .setShadow(1, 1, shadow, 0, false, true);
-
-    this.add
-      .text(W - LAYOUT.margin, H - LAYOUT.margin, t('title.version', { version: __APP_VERSION__ }), {
-        color: css(PALETTE.cream),
-        fontSize: `${LAYOUT.noteSize}px`,
-      })
-      .setOrigin(1, 1);
+    snapToPixel(
+      this.add
+        .text(W / 2, H - TILE * 3 - LAYOUT.lineGap * 2, t('title.comingSoon'), {
+          fontFamily: `"${FONT.body}"`,
+          fontSize: `${LAYOUT.noteSize}px`,
+          color: css(PALETTE.cream),
+        })
+        .setOrigin(0.5, 1)
+        .setShadow(1, 1, shadow, 0, false, true),
+    );
   }
 
-  /** Langit, bukit, dan petak kebun. Diganti tilemap asli di P1. */
+  /** Langit bertingkat, bukit, dan petak kebun. Diganti tilemap asli di P1. */
   private drawBackdrop(): void {
     const g = this.add.graphics();
-    // Langit bertingkat (gradasi ala pixel art), makin terang mendekati cakrawala.
     g.fillStyle(PALETTE.sky).fillRect(0, 0, W, H);
     g.fillStyle(PALETTE.skyLight).fillRect(0, H - TILE * 7, W, TILE * 2);
     g.fillStyle(PALETTE.horizon).fillRect(0, H - TILE * 5, W, TILE * 2);

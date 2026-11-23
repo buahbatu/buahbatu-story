@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#1d1a2f" />
     <title>Buahbatu Story</title>
+    <link
+      rel="preload"
+      href="/assets/fonts/pixelify-sans-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/assets/fonts/press-start-2p-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <style>
       html,
       body {
@@ -13,16 +27,27 @@
         background: #1d1a2f;
         overflow: hidden;
       }
-      #game {
+      /* Canvas (#game) dan overlay UI (#ui) ditumpuk di sel grid yang sama, di tengah layar. */
+      #stage {
         width: 100%;
         height: 100%;
         display: grid;
         place-items: center;
       }
+      #game,
+      #ui {
+        grid-area: 1 / 1;
+      }
+      #game canvas {
+        display: block;
+      }
     </style>
   </head>
   <body>
-    <div id="game"></div>
+    <div id="stage">
+      <div id="game"></div>
+      <div id="ui"></div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -1,3 +1,44 @@
-// Root UI Preact (App.tsx, hud, phone, menus, dialog). Diisi di P0-08.
-// Desain: docs/40-ui-ux.md, ADR-005
-export {};
+// Pasang overlay Preact + sambungkan EventBus → store UI. Desain: docs/40-ui-ux.md, ADR-005
+import './styles/pixel.css';
+
+import { createElement, render } from 'preact';
+
+import { TOAST } from '../config/ui';
+import type { EventBus } from '../core/events';
+import { App } from './App';
+import type { Store } from './store';
+import { expireToasts, pushToast } from './toasts';
+import { uiStore, type UiState } from './uiState';
+
+export interface Clock {
+  now(): number;
+  setTimeout(callback: () => void, ms: number): unknown;
+}
+
+const browserClock: Clock = {
+  now: () => performance.now(),
+  setTimeout: (callback, ms) => window.setTimeout(callback, ms),
+};
+
+/** Event `ui/toast` → masuk antrean (maks. 3), hilang sendiri setelah durasinya. */
+export function connectToasts(bus: EventBus, store: Store<UiState>, clock: Clock = browserClock): () => void {
+  let nextId = 1;
+  return bus.on('ui/toast', (event) => {
+    const expiresAt = clock.now() + TOAST.durationMs;
+    const toast = {
+      id: nextId++,
+      key: event.key,
+      expiresAt,
+      ...(event.params ? { params: event.params } : {}),
+    };
+    store.set((s) => ({ toasts: pushToast(s.toasts, toast, TOAST.maxVisible) }));
+    clock.setTimeout(() => {
+      store.set((s) => ({ toasts: expireToasts(s.toasts, clock.now()) }));
+    }, TOAST.durationMs);
+  });
+}
+
+export function mountUi(root: HTMLElement, bus: EventBus): void {
+  render(createElement(App, null), root);
+  connectToasts(bus, uiStore);
+}

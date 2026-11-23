@@ -1,0 +1,127 @@
+/* Style pixel dasar overlay UI. Desain: docs/40-ui-ux.md §1 & §8, docs/42-aset-lisensi.md §1
+ * Semua ukuran memakai satuan "pixel game" (--px) = 1px × zoom canvas, jadi UI ikut tajam
+ * per pixel fisik seperti canvas (lihat src/utils/scale.ts). */
+
+@font-face {
+  font-family: 'Pixelify Sans';
+  src: url('/assets/fonts/pixelify-sans-400.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pixelify Sans';
+  src: url('/assets/fonts/pixelify-sans-700.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('/assets/fonts/press-start-2p-400.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --zoom: 1;
+  --px: calc(var(--zoom) * 1px);
+
+  --color-night: #1d1a2f;
+  --color-ink: #3b2a20;
+  --color-cream: #f4e9d1;
+  --color-wood: #8a5a36;
+  --color-wood-dark: #5c3a22;
+  --color-strawberry: #d9465b;
+  --color-leaf: #4f8f4a;
+
+  --font-body: 'Pixelify Sans', system-ui, sans-serif;
+  --font-title: 'Press Start 2P', monospace;
+
+  --text-s: calc(var(--px) * 8);
+  --text-m: calc(var(--px) * 10);
+  --text-l: calc(var(--px) * 12);
+
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+}
+
+#ui {
+  position: relative;
+  width: var(--game-w, 640px);
+  height: var(--game-h, 360px);
+  overflow: hidden;
+  /* Overlay tidak menghalangi klik ke canvas, kecuali elemen yang memang interaktif. */
+  pointer-events: none;
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: 1.25;
+  color: var(--color-ink);
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  text-rendering: optimizeSpeed;
+}
+
+.ui-root {
+  position: absolute;
+  inset: 0;
+}
+
+.interactive {
+  pointer-events: auto;
+}
+
+/* Panel krem/kayu, border pixel 2px, bayangan keras 1 tingkat (docs/40 §1). */
+.panel {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  border: calc(var(--px) * 2) solid var(--color-wood);
+  box-shadow: calc(var(--px) * 2) calc(var(--px) * 2) 0 0 var(--color-wood-dark);
+  padding: calc(var(--px) * 3) calc(var(--px) * 6);
+}
+
+:focus-visible {
+  outline: calc(var(--px) * 2) solid var(--color-strawberry);
+  outline-offset: calc(var(--px) * 1);
+}
+
+.toast-host {
+  position: absolute;
+  top: calc(var(--px) * 8);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--px) * 4);
+}
+
+.toast {
+  border-left-color: var(--color-strawberry);
+  border-left-width: calc(var(--px) * 4);
+  white-space: nowrap;
+  animation: toast-in var(--dur-base) steps(3, end);
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateY(calc(var(--px) * -6));
+    opacity: 0;
+  }
+}
+
+.version-badge {
+  position: absolute;
+  right: calc(var(--px) * 6);
+  bottom: calc(var(--px) * 4);
+  font-size: var(--text-m);
+  color: var(--color-cream);
+  text-shadow: var(--px) var(--px) 0 var(--color-night);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

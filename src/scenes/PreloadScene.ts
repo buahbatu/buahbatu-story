@@ -3,9 +3,13 @@ import * as Phaser from 'phaser';
 
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/game';
 import { PALETTE, css } from '../config/palette';
+import { FONTS_TO_PRELOAD, FONT_LOAD_TIMEOUT_MS } from '../config/ui';
 import { t } from '../content/i18n';
+import { setActiveScene } from '../ui/uiState';
+import { waitForFonts } from '../utils/fonts';
 import { loadingBarFill } from '../utils/progress';
 import { SCENE } from './keys';
+import { centerOnPixel } from './pixelText';
 
 const BAR = { width: 240, height: 12, border: 2, gap: 6, fontSize: 10 } as const;
 
@@ -15,6 +19,7 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   preload(): void {
+    setActiveScene(SCENE.preload);
     const x = Math.floor((GAME_WIDTH - BAR.width) / 2);
     const y = Math.floor((GAME_HEIGHT - BAR.height) / 2);
     const inner = BAR.width - BAR.border * 2;
@@ -23,23 +28,28 @@ export class PreloadScene extends Phaser.Scene {
     const fill = this.add
       .rectangle(x + BAR.border, y + BAR.border, 0, BAR.height - BAR.border * 2, PALETTE.strawberry)
       .setOrigin(0);
-    const label = this.add
-      .text(GAME_WIDTH / 2, y + BAR.height + BAR.gap, t('boot.loading', { percent: 0 }), {
+    // Font pixel belum tentu siap di sini (dimuat paralel), jadi label pakai font cadangan.
+    const label = centerOnPixel(
+      this.add.text(0, y + BAR.height + BAR.gap, t('boot.loading', { percent: 0 }), {
         color: css(PALETTE.cream),
         fontSize: `${BAR.fontSize}px`,
-      })
-      .setOrigin(0.5, 0);
+      }),
+      GAME_WIDTH / 2,
+    );
 
     this.load.on(Phaser.Loader.Events.PROGRESS, (progress: number) => {
       const { fillWidth, percent } = loadingBarFill(progress, inner);
       fill.width = fillWidth;
-      label.setText(t('boot.loading', { percent }));
+      centerOnPixel(label.setText(t('boot.loading', { percent })), GAME_WIDTH / 2);
     });
 
     // Aset umum (atlas, tileset, font bitmap) didaftarkan di sini mulai P1-01.
   }
 
   create(): void {
-    this.scene.start(SCENE.title);
+    // Font pixel harus siap sebelum Title menggambar teks; kalau gagal/lama, lanjut dengan font cadangan.
+    void waitForFonts(document.fonts, FONTS_TO_PRELOAD, FONT_LOAD_TIMEOUT_MS).then(() => {
+      this.scene.start(SCENE.title);
+    });
   }
 }
