@@ -15,7 +15,8 @@ export function parseEnv(text) {
     if (!match) continue;
     let value = (match[2] ?? '').trim();
     const quoted = /^(['"])(.*)\1$/.exec(value);
-    value = quoted ? (quoted[2] ?? '') : value.replace(/\s+#.*$/, '').trim();
+    // Tanpa kutip, `#` di awal nilai atau setelah spasi = komentar (`KEY=  # catatan` → kosong).
+    value = quoted ? (quoted[2] ?? '') : value.replace(/(^|\s+)#.*$/, '').trim();
     if (value) env[match[1] ?? ''] = value;
   }
   return env;
@@ -27,6 +28,36 @@ export function parseEnv(text) {
  */
 export function readEnvFile(file) {
   return existsSync(file) ? parseEnv(readFileSync(file, 'utf8')) : {};
+}
+
+/**
+ * Isi variabel di teks env TANPA menimpa nilai yang sudah ada (kecuali `overwrite`).
+ * Baris lain (komentar, urutan) dipertahankan; variabel yang belum ada ditambahkan di akhir.
+ * @param {string} text
+ * @param {Record<string, string>} values
+ * @param {{ overwrite?: boolean }} [options]
+ * @returns {{ text: string, changed: string[] }}
+ */
+export function upsertEnv(text, values, { overwrite = false } = {}) {
+  const existing = parseEnv(text);
+  const pending = new Map(Object.entries(values).filter(([, v]) => v !== ''));
+  /** @type {string[]} */
+  const changed = [];
+  const lines = text.split(/\r?\n/).map((line) => {
+    const name = /^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=/.exec(line)?.[1];
+    if (!name || !pending.has(name)) return line;
+    const value = pending.get(name) ?? '';
+    pending.delete(name);
+    if (existing[name] !== undefined && (!overwrite || existing[name] === value)) return line;
+    changed.push(name);
+    return `${name}=${value}`;
+  });
+  for (const [name, value] of pending) {
+    if (lines.length > 0 && lines[lines.length - 1] === '') lines.pop();
+    lines.push(`${name}=${value}`, '');
+    changed.push(name);
+  }
+  return { text: lines.join('\n'), changed };
 }
 
 /**

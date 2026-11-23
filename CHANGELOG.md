@@ -8,6 +8,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 ## [Unreleased]
 
 ### Ditambah
+- **P0-10b** `npm run setup` (`scripts/setup.mjs`), idempotent: buat `.env.local` dari template & isi otomatis tanpa menimpa nilai user, gitleaks + hook, identitas & credential git lokal, repo GitHub (dibuat public kalau belum ada) + remote + push awal, login Vercel per folder (device login dibuka di Chrome profil `LOGIN_CHROME_PROFILE`), `project add` + `link` project `buahbatu-story`, sinkron env ke Vercel Production & Preview (nilai lewat stdin). Helper `scripts/lib/browser.mjs`, `upsertEnv`, + tes.
 - **P0-10a** `npm run doctor` (`scripts/doctor.mjs`, hanya membaca): cek tools, git lokal, akun GitHub + scope, login/link Vercel, `.env.local`; kebutuhan mengikuti fase TODO (⏳ belum waktunya / ❌ wajib sekarang), nilai rahasia tidak pernah dicetak. `npm run tools`: gitleaks 8.30.1 ke `.tools/` dengan verifikasi SHA-256. Hook `.githooks/pre-commit` (aktif otomatis lewat `prepare`) menolak commit berisi rahasia. Pustaka skrip murni `scripts/lib/{env,tasks,report}.mjs` + tes.
 - **P0-09** `vercel.json`: deploy hanya lewat CI (`git.deploymentEnabled: false`), region `sin1`, cache immutable untuk file ber-hash `/_app/*`, cache pendek untuk `/assets/*`, header keamanan (nosniff, referrer, frame DENY, Permissions-Policy mic `self`). `.env.example` disusun ulang dengan penanda 🔒 rahasia / 🌐 publik. `.gitignore` dilengkapi (hasil tes, Supabase lokal, editor). `CREDITS.md` dirapikan + lisensi library. Tes `tests/repo-config.test.ts`: env template sinkron dengan `docs/51` §4, template tanpa nilai, `VITE_*` bukan rahasia, entri `.gitignore` wajib, aturan `vercel.json`.
 - **P0-08** Overlay Preact (`src/ui/`) ditumpuk tepat di atas canvas: ukuran & skala mengikuti zoom integer (`--zoom`, `--game-w/h`), jadi UI juga tajam per pixel fisik. Style pixel (`ui/styles/pixel.css`: panel krem/kayu, border 2px, bayangan keras, aksen stroberi, `prefers-reduced-motion`). Font **Pixelify Sans** & **Press Start 2P** (OFL, `public/assets/fonts`, tercatat di `CREDITS.md`), ditunggu sebelum Title tampil (`utils/fonts.ts`, timeout 3 dtk). Store UI tanpa dependency (`ui/store.ts`, `useStore`), toast EventBus → maks. 3 bertumpuk, versi game pindah ke overlay. Helper `snapToPixel` untuk teks Phaser.
@@ -21,6 +22,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - **P0-00** Akun per folder: `scripts/platform.mjs` (wrapper `gh`/`vercel`/`supabase` memakai akun proyek tanpa mengubah login global), git identitas + credential helper lokal untuk akun `buahbatu`, `.gitignore` minimal.
 
 ### Diubah
+- **P0-10b** `.gitignore` memakai pola `.env*` & `.vercel` persis seperti yang dicari `vercel link` (sebelumnya CLI menambahkan baris sendiri yang membuat `!.env.example` tidak berlaku); urutannya dijaga tes. `.env.example` + `LOGIN_CHROME_PROFILE` (opsional). `docs/51` §5: status implementasi setup.
 - Tagline layar judul diganti jadi bahasa Inggris atas permintaan user: "A game made with love for Michelle Melinda" (pengecualian dari aturan teks UI berbahasa Indonesia; tetap lewat `i18n/id.json`).
 - **P0-10a** Task P0-10 dipecah jadi P0-10a (doctor + gitleaks) & P0-10b (setup) karena >400 baris (AGENTS §6); total task 184. `scripts/platform.mjs` direfaktor (helper non-fatal dipakai ulang doctor/setup, parser env di `scripts/lib/env.mjs`). `tsconfig`: `allowJs` (tanpa `checkJs`) supaya tes bisa memakai tipe JSDoc skrip. `docs/51` §5 & §7 diperbarui.
 - **P0-09** Output Vite pindah ke `/_app/` (`build.assetsDir`) supaya file ber-hash tidak bercampur dengan `public/assets`. `docs/01` §4: `TURN_API_KEY` diganti `METERED_APP_NAME`/`METERED_API_KEY` agar sama dengan `docs/51` & `.env.example`. Cron keep-alive sengaja belum di `vercel.json` (fungsinya baru ada di P5-08).
@@ -31,6 +33,9 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - **P0-01** ADR-016: Phaser 4 + TypeScript dipin ~6.0 (belum didukung typescript-eslint untuk TS 7). `docs/01` §1 & §3 disesuaikan.
 - ADR-015: login tertutup tanpa registrasi publik, Lupa password mendeteksi email terdaftar (rate limit). `docs/32` §1–2 dan task P5-04 disesuaikan.
 - **P0-00** ADR-014 diterima (pola shaflow). ADR-010 diubah: repo **public selama development**, private saat final. Docs 01/03/43/50/51 disesuaikan.
+
+### Diperbaiki
+- **P0-10b** `parseEnv` salah membaca `KEY=  # catatan` sebagai bernilai (komentar setelah nilai kosong). Setup sempat menulis ulang credential helper di setiap run (output git di-trim sehingga baris reset hilang) → sekarang idempotent. Setup sempat membuka tautan telemetri Vercel alih-alih halaman login → kini hanya URL login/device yang dibuka.
 
 ### Docs
 - Dokumen desain awal (GDD modular), `AGENTS.md`, `TODO.md`, `PROMPT.md`.

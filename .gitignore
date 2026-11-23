@@ -10,11 +10,11 @@ test-results/
 blob-report/
 
 # Rahasia & akun per folder (ADR-014, docs/51 §7)
-.env
-.env.*
+# Pola `.env*` & `.vercel` ditulis persis seperti yang dicari `vercel link`, supaya CLI tidak
+# menambahkan baris sendiri. `!.env.example` WAJIB setelah `.env*` (urutan menentukan).
+.env*
 !.env.example
-.envrc
-.vercel/
+.vercel
 .vercel-cli/
 supabase/.temp/
 supabase/.branches/

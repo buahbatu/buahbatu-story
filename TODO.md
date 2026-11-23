@@ -20,7 +20,7 @@
 
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
-| P0 | Setup Proyek & Otomasi | v0.1 | 11 | 15 | 🟡 |
+| P0 | Setup Proyek & Otomasi | v0.1 | 12 | 15 | 🟡 |
 | P1 | Fondasi Dunia & Gerak | v0.1 | 0 | 11 | ⬜ |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
@@ -37,12 +37,12 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **11** | **184** | |
+| **Total** | | | **12** | **184** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
 **Sedang dikerjakan:** —
-**Task berikutnya:** P0-10b
+**Task berikutnya:** P0-11
 
 ---
 
@@ -58,7 +58,7 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 - [x] **P0-08** Root Preact overlay di atas canvas + style pixel dasar + font + file i18n `id.json` · Ref: 40 · ✅ 2026-11-23 · overlay Preact sejajar canvas (UI ikut zoom pixel fisik), font Pixelify Sans + Press Start 2P (OFL), panel pixel, toast maks. 3, store UI; diverifikasi screenshot
 - [x] **P0-09** Lengkapi `.env.example`, `.gitignore` (personal, `.env.local`, `.vercel/`), `CREDITS.md`, `vercel.json` · Ref: 51, 42, 43 · ✅ 2026-11-23 · env template bertanda rahasia/publik + dijaga tes sinkron docs/51, .gitignore diuji git check-ignore, vercel.json (CI-only, cache /_app immutable, header keamanan)
 - [x] **P0-10a** Script `npm run doctor` (cek tools, akun, env per fase, tanpa menampilkan rahasia) + pre-commit `gitleaks` · Ref: 51 · ✅ 2026-11-23 · doctor per fase (11 ok/0 gagal), gitleaks 8.30.1 di .tools (checksum diverifikasi), hook pre-commit menolak token palsu, riwayat 11 commit bersih
-- [ ] **P0-10b** Script `npm run setup` (git identitas, GitHub repo (public selama dev, ADR-010), Vercel link + env) idempotent · Ref: 51
+- [x] **P0-10b** Script `npm run setup` (git identitas, GitHub repo (public selama dev, ADR-010), Vercel link + env) idempotent · Ref: 51 · ✅ 2026-11-23 · setup 7 ok/0 gagal & idempotent (2x run tanpa perubahan); project Vercel buahbatu-story ter-link (akun buahbatu); doctor 14 ok
 - [ ] **P0-11** Playwright + test hook `window.__BB__` + smoke E2E + snapshot visual + emulasi HP landscape + `npm run verify` · Ref: 50
 - [ ] **P0-12** GitHub Actions CI (`verify`) + deploy Preview/Production otomatis + smoke test URL + rollback · Ref: 51, 50
 - [ ] **P0-13** Jalankan `npm run setup` end-to-end → push pertama → title screen online di Vercel (dibuktikan smoke E2E ke URL production) · Ref: 51

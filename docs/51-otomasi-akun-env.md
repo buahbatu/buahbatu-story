@@ -111,6 +111,12 @@ Pilih salah satu (ikuti pola proyek lain):
 ```
 Output akhir berupa tabel ✅/❌ per langkah. Kalau ada yang kurang, script menyebut **persis** variabel apa yang harus diisi user.
 
+**Status implementasi (P0-10b):** langkah 1–3 dan 5 sudah jalan (`scripts/setup.mjs`):
+- `.env.local` dibuat dari template kalau belum ada; `GIT_USER_*`, `GH_OWNER`, `VERCEL_ORG_ID/PROJECT_ID` diisi otomatis **tanpa menimpa** nilai yang sudah diisi user.
+- Login yang butuh klik (GitHub device login, Vercel login) dibuka di Chrome profil `LOGIN_CHROME_PROFILE`; akun aktif global `gh` dikembalikan seperti semula setelahnya.
+- Vercel: `project add` (kalau belum ada) → `link --yes --project buahbatu-story`. Env disinkron ke Production & Preview hanya untuk variabel yang sudah punya nilai (nilai lewat stdin). Repo Git **tidak** dihubungkan ke Vercel karena deploy hanya lewat CI.
+- Langkah 4 (Supabase) menyusul di P5-01, langkah 6–7 (CI secrets, deploy) di P0-12/P0-13.
+
 Perintah lain:
 | Perintah | Fungsi |
 |---|---|

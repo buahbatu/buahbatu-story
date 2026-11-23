@@ -1,7 +1,9 @@
 // Logika murni script otomasi (doctor/tools). Desain: docs/51 §5 & §7
 import { describe, expect, it } from 'vitest';
 
-import { mask, parseEnv } from '../scripts/lib/env.mjs';
+import { chromeArgs, pickDeviceCode, pickLoginUrl } from '../scripts/lib/browser.mjs';
+import { mask, parseEnv, upsertEnv } from '../scripts/lib/env.mjs';
+import { envsToSync, isProjectHelperList } from '../scripts/setup.mjs';
 import { exitCode, formatReport, gate } from '../scripts/lib/report.mjs';
 import { compareTasks, currentTask, isRequiredNow, parseTaskId } from '../scripts/lib/tasks.mjs';
 import { gitleaksAsset, parseChecksums } from '../scripts/tools.mjs';
@@ -16,8 +18,87 @@ describe('parseEnv', () => {
     expect(parseEnv(`A="halo # bukan komentar"\nB='x'`)).toEqual({ A: 'halo # bukan komentar', B: 'x' });
   });
 
+  it('nilai kosong yang diikuti komentar tetap dianggap kosong', () => {
+    expect(parseEnv('GH_OWNER=                      # username/org\nX=#bukan nilai')).toEqual({});
+  });
+
+  it('# di tengah nilai tanpa spasi tetap bagian nilai (mis. warna)', () => {
+    expect(parseEnv('COLOR=abc#123')).toEqual({ COLOR: 'abc#123' });
+  });
+
   it('tahan CRLF (file diedit di Windows)', () => {
     expect(parseEnv('A=1\r\nB=2\r\n')).toEqual({ A: '1', B: '2' });
+  });
+});
+
+describe('upsertEnv', () => {
+  const template = ['# judul', 'A=', 'B=sudah', '', 'C=  # catatan', ''].join('\n');
+
+  it('mengisi variabel kosong, mempertahankan komentar & urutan', () => {
+    const { text, changed } = upsertEnv(template, { A: '1', C: '3' });
+    expect(text).toBe(['# judul', 'A=1', 'B=sudah', '', 'C=3', ''].join('\n'));
+    expect(changed).toEqual(['A', 'C']);
+  });
+
+  it('TIDAK menimpa nilai yang sudah diisi user (default)', () => {
+    expect(upsertEnv(template, { B: 'baru' })).toEqual({ text: template, changed: [] });
+  });
+
+  it('overwrite hanya kalau diminta & nilainya memang beda', () => {
+    expect(upsertEnv(template, { B: 'baru' }, { overwrite: true }).changed).toEqual(['B']);
+    expect(upsertEnv(template, { B: 'sudah' }, { overwrite: true }).changed).toEqual([]);
+  });
+
+  it('variabel baru ditambahkan di akhir; nilai kosong diabaikan', () => {
+    const { text, changed } = upsertEnv('A=1\n', { NEW: 'x', EMPTY: '' });
+    expect(text).toBe('A=1\nNEW=x\n');
+    expect(changed).toEqual(['NEW']);
+  });
+
+  it('idempotent: menjalankan dua kali tidak mengubah apa-apa lagi', () => {
+    const once = upsertEnv(template, { A: '1' }).text;
+    expect(upsertEnv(once, { A: '1' })).toEqual({ text: once, changed: [] });
+  });
+});
+
+describe('setup helpers', () => {
+  it('envsToSync hanya variabel yang sudah punya nilai', () => {
+    expect(envsToSync({ VITE_SUPABASE_URL: 'https://x.supabase.co', CRON_SECRET: '', OTHER: 'y' })).toEqual([
+      'VITE_SUPABASE_URL',
+    ]);
+  });
+
+  it('envsToSync tidak pernah menyertakan token user (GH/VERCEL/SUPABASE_ACCESS)', () => {
+    const all = { GH_TOKEN: 'a', VERCEL_TOKEN: 'b', SUPABASE_ACCESS_TOKEN: 'c', SUPABASE_DB_PASSWORD: 'd' };
+    expect(envsToSync(all)).toEqual([]);
+  });
+
+  it('pickLoginUrl mengabaikan tautan telemetri/dokumentasi (kasus nyata Vercel CLI run pertama)', () => {
+    const out = [
+      'Vercel CLI now collects telemetry. Learn more: https://vercel.com/docs/cli/about-telemetry',
+      'Visit https://vercel.com/oauth/device?user_code=ABCD-EFGH to log in',
+    ].join('\n');
+    expect(pickLoginUrl(out)).toBe('https://vercel.com/oauth/device?user_code=ABCD-EFGH');
+    expect(pickLoginUrl('Learn more: https://vercel.com/docs/cli/about-telemetry')).toBeUndefined();
+  });
+
+  it('pickDeviceCode membaca kode device login', () => {
+    expect(pickDeviceCode('! One-time code (C92E-2A3D) copied to clipboard')).toBe('C92E-2A3D');
+    expect(pickDeviceCode('tidak ada kode')).toBeUndefined();
+  });
+
+  it('isProjectHelperList: wajib [kosong, helper proyek] persis (kasus nyata: output mentah git)', () => {
+    const helper = '!f() { echo x; }; f';
+    expect(isProjectHelperList(`\n${helper}\n`, helper)).toBe(true);
+    expect(isProjectHelperList(`\r\n${helper}\r\n`, helper)).toBe(true);
+    expect(isProjectHelperList(`${helper}\n`, helper)).toBe(false); // tanpa reset helper global
+    expect(isProjectHelperList(`\n!gh auth git-credential\n`, helper)).toBe(false);
+    expect(isProjectHelperList('', helper)).toBe(false);
+  });
+
+  it('chromeArgs memilih profil kalau diisi', () => {
+    expect(chromeArgs('https://x', 'Profile 2')).toEqual(['--profile-directory=Profile 2', 'https://x']);
+    expect(chromeArgs('https://x', undefined)).toEqual(['https://x']);
   });
 });
 

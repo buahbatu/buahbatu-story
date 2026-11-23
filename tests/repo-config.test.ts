@@ -32,16 +32,15 @@ describe('.env.example', () => {
 describe('.gitignore', () => {
   const ignore = read('.gitignore').split(/\r?\n/);
 
-  it.each([
-    '.env',
-    '.env.*',
-    '!.env.example',
-    '.vercel/',
-    '.vercel-cli/',
-    'src/content/personal/',
-    'node_modules/',
-  ])('memuat %s', (entry) => {
-    expect(ignore).toContain(entry);
+  it.each(['.env*', '!.env.example', '.vercel', '.vercel-cli/', 'src/content/personal/', 'node_modules/'])(
+    'memuat %s',
+    (entry) => {
+      expect(ignore).toContain(entry);
+    },
+  );
+
+  it('!.env.example ada SETELAH .env* (kalau terbalik, template ikut ter-ignore)', () => {
+    expect(ignore.indexOf('!.env.example')).toBeGreaterThan(ignore.indexOf('.env*'));
   });
 });
 

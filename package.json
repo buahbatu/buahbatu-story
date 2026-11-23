@@ -21,7 +21,8 @@
     "validate:content": "vitest run src/content/content.test.ts",
     "doctor": "node scripts/doctor.mjs",
     "tools": "node scripts/tools.mjs",
-    "prepare": "node scripts/hooks.mjs"
+    "prepare": "node scripts/hooks.mjs",
+    "setup": "node scripts/setup.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.2",
