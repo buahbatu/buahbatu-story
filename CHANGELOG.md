@@ -21,6 +21,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - **P0-00** Akun per folder: `scripts/platform.mjs` (wrapper `gh`/`vercel`/`supabase` memakai akun proyek tanpa mengubah login global), git identitas + credential helper lokal untuk akun `buahbatu`, `.gitignore` minimal.
 
 ### Diubah
+- Tagline layar judul diganti jadi bahasa Inggris atas permintaan user: "A game made with love for Michelle Melinda" (pengecualian dari aturan teks UI berbahasa Indonesia; tetap lewat `i18n/id.json`).
 - **P0-10a** Task P0-10 dipecah jadi P0-10a (doctor + gitleaks) & P0-10b (setup) karena >400 baris (AGENTS §6); total task 184. `scripts/platform.mjs` direfaktor (helper non-fatal dipakai ulang doctor/setup, parser env di `scripts/lib/env.mjs`). `tsconfig`: `allowJs` (tanpa `checkJs`) supaya tes bisa memakai tipe JSDoc skrip. `docs/51` §5 & §7 diperbarui.
 - **P0-09** Output Vite pindah ke `/_app/` (`build.assetsDir`) supaya file ber-hash tidak bercampur dengan `public/assets`. `docs/01` §4: `TURN_API_KEY` diganti `METERED_APP_NAME`/`METERED_API_KEY` agar sama dengan `docs/51` & `.env.example`. Cron keep-alive sengaja belum di `vercel.json` (fungsinya baru ada di P5-08).
 - **P0-07** ADR-017 (Immer untuk Command). `docs/02` §4 contoh Handler disesuaikan dengan implementasi (draft + `succeed`/`reject`).
