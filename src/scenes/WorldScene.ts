@@ -1,8 +1,10 @@
 import { Color, Fog, NearestFilter, PerspectiveCamera, SRGBColorSpace, Scene, TextureLoader, type Group, type Texture } from 'three';
+import { PLAYER } from '../config/balance';
 import { PALETTE } from '../config/palette';
 import { DEFAULT_AREA, INTERIOR, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { logger } from '../core/logger';
-import type { GameScene } from '../engine/engine';
+import type { Engine, GameScene } from '../engine/engine';
+import { APPEARANCE, PlayerView, stepMotion, type Direction, type PlayerMotion } from '../entities';
 import { uiStore } from '../ui/uiState';
 import { buildArea, disposeTree } from '../world/build';
 import { addEnvironment } from '../world/environment';
@@ -26,6 +28,9 @@ export class WorldScene implements GameScene {
   private target: { area: string; spawn?: string } = { area: DEFAULT_AREA };
   private root: Group | null = null;
   private atlas: Texture | null = null;
+  private engine: Engine | null = null;
+  private readonly playerView = new PlayerView(APPEARANCE.A);
+  player: PlayerMotion | null = null;
 
   constructor() {
     const scene = new Scene();
@@ -37,14 +42,22 @@ export class WorldScene implements GameScene {
     this.target = { area, spawn };
   }
 
-  async enter(): Promise<void> {
+  async enter(engine: Engine): Promise<void> {
+    this.engine = engine;
     try {
       if (this.area?.id !== this.target.area) await this.load(this.target.area);
-      this.focus(this.target.spawn);
+      this.spawn(this.target.spawn);
     } catch (error) {
       logger.error(error);
       uiStore.set({ fatal: 'world.loadError' });
     }
+  }
+
+  update(dt: number): void {
+    const { area, player, engine } = this;
+    if (!area || !player || !engine) return;
+    this.player = stepMotion(player, engine.input.move(), engine.input.isDown('run'), dt, area, PLAYER);
+    this.showPlayer();
   }
 
   resize(width: number, height: number): void {
@@ -78,13 +91,32 @@ export class WorldScene implements GameScene {
     this.world.scene.fog = new Fog(fog, num(settings.fogNear, fogNear), num(settings.fogFar, indoor ? INTERIOR.fogFar : WORLD_FOG.far));
   }
 
-  private focus(spawnId?: string): void {
+  place(x: number, y: number, facing: Direction): void {
+    if (!this.player) return;
+    this.player = { ...this.player, x, y, facing, anim: 'idle', animTime: 0 };
+    this.showPlayer();
+  }
+
+  private spawn(spawnId?: string): void {
     if (!this.area) return;
     const spawns = this.area.spawns;
-    const spawn = (spawnId ? spawns[spawnId] : undefined) ?? spawns.start ?? Object.values(spawns)[0] ?? { x: 0, y: 0 };
+    const at = (spawnId ? spawns[spawnId] : undefined) ?? spawns.start ?? Object.values(spawns)[0] ?? { x: 0, y: 0 };
+    this.player = { x: at.x, y: at.y, facing: 's', anim: 'idle', animTime: 0 };
+    this.world.scene.add(this.playerView.object);
+    this.showPlayer();
+  }
+
+  private showPlayer(): void {
+    if (!this.area || !this.player) return;
+    this.playerView.apply(this.player, elevation(this.area, this.player.x, this.player.y));
+    this.placeCamera(this.player);
+  }
+
+  private placeCamera(focus: { x: number; y: number }): void {
+    if (!this.area) return;
     const { settings, width, height } = this.area;
     const indoor = settings.interior === true;
-    const target = indoor ? { x: width / 2, y: height / 2 - INTERIOR.lookBack } : spawn;
+    const target = indoor ? { x: width / 2, y: height / 2 - INTERIOR.lookBack } : focus;
     const distance =
       typeof settings.cameraDistance === 'number' ? settings.cameraDistance : indoor ? INTERIOR.cameraDistance : WORLD_CAMERA.distance;
     const pitch = (WORLD_CAMERA.pitchDeg * Math.PI) / 180;

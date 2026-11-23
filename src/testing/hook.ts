@@ -63,7 +63,11 @@ function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
       });
       return { id, width: area.width, height: area.height, props };
     },
+    placePlayer(x, y, facing) {
+      world.place(x, y, facing);
+    },
     actions: () => engine.input.down(),
+    player: () => (world.player && world.area ? { ...world.player, area: world.area.id } : null),
     move: () => engine.input.move(),
     freeze(on) {
       if (on) engine.freezeAt(0);
