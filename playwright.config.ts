@@ -27,10 +27,12 @@ export default defineConfig({
   projects: [
     {
       name: 'desktop',
+      testIgnore: /orientation/,
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1 },
     },
-    { name: 'android-landscape', use: { ...devices['Galaxy S24 landscape'] } },
-    { name: 'iphone-landscape', use: { ...devices['iPhone 15 landscape'], browserName: 'chromium' } },
+    { name: 'android-landscape', testIgnore: /orientation/, use: { ...devices['Galaxy S24 landscape'] } },
+    { name: 'iphone-landscape', testIgnore: /orientation/, use: { ...devices['iPhone 15 landscape'], browserName: 'chromium' } },
+    { name: 'android-portrait', testMatch: /orientation/, use: { ...devices['Galaxy S24'] } },
   ],
   webServer: {
     command: `npm run build:test && npx vite preview --outDir dist-test --port ${PORT} --strictPort`,

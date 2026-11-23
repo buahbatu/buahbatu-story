@@ -77,14 +77,14 @@ Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kot
 - Semua tombol bisa di-remap (Pengaturan → Kontrol).
 - Input diabstraksi menjadi **Action** (`src/input/`), bukan key langsung.
 
-## 7. Responsif
-- Desktop: resolusi dasar 640×360 di-scale integer (×2 = 1280×720, ×3 = 1920×1080).
-  - Integer dihitung dalam **pixel fisik** (`src/utils/scale.ts`): di laptop dengan display scaling 125%/150%, 1 pixel game tetap = tepat N pixel layar (mis. 1536×864 @125% → ×3 fisik, zoom CSS 2,4).
-  - **Layar berkerapatan tinggi (DPR ≥ 2: HP, Retina)**: integer hanya kalau mengisi ≥ 80% ruang; kalau tidak, skala pecahan nearest-neighbor yang memenuhi layar (mis. iPhone landscape 734×343 → ×2,86). Di layar desktop DPR < 2 tetap integer murni (ADR-018).
-  - Layar lebih kecil dari 640×360 (HP lama) → diperkecil pecahan (tidak terpotong).
-  - Zoom dihitung ulang saat resize, rotasi HP, pindah monitor, atau zoom browser. Canvas di-center oleh CSS (bukan `autoCenter` Phaser).
-- HP: mode landscape, tombol sentuh ≥ 44px, UI menu memakai layout 1 kolom.
-- Kalau HP dalam posisi portrait: tampilkan ajakan "Putar HP kamu 🔄".
+## 7. Responsif (ADR-020)
+- **Area pandang fleksibel, zoom selalu integer.** Zoom `k` = piksel fisik per piksel game, dipilih supaya tinggi dunia yang terlihat ±360 (batas 270–450, lebar maks. 960). Ukuran dunia = layar ÷ k → **game selalu penuh layar dan selalu tajam**. Layar lebih lebar = melihat lebih banyak dunia (seperti Stardew Valley). Logika: `src/utils/scale.ts`, batas: `VIEW_LIMITS` di `src/config/game.ts`.
+  - Contoh: laptop 1366×768 di Chrome (1366×657) → ×2, dunia 683×328; F11 → 683×384; 1080p → ×3, 640×360; Android 780×360 → ×3, 780×360; iPhone 734×343 → ×3, 734×343.
+  - Dihitung per **piksel fisik**: display scaling 125%/150% tetap tajam.
+  - Dihitung ulang saat resize, rotasi, pindah monitor, atau zoom browser. Scene menata ulang isinya dari `this.scale.width/height` (jangan hardcode 640×360). HUD/UI menempel ke tepi layar.
+- **Game wajib landscape.** Di perangkat sentuh yang dipegang tegak (`(orientation: portrait) and (pointer: coarse)`), game disembunyikan total dan di-pause; yang tampil hanya animasi HP berputar + "Putar HP kamu". Jendela desktop yang sempit tidak diblokir.
+- **Layar penuh di HP**: Android Chrome masuk layar penuh (address & navigation bar tersembunyi) pada sentuhan pertama, lalu orientasi dikunci landscape. Game juga bisa di-install (PWA, `public/manifest.webmanifest`: `display: fullscreen`, `orientation: landscape`): dibuka dari ikon home screen langsung penuh layar. iPhone: hanya lewat "Tambah ke Layar Utama" (Safari iPhone tidak mendukung layar penuh untuk halaman web).
+- HP: tombol sentuh ≥ 44px, UI menu memakai layout 1 kolom.
 
 ## 8. Aksesibilitas
 - Ukuran teks (S/M/L), kontras tinggi, mode buta warna (ikon + teks, tidak hanya warna).

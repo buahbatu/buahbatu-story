@@ -48,6 +48,12 @@ export function createTestApi({ game, runtime }: TestHookContext): TestApi {
       runtime.bus.emit(event);
     },
     scene: () => uiStore.get().scene,
+    view: () => ({
+      width: game.scale.width,
+      height: game.scale.height,
+      zoom: game.scale.zoom,
+      pixelScale: Math.round(game.scale.zoom * window.devicePixelRatio),
+    }),
     freeze(on) {
       if (on) game.loop.sleep();
       else game.loop.wake();

@@ -63,3 +63,28 @@ describe('vercel.json', () => {
     expect(read('vercel.json')).not.toMatch(/SECRET|SERVICE_ROLE|TOKEN|PASSWORD/i);
   });
 });
+
+describe('manifest PWA (layar penuh di HP, ADR-020)', () => {
+  const manifest = JSON.parse(read('public/manifest.webmanifest')) as {
+    display: string;
+    orientation: string;
+    icons: { src: string; sizes: string; purpose: string }[];
+  };
+  const pngSize = (file: string) => {
+    const buf = readFileSync(join(root, 'public', file));
+    return `${buf.readUInt32BE(16)}x${buf.readUInt32BE(20)}`;
+  };
+  it('dibuka layar penuh & wajib landscape', () => {
+    expect(manifest).toMatchObject({ display: 'fullscreen', orientation: 'landscape' });
+  });
+  it('ikon 192 & 512 ada, PNG asli, ukurannya sesuai, ada versi maskable', () => {
+    for (const icon of manifest.icons) expect(pngSize(icon.src), icon.src).toBe(icon.sizes);
+    expect(manifest.icons.map((i) => i.sizes)).toEqual(expect.arrayContaining(['192x192', '512x512']));
+    expect(manifest.icons.some((i) => i.purpose.includes('maskable'))).toBe(true);
+  });
+  it('index.html menautkan manifest & ikon iPhone', () => {
+    const html = read('index.html');
+    expect(html).toContain('rel="manifest" href="/manifest.webmanifest"');
+    expect(pngSize('/assets/ui/icons/apple-touch-icon.png')).toBe('180x180');
+  });
+});

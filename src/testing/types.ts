@@ -11,6 +11,7 @@ export interface TestApi {
   emit(event: GameEvent): void;
   scene(): SceneKey | null;
   freeze(on: boolean): void;
+  view(): { width: number; height: number; zoom: number; pixelScale: number };
 }
 
 declare global {

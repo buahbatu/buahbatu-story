@@ -7,9 +7,9 @@ Setiap aset pihak ketiga **wajib** dicatat di sini (lihat `docs/42-aset-lisensi.
 ## Grafis
 | Aset (path) | Pembuat | Sumber (URL) | Lisensi | Modifikasi |
 |---|---|---|---|---|
-| — | — | — | — | — |
+| `public/assets/ui/icons/*.png` (ikon aplikasi stroberi 16×16, diperbesar nearest-neighbor) | Dibuat sendiri untuk proyek ini (AI agent, palet `config/palette.ts`) | — | Milik proyek | — |
 
-*Saat ini belum ada grafis pihak ketiga: latar layar judul masih digambar dengan kode (Phaser Graphics) sebagai placeholder sampai tileset LPC masuk di P1-01.*
+*Selain ikon aplikasi, belum ada grafis pihak ketiga: latar layar judul masih digambar dengan kode (Phaser Graphics) sebagai placeholder sampai tileset LPC masuk di P1-01.*
 
 ## Audio
 | Aset (path) | Pembuat | Sumber (URL) | Lisensi | Modifikasi |

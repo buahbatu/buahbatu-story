@@ -102,7 +102,7 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Konsekuensi**: Handler wajib memakai `createRng(draft.world)` (bukan `Math.random`) dan tidak boleh me-*return* objek state baru dari recipe. Peta handler (`HandlerMap`) diwajibkan lengkap oleh TypeScript untuk setiap jenis Command.
 
 ### ADR-018 · Skala pecahan di layar HP yang pendek
-- **Status**: Diterima (2026-11-23, keputusan user, opsi B)
+- **Status**: Diganti oleh ADR-020 (2026-11-23)
 - **Konteks**: Integer scaling murni (P0-05) membuat game di iPhone landscape (734×343, sedikit di bawah 360) hanya ×2 piksel fisik → memakai ±58% lebar layar.
 - **Keputusan**: Di layar DPR ≥ 2, kalau integer mengisi < 80% ruang, pakai skala pecahan nearest-neighbor yang memenuhi layar. Di DPR < 2 (desktop/laptop) tetap integer murni.
 - **Alasan**: Di layar sepadat HP/Retina, piksel game yang 1 piksel fisik lebih tebal tidak terlihat; di desktop (piksel fisik besar) ketidakrataan 2/3 px terlihat dan mengganggu saat kamera bergerak.
@@ -114,6 +114,13 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Keputusan**: Semua komentar dihapus dari kode (dijaga tes `tests/no-comments.test.ts` berbasis parser TypeScript). Prettier `printWidth` 110 → 140, baris kosong di dalam blok dihapus. Skrip `scripts/*.mjs` (yang tipenya dulu bergantung pada komentar JSDoc) diubah jadi `scripts/*.ts`, dijalankan langsung oleh Node 24. `tsconfig`: `erasableSyntaxOnly`, `allowImportingTsExtensions`, tanpa `allowJs`.
 - **Alasan**: Tanpa JSDoc, tipe skrip hilang dan lint strict di tes gagal; TypeScript asli memberi tipe tanpa komentar dan seluruh skrip kini ikut typecheck ketat.
 - **Konsekuensi**: Rujukan "Desain: docs/…" di kode hilang, digantikan tabel sistem → dokumen di `tests/structure.test.ts` dan rujukan di TODO/docs. Node < 24 tidak bisa menjalankan skrip (sudah dijaga `engines` & `.nvmrc`). Parameter property di class tidak dipakai.
+
+### ADR-020 · Area pandang fleksibel, game wajib landscape, layar penuh di HP
+- **Status**: Diterima (2026-11-23, keputusan user). Menggantikan ADR-018 dan aturan resolusi tetap 640×360 di `40` §7.
+- **Konteks**: Di laptop user (1366×768, Chrome) aturan integer + resolusi tetap membuat game hanya ×1 (±separuh layar); F11 pun masih berbingkai. Di HP, user ingin game wajib landscape dan tanpa bar browser.
+- **Keputusan**: (1) Zoom selalu integer per piksel fisik, ukuran dunia yang terlihat mengikuti layar (tinggi ±360, batas 270–450, lebar maks. 960) → selalu penuh layar. (2) Perangkat sentuh tegak: game disembunyikan & di-pause, tampil animasi putar HP. (3) Android: layar penuh + kunci landscape pada sentuhan pertama; PWA `display: fullscreen`, `orientation: landscape` dengan ikon sendiri.
+- **Alasan**: Cara standar game pixel art (piksel tetap rata & tajam tanpa bingkai). Fullscreen API wajib dipicu aksi user; iPhone Safari tidak mendukungnya untuk halaman biasa, jadi PWA jadi jalurnya.
+- **Konsekuensi**: Semua scene & HUD wajib membaca ukuran dari `this.scale` dan menyesuaikan saat resize. Kamera (P1-06) dan peta harus siap memperlihatkan area berbeda per layar. Pemain di layar lebar melihat sedikit lebih banyak dunia (tidak memengaruhi multiplayer karena dunia adalah data).
 
 ---
 

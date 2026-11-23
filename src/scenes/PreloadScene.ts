@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { GAME_HEIGHT, GAME_WIDTH } from '../config/game';
+
 import { PALETTE, css } from '../config/palette';
 import { FONTS_TO_PRELOAD, FONT_LOAD_TIMEOUT_MS } from '../config/ui';
 import { t } from '../content/i18n';
@@ -17,8 +17,8 @@ export class PreloadScene extends Phaser.Scene {
   }
   preload(): void {
     setActiveScene(SCENE.preload);
-    const x = Math.floor((GAME_WIDTH - BAR.width) / 2);
-    const y = Math.floor((GAME_HEIGHT - BAR.height) / 2);
+    const x = Math.floor((this.scale.width - BAR.width) / 2);
+    const y = Math.floor((this.scale.height - BAR.height) / 2);
     const inner = BAR.width - BAR.border * 2;
     this.add.rectangle(x, y, BAR.width, BAR.height).setOrigin(0).setStrokeStyle(BAR.border, PALETTE.cream);
     const fill = this.add.rectangle(x + BAR.border, y + BAR.border, 0, BAR.height - BAR.border * 2, PALETTE.strawberry).setOrigin(0);
@@ -27,12 +27,12 @@ export class PreloadScene extends Phaser.Scene {
         color: css(PALETTE.cream),
         fontSize: `${BAR.fontSize}px`,
       }),
-      GAME_WIDTH / 2,
+      this.scale.width / 2,
     );
     this.load.on(Phaser.Loader.Events.PROGRESS, (progress: number) => {
       const { fillWidth, percent } = loadingBarFill(progress, inner);
       fill.width = fillWidth;
-      centerOnPixel(label.setText(t('boot.loading', { percent })), GAME_WIDTH / 2);
+      centerOnPixel(label.setText(t('boot.loading', { percent })), this.scale.width / 2);
     });
   }
   create(): void {

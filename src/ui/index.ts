@@ -3,6 +3,7 @@ import { createElement, render } from 'preact';
 import { TOAST } from '../config/ui';
 import type { EventBus } from '../core/events';
 import { App } from './App';
+import { RotateHint } from './components/RotateHint';
 import type { Store } from './store';
 import { expireToasts, pushToast } from './toasts';
 import { uiStore, type UiState } from './uiState';
@@ -36,5 +37,7 @@ export function connectToasts(bus: EventBus, store: Store<UiState>, clock: Clock
 
 export function mountUi(root: HTMLElement, bus: EventBus): void {
   render(createElement(App, null), root);
+  const rotate = document.getElementById('rotate');
+  if (rotate) render(createElement(RotateHint, null), rotate);
   connectToasts(bus, uiStore);
 }

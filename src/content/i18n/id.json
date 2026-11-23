@@ -7,5 +7,7 @@
   "boot.contentError": "Data game rusak. Coba muat ulang halaman.",
   "error.unknownCommand": "Aksi ini belum dikenal. Coba lagi sebentar, ya.",
   "error.invalidCommand": "Aksinya nggak bisa dilakukan sekarang.",
-  "error.internal": "Waduh, ada yang error. Progresmu aman, coba ulangi."
+  "error.internal": "Waduh, ada yang error. Progresmu aman, coba ulangi.",
+  "rotate.title": "Putar HP kamu",
+  "rotate.body": "Buahbatu Story dimainkan dengan HP miring (landscape)."
 }

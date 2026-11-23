@@ -77,7 +77,7 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 - [ ] **P1-07** Sistem interaksi: deteksi objek terdekat + prompt "E ..." · Ref: 10, 40
 - [ ] **P1-08** Kotak dialog Preact (typewriter, pilihan, potret placeholder, log) · Ref: 40, 18
 - [ ] **P1-09** Transisi area (pintu & tepi peta) + fade + spawn point · Ref: 10
-- [ ] **P1-10** Kontrol sentuh: joystick virtual + tombol aksi + deteksi portrait · Ref: 40
+- [ ] **P1-10** Kontrol sentuh: joystick virtual + tombol aksi (deteksi portrait + layar penuh HP sudah dikerjakan lebih awal, ADR-020) · Ref: 40
 - [ ] **P1-11** Mode debug `?debug=1` (FPS, collision, grid) · Ref: 50
 
 **Kriteria selesai P1:** bisa jalan di Lembang, masuk/keluar kos, ngobrol dengan papan (dialog), main di HP & laptop.

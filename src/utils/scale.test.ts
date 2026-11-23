@@ -1,77 +1,62 @@
 import { describe, expect, it } from 'vitest';
-import { computeScale } from './scale';
+import { computeView, type ViewLimits } from './scale';
 
-const base = { baseWidth: 640, baseHeight: 360 };
+const limits: ViewLimits = { baseHeight: 360, minHeight: 270, maxHeight: 450, maxWidth: 960 };
+const view = (viewportWidth: number, viewportHeight: number, devicePixelRatio = 1) =>
+  computeView({ ...limits, viewportWidth, viewportHeight, devicePixelRatio });
+const fills = (r: ReturnType<typeof computeView>, w: number, h: number, dpr = 1) => {
+  expect(Math.abs(r.width * r.zoom - w)).toBeLessThan(r.zoom);
+  expect(Math.abs(r.height * r.zoom - h)).toBeLessThan(r.zoom);
+  expect(Number.isInteger(r.pixelScale)).toBe(true);
+  expect(r.zoom * dpr).toBeCloseTo(r.pixelScale);
+};
 
-describe('computeScale', () => {
+describe('computeView (ADR-020: zoom integer, area pandang fleksibel)', () => {
   it.each([
-    { w: 1280, h: 720, zoom: 2 },
-    { w: 1920, h: 1080, zoom: 3 },
-    { w: 2560, h: 1440, zoom: 4 },
-    { w: 640, h: 360, zoom: 1 },
-  ])('DPR 1, $w×$h → ×$zoom', ({ w, h, zoom }) => {
-    expect(computeScale({ ...base, viewportWidth: w, viewportHeight: h, devicePixelRatio: 1 })).toEqual({
-      zoom,
-      devicePixelsPerGamePixel: zoom,
-      integer: true,
-    });
+    { w: 1366, h: 657, k: 2, gw: 683, gh: 328, label: 'laptop 1366×768 di Chrome' },
+    { w: 1366, h: 768, k: 2, gw: 683, gh: 384, label: 'laptop 1366×768 F11' },
+    { w: 1280, h: 720, k: 2, gw: 640, gh: 360, label: '720p' },
+    { w: 1920, h: 969, k: 3, gw: 640, gh: 323, label: '1080p di Chrome' },
+    { w: 1920, h: 1080, k: 3, gw: 640, gh: 360, label: '1080p F11' },
+    { w: 2560, h: 1440, k: 4, gw: 640, gh: 360, label: '1440p' },
+  ])('$label ($w×$h) → ×$k, dunia $gw×$gh, penuh layar', ({ w, h, k, gw, gh }) => {
+    const r = view(w, h);
+    expect(r).toMatchObject({ pixelScale: k, width: gw, height: gh });
+    fills(r, w, h);
   });
-  it('membulatkan ke bawah, tidak pernah melebihi layar', () => {
-    const r = computeScale({ ...base, viewportWidth: 1366, viewportHeight: 657, devicePixelRatio: 1 });
-    expect(r.zoom).toBe(1);
-    expect(640 * r.zoom).toBeLessThanOrEqual(1366);
-    expect(360 * r.zoom).toBeLessThanOrEqual(657);
-  });
-  it('dibatasi sisi yang paling sempit (layar lebar)', () => {
-    const r = computeScale({ ...base, viewportWidth: 3440, viewportHeight: 1000, devicePixelRatio: 1 });
-    expect(r.zoom).toBe(2);
-  });
-  it('display scaling 125%: pixel fisik tetap bulat (×3 fisik = zoom CSS 2,4)', () => {
-    const r = computeScale({ ...base, viewportWidth: 1536, viewportHeight: 864, devicePixelRatio: 1.25 });
-    expect(r.devicePixelsPerGamePixel).toBe(3);
-    expect(r.zoom).toBeCloseTo(2.4);
-    expect(Number.isInteger(640 * r.zoom * 1.25)).toBe(true);
-  });
-  it('HP retina landscape (844×390, DPR 3) → ×3 fisik = zoom CSS 1', () => {
-    const r = computeScale({ ...base, viewportWidth: 844, viewportHeight: 390, devicePixelRatio: 3 });
-    expect(r).toEqual({ zoom: 1, devicePixelsPerGamePixel: 3, integer: true });
-  });
-  it('iPhone landscape (734×343, DPR 3) → pecahan ×2,86 yang memenuhi layar (ADR-018)', () => {
-    const r = computeScale({ ...base, viewportWidth: 734, viewportHeight: 343, devicePixelRatio: 3 });
-    expect(r.integer).toBe(false);
-    expect(r.devicePixelsPerGamePixel).toBeCloseTo((343 * 3) / 360, 2);
-    expect(360 * r.zoom).toBeLessThanOrEqual(343);
-    expect(360 * r.zoom).toBeGreaterThan(343 - 1);
-    expect(Number.isInteger(Math.round(640 * r.zoom * 3 * 1e6) / 1e6)).toBe(true);
-  });
-  it('Android landscape (780×360, DPR 3) → tetap integer ×3', () => {
-    const r = computeScale({ ...base, viewportWidth: 780, viewportHeight: 360, devicePixelRatio: 3 });
-    expect(r).toEqual({ zoom: 1, devicePixelsPerGamePixel: 3, integer: true });
+  it('display scaling 125% (1536×730 CSS) → integer per pixel fisik, penuh', () => {
+    const r = view(1536, 730, 1.25);
+    expect(r.pixelScale).toBe(3);
+    fills(r, 1536, 730, 1.25);
   });
   it.each([
-    { w: 1920, h: 960, dpr: 1, zoom: 2 },
-    { w: 1366, h: 657, dpr: 1, zoom: 1 },
-    { w: 1536, h: 750, dpr: 1.25, zoom: 1.6 },
-  ])('desktop DPR < 2 ($w×$h @$dpr) selalu integer walau tidak penuh', ({ w, h, dpr, zoom }) => {
-    const r = computeScale({ ...base, viewportWidth: w, viewportHeight: h, devicePixelRatio: dpr });
-    expect(r.integer).toBe(true);
-    expect(r.zoom).toBeCloseTo(zoom);
+    { w: 780, h: 360, dpr: 3, gw: 780, gh: 360, label: 'Android landscape' },
+    { w: 734, h: 343, dpr: 3, gw: 734, gh: 343, label: 'iPhone landscape' },
+    { w: 568, h: 320, dpr: 2, gw: 568, gh: 320, label: 'HP kecil' },
+  ])('$label → integer & penuh layar (dunia $gw×$gh)', ({ w, h, dpr, gw, gh }) => {
+    const r = view(w, h, dpr);
+    expect(r).toMatchObject({ width: gw, height: gh });
+    fills(r, w, h, dpr);
   });
-  it('Retina yang hampir penuh tetap integer (fill ≥ 80%)', () => {
-    const r = computeScale({ ...base, viewportWidth: 1440, viewportHeight: 800, devicePixelRatio: 2 });
-    expect(r).toEqual({ zoom: 2, devicePixelsPerGamePixel: 4, integer: true });
+  it('ultrawide: lebar dunia dibatasi maxWidth (sisanya bingkai)', () => {
+    const r = view(5120, 1440);
+    expect(r.width).toBe(960);
+    expect(r.height).toBe(360);
   });
-  it('layar lebih kecil dari 640×360 → diperkecil pecahan, ditandai tidak integer', () => {
-    const r = computeScale({ ...base, viewportWidth: 568, viewportHeight: 320, devicePixelRatio: 1 });
-    expect(r.integer).toBe(false);
-    expect(r.zoom).toBeCloseTo(568 / 640);
+  it('tinggi dunia selalu dalam batas min–max untuk layar ≥ 540 px fisik', () => {
+    for (let h = 540; h <= 2400; h += 7) {
+      const r = view(1920, h);
+      expect(r.height).toBeGreaterThanOrEqual(limits.minHeight);
+      expect(r.height).toBeLessThanOrEqual(limits.maxHeight);
+    }
   });
   it.each([0, -1, Number.NaN, Number.POSITIVE_INFINITY])('DPR tidak valid (%s) dianggap 1', (dpr) => {
-    const r = computeScale({ ...base, viewportWidth: 1280, viewportHeight: 720, devicePixelRatio: dpr });
-    expect(r.zoom).toBe(2);
+    expect(view(1280, 720, dpr)).toMatchObject({ pixelScale: 2, zoom: 2 });
   });
-  it('viewport 0 (tab tersembunyi) tidak menghasilkan NaN', () => {
-    const r = computeScale({ ...base, viewportWidth: 0, viewportHeight: 0, devicePixelRatio: 1 });
+  it('viewport 0 (tab tersembunyi) tidak menghasilkan NaN atau 0', () => {
+    const r = view(0, 0);
+    expect(r.width).toBeGreaterThan(0);
+    expect(r.height).toBeGreaterThan(0);
     expect(r.zoom).toBe(1);
   });
 });

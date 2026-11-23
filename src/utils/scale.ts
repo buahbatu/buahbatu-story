@@ -1,31 +1,32 @@
-export const MIN_INTEGER_FILL = 0.8;
+export interface ViewLimits {
+  baseHeight: number;
+  minHeight: number;
+  maxHeight: number;
+  maxWidth: number;
+}
 
-export const FRACTIONAL_MIN_DPR = 2;
-
-export interface ScaleInput {
+export interface ViewInput extends ViewLimits {
   viewportWidth: number;
   viewportHeight: number;
   devicePixelRatio: number;
-  baseWidth: number;
-  baseHeight: number;
-  minIntegerFill?: number;
 }
 
-export interface ScaleResult {
+export interface ViewResult {
   zoom: number;
-  devicePixelsPerGamePixel: number;
-  integer: boolean;
+  pixelScale: number;
+  width: number;
+  height: number;
 }
 
-export function computeScale(input: ScaleInput): ScaleResult {
-  const dpr = Number.isFinite(input.devicePixelRatio) && input.devicePixelRatio > 0 ? input.devicePixelRatio : 1;
-  const fit = Math.min((input.viewportWidth * dpr) / input.baseWidth, (input.viewportHeight * dpr) / input.baseHeight);
-  const safeFit = Number.isFinite(fit) && fit > 0 ? fit : 1;
-  const whole = Math.floor(safeFit);
-  const minFill = dpr >= FRACTIONAL_MIN_DPR ? (input.minIntegerFill ?? MIN_INTEGER_FILL) : 0;
-  if (whole >= 1 && whole / safeFit >= minFill) {
-    return { zoom: whole / dpr, devicePixelsPerGamePixel: whole, integer: true };
-  }
-  const device = Math.floor(safeFit * input.baseWidth) / input.baseWidth;
-  return { zoom: device / dpr, devicePixelsPerGamePixel: device, integer: false };
+const positive = (n: number, fallback: number) => (Number.isFinite(n) && n > 0 ? n : fallback);
+
+export function computeView(input: ViewInput): ViewResult {
+  const dpr = positive(input.devicePixelRatio, 1);
+  const deviceW = positive(input.viewportWidth * dpr, input.baseHeight);
+  const deviceH = positive(input.viewportHeight * dpr, input.baseHeight);
+  let k = Math.max(1, Math.round(deviceH / input.baseHeight));
+  while (k > 1 && deviceH / k < input.minHeight) k--;
+  const height = Math.max(1, Math.min(input.maxHeight, Math.floor(deviceH / k)));
+  const width = Math.max(1, Math.min(input.maxWidth, Math.floor(deviceW / k)));
+  return { zoom: k / dpr, pixelScale: k, width, height };
 }
