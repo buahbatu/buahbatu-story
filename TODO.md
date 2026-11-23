@@ -20,7 +20,7 @@
 
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
-| P0 | Setup Proyek & Otomasi | v0.1 | 6 | 14 | 🟡 |
+| P0 | Setup Proyek & Otomasi | v0.1 | 7 | 14 | 🟡 |
 | P1 | Fondasi Dunia & Gerak | v0.1 | 0 | 11 | ⬜ |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
@@ -37,12 +37,12 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **6** | **183** | |
+| **Total** | | | **7** | **183** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
 **Sedang dikerjakan:** —
-**Task berikutnya:** P0-06
+**Task berikutnya:** P0-07
 
 ---
 
@@ -53,7 +53,7 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 - [x] **P0-03** tsconfig strict, ESLint (typescript-eslint), Prettier, EditorConfig, script npm · Ref: 01, 03 · ✅ 2026-11-23 · ESLint strictTypeChecked + aturan arsitektur (uji balik 6/6 tertangkap), Prettier, LF
 - [x] **P0-04** Vitest + contoh test + script `validate:content` (kerangka) · Ref: 03, 50 · ✅ 2026-11-23 · validator konten zod (ID snake_case, ID unik, file wajib terdaftar), 98 tes lolos; validate:content lewat Vitest (tanpa tsx)
 - [x] **P0-05** Konfigurasi Phaser: `pixelArt`, resolusi 640×360, integer scaling, resize handler · Ref: 02, 40 · ✅ 2026-11-23 · zoom integer per pixel FISIK (tajam di DPR 1/1.25/1.5/3, diuji per piksel), resize/rotasi/DPR handler, arcade physics
-- [ ] **P0-06** Scene Boot → Preload (loading bar) → Title (placeholder) · Ref: 02
+- [x] **P0-06** Scene Boot → Preload (loading bar) → Title (placeholder) · Ref: 02 · ✅ 2026-11-23 · Boot (validasi konten) → Preload (loading bar) → Title (judul, tagline, versi); i18n id.json + t() ditarik dari P0-08 karena Title butuh teks
 - [ ] **P0-07** Core: EventBus bertipe, GameState awal, CommandDispatcher, RNG seeded, logger + test · Ref: 02
 - [ ] **P0-08** Root Preact overlay di atas canvas + style pixel dasar + font + file i18n `id.json` · Ref: 40
 - [ ] **P0-09** Lengkapi `.env.example`, `.gitignore` (personal, `.env.local`, `.vercel/`), `CREDITS.md`, `vercel.json` · Ref: 51, 42, 43

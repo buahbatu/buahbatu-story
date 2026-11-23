@@ -1,0 +1,8 @@
+{
+  "game.title": "Buahbatu Story",
+  "title.tagline": "Hidup berdua di Bandung",
+  "title.version": "Versi {version}",
+  "title.comingSoon": "Dunianya lagi dibangun, sabar nya…",
+  "boot.loading": "Memuat… {percent}%",
+  "boot.contentError": "Data game rusak. Coba muat ulang halaman."
+}
