@@ -1,0 +1,21 @@
+# Dependensi & hasil build
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Rahasia & akun per folder (ADR-014)
+.env
+.env.*
+!.env.example
+.envrc
+.vercel/
+.vercel-cli/
+supabase/.temp/
+
+# Konten personal (ADR-010, docs/43)
+src/content/personal/
+
+# Editor & OS
+.DS_Store
+Thumbs.db
+*.log

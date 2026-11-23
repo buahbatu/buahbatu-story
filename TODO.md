@@ -1,0 +1,338 @@
+# ✅ TODO — Roadmap Buahbatu Story
+
+> **Aturan wajib** (detail di `AGENTS.md` §3–4):
+> 1. Kerjakan **berurutan**, **1 task** sekaligus.
+> 2. Sebelum mulai: ubah `[ ]` → `[~]` + `🟡 YYYY-MM-DD`.
+> 3. Setelah selesai & terverifikasi (lint, typecheck, test, build): ubah ke `[x]` + `✅ YYYY-MM-DD · catatan singkat`.
+> 4. **Update tabel Progres** di bawah + tambah entri di `CHANGELOG.md`.
+> 5. Blocked → `[!]` + alasan. Dibatalkan → `[-]` + alasan.
+> 6. Task terlalu besar → pecah jadi `Pn-xxa`, `Pn-xxb`.
+> 7. Ide baru → taruh di **💡 Backlog Ide**, jangan langsung dikerjakan.
+> 8. **Kriteria selesai fase dibuktikan dengan tes otomatis yang dijalankan AI** (`e2e/<fase>.spec.ts`), bukan dicek manual oleh user.
+> 9. **Jangan minta user melakukan langkah manual** yang bisa dikerjakan lewat CLI/script. User hanya mengisi token di `.env.local` (`docs/51`).
+
+**Legenda**: `[ ]` belum · `[~]` dikerjakan · `[x]` selesai · `[!]` blocked · `[-]` batal
+**Ref** = nomor dokumen di `docs/` (misal `12` = `docs/12-pertanian-peternakan.md`)
+
+---
+
+## 📊 Progres per Fase
+
+| Fase | Nama | Versi | Selesai | Total | Status |
+|---|---|---|---|---|---|
+| P0 | Setup Proyek & Otomasi | v0.1 | 1 | 14 | 🟡 |
+| P1 | Fondasi Dunia & Gerak | v0.1 | 0 | 11 | ⬜ |
+| P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
+| P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
+| P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
+| P5 | Backend & Cloud Save | v0.3 | 0 | 10 | ⬜ |
+| P6 | Multiplayer Berdua | v0.3 | 0 | 12 | ⬜ |
+| P7 | Karakter & Outfit | v0.4 | 0 | 9 | ⬜ |
+| P8 | HP, NPC, Dialog & Quest | v0.5 | 0 | 14 | ⬜ |
+| P9 | Kebutuhan, Mood & Hubungan | v0.6 | 0 | 12 | ⬜ |
+| P10 | Aktivitas | v0.7 | 0 | 11 | ⬜ |
+| P11 | Voice | v0.8 | 0 | 8 | ⬜ |
+| P12 | Kendaraan & Peta Bandung | v0.9 | 0 | 10 | ⬜ |
+| P13 | Properti, Kredit & Pernikahan | v0.10 | 0 | 13 | ⬜ |
+| P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
+| P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
+| P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
+| **Total** | | | **1** | **183** | |
+
+Status: ⬜ belum · 🟡 berjalan · ✅ selesai
+
+**Sedang dikerjakan:** —
+**Task berikutnya:** P0-01
+
+---
+
+## P0 · Setup Proyek & Otomasi
+- [x] **P0-00** Deteksi pola akun per folder dari proyek **kelola, prins, shaflow, kis** (tanpa menampilkan rahasia) → ringkas ke user → konfirmasi akun → ADR · Ref: 51 · ✅ 2026-11-23 · pola shaflow (wrapper `scripts/platform.mjs`), akun `buahbatu`, git config lokal, repo public selama dev (ADR-010, ADR-014)
+- [ ] **P0-01** Init Vite + TypeScript, install Phaser, Preact, zod, idb-keyval, easystarjs, supabase-js · Ref: 01
+- [ ] **P0-02** Buat struktur folder lengkap sesuai arsitektur (folder kosong + `index.ts` placeholder) · Ref: 02
+- [ ] **P0-03** tsconfig strict, ESLint (typescript-eslint), Prettier, EditorConfig, script npm · Ref: 01, 03
+- [ ] **P0-04** Vitest + contoh test + script `validate:content` (kerangka) · Ref: 03, 50
+- [ ] **P0-05** Konfigurasi Phaser: `pixelArt`, resolusi 640×360, integer scaling, resize handler · Ref: 02, 40
+- [ ] **P0-06** Scene Boot → Preload (loading bar) → Title (placeholder) · Ref: 02
+- [ ] **P0-07** Core: EventBus bertipe, GameState awal, CommandDispatcher, RNG seeded, logger + test · Ref: 02
+- [ ] **P0-08** Root Preact overlay di atas canvas + style pixel dasar + font + file i18n `id.json` · Ref: 40
+- [ ] **P0-09** Lengkapi `.env.example`, `.gitignore` (personal, `.env.local`, `.vercel/`), `CREDITS.md`, `vercel.json` · Ref: 51, 42, 43
+- [ ] **P0-10** Script `npm run doctor` + `npm run setup` (git identitas, GitHub repo (public selama dev, ADR-010), Vercel link + env) idempotent + pre-commit `gitleaks` · Ref: 51
+- [ ] **P0-11** Playwright + test hook `window.__BB__` + smoke E2E + snapshot visual + emulasi HP landscape + `npm run verify` · Ref: 50
+- [ ] **P0-12** GitHub Actions CI (`verify`) + deploy Preview/Production otomatis + smoke test URL + rollback · Ref: 51, 50
+- [ ] **P0-13** Jalankan `npm run setup` end-to-end → push pertama → title screen online di Vercel (dibuktikan smoke E2E ke URL production) · Ref: 51
+
+**Kriteria selesai P0:** `npm run verify` hijau; push ke `main` otomatis memakai akun proyek ini, lolos CI, dan ter-deploy; smoke E2E ke URL production lolos. User hanya mengisi token di `.env.local`.
+
+---
+
+## P1 · Fondasi Dunia & Gerak
+- [ ] **P1-01** Pipeline Tiled: konvensi layer, loader map `.tmj`, tileset LPC placeholder · Ref: 10, 42
+- [ ] **P1-02** Map prototipe `lembang` (kecil) + `kos_a` interior + `buahbatu` (kecil) + interior rumah Michelle · Ref: 10
+- [ ] **P1-03** Abstraksi input → Action (keyboard dulu) · Ref: 40
+- [ ] **P1-04** Entity Player: gerak 8 arah, lari, animasi idle/walk (sprite LPC placeholder) · Ref: 15
+- [ ] **P1-05** Collision dari object layer + y-sorting depth · Ref: 02, 10
+- [ ] **P1-06** Kamera follow, batas map, zoom integer · Ref: 40
+- [ ] **P1-07** Sistem interaksi: deteksi objek terdekat + prompt "E ..." · Ref: 10, 40
+- [ ] **P1-08** Kotak dialog Preact (typewriter, pilihan, potret placeholder, log) · Ref: 40, 18
+- [ ] **P1-09** Transisi area (pintu & tepi peta) + fade + spawn point · Ref: 10
+- [ ] **P1-10** Kontrol sentuh: joystick virtual + tombol aksi + deteksi portrait · Ref: 40
+- [ ] **P1-11** Mode debug `?debug=1` (FPS, collision, grid) · Ref: 50
+
+**Kriteria selesai P1:** bisa jalan di Lembang, masuk/keluar kos, ngobrol dengan papan (dialog), main di HP & laptop.
+
+---
+
+## P2 · Waktu, Cuaca & Save Lokal
+- [ ] **P2-01** Logic jam & kalender (menit → hari → musim → tahun) + test · Ref: 11
+- [ ] **P2-02** HUD jam/tanggal/musim (Preact) · Ref: 11, 40
+- [ ] **P2-03** Siklus siang/malam (overlay + sprite lampu) · Ref: 11
+- [ ] **P2-04** Tidur, Day Tick pipeline (kerangka berurutan), pingsan 02:00, layar ringkasan hari · Ref: 11
+- [ ] **P2-05** Generator cuaca seeded per musim + test · Ref: 11
+- [ ] **P2-06** Efek visual cuaca: hujan, kabut, salju, angin (partikel + pooling) · Ref: 11
+- [ ] **P2-07** Skema save zod + `schemaVersion` + kerangka migrasi + test · Ref: 32
+- [ ] **P2-08** Save/load IndexedDB + autosave saat tidur + indikator "Tersimpan ✓" · Ref: 32, 40
+- [ ] **P2-09** Export/import save `.json` di menu Pengaturan (sederhana) · Ref: 32
+
+**Kriteria selesai P2:** hari berganti, cuaca berubah, refresh browser → progres tetap ada. 🎉 **Rilis v0.1**
+
+---
+
+## P3 · Pertanian, Ternak & Inventory
+- [ ] **P3-01** Skema & data `items.json` + loader zod + validasi ID unik · Ref: 12, 02
+- [ ] **P3-02** Inventory (tas + hotbar 10 slot) logic + test · Ref: 12
+- [ ] **P3-03** UI inventory & hotbar (drag-drop, tooltip) · Ref: 40
+- [ ] **P3-04** Alat (cangkul, penyiram, sabit, kapak, beliung) + sistem energi · Ref: 12, 16
+- [ ] **P3-05** Status tanah (gembur, tersiram, reset harian) via Command · Ref: 12
+- [ ] **P3-06** Tanaman: tanam, tumbuh per hari, layu, regrow, kualitas + test · Ref: 12
+- [ ] **P3-07** Data `crops.json` minimal 16 tanaman + sprite tahap tumbuh · Ref: 12
+- [ ] **P3-08** Kotak Kirim + penjualan saat Day Tick + ringkasan · Ref: 12, 13
+- [ ] **P3-09** Pupuk & crafting dasar (meja kerja, penyiram otomatis) · Ref: 12, 20
+- [ ] **P3-10** Ternak: kandang ayam & sapi, makan, elus, hati, produk + test · Ref: 12
+- [ ] **P3-11** Peliharaan (kucing/anjing) + mesin olahan dasar (selai, yogurt) · Ref: 12
+
+**Kriteria selesai P3:** loop tanam → siram → panen → kirim → dapat uang berjalan selama 1 musim penuh.
+
+---
+
+## P4 · Ekonomi, Toko & Karier Dasar
+- [ ] **P4-01** Dompet + log transaksi + test · Ref: 13
+- [ ] **P4-02** Sistem toko generik data-driven (jam buka, stok musiman, beli/jual) · Ref: 13
+- [ ] **P4-03** UI toko (beli/jual, jumlah, konfirmasi) · Ref: 13, 40
+- [ ] **P4-04** Toko bibit Kang Asep + warung Bu Euis · Ref: 13
+- [ ] **P4-05** Harga dinamis (musim, saturasi, permintaan harian) + test · Ref: 13
+- [ ] **P4-06** Sistem karier generik (level, shift, performa, promosi, time-skip) + test · Ref: 13
+- [ ] **P4-07** Karier Kuliner level 1–3 + minigame Racik Kopi · Ref: 13, 20
+- [ ] **P4-08** Script `simulate-economy.ts` + balancing awal · Ref: 13, 50
+
+**Kriteria selesai P4:** bisa hidup dari bertani **atau** kerja di kafe; kurva uang mendekati target. 🎉 **Rilis v0.2**
+
+---
+
+## P5 · Backend & Cloud Save
+- [ ] **P5-01** Setup Supabase otomatis lewat `npm run setup` (buat project, ambil keys → `.env.local`, `supabase link`, `db push` migrasi `001_init.sql`, matikan signup publik) · Ref: 32, 51
+- [ ] **P5-02** RLS `002_rls.sql` + uji akses (user lain tidak bisa baca) · Ref: 32
+- [ ] **P5-03** Fungsi `create_household` & `join_household(code)` (maks. 2 anggota) · Ref: 32
+- [ ] **P5-04** UI login/daftar + buat/gabung household di Title · Ref: 32, 40
+- [ ] **P5-05** Cloud save world & player + `save_world` optimistic version · Ref: 32
+- [ ] **P5-06** Sinkron lokal ↔ cloud saat login + resolusi konflik · Ref: 32
+- [ ] **P5-07** Snapshot harian + restore dari Pengaturan · Ref: 32
+- [ ] **P5-08** Vercel Cron keep-alive (`api/keepalive.ts`) + `CRON_SECRET` di-generate & disinkron ke Vercel otomatis · Ref: 32, 51
+- [ ] **P5-09** Bucket Storage privat `media` + policy (dibuat lewat script) · Ref: 32
+- [ ] **P5-10** Akun & household tes A/B dibuat otomatis + fixture login Playwright + pembersihan data tes · Ref: 50, 51
+
+**Kriteria selesai P5:** login di device lain → progres sama; project tidak ter-pause.
+
+---
+
+## P6 · Multiplayer Berdua
+- [ ] **P6-01** Channel privat `household:{id}` + Realtime Authorization · Ref: 30, 32
+- [ ] **P6-02** Presence + notifikasi "💗 {partner} online" + status · Ref: 30
+- [ ] **P6-03** Broadcast posisi 10 Hz + RemotePlayer + interpolasi · Ref: 30
+- [ ] **P6-04** Pemilihan host deterministik + handover · Ref: 30
+- [ ] **P6-05** Command lewat jaringan (cmd → host → ack/patch) + prediksi & rollback · Ref: 30, 02
+- [ ] **P6-06** Sinkron jam & cuaca dari host (`world:tick`) · Ref: 30, 11
+- [ ] **P6-07** Sinkron tanah, tanaman, ternak, objek dunia (`state:patch`) · Ref: 30
+- [ ] **P6-08** Ganti hari hanya saat keduanya tidur + layar menunggu · Ref: 11
+- [ ] **P6-09** Emote + chat bubble + app Chat sederhana (simpan ke DB) · Ref: 30, 40
+- [ ] **P6-10** Reconnect, antrean Command, overlay koneksi putus · Ref: 30
+- [ ] **P6-11** Indikator arah pasangan di luar layar · Ref: 30
+- [ ] **P6-12** E2E multiplayer otomatis (2 browser context, semua skenario `50` §4) + masuk CI · Ref: 30, 50
+
+**Kriteria selesai P6:** kalian bisa bertani bareng di dunia yang sama dari dua device. 🎉 **Rilis v0.3: BISA MAIN BERDUA**
+
+---
+
+## P7 · Karakter & Outfit
+- [ ] **P7-01** Sistem layered sprite (container + bake ke RenderTexture) · Ref: 15
+- [ ] **P7-02** Import layer LPC (body, rambut, hijab, baju dasar) + `CREDITS.md` · Ref: 15, 42
+- [ ] **P7-03** Character Creator scene (kulit, wajah, rambut, hijab, warna, trait, ultah) · Ref: 15, 16
+- [ ] **P7-04** Potret dialog pemain A & B (8 ekspresi) dari foto · Ref: 15, 43
+- [ ] **P7-05** Slot outfit + `outfits.json` (≥ 40 item awal) + validasi · Ref: 15
+- [ ] **P7-06** Lemari + preset outfit · Ref: 15
+- [ ] **P7-07** Toko baju Cihampelas + ruang ganti (preview 4 arah) · Ref: 15
+- [ ] **P7-08** Hadiahkan baju ke pasangan + sinkron outfit realtime · Ref: 15, 30
+- [ ] **P7-09** Efek ringan outfit (warmth, baju kerja) · Ref: 15
+
+**Kriteria selesai P7:** karakter mirip kalian, bisa beli & ganti baju, pasangan melihat perubahannya. 🎉 **Rilis v0.4**
+
+---
+
+## P8 · HP, NPC, Dialog & Quest
+- [ ] **P8-01** Kerangka HP (app launcher, navigasi, wallpaper) · Ref: 40
+- [ ] **P8-02** App Quest, Kalender, Cuaca, Peta (dasar) · Ref: 40
+- [ ] **P8-03** Data NPC + spawn + potret · Ref: 18
+- [ ] **P8-04** Pathfinding EasyStar + jadwal harian & override · Ref: 18
+- [ ] **P8-05** Dialog berkondisi (kondisi, variabel, prioritas, cooldown) + test · Ref: 18
+- [ ] **P8-06** Pertemanan NPC + hadiah (loved..hated) + ultah NPC · Ref: 18
+- [ ] **P8-07** Quest engine (objectives via event, rewards, state machine) + test · Ref: 19
+- [ ] **P8-08** Quest harian + papan warga Alun-alun · Ref: 19
+- [ ] **P8-09** Cutscene engine (script JSON, sinkron host) · Ref: 19
+- [ ] **P8-10** 10 NPC pertama dengan jadwal & dialog (termasuk Mamah & Papah Michelle) · Ref: 18
+- [ ] **P8-11** Isi kuesioner personal + `personal/` + fallback `personal.example` · Ref: 43
+- [ ] **P8-12** Bab 1 "Pendatang Baru" · Ref: 19
+- [ ] **P8-13** Bab 2 "Kebetulan yang Disengaja" (cutscene ketemu, co-op) · Ref: 19, 16
+- [ ] **P8-14** Bab 3 "Ngopi di Braga" · Ref: 19
+
+**Kriteria selesai P8:** kota terasa hidup, ada cerita yang bisa diikuti sampai Bab 3. 🎉 **Rilis v0.5**
+
+---
+
+## P9 · Kebutuhan, Mood & Hubungan
+- [ ] **P9-01** Needs (energi, lapar, sosial, hiburan) + HUD + test · Ref: 16
+- [ ] **P9-02** Moodlet & perhitungan mood + test · Ref: 16
+- [ ] **P9-03** Trait & aspirasi (data + efek) · Ref: 16
+- [ ] **P9-04** Meter Pertemanan & Romansa antar pemain + test · Ref: 16
+- [ ] **P9-05** Menu interaksi radial + model Ajak → Terima/Tolak · Ref: 16, 30
+- [ ] **P9-06** Animasi interaksi berdua (peluk, gandeng, dansa, foto) · Ref: 16, 15
+- [ ] **P9-07** Tahap hubungan + gate event (wajib berdua online) · Ref: 16
+- [ ] **P9-08** Aktivitas kencan (ngopi, city light Dago, kuliner malam) · Ref: 16
+- [ ] **P9-09** Interaksi saat pasangan offline (karakter tidur, kejutan, Bonus Kangen) · Ref: 16
+- [ ] **P9-10** Quest romantis (≥ 10) · Ref: 19
+- [ ] **P9-11** Bab 4 & 5 (PDKT → jadian) + event "Main ke Rumah" Buahbatu + meter Restu + kenangan personal · Ref: 19, 10, 18, 43
+- [ ] **P9-12** Album Kenangan (foto, teks, audio) di app Album · Ref: 43, 31
+
+**Kriteria selesai P9:** kalian bisa jadian di game dengan momen yang personal. 🎉 **Rilis v0.6**
+
+---
+
+## P10 · Aktivitas
+- [ ] **P10-01** Mancing: minigame + `fish.json` (≥ 30) + test seleksi ikan · Ref: 20
+- [ ] **P10-02** Masak: dapur, resep Sunda (≥ 20 awal), buff, masak berdua · Ref: 20
+- [ ] **P10-03** Crafting lengkap (kategori, resep terbuka via skill) · Ref: 20
+- [ ] **P10-04** Mode foto (pose, filter, bingkai) + simpan album + sinkron Storage · Ref: 20
+- [ ] **P10-05** Ensiklopedia koleksi · Ref: 21
+- [ ] **P10-06** Gua Tangkuban lantai 1–10 (template, bijih, puzzle, lentera) · Ref: 20
+- [ ] **P10-07** Museum Geologi (donasi + hadiah) · Ref: 20
+- [ ] **P10-08** Upgrade alat di pandai besi · Ref: 12
+- [ ] **P10-09** Minigame Balok Braga + papan skor rumah · Ref: 20
+- [ ] **P10-10** Minigame Catur/Congklak & Tebak Gambar (versus pasangan) · Ref: 20
+- [ ] **P10-11** Serangga & forage · Ref: 20
+
+**Kriteria selesai P10:** banyak hal untuk dilakukan selain bertani. 🎉 **Rilis v0.7**
+
+---
+
+## P11 · Voice
+- [ ] **P11-01** Blip suara karakter (WebAudio, profil per karakter) · Ref: 31
+- [ ] **P11-02** Pemutar suara kenangan (+ subtitle opsional) · Ref: 31
+- [ ] **P11-03** Voice note: rekam, upload, mailbox, signed URL, putar · Ref: 31, 32
+- [ ] **P11-04** Lampirkan voice note ke hadiah · Ref: 31
+- [ ] **P11-05** `api/turn-credentials.ts` + konfigurasi STUN/TURN + env TURN disinkron ke Vercel (`env:sync`) · Ref: 31, 51
+- [ ] **P11-06** Voice chat WebRTC + signaling via channel · Ref: 31
+- [ ] **P11-07** Proximity gain + indikator bicara + push-to-talk/open mic · Ref: 31
+- [ ] **P11-08** App Telepon (panggil, ringtone, angkat, fallback voice note) · Ref: 31
+
+**Kriteria selesai P11:** bisa ngobrol pakai suara di dalam game, makin dekat makin jelas. 🎉 **Rilis v0.8**
+
+---
+
+## P12 · Kendaraan & Peta Bandung
+- [ ] **P12-01** Art & map final: Dago, Braga, Cihampelas · Ref: 10, 42
+- [ ] **P12-02** Art & map final: Gedung Sate, Alun-alun, Pasar Baru · Ref: 10, 42
+- [ ] **P12-03** Art & map final: **Buahbatu ⭐** (rumah keluarga Michelle, Jl. Buahbatu, tempat masa kecil dari kuesioner) · Ref: 10, 43
+- [ ] **P12-04** Angkot + halte (fast travel berbayar, jam operasi, Mang Oleh) · Ref: 14
+- [ ] **P12-05** Sistem kendaraan: naik/turun, tile `road`, kecepatan, bensin, parkir · Ref: 14
+- [ ] **P12-06** Sepeda & motor + dealer · Ref: 14
+- [ ] **P12-07** Bonceng pasangan (ajak/terima, sinkron, poin Romansa) · Ref: 14, 16
+- [ ] **P12-08** App Ojek + App Peta lengkap · Ref: 14, 40
+- [ ] **P12-09** Kustom kendaraan (warna, stiker, helm) · Ref: 14
+- [ ] **P12-10** Karier tambahan: Kreatif & Pariwisata · Ref: 13
+
+**Kriteria selesai P12:** keliling Bandung (sampai Buahbatu) pakai motor sambil bonceng pasangan. 🎉 **Rilis v0.9**
+
+---
+
+## P13 · Properti, Kredit & Pernikahan
+- [ ] **P13-01** Sistem kredit (DP, tenor, cicilan Senin, denda, skor bank) + test lengkap · Ref: 14, 13
+- [ ] **P13-02** Bank (Pak Dadang) + app Bank: tabungan, transfer, kredit · Ref: 13
+- [ ] **P13-03** Sewa/beli hunian: kos → kontrakan → rumah · Ref: 14
+- [ ] **P13-04** Mode dekor ala Sims (grid, rotasi, undo, wallpaper/lantai, realtime berdua) · Ref: 14
+- [ ] **P13-05** `furniture.json` (≥ 80) + toko furnitur + skor rumah · Ref: 14
+- [ ] **P13-06** Berkunjung ke rumah pasangan (ketuk pintu, izin) · Ref: 14
+- [ ] **P13-07** Beli tanah + konstruksi bangunan (kandang, greenhouse, gudang) · Ref: 14
+- [ ] **P13-08** Bab 6 & Proyek Revitalisasi awal (Lembang Hijau) · Ref: 21, 19
+- [ ] **P13-09** Bab 7: "Minta Restu" di Buahbatu + Lamaran (toko perhiasan, pilih lokasi, cutscene) · Ref: 16, 18, 19
+- [ ] **P13-10** Bab 8 Persiapan & upacara pernikahan + bulan madu · Ref: 16, 19
+- [ ] **P13-11** Dompet & aset bersama, pindah serumah · Ref: 13, 14
+- [ ] **P13-12** Mobil + kredit mobil · Ref: 14
+- [ ] **P13-13** Rumah Impian (bangun di tanah sendiri) · Ref: 14
+
+**Kriteria selesai P13:** menikah di game, punya rumah sendiri dengan KPR. 🎉 **Rilis v0.10**
+
+---
+
+## P14 · Keluarga & Anak
+- [ ] **P14-01** Keputusan punya anak / adopsi (persetujuan berdua) · Ref: 17
+- [ ] **P14-02** Masa penantian + quest persiapan + cutscene kelahiran · Ref: 17
+- [ ] **P14-03** Bayi: kebutuhan, perawatan, babysitter · Ref: 17
+- [ ] **P14-04** Tumbuh kembang (bayi → balita → anak → remaja) + test · Ref: 17
+- [ ] **P14-05** Penampilan & trait warisan · Ref: 17
+- [ ] **P14-06** Sekolah: daftar, biaya, PR minigame, rapor, acara sekolah · Ref: 17
+- [ ] **P14-07** Anak membantu + aktivitas keluarga + foto keluarga tahunan · Ref: 17
+- [ ] **P14-08** App Keluarga + pohon keluarga · Ref: 17, 40
+- [ ] **P14-09** Bab 9 & 10 · Ref: 19
+
+**Kriteria selesai P14:** punya anak yang tumbuh dan sekolah. 🎉 **Rilis v0.11**
+
+---
+
+## P15 · Festival, Event & Endgame
+- [ ] **P15-01** Sistem festival + 8 festival (`19` §5) · Ref: 19
+- [ ] **P15-02** Event tanggal asli (ultah, anniversary) + quest kejutan yang tersembunyi dari yang berulang tahun · Ref: 19, 43
+- [ ] **P15-03** Event acak harian · Ref: 19
+- [ ] **P15-04** Skill 6 jenis + perk Lv5/Lv10 · Ref: 21
+- [ ] **P15-05** Proyek Revitalisasi lengkap (6 proyek) · Ref: 21
+- [ ] **P15-06** Area Ciwidey & Situ Patenggang · Ref: 10
+- [ ] **P15-07** Gua Tangkuban lantai 11–20 + Saung Udjo (ritme angklung duet) · Ref: 20
+- [ ] **P15-08** Achievement (≥ 100) · Ref: 21
+- [ ] **P15-09** Karier Agribisnis & Pendidikan + Lv10 bisnis sendiri · Ref: 13
+- [ ] **P15-10** Meter Kesempurnaan Hidup + konten tahun 3+ (legendaris, event langka) · Ref: 21
+- [ ] **P15-11** Legacy anak (kelulusan, jalan hidup) · Ref: 17
+- [ ] **P15-12** NPC lengkap (20–25) + heart events · Ref: 18
+
+**Kriteria selesai P15:** selalu ada tujuan baru setiap musim dan tahun. 🎉 **Rilis v0.12**
+
+---
+
+## P16 · Polish & Rilis v1.0
+- [ ] **P16-01** Audio lengkap (musik area/musim, ambience, SFX) · Ref: 41
+- [ ] **P16-02** Tutorial bertahap · Ref: 40
+- [ ] **P16-03** Pengaturan lengkap (audio, kontrol remap, teks, aksesibilitas) · Ref: 40
+- [ ] **P16-04** Gamepad support · Ref: 40
+- [ ] **P16-05** Optimasi performa HP (budget `50` §6) · Ref: 50
+- [ ] **P16-06** Balancing pass ekonomi & progresi (simulasi 3 tahun) · Ref: 13, 21
+- [ ] **P16-07** Layar Kredit (dari `CREDITS.md`) · Ref: 42
+- [ ] **P16-08** Perluas E2E: playthrough tahun 1 dipercepat (solo & berdua) + perf test di CI · Ref: 50
+- [ ] **P16-09** Playtest 2 minggu berdua + perbaikan bug · Ref: 50
+- [ ] **P16-10** Checklist rilis + tag `v1.0.0` 🎉 · Ref: 50
+
+---
+
+## 💡 Backlog Ide
+*(Ide baru masuk sini dulu, dibahas sebelum masuk fase.)*
+- Kalender event musiman tahunan (Ramadan/Lebaran, Natal) yang bisa diaktifkan di pengaturan
+- Mode "surat masa depan" (tulis surat yang baru bisa dibuka 1 tahun nyata kemudian)
+- Hewan langka di Tahura (lutung)
+- Kafe milik sendiri bisa didekor penuh
+- Mini "TikTok" in-game: rekam GIF momen berdua
