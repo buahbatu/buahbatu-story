@@ -5,7 +5,7 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 ---
 
 ### ADR-001 · 2D pixel top-down, bukan 3D
-- **Status**: Diterima
+- **Status**: Diganti oleh ADR-022 (2026-11-24)
 - **Konteks**: Ingin nuansa Harvest Moon, banyak sistem (farming grid, dekor, NPC). 3D jauh lebih berat dikerjakan.
 - **Keputusan**: 2D pixel top-down dengan Phaser.
 - **Konsekuensi**: Aset gratis berlimpah, grid farming/dekor sederhana. Visual "mirip wajah" dicapai lewat potret dialog.
@@ -20,6 +20,7 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Konsekuensi**: Dashboard tabel enak dipakai, Realtime Presence/Broadcast cocok untuk multiplayer. Perlu dipantau kalau kebijakan pause berubah.
 
 ### ADR-004 · Art direction LPC 32px
+- **Status**: Diganti oleh ADR-022 (2026-11-24)
 - **Konteks**: Butuh karakter berlapis (ganti baju) gratis dan konsisten. Aset 16px (Sprout Lands) tidak cocok dengan karakter LPC.
 - **Keputusan**: Seluruh aset mengikuti gaya **LPC, tile 32×32**. Landmark Bandung digambar sendiri mengikuti palet LPC.
 - **Konsekuensi**: Wajib mematuhi lisensi LPC (CC-BY-SA/GPL/OGA-BY) dan mencatat kredit di `CREDITS.md`. Alternatif berbayar: Mana Seed (16px), hanya kalau seluruh gaya ikut diganti.
@@ -88,7 +89,7 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Konsekuensi**: Deteksi email membuka celah enumerasi akun, jadi endpoint wajib di-rate-limit. Konten personal tetap wajib dari bucket privat (bukan bundle JS), karena login tidak melindungi file statis. Detail: `32` §2.
 
 ### ADR-016 · Phaser 4 + versi toolchain awal
-- **Status**: Diterima (P0-01, 2026-11-23)
+- **Status**: Diganti oleh ADR-022 (2026-11-24); bagian versi TypeScript tetap berlaku
 - **Konteks**: `01` meminta "Phaser versi stabil terbaru". Per November 2026 versinya **4.2.1** (4.0 stabil sejak April 2026; 3.90 adalah rilis terakhir v3). Contoh kode di docs masih memakai API Phaser 3. TypeScript terbaru (7.x, compiler native) belum didukung `typescript-eslint` (peer `<6.1.0`).
 - **Keputusan**: Pakai **Phaser 4.2.x** (`import * as Phaser from 'phaser'`). TypeScript dipin **~6.0** sampai `typescript-eslint` mendukung TS 7. Vite 8 (Rolldown): opsi build memakai `build.rolldownOptions`, dan Phaser dipisah ke chunk sendiri.
 - **Alasan**: Phaser 4 adalah jalur yang masih dirawat; API scene/tilemap/arcade umumnya sama dengan v3. Pin TS mencegah lint rusak di P0-03.
@@ -121,6 +122,21 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Keputusan**: (1) Zoom selalu integer per piksel fisik, ukuran dunia yang terlihat mengikuti layar (tinggi ±360, batas 270–450, lebar maks. 960) → selalu penuh layar. (2) Perangkat sentuh tegak: game disembunyikan & di-pause, tampil animasi putar HP. (3) Android: layar penuh + kunci landscape pada sentuhan pertama; PWA `display: fullscreen`, `orientation: landscape` dengan ikon sendiri.
 - **Alasan**: Cara standar game pixel art (piksel tetap rata & tajam tanpa bingkai). Fullscreen API wajib dipicu aksi user; iPhone Safari tidak mendukungnya untuk halaman biasa, jadi PWA jadi jalurnya.
 - **Konsekuensi**: Semua scene & HUD wajib membaca ukuran dari `this.scale` dan menyesuaikan saat resize. Kamera (P1-06) dan peta harus siap memperlihatkan area berbeda per layar. Pemain di layar lebar melihat sedikit lebih banyak dunia (tidak memengaruhi multiplayer karena dunia adalah data).
+
+### ADR-021 · (dibatalkan) Gaya chibi 2D 16px
+- **Status**: Diganti oleh ADR-022 sebelum dikerjakan. User sempat memilih gaya chibi 2D, lalu menegaskan acuan sebenarnya adalah *Harvest Moon: Back to Nature* (PS1), bukan Stardew Valley.
+
+### ADR-022 · Visual 2.5D ala Harvest Moon: Back to Nature, engine Three.js
+- **Status**: Diterima (2026-11-24, keputusan user). Menggantikan ADR-001 (2D top-down), ADR-004 (LPC 32px), ADR-016 (Phaser 4). Merevisi Non-Goals `00` §6.
+- **Konteks**: Acuan user adalah **Harvest Moon: Back to Nature** (PS1): dunia 3D low-poly bertekstur, kamera miring dari atas, karakter berupa sprite 2D chibi. Docs lama mengarah ke 2D pixel top-down (lebih mirip Stardew Valley) sehingga tidak sesuai.
+- **Keputusan**:
+  1. **Engine**: **Three.js** (WebGL) menggantikan Phaser. Logika game, Command, state, UI Preact, CI, tes, layar penuh/putar HP tetap.
+  2. **Gaya**: dunia **3D low-poly** (tanah petak, rumah, pohon, pagar dari geometri sederhana + tekstur pixel kecil, `NearestFilter`), **karakter & NPC sprite chibi** (billboard menghadap kamera, 8 arah), **kamera perspektif miring** dari atas mengikuti pemain. Semua aset orisinal berlatar Bandung; tidak menyalin aset, karakter, peta, atau tampilan spesifik game mana pun.
+  3. **Rasa PS1**: dirender ke **resolusi internal rendah** (tinggi ±240) lalu diperbesar zoom integer tanpa blur (memakai `computeView`, ADR-020), tekstur nearest-neighbor, palet hangat.
+  4. **Peta**: tetap disusun sebagai **grid** (Tiled `.tmj`: layer tanah, ketinggian, objek, tabrakan) lalu **dibangun otomatis jadi 3D**. Gameplay (cangkul, tanam, tabrakan, NPC pathfinding) tetap berbasis grid seperti Back to Nature.
+  5. Bangunan unik per daerah (`10` §5) dibuat dari model low-poly modular + tekstur, digenerate lewat kode/data sehingga variasinya banyak.
+- **Alasan**: Satu-satunya cara memenuhi visi user. Three.js matang, gratis, jalan di browser & HP; low-poly + render resolusi rendah tetap ringan. Grid-based world menjaga semua desain sistem (farming, dekor, NPC) tetap berlaku.
+- **Konsekuensi**: Task berbasis Phaser (scene, kamera 2D, sprite LPC) disusun ulang (TODO P1). Pekerjaan grafik lebih besar (model + tekstur + sprite). Budget performa (`50` §6) diukur ulang untuk 3D. Snapshot visual dibuat ulang. Docs yang menyebut Phaser/LPC/top-down direvisi bertahap saat task terkait dikerjakan; yang inti (`00`, `01`, `02`, `10` §6, `42`) direvisi sekarang.
 
 ---
 

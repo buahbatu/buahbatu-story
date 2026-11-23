@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia & Gerak | v0.1 | 0 | 11 | ⬜ |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 0 | 12 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,12 +37,12 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **15** | **184** | |
+| **Total** | | | **15** | **185** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
-**Sedang dikerjakan:** P1-01
-**Task berikutnya:** P1-01
+**Sedang dikerjakan:** P1-00
+**Task berikutnya:** P1-00
 
 ---
 
@@ -67,13 +67,14 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
 ---
 
-## P1 · Fondasi Dunia & Gerak
-- [~] **P1-01** Pipeline Tiled: konvensi layer, loader map `.tmj`, tileset LPC placeholder · Ref: 10, 42 · 🟡 2026-11-23
+## P1 · Fondasi Dunia 2.5D & Gerak (ADR-022)
+- [~] **P1-00** Migrasi engine ke Three.js: renderer resolusi rendah ala PS1 (render target dari `computeView`, diperbesar integer tanpa blur), scene manager (Boot → Preload → Title), latar judul 3D low-poly, hapus Phaser, test hook & E2E tetap hijau · Ref: 02, 40 · 🟡 2026-11-24
+- [ ] **P1-01** Pipeline peta: grid Tiled `.tmj` (konvensi layer + ketinggian) → dunia 3D low-poly otomatis, skema zod, tekstur pixel placeholder · Ref: 10, 42
 - [ ] **P1-02** Map prototipe `lembang` (kecil) + `kos_a` interior + `buahbatu` (kecil) + interior rumah Michelle · Ref: 10
 - [ ] **P1-03** Abstraksi input → Action (keyboard dulu) · Ref: 40
-- [ ] **P1-04** Entity Player: gerak 8 arah, lari, animasi idle/walk (sprite LPC placeholder) · Ref: 15
-- [ ] **P1-05** Collision dari object layer + y-sorting depth · Ref: 02, 10
-- [ ] **P1-06** Kamera follow, batas map, zoom integer · Ref: 40
+- [ ] **P1-04** Entity Player: sprite chibi billboard 8 arah, lari, animasi idle/walk (placeholder) · Ref: 15
+- [ ] **P1-05** Collision berbasis grid & objek + urutan gambar sprite vs bangunan · Ref: 02, 10
+- [ ] **P1-06** Kamera 2.5D miring ala Back to Nature: follow pemain, batas peta · Ref: 40
 - [ ] **P1-07** Sistem interaksi: deteksi objek terdekat + prompt "E ..." · Ref: 10, 40
 - [ ] **P1-08** Kotak dialog Preact (typewriter, pilihan, potret placeholder, log) · Ref: 40, 18
 - [ ] **P1-09** Transisi area (pintu & tepi peta) + fade + spawn point · Ref: 10
@@ -87,7 +88,7 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 ## P2 · Waktu, Cuaca & Save Lokal
 - [ ] **P2-01** Logic jam & kalender (menit → hari → musim → tahun) + test · Ref: 11
 - [ ] **P2-02** HUD jam/tanggal/musim (Preact) · Ref: 11, 40
-- [ ] **P2-03** Siklus siang/malam (overlay + sprite lampu) · Ref: 11
+- [ ] **P2-03** Siklus siang/malam (cahaya matahari & ambient 3D + lampu) · Ref: 11
 - [ ] **P2-04** Tidur, Day Tick pipeline (kerangka berurutan), pingsan 02:00, layar ringkasan hari · Ref: 11
 - [ ] **P2-05** Generator cuaca seeded per musim + test · Ref: 11
 - [ ] **P2-06** Efek visual cuaca: hujan, kabut, salju, angin (partikel + pooling) · Ref: 11
@@ -165,8 +166,8 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 ---
 
 ## P7 · Karakter & Outfit
-- [ ] **P7-01** Sistem layered sprite (container + bake ke RenderTexture) · Ref: 15
-- [ ] **P7-02** Import layer LPC (body, rambut, hijab, baju dasar) + `CREDITS.md` · Ref: 15, 42
+- [ ] **P7-01** Sistem layered sprite chibi (bake layer ke satu tekstur untuk billboard) · Ref: 15
+- [ ] **P7-02** Layer karakter chibi (body, rambut, hijab, baju dasar) + `CREDITS.md` · Ref: 15, 42
 - [ ] **P7-03** Character Creator scene (kulit, wajah, rambut, hijab, warna, trait, ultah) · Ref: 15, 16
 - [ ] **P7-04** Potret dialog pemain A & B (8 ekspresi) dari foto · Ref: 15, 43
 - [ ] **P7-05** Slot outfit + `outfits.json` (≥ 40 item awal) + validasi · Ref: 15

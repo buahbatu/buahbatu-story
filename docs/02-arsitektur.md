@@ -2,7 +2,7 @@
 
 ## 1. Prinsip
 1. **Multiplayer-ready sejak hari pertama.** Semua perubahan state lewat **Command**, jadi nanti Command tinggal dikirim lewat jaringan.
-2. **Logika murni terpisah dari Phaser.** Aturan game (tumbuh tanaman, harga, cicilan, quest) ditulis sebagai fungsi murni yang bisa di-test tanpa browser.
+2. **Logika murni terpisah dari engine (Three.js).** Aturan game (tumbuh tanaman, harga, cicilan, quest) ditulis sebagai fungsi murni yang bisa di-test tanpa browser.
 3. **Data-driven.** Konten = JSON di `src/content/`, kode = mesin. Menambah item/NPC/quest **tidak perlu** mengubah kode.
 4. **Modular per sistem.** Setiap sistem punya folder sendiri dan berkomunikasi lewat **EventBus** bertipe, tidak saling import sembarangan.
 5. **Satu sumber kebenaran.** `GameState` adalah satu objek serializable (bisa langsung disimpan sebagai JSON).
@@ -24,7 +24,7 @@ buahbatu-story/
 │     ├─ audio/{music,sfx,ambience,blips}/
 │     └─ fonts/
 ├─ src/
-│  ├─ main.ts                  # entry: buat Phaser.Game + mount UI Preact
+│  ├─ main.ts                  # entry: renderer Three.js + scene manager + mount UI Preact
 │  ├─ config/
 │  │  ├─ game.ts               # resolusi, physics, scale
 │  │  ├─ balance.ts            # SEMUA angka balancing
@@ -46,7 +46,7 @@ buahbatu-story/
 │  │     ├─ types.ts           # tipe data sistem
 │  │     ├─ logic.ts           # fungsi MURNI (wajib di-test)
 │  │     ├─ handlers.ts        # handler Command → panggil logic → emit event
-│  │     ├─ view.ts            # (opsional) adapter ke Phaser
+│  │     ├─ view.ts            # (opsional) adapter ke Three.js
 │  │     └─ logic.test.ts
 │  ├─ scenes/
 │  │  ├─ BootScene.ts  PreloadScene.ts  TitleScene.ts
@@ -98,7 +98,7 @@ buahbatu-story/
              │
      ┌───────┴────────┐
      ▼                ▼
- Phaser view      Preact UI
+ 3D view (Three)  Preact UI
 ```
 - **Gerak karakter** tidak lewat Command (terlalu sering); dikirim sebagai *broadcast posisi* (lihat `30-multiplayer.md`).
 - Saat solo, pemain otomatis jadi **host**.
@@ -137,7 +137,7 @@ export const setFlag: Handler<CommandOf<'world/setFlag'>> = (draft, cmd) => {
 ```
 Aturan:
 - Handler **memutasi `draft` Immer**, lalu mengembalikan `succeed(events)` atau `reject(reasonKey)`. Dispatcher menjalankannya secara **atomik**: reject/throw → state tidak berubah sama sekali.
-- Handler **tidak boleh** menyentuh Phaser, DOM, atau jaringan.
+- Handler **tidak boleh** menyentuh engine (Three.js), DOM, atau jaringan.
 - Semua keputusan acak memakai `rng` dari state (seeded) supaya host dan klien konsisten.
 
 ## 5. GameState (garis besar)
@@ -169,7 +169,7 @@ interface GameState {
 }
 ```
 
-## 6. Scene Phaser
+## 6. Scene (scene manager sendiri di atas Three.js, ADR-022)
 | Scene | Tugas |
 |---|---|
 | `BootScene` | Load config minimal, font |
@@ -178,7 +178,7 @@ interface GameState {
 | `CharacterCreatorScene` | Bikin karakter (sekali di awal) |
 | `WorldScene` | Area aktif: tilemap, entity, kamera, efek cuaca/cahaya |
 
-UI (HUD, HP, menu, dialog) **tidak** dibuat sebagai scene Phaser, tapi sebagai **Preact overlay** di atas canvas, berkomunikasi lewat EventBus + store.
+UI (HUD, HP, menu, dialog) **tidak** dibuat sebagai scene Phaser, tapi sebagai **Preact overlay** di atas canvas 3D, berkomunikasi lewat EventBus + store.
 
 Area dimuat **per area** (lazy). Pindah area = unload tilemap lama → load tilemap baru → fade.
 

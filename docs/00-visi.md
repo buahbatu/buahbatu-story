@@ -1,7 +1,7 @@
 # 00 · Visi & Pilar Desain
 
 ## 1. Pitch
-**Buahbatu Story** adalah life-sim pixel 2D untuk dua orang. Judulnya diambil dari **Buahbatu**, kampung halaman Michelle (Pemain B). Kalian mulai sebagai **dua orang lajang**: Pemain A ngekos di Dago, sedangkan Michelle tinggal di rumah keluarganya di Buahbatu. Dari situ kalian bertani di Lembang, kerja di Braga, belanja di Cihampelas, dan pelan-pelan **kenal → PDKT → pacaran → nikah → punya rumah → punya anak**. Semua dimainkan **berdua secara online**, dan saat dua-duanya online kalian bisa saling ketemu, ngobrol pakai suara, dan bikin kenangan bareng.
+**Buahbatu Story** adalah life-sim **2.5D ala Harvest Moon: Back to Nature** (dunia 3D low-poly, karakter sprite chibi, kamera miring; ADR-022) untuk dua orang. Judulnya diambil dari **Buahbatu**, kampung halaman Michelle (Pemain B). Kalian mulai sebagai **dua orang lajang**: Pemain A ngekos di Dago, sedangkan Michelle tinggal di rumah keluarganya di Buahbatu. Dari situ kalian bertani di Lembang, kerja di Braga, belanja di Cihampelas, dan pelan-pelan **kenal → PDKT → pacaran → nikah → punya rumah → punya anak**. Semua dimainkan **berdua secara online**, dan saat dua-duanya online kalian bisa saling ketemu, ngobrol pakai suara, dan bikin kenangan bareng.
 
 > Gameplay **Harvest Moon** × alur hidup **The Sims** × kebebasan **GTA**, dalam dunia Bandung yang hangat.
 
@@ -54,7 +54,7 @@ Inilah yang bikin game **tidak gampang tamat**.
 - ❌ Game over, kematian karakter, penyitaan aset
 - ❌ Romansa dengan NPC (romansa hanya antar kalian berdua)
 - ❌ Multiplayer publik / lebih dari 2 pemain
-- ❌ Grafik 3D atau realistis
+- ❌ Grafik realistis / 3D modern (gaya visual: 2.5D low-poly ala PS1, ADR-022)
 - ❌ Iklan, microtransaction, monetisasi apa pun
 - ❌ Konten eksplisit (romantis tetap sopan dan manis)
 

@@ -4,7 +4,7 @@
 | Lapisan | Teknologi | Alasan |
 |---|---|---|
 | Bahasa | **TypeScript** (strict) | Game besar dan jangka panjang butuh tipe yang aman |
-| Engine 2D | **Phaser** (versi stabil terbaru) | Engine 2D web paling matang; tilemap, kamera, input, audio sudah built-in |
+| Engine 3D | **Three.js** (WebGL) | Render dunia 2.5D low-poly ala Back to Nature, ringan, jalan di browser & HP (ADR-022) |
 | Bundler | **Vite** | Dev server cepat, hot reload |
 | UI menu | **Preact** + CSS | Menu kompleks (inventory, toko, lemari, HP) jauh lebih gampang dibuat dengan DOM |
 | Validasi data | **zod** | Konten JSON & save divalidasi saat load |
@@ -17,7 +17,7 @@
 | Testing | **Vitest** (unit), **Playwright** (smoke, opsional) | |
 | Kualitas | **ESLint** + **Prettier** | |
 
-> ⚠️ Proyek memakai **Phaser 4** (ADR-016). Contoh kode di docs masih bergaya Phaser 3, jadi cek ulang API-nya saat dipakai.
+> ⚠️ Engine diganti dari Phaser ke **Three.js** (ADR-022). Contoh kode bergaya Phaser di docs lama tidak berlaku lagi; ikuti kode di repo.
 
 ## 2. Tools (semua gratis)
 | Tool | Fungsi |
@@ -27,7 +27,7 @@
 | **Git + GitHub** (repo **public** selama development → **private** saat final, ADR-010) | Versi kode |
 | **Tiled** | Desain peta |
 | **LibreSprite / Piskel** | Pixel art (Aseprite kalau mau berbayar) |
-| **Universal LPC Spritesheet Generator** | Basis karakter & baju berlapis |
+| **Blender** (opsional) | Model low-poly kalau tidak cukup dibentuk lewat kode |
 | **free-tex-packer** | Bikin texture atlas |
 | **Audacity** | Edit audio / suara kenangan |
 

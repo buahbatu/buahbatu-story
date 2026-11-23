@@ -1,10 +1,10 @@
 # 42 · Aset, Art Direction & Lisensi
 
 ## 1. Art Direction
-- **Gaya**: pixel art top-down **LPC 32×32** (ADR-004), palet hangat, outline gelap lembut.
+- **Gaya**: **2.5D ala Harvest Moon: Back to Nature** (ADR-022): dunia **3D low-poly** bertekstur pixel kecil (filter nearest), karakter & NPC **sprite chibi** (billboard, 8 arah), kamera miring dari atas, render resolusi rendah ala PS1, palet hangat. Semua orisinal.
 - **Konsistensi > kemewahan**: semua aset harus terlihat dari "dunia yang sama". Jangan campur aset 16px dan 32px.
 - **Palet utama**: hijau daun Lembang, krem kolonial Braga, merah stroberi, biru langit Bandung, oranye senja.
-- Landmark Bandung digambar **custom** mengikuti skala & palet LPC.
+- Landmark & bangunan Bandung dibentuk **custom** (model low-poly modular + tekstur), setiap bangunan berbeda (`10` §5).
 
 ## 2. Sumber Aset Gratis
 | Kebutuhan | Sumber | Lisensi umum |

@@ -1,7 +1,7 @@
 # 10 · Dunia: Bandung
 
 ## 1. Konsep
-Bandung versi pixel yang hangat dan sedikit "fantasi" (ada 4 musim, salju tipis di musim dingin). Dunia dibagi menjadi **area** yang saling terhubung, seperti Harvest Moon: jalan ke ujung peta/pintu → layar fade → masuk area lain.
+Bandung versi 2.5D low-poly (ala Back to Nature) yang hangat dan sedikit "fantasi" (ada 4 musim, salju tipis di musim dingin). Dunia dibagi menjadi **area** yang saling terhubung, seperti Harvest Moon: jalan ke ujung peta/pintu → layar fade → masuk area lain.
 
 ## 2. Daftar Area
 
@@ -69,7 +69,7 @@ Buahbatu adalah **area paling personal** di game, karena judul game diambil dari
 ## 5. Landmark yang Digambar Custom
 Gedung Sate · Jalan Braga (fasad kolonial + lampu jalan) · Gedung Merdeka · Masjid Raya/alun-alun (taman rumput sintetis) · Kebun teh · Kawah Putih (air hijau toska) · Tangkuban Perahu · Skywalk Cihampelas · Saung Angklung Udjo.
 
-Gaya: LPC 32px, palet hangat, ikuti `42-aset-lisensi.md`.
+Gaya: 2.5D low-poly + tekstur pixel, palet hangat, ikuti `42-aset-lisensi.md` (ADR-022).
 
 ### Aturan detail peta (permintaan user, 2026-11-24)
 - **Peta luas dan detail**, bukan petak kosong. Setiap area punya **identitas visual sendiri** (palet, material jalan/atap, vegetasi, properti jalanan) sehingga pemain langsung tahu sedang di mana. Contoh: Lembang = kayu, kebun, kabut; Braga = fasad kolonial krem, lampu jalan kuning, trotoar batu; Buahbatu = rumah kompleks, warung, gerobak jajanan.

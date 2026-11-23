@@ -1,6 +1,6 @@
 # 🌾💗 Buahbatu Story
 
-> Life-sim pixel 2D untuk **dua orang**, campuran **Harvest Moon** (bertani, musim, festival), **The Sims** (hidup dari lajang → pacaran → nikah → punya anak) dan **GTA** (dunia luas, kendaraan, belanja, HP). Berlatar **Bandung** dan dimainkan berdua secara online lewat browser.
+> Life-sim **2.5D ala Harvest Moon: Back to Nature** (dunia 3D low-poly + karakter sprite chibi) untuk **dua orang**, campuran **Harvest Moon** (bertani, musim, festival), **The Sims** (hidup dari lajang → pacaran → nikah → punya anak) dan **GTA** (dunia luas, kendaraan, belanja, HP). Berlatar **Bandung** dan dimainkan berdua secara online lewat browser.
 
 ---
 
@@ -87,13 +87,13 @@ Alur kerja singkat:
 
 | Bagian | Pilihan |
 |---|---|
-| Engine | **Phaser** + **TypeScript** + **Vite** |
+| Engine | **Three.js** + **TypeScript** + **Vite** (ADR-022) |
 | Peta | **Tiled** (export JSON) |
 | UI menu | **Preact** overlay (DOM) + CSS pixel |
 | Backend | **Supabase** (Auth, Postgres, Realtime, Storage) |
 | Voice | **WebRTC** + TURN |
 | Hosting | **Vercel** (gratis, tanpa VPS) + Vercel Cron |
-| Aset | LPC 32px (gratis, open license) + pixel art custom |
+| Aset | Model low-poly + tekstur pixel + sprite chibi (orisinal, ADR-022) |
 
 Total biaya: **Rp0** (semua free tier). Opsional: domain custom & aset premium.
 
