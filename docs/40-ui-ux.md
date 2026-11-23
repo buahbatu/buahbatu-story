@@ -78,8 +78,8 @@ Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kot
 - Input diabstraksi menjadi **Action** (`src/input/`), bukan key langsung.
 
 ## 7. Responsif (ADR-020)
-- **Area pandang fleksibel, zoom selalu integer.** Zoom `k` = piksel fisik per piksel game, dipilih supaya tinggi dunia yang terlihat ±360 (batas 270–450, lebar maks. 960). Ukuran dunia = layar ÷ k → **game selalu penuh layar dan selalu tajam**. Layar lebih lebar = melihat lebih banyak dunia (seperti Stardew Valley). Logika: `src/utils/scale.ts`, batas: `VIEW_LIMITS` di `src/config/game.ts`.
-  - Contoh: laptop 1366×768 di Chrome (1366×657) → ×2, dunia 683×328; F11 → 683×384; 1080p → ×3, 640×360; Android 780×360 → ×3, 780×360; iPhone 734×343 → ×3, 734×343.
+- **Area pandang fleksibel, zoom selalu integer.** Zoom `k` = piksel fisik per piksel game, dipilih supaya tinggi **resolusi render internal** ±240 ala PS1 (batas 180–300, lebar maks. 640; ADR-022). Ukuran dunia = layar ÷ k → **game selalu penuh layar dan selalu tajam**. Layar lebih lebar = melihat sedikit lebih banyak dunia. Logika: `src/utils/scale.ts`, batas: `VIEW_LIMITS` di `src/config/game.ts`.
+  - Contoh: laptop 1366×768 di Chrome (1366×657) → ×3, render 455×219; 720p → ×3, 426×240; 1080p → ×5 (atau ×4), ±384×216. Ukuran UI (HTML) tidak ikut zoom ini: satuan `--px` = tinggi canvas ÷ 360.
   - Dihitung per **piksel fisik**: display scaling 125%/150% tetap tajam.
   - Dihitung ulang saat resize, rotasi, pindah monitor, atau zoom browser. Scene menata ulang isinya dari `this.scale.width/height` (jangan hardcode 640×360). HUD/UI menempel ke tepi layar.
 - **Game wajib landscape.** Di perangkat sentuh yang dipegang tegak (`(orientation: portrait) and (pointer: coarse)`), game disembunyikan total dan di-pause; yang tampil hanya animasi HP berputar + "Putar HP kamu". Jendela desktop yang sempit tidak diblokir.

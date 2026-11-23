@@ -24,11 +24,11 @@ buahbatu-story/
 │     ├─ audio/{music,sfx,ambience,blips}/
 │     └─ fonts/
 ├─ src/
+│  ├─ engine/                  # Engine Three.js: renderer resolusi rendah, loop, scene manager (ADR-022)
 │  ├─ main.ts                  # entry: renderer Three.js + scene manager + mount UI Preact
 │  ├─ config/
 │  │  ├─ game.ts               # resolusi, physics, scale
 │  │  ├─ balance.ts            # SEMUA angka balancing
-│  │  └─ constants.ts          # tile size, depth layers, keys
 │  ├─ core/
 │  │  ├─ state/                # GameState types, createInitialState, selectors
 │  │  ├─ commands/             # tipe Command, dispatcher, registry handler
@@ -194,7 +194,7 @@ type GameEvent =
 Event dipakai untuk: update UI, memicu quest/achievement, SFX, notifikasi.
 
 ## 8. Depth (urutan gambar)
-`constants.ts` → `DEPTH = { ground: 0, decor: 10, entities: 20 (y-sorted), above: 30, weather: 40, lighting: 50 }`. Entity di-sort berdasarkan Y supaya karakter bisa berdiri di depan/belakang pohon.
+Dunia 3D (ADR-022): urutan gambar ditentukan depth buffer Three.js; sprite karakter (billboard) berdiri di dunia 3D sehingga otomatis bisa di depan/belakang pohon & bangunan.
 
 ## 9. Performa
 - Texture atlas, bukan ratusan file gambar terpisah.

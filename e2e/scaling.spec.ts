@@ -29,15 +29,15 @@ test('zoom integer per pixel fisik, game memenuhi layar, overlay sejajar (ADR-02
   for (const key of ['x', 'y', 'w', 'h'] as const) expect(Math.abs(m.ui[key] - m.canvas[key])).toBeLessThan(1);
 });
 
-test('desktop 1280×720 → tepat ×2, dunia 640×360', async ({ game: { page } }, testInfo) => {
+test('desktop 1280×720 → ×3, resolusi internal 426×240 ala PS1', async ({ game: { page } }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop', 'khusus desktop');
-  expect(await page.locator('#game canvas').boundingBox()).toMatchObject({ x: 0, y: 0, width: 1280, height: 720 });
-  expect(await page.evaluate(() => window.__BB__?.view())).toMatchObject({ width: 640, height: 360, pixelScale: 2 });
+  expect(await page.locator('#game canvas').boundingBox()).toMatchObject({ width: 1278, height: 720 });
+  expect(await page.evaluate(() => window.__BB__?.view())).toMatchObject({ width: 426, height: 240, pixelScale: 3 });
 });
 
 test('resize jendela → dunia menyesuaikan tanpa reload', async ({ game: { page } }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop', 'khusus desktop');
   await page.setViewportSize({ width: 1366, height: 657 });
-  await expect.poll(() => page.evaluate(() => window.__BB__?.view())).toMatchObject({ width: 683, height: 328, pixelScale: 2 });
-  expect(await page.locator('#game canvas').boundingBox()).toMatchObject({ width: 1366, height: 656 });
+  await expect.poll(() => page.evaluate(() => window.__BB__?.view())).toMatchObject({ width: 455, height: 219, pixelScale: 3 });
+  expect(await page.locator('#game canvas').boundingBox()).toMatchObject({ width: 1365, height: 657 });
 });

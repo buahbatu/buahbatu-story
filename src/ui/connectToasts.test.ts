@@ -18,7 +18,7 @@ function setup() {
     for (const timer of timers.filter((x) => x.at <= now)) timer.run();
   };
   const bus = new EventBus(createLogger('t', { sink: () => undefined }));
-  const store = createStore<UiState>({ scene: null, toasts: [] });
+  const store = createStore<UiState>({ scene: null, toasts: [], loading: null, fatal: null });
   connectToasts(bus, store, clock);
   return { bus, store, advance };
 }

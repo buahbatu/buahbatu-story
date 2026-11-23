@@ -3,7 +3,7 @@ import prettier from 'eslint-config-prettier';
 import tseslint from 'typescript-eslint';
 
 const IMPURE_LIBS = [
-  { name: 'phaser', message: 'Logika murni tidak boleh memakai Phaser (docs/02 §4). Pindahkan ke view.ts.' },
+  { name: 'three', message: 'Logika murni tidak boleh memakai Three.js (docs/02 §4). Pindahkan ke view.ts.' },
   { name: 'preact', message: 'Logika murni tidak boleh memakai UI (docs/02 §4).' },
 ];
 const IMPURE_PATTERNS = [

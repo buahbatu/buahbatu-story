@@ -1,28 +1,19 @@
-import * as Phaser from 'phaser';
-
-import { PALETTE, css } from '../config/palette';
 import { assertContentValid } from '../content';
-import { t } from '../content/i18n';
-import { setActiveScene } from '../ui/uiState';
 import { logger } from '../core/logger';
+import type { Engine, GameScene } from '../engine/engine';
+import { uiStore } from '../ui/uiState';
 import { SCENE } from './keys';
-import { snapToPixel } from './pixelText';
 
-export class BootScene extends Phaser.Scene {
-  constructor() {
-    super(SCENE.boot);
-  }
-  create(): void {
-    setActiveScene(SCENE.boot);
+export class BootScene implements GameScene {
+  readonly key = SCENE.boot;
+  enter(engine: Engine): void {
     try {
       assertContentValid();
     } catch (error) {
       logger.error(error);
-      snapToPixel(
-        this.add.text(this.scale.width / 2, this.scale.height / 2, t('boot.contentError'), { color: css(PALETTE.cream) }).setOrigin(0.5),
-      );
+      uiStore.set({ fatal: 'boot.contentError' });
       return;
     }
-    this.scene.start(SCENE.preload);
+    void engine.start(SCENE.preload);
   }
 }

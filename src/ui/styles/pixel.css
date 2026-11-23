@@ -18,8 +18,7 @@
 }
 
 :root {
-  --zoom: 1;
-  --px: calc(var(--zoom) * 1px);
+  --px: 1px;
   --color-night: #1d1a2f;
   --color-ink: #3b2a20;
   --color-cream: #f4e9d1;
@@ -126,7 +125,7 @@
 }
 .title-note {
   position: absolute;
-  bottom: calc(var(--px) * 116);
+  bottom: calc(var(--px) * 24);
   font-size: calc(var(--px) * 12);
   line-height: 1;
   text-shadow: var(--px) var(--px) 0 var(--color-night);
@@ -227,4 +226,36 @@
   .rotate-phone {
     transform: rotate(-90deg);
   }
+}
+.loading,
+.fatal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--px) * 6);
+  color: var(--color-cream);
+}
+.loading-track {
+  width: calc(var(--px) * 240);
+  height: calc(var(--px) * 12);
+  box-sizing: border-box;
+  border: calc(var(--px) * 2) solid var(--color-cream);
+}
+.loading-fill {
+  height: 100%;
+  background: var(--color-strawberry);
+}
+.loading-label {
+  margin: 0;
+  font-size: var(--text-m);
+}
+.fatal {
+  max-width: calc(var(--px) * 300);
+  text-align: center;
 }

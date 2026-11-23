@@ -1,14 +1,17 @@
 export const PALETTE = {
   night: 0x1d1a2f,
-  sky: 0x87b5d9,
-  skyLight: 0xa7c9e2,
-  horizon: 0xf3d3b0,
-  hillFar: 0x5f9f6b,
-  hillNear: 0x3f7a4f,
-  soil: 0x7a5236,
-  cream: 0xf4e9d1,
-  strawberry: 0xd9465b,
-  dusk: 0xf29e4c,
+  sky: 0x9cc8e8,
+  fog: 0xcfe3ef,
+  grass: 0x6fb35f,
+  grassDark: 0x58994d,
+  path: 0xd8b98a,
+  soil: 0x7a4a2a,
+  strawberry: 0xe04a5a,
+  leaf: 0x3f8f4a,
+  leafDark: 0x2c6b37,
+  bark: 0x7a4b2a,
+  wall: 0xf3e2bf,
+  roof: 0xd9534a,
+  wood: 0x9a6436,
+  sun: 0xfff1d6,
 } as const;
-
-export const css = (color: number): string => `#${color.toString(16).padStart(6, '0')}`;

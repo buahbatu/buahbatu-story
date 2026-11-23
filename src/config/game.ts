@@ -1,9 +1,9 @@
-import * as Phaser from 'phaser';
+import type { Engine } from '../engine/engine';
 import { computeView, type ViewLimits, type ViewResult } from '../utils/scale';
 
-export const VIEW_LIMITS: ViewLimits = { baseHeight: 360, minHeight: 270, maxHeight: 450, maxWidth: 960 };
-export const BACKGROUND_COLOR = '#1d1a2f';
-export const PORTRAIT_TOUCH_QUERY = '(orientation: portrait) and (pointer: coarse)';
+const VIEW_LIMITS: ViewLimits = { baseHeight: 240, minHeight: 180, maxHeight: 300, maxWidth: 640 };
+const UI_REFERENCE_HEIGHT = 360;
+const PORTRAIT_TOUCH_QUERY = '(orientation: portrait) and (pointer: coarse)';
 
 export function currentView(): ViewResult {
   const viewport = window.visualViewport;
@@ -15,37 +15,20 @@ export function currentView(): ViewResult {
   });
 }
 
-export function createGameConfig(parent: string, scenes: Phaser.Types.Scenes.SceneType[]): Phaser.Types.Core.GameConfig {
-  const { width, height, zoom } = currentView();
-  return {
-    type: Phaser.AUTO,
-    parent,
-    width,
-    height,
-    backgroundColor: BACKGROUND_COLOR,
-    pixelArt: true,
-    roundPixels: true,
-    antialias: false,
-    scale: { mode: Phaser.Scale.NONE, autoCenter: Phaser.Scale.NO_CENTER, zoom },
-    physics: { default: 'arcade', arcade: { gravity: { x: 0, y: 0 }, debug: false } },
-    scene: scenes,
-  };
-}
-
-export function installViewScaling(game: Phaser.Game): () => void {
+export function installViewScaling(engine: Engine): () => void {
   let frame = 0;
   const portrait = window.matchMedia(PORTRAIT_TOUCH_QUERY);
   const apply = () => {
     frame = 0;
-    const { width, height, zoom } = currentView();
-    if (game.scale.width !== width || game.scale.height !== height) game.scale.resize(width, height);
-    if (game.scale.zoom !== zoom) game.scale.setZoom(zoom);
+    const view = currentView();
+    const { width, height, zoom } = engine.view;
+    if (view.width !== width || view.height !== height || view.zoom !== zoom) engine.resize(view);
     const root = document.documentElement.style;
-    root.setProperty('--zoom', String(zoom));
-    root.setProperty('--game-w', `${width * zoom}px`);
-    root.setProperty('--game-h', `${height * zoom}px`);
-    if (portrait.matches) game.loop.sleep();
-    else if (!document.documentElement.hasAttribute('data-frozen')) game.loop.wake();
+    root.setProperty('--px', `${(view.height * view.zoom) / UI_REFERENCE_HEIGHT}px`);
+    root.setProperty('--game-w', `${view.width * view.zoom}px`);
+    root.setProperty('--game-h', `${view.height * view.zoom}px`);
+    if (portrait.matches) engine.sleep();
+    else if (!document.documentElement.hasAttribute('data-frozen')) engine.wake();
   };
   const schedule = () => {
     if (frame === 0) frame = requestAnimationFrame(apply);

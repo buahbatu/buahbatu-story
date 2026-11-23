@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 0 | 12 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 1 | 12 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,12 +37,12 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **15** | **185** | |
+| **Total** | | | **16** | **185** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
-**Sedang dikerjakan:** P1-00
-**Task berikutnya:** P1-00
+**Sedang dikerjakan:** —
+**Task berikutnya:** P1-01
 
 ---
 
@@ -68,7 +68,7 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 ---
 
 ## P1 · Fondasi Dunia 2.5D & Gerak (ADR-022)
-- [~] **P1-00** Migrasi engine ke Three.js: renderer resolusi rendah ala PS1 (render target dari `computeView`, diperbesar integer tanpa blur), scene manager (Boot → Preload → Title), latar judul 3D low-poly, hapus Phaser, test hook & E2E tetap hijau · Ref: 02, 40 · 🟡 2026-11-24
+- [x] **P1-00** Migrasi engine ke Three.js: renderer resolusi rendah ala PS1 (render target dari `computeView`, diperbesar integer tanpa blur), scene manager (Boot → Preload → Title), latar judul 3D low-poly, hapus Phaser, test hook & E2E tetap hijau · Ref: 02, 40 · ✅ 2026-11-23 · Phaser → Three.js 0.187: render resolusi rendah ala PS1 + upscale integer, scene manager, layar judul 3D low-poly beranimasi (kamera bergerak), loading/error ke overlay; bundle 357→132 KB gzip
 - [ ] **P1-01** Pipeline peta: grid Tiled `.tmj` (konvensi layer + ketinggian) → dunia 3D low-poly otomatis, skema zod, tekstur pixel placeholder · Ref: 10, 42
 - [ ] **P1-02** Map prototipe `lembang` (kecil) + `kos_a` interior + `buahbatu` (kecil) + interior rumah Michelle · Ref: 10
 - [ ] **P1-03** Abstraksi input → Action (keyboard dulu) · Ref: 40

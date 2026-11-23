@@ -1,12 +1,12 @@
-import type * as Phaser from 'phaser';
 import type { GameRuntime } from '../core/runtime';
+import type { Engine } from '../engine/engine';
 import { createInitialState } from '../core/state';
 import { SCENE } from '../scenes/keys';
 import { uiStore } from '../ui/uiState';
 import type { TestApi } from './types';
 
-export interface TestHookContext {
-  game: Phaser.Game;
+interface TestHookContext {
+  engine: Engine;
   runtime: GameRuntime;
 }
 
@@ -31,7 +31,7 @@ function waitForTitle(): Promise<void> {
   });
 }
 
-export function createTestApi({ game, runtime }: TestHookContext): TestApi {
+function createTestApi({ engine, runtime }: TestHookContext): TestApi {
   return {
     async ready() {
       await waitForTitle();
@@ -48,15 +48,10 @@ export function createTestApi({ game, runtime }: TestHookContext): TestApi {
       runtime.bus.emit(event);
     },
     scene: () => uiStore.get().scene,
-    view: () => ({
-      width: game.scale.width,
-      height: game.scale.height,
-      zoom: game.scale.zoom,
-      pixelScale: Math.round(game.scale.zoom * window.devicePixelRatio),
-    }),
+    view: () => ({ ...engine.view }),
     freeze(on) {
-      if (on) game.loop.sleep();
-      else game.loop.wake();
+      if (on) engine.freezeAt(0);
+      else engine.wake();
       document.documentElement.toggleAttribute('data-frozen', on);
     },
   };

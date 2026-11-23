@@ -15,7 +15,7 @@ const DIRECTORIES = words(`maps api supabase/migrations scripts tests e2e docs
   public/assets/audio/ambience public/assets/audio/blips src/content/npcs src/content/dialogs src/content/quests
   src/content/cutscenes src/content/i18n src/content/personal.example src/ui/hud src/ui/phone src/ui/menus
   src/ui/dialog src/ui/components src/ui/styles`);
-const FILES = words(`src/main.ts src/config/game.ts src/config/balance.ts src/config/constants.ts
+const FILES = words(`src/main.ts src/config/game.ts src/config/balance.ts
   src/core/state/index.ts src/core/commands/index.ts src/core/events/index.ts src/core/rng.ts src/core/clock.ts
   src/core/logger.ts src/scenes/index.ts src/entities/index.ts src/input/index.ts src/ui/index.ts src/net/index.ts
   src/net/voice/index.ts src/save/index.ts src/save/migrations/index.ts src/content/index.ts src/utils/index.ts`);
