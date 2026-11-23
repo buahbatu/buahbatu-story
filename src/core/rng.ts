@@ -1,14 +1,7 @@
-// RNG seeded & deterministik. State-nya (uint32) disimpan DI DALAM GameState (`world.rngState`),
-// jadi host & klien yang menjalankan Command yang sama mendapat angka acak yang sama.
-// Desain: docs/02-arsitektur.md §4 ("semua keputusan acak memakai rng dari state")
-//
-// Algoritma: mulberry32 (cepat, periode 2^32, cukup untuk gameplay; bukan untuk kriptografi).
-
 export interface RngHolder {
   rngState: number;
 }
 
-/** Satu langkah mulberry32: kembalikan [angka 0 ≤ x < 1, state berikutnya]. Murni. */
 export function nextFloat(state: number): [value: number, next: number] {
   const next = (state + 0x6d2b79f5) >>> 0;
   let t = next;
@@ -18,7 +11,6 @@ export function nextFloat(state: number): [value: number, next: number] {
   return [value, next];
 }
 
-/** Ubah teks (mis. householdId) jadi seed uint32 (FNV-1a). */
 export function hashSeed(text: string): number {
   let hash = 0x811c9dc5;
   for (let i = 0; i < text.length; i++) {
@@ -38,22 +30,13 @@ export interface WeightedEntry<T> {
 }
 
 export interface Rng {
-  /** 0 ≤ x < 1 */
   float(): number;
-  /** Bilangan bulat min ≤ x ≤ max (inklusif). */
   int(min: number, max: number): number;
-  /** True dengan peluang p (0–1). */
   chance(p: number): boolean;
-  /** Elemen acak; undefined kalau array kosong. */
   pick<T>(items: readonly T[]): T | undefined;
-  /** Pilih berdasarkan bobot (bobot ≤ 0 diabaikan); undefined kalau total bobot 0. */
   weighted<T>(entries: readonly WeightedEntry<T>[]): T | undefined;
 }
 
-/**
- * RNG yang membaca & menulis `holder.rngState`. Di handler Command, holder = `draft.world`,
- * sehingga perubahan state RNG ikut tercatat (dan ikut dibatalkan kalau Command gagal).
- */
 export function createRng(holder: RngHolder): Rng {
   const float = () => {
     const [value, next] = nextFloat(holder.rngState);

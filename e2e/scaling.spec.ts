@@ -1,10 +1,6 @@
-// Integer scaling per pixel fisik + overlay UI sejajar canvas di desktop & HP landscape.
-// Desain: docs/40-ui-ux.md §7, src/utils/scale.ts
 import { expect, test } from './fixtures';
 
-test('canvas di-scale integer per pixel fisik, utuh di dalam layar, overlay sejajar', async ({
-  game: { page },
-}) => {
+test('canvas di-scale integer per pixel fisik, utuh di dalam layar, overlay sejajar', async ({ game: { page } }) => {
   const m = await page.evaluate(() => {
     const canvas = document.querySelector('#game canvas');
     const ui = document.querySelector('#ui');
@@ -19,30 +15,21 @@ test('canvas di-scale integer per pixel fisik, utuh di dalam layar, overlay seja
       ui: { x: u.x, y: u.y, w: u.width, h: u.height },
     };
   });
-
-  // ADR-018: integer per pixel fisik, ATAU (layar DPR ≥ 2) pecahan yang memenuhi layar.
   const devicePerGamePixel = (m.canvas.w * m.dpr) / 640;
   const integer = Math.abs(devicePerGamePixel - Math.round(devicePerGamePixel)) < 0.01;
   const fills = m.vh - m.canvas.h < 1 || m.vw - m.canvas.w < 1;
   expect(integer || (m.dpr >= 2 && fills), `×${devicePerGamePixel.toFixed(3)} @DPR ${m.dpr}`).toBe(true);
   expect(devicePerGamePixel).toBeGreaterThanOrEqual(1);
   expect(m.canvas.w / m.canvas.h).toBeCloseTo(16 / 9, 2);
-
-  // Utuh di dalam viewport (tidak terpotong) & di tengah.
   expect(m.canvas.x).toBeGreaterThanOrEqual(-0.5);
   expect(m.canvas.y).toBeGreaterThanOrEqual(-0.5);
   expect(m.canvas.x + m.canvas.w).toBeLessThanOrEqual(m.vw + 0.5);
   expect(m.canvas.y + m.canvas.h).toBeLessThanOrEqual(m.vh + 0.5);
   expect(Math.abs(m.canvas.x - (m.vw - m.canvas.w) / 2)).toBeLessThan(1);
-
-  // Overlay Preact menempel tepat di atas canvas.
-  for (const key of ['x', 'y', 'w', 'h'] as const)
-    expect(Math.abs(m.ui[key] - m.canvas[key])).toBeLessThan(1);
+  for (const key of ['x', 'y', 'w', 'h'] as const) expect(Math.abs(m.ui[key] - m.canvas[key])).toBeLessThan(1);
 });
 
-test('iPhone landscape: game memenuhi tinggi layar (pecahan, ADR-018)', async ({
-  game: { page },
-}, testInfo) => {
+test('iPhone landscape: game memenuhi tinggi layar (pecahan, ADR-018)', async ({ game: { page } }, testInfo) => {
   test.skip(testInfo.project.name !== 'iphone-landscape', 'khusus iPhone');
   const size = await page.locator('#game canvas').boundingBox();
   const vh = page.viewportSize()?.height ?? 0;

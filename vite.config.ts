@@ -1,9 +1,7 @@
 import { readFileSync } from 'node:fs';
-
 import preact from '@preact/preset-vite';
 import { defineConfig } from 'vite';
 
-// Phaser ±1,4 MB (±360 KB gzip). Dipisah jadi chunk sendiri supaya cache browser awet antar deploy.
 const PHASER_CHUNK_LIMIT_KB = 1500;
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as {
@@ -17,8 +15,6 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
-    // File ber-hash ke /_app/ (di-cache immutable di vercel.json), terpisah dari public/assets/
-    // (font, tileset) yang namanya tetap sehingga cache-nya harus lebih pendek.
     assetsDir: '_app',
     chunkSizeWarningLimit: PHASER_CHUNK_LIMIT_KB,
     rolldownOptions: {

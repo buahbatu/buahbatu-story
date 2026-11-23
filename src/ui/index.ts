@@ -1,8 +1,5 @@
-// Pasang overlay Preact + sambungkan EventBus → store UI. Desain: docs/40-ui-ux.md, ADR-005
 import './styles/pixel.css';
-
 import { createElement, render } from 'preact';
-
 import { TOAST } from '../config/ui';
 import type { EventBus } from '../core/events';
 import { App } from './App';
@@ -20,7 +17,6 @@ const browserClock: Clock = {
   setTimeout: (callback, ms) => window.setTimeout(callback, ms),
 };
 
-/** Event `ui/toast` → masuk antrean (maks. 3), hilang sendiri setelah durasinya. */
 export function connectToasts(bus: EventBus, store: Store<UiState>, clock: Clock = browserClock): () => void {
   let nextId = 1;
   return bus.on('ui/toast', (event) => {

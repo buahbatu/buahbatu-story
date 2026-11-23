@@ -1,5 +1,3 @@
-// Snapshot visual layar penting. Baseline per project & OS (e2e/__screenshots__/).
-// Perubahan tampilan yang disengaja → `npm run e2e:update`, lalu AI menilai gambarnya (docs/50 §5).
 import { expect, test } from './fixtures';
 
 test('layar judul', async ({ game: { page } }) => {

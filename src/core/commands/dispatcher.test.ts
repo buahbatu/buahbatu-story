@@ -1,6 +1,5 @@
 import { applyPatches } from 'immer';
 import { describe, expect, it, vi } from 'vitest';
-
 import { EventBus, type GameEvent } from '../events';
 import { createLogger, type LogLevel } from '../logger';
 import { createRng } from '../rng';
@@ -33,12 +32,9 @@ describe('CommandDispatcher — jalur sukses', () => {
     const result = dispatcher.dispatch(setFlag('ch1.met'));
     expect(result.ok).toBe(true);
     expect(dispatcher.getState().world.flags['ch1.met']).toBe(true);
-    expect(events).toEqual([
-      { type: 'world/flagChanged', by: 'A', key: 'ch1.met', value: true, previous: undefined },
-    ]);
+    expect(events).toEqual([{ type: 'world/flagChanged', by: 'A', key: 'ch1.met', value: true, previous: undefined }]);
     expect(result.patches).toEqual([{ op: 'add', path: ['world', 'flags', 'ch1.met'], value: true }]);
   });
-
   it('immutable: state lama tidak berubah, state baru beku', () => {
     const { dispatcher } = setup();
     const before = dispatcher.getState();
@@ -49,14 +45,12 @@ describe('CommandDispatcher — jalur sukses', () => {
       (dispatcher.getState().world.flags as Record<string, unknown>).hack = 1;
     }).toThrow();
   });
-
   it('inversePatches mengembalikan state sebelumnya (dasar rollback prediksi P6-05)', () => {
     const { dispatcher } = setup();
     const before = dispatcher.getState();
     const { inversePatches } = dispatcher.dispatch(setFlag('a', 3));
     expect(applyPatches(dispatcher.getState(), inversePatches)).toEqual(before);
   });
-
   it('nilai sama → sukses tanpa event dan tanpa patch', () => {
     const { dispatcher, events } = setup();
     dispatcher.dispatch(setFlag('a'));
@@ -65,7 +59,6 @@ describe('CommandDispatcher — jalur sukses', () => {
     expect(again).toMatchObject({ ok: true, events: [], patches: [] });
     expect(events).toEqual([]);
   });
-
   it('subscriber diberi tahu dengan command & patch', () => {
     const { dispatcher } = setup();
     const listener = vi.fn();
@@ -97,12 +90,10 @@ describe('CommandDispatcher — atomik saat gagal', () => {
     expect(dispatcher.getState()).toEqual(initial);
     expect(events).toEqual([]);
   });
-
   it('menolak nilai bukan angka hingga (data jaringan rusak)', () => {
     const { dispatcher } = setup();
     expect(dispatcher.dispatch(setFlag('a', Number.NaN)).ok).toBe(false);
   });
-
   it('handler yang sempat memutasi lalu reject → mutasinya dibatalkan', () => {
     const handlers: HandlerMap = {
       'world/setFlag': (draft) => {
@@ -117,7 +108,6 @@ describe('CommandDispatcher — atomik saat gagal', () => {
     expect(dispatcher.getState()).toBe(before);
     expect(dispatcher.getState()).toEqual(initial);
   });
-
   it('handler crash → error.internal, state utuh, error dicatat', () => {
     const handlers: HandlerMap = {
       'world/setFlag': (draft) => {
@@ -130,7 +120,6 @@ describe('CommandDispatcher — atomik saat gagal', () => {
     expect(dispatcher.getState()).toEqual(initial);
     expect(logs).toContain('error');
   });
-
   it('Command tidak dikenal (mis. dari klien versi lain) → error.unknownCommand', () => {
     const { dispatcher } = setup();
     const unknown = { type: 'farm/teleport', by: 'B' } as unknown as Command;
@@ -147,7 +136,6 @@ describe('CommandDispatcher — RNG deterministik lewat Command', () => {
       return succeed();
     },
   });
-
   it('host & klien dengan seed sama mendapat hasil acak yang sama', () => {
     const run = () => {
       const { dispatcher } = setup(rollHandlers(false), 7);
@@ -156,13 +144,11 @@ describe('CommandDispatcher — RNG deterministik lewat Command', () => {
     };
     expect(run()).toEqual(run());
   });
-
   it('Command gagal tidak memajukan RNG', () => {
     const { dispatcher, initial } = setup(rollHandlers(true));
     dispatcher.dispatch(setFlag('x'));
     expect(dispatcher.getState().world.rngState).toBe(initial.world.rngState);
   });
-
   it('Command sukses memajukan RNG', () => {
     const { dispatcher, initial } = setup(rollHandlers(false));
     dispatcher.dispatch(setFlag('x'));

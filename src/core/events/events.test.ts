@@ -1,5 +1,4 @@
 import { describe, expect, it, vi } from 'vitest';
-
 import { createLogger } from '../logger';
 import { EventBus, type GameEvent } from './index';
 
@@ -18,17 +17,15 @@ describe('EventBus', () => {
     expect(onToast).toHaveBeenCalledWith(toast);
     expect(onFlag).not.toHaveBeenCalled();
   });
-
   it('payload ter-narrow sesuai tipe', () => {
     const bus = new EventBus(silent);
     let key = '';
     bus.on('world/flagChanged', (event) => {
-      key = event.key; // tanpa cast: TypeScript tahu ini event flagChanged
+      key = event.key;
     });
     bus.emit(flag);
     expect(key).toBe('met');
   });
-
   it('onAny menerima semua event sesuai urutan', () => {
     const bus = new EventBus(silent);
     const seen: string[] = [];
@@ -36,7 +33,6 @@ describe('EventBus', () => {
     bus.emitAll([toast, flag]);
     expect(seen).toEqual(['ui/toast', 'world/flagChanged']);
   });
-
   it('unsubscribe menghentikan listener', () => {
     const bus = new EventBus(silent);
     const listener = vi.fn();
@@ -45,12 +41,9 @@ describe('EventBus', () => {
     bus.emit(toast);
     expect(listener).not.toHaveBeenCalled();
   });
-
   it('listener yang error tidak menghentikan listener lain, dan error-nya dicatat', () => {
     const errors: unknown[] = [];
-    const bus = new EventBus(
-      createLogger('t', { sink: (level, _s, args) => level === 'error' && errors.push(args) }),
-    );
+    const bus = new EventBus(createLogger('t', { sink: (level, _s, args) => level === 'error' && errors.push(args) }));
     const after = vi.fn();
     bus.on('ui/toast', () => {
       throw new Error('boom');
@@ -60,7 +53,6 @@ describe('EventBus', () => {
     expect(after).toHaveBeenCalledOnce();
     expect(errors).toHaveLength(1);
   });
-
   it('listener boleh unsubscribe dirinya sendiri saat emit', () => {
     const bus = new EventBus(silent);
     const second = vi.fn();

@@ -1,6 +1,4 @@
 #!/bin/sh
-# Blok commit yang berisi rahasia (token, key, password). Desain: docs/51 §7
-# Biner: .tools/gitleaks (dipasang `npm run tools`), atau gitleaks di PATH.
 root=$(git rev-parse --show-toplevel)
 bin=""
 for candidate in "$root/.tools/gitleaks/gitleaks.exe" "$root/.tools/gitleaks/gitleaks"; do

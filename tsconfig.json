@@ -15,20 +15,11 @@
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    "allowJs": true,
-    "checkJs": false,
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": [
-    "src",
-    "tests",
-    "e2e",
-    "e2e-deploy",
-    "vite.config.ts",
-    "vitest.config.ts",
-    "playwright.config.ts",
-    "playwright.deploy.config.ts"
-  ]
+  "include": ["src", "scripts", "tests", "e2e", "e2e-deploy", "*.ts"]
 }

@@ -1,4 +1,3 @@
-// Kunci scene Phaser. Desain: docs/02-arsitektur.md §6
 export const SCENE = {
   boot: 'Boot',
   preload: 'Preload',

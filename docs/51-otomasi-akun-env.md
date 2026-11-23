@@ -35,9 +35,9 @@ Mengikuti pola **shaflow**, akun GitHub **`buahbatu`**:
 | Alat | Cara |
 |---|---|
 | `git` | `git config --local` → `user.name=buahbatu`, email akun proyek, `credential.https://github.com.helper` yang mengambil token dinamis dari `gh auth token -u buahbatu` |
-| `gh` | `node scripts/platform.mjs gh …` (inject `GH_TOKEN` dari keyring, akun aktif global tidak diganti) |
-| `vercel` | `node scripts/platform.mjs vercel …` (`--global-config .vercel-cli`) |
-| `supabase` | `node scripts/platform.mjs supabase …` (`SUPABASE_ACCESS_TOKEN` dari `.env.local`) |
+| `gh` | `node scripts/platform.ts gh …` (inject `GH_TOKEN` dari keyring, akun aktif global tidak diganti) |
+| `vercel` | `node scripts/platform.ts vercel …` (`--global-config .vercel-cli`) |
+| `supabase` | `node scripts/platform.ts supabase …` (`SUPABASE_ACCESS_TOKEN` dari `.env.local`) |
 | Login browser | Chrome profil **Kelola POS** (`--profile-directory="Profile 2"`), user tinggal klik |
 
 Pola default di §3 tetap berlaku sebagai cadangan (misalnya di mesin lain tanpa keyring `gh`: isi `GH_TOKEN`).
@@ -112,7 +112,7 @@ Pilih salah satu (ikuti pola proyek lain):
 ```
 Output akhir berupa tabel ✅/❌ per langkah. Kalau ada yang kurang, script menyebut **persis** variabel apa yang harus diisi user.
 
-**Status implementasi (P0-10b):** langkah 1–3 dan 5 sudah jalan (`scripts/setup.mjs`):
+**Status implementasi (P0-10b):** langkah 1–3 dan 5 sudah jalan (`scripts/setup.ts`):
 - `.env.local` dibuat dari template kalau belum ada; `GIT_USER_*`, `GH_OWNER`, `VERCEL_ORG_ID/PROJECT_ID` diisi otomatis **tanpa menimpa** nilai yang sudah diisi user.
 - Login yang butuh klik (GitHub device login, Vercel login) dibuka di Chrome profil `LOGIN_CHROME_PROFILE`; akun aktif global `gh` dikembalikan seperti semula setelahnya.
 - Vercel: `project add` (kalau belum ada) → `link --yes --project buahbatu-story`. Env disinkron ke Production & Preview hanya untuk variabel yang sudah punya nilai (nilai lewat stdin). Repo Git **tidak** dihubungkan ke Vercel karena deploy hanya lewat CI.

@@ -1,5 +1,3 @@
-// Validasi seluruh file konten terhadap registry skema. Murni: tanpa I/O.
-// Desain: docs/03-standar-kode.md §5, docs/50-testing-deploy.md §1
 import type { ContentRegistry } from './registry';
 
 export interface ContentIssue {
@@ -7,11 +5,7 @@ export interface ContentIssue {
   message: string;
 }
 
-/** `files`: path relatif (mis. `items.json`) → isi JSON yang sudah di-parse. */
-export function validateContent(
-  files: Readonly<Record<string, unknown>>,
-  registry: ContentRegistry,
-): ContentIssue[] {
+export function validateContent(files: Readonly<Record<string, unknown>>, registry: ContentRegistry): ContentIssue[] {
   const issues: ContentIssue[] = [];
   for (const [file, data] of Object.entries(files)) {
     const schema = registry[file];

@@ -1,9 +1,7 @@
-// Fixture E2E: buka game, tunggu test hook & layar judul, kumpulkan error console.
 import { test as base, expect, type Page } from '@playwright/test';
 
 export interface GamePage {
   page: Page;
-  /** Error console & exception halaman selama tes. */
   errors: string[];
 }
 

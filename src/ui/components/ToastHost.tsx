@@ -1,4 +1,3 @@
-// Tumpukan notifikasi di atas tengah. Desain: docs/40-ui-ux.md §9
 import { t } from '../../content/i18n';
 import { uiStore } from '../uiState';
 import { useStore } from '../useStore';

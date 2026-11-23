@@ -1,6 +1,3 @@
-// Store kecil tanpa dependency: jembatan Phaser ↔ Preact selain EventBus (ADR-005).
-// Desain: docs/02-arsitektur.md §6
-
 export type Updater<T> = Partial<T> | ((state: T) => Partial<T>);
 
 export interface Store<T extends object> {

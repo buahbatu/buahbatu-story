@@ -1,5 +1,3 @@
-// Smoke: game boot sampai layar judul, test hook bekerja, Command lewat jalur yang sama dengan pemain.
-// Desain: docs/50-testing-deploy.md §1–2, docs/02-arsitektur.md §4
 import { expect, test } from './fixtures';
 
 test('boot → Preload → Title tanpa error', async ({ game: { page, errors } }) => {

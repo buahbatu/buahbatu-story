@@ -1,7 +1,4 @@
-// Implementasi test hook `window.__BB__`. Dimuat lewat dynamic import HANYA di mode test / dev ?test=1.
-// Desain: docs/50-testing-deploy.md §2
 import type * as Phaser from 'phaser';
-
 import type { GameRuntime } from '../core/runtime';
 import { createInitialState } from '../core/state';
 import { SCENE } from '../scenes/keys';
@@ -38,7 +35,6 @@ export function createTestApi({ game, runtime }: TestHookContext): TestApi {
   return {
     async ready() {
       await waitForTitle();
-      // Dua frame: Phaser selesai menggambar Title & Preact selesai render overlay.
       await nextFrame();
       await nextFrame();
     },

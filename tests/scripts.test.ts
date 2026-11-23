@@ -1,31 +1,25 @@
-// Logika murni script otomasi (doctor/tools). Desain: docs/51 §5 & §7
 import { describe, expect, it } from 'vitest';
-
-import { chromeArgs, pickDeviceCode, pickLoginUrl } from '../scripts/lib/browser.mjs';
-import { mask, parseEnv, upsertEnv } from '../scripts/lib/env.mjs';
-import { envsToSync, isProjectHelperList } from '../scripts/setup.mjs';
-import { exitCode, formatReport, gate } from '../scripts/lib/report.mjs';
-import { compareTasks, currentTask, isRequiredNow, parseTaskId } from '../scripts/lib/tasks.mjs';
-import { gitleaksAsset, parseChecksums } from '../scripts/tools.mjs';
+import { chromeArgs, pickDeviceCode, pickLoginUrl } from '../scripts/lib/browser.ts';
+import { mask, parseEnv, upsertEnv } from '../scripts/lib/env.ts';
+import { envsToSync, isProjectHelperList } from '../scripts/setup.ts';
+import { exitCode, formatReport, gate } from '../scripts/lib/report.ts';
+import { compareTasks, currentTask, isRequiredNow, parseTaskId } from '../scripts/lib/tasks.ts';
+import { gitleaksAsset, parseChecksums } from '../scripts/tools.ts';
 
 describe('parseEnv', () => {
   it('membaca KEY=nilai, mengabaikan komentar & nilai kosong', () => {
     const text = ['# komentar', 'A=1', 'B=', 'C=  dua  ', 'D=x # catatan', '', 'export E=e'].join('\n');
     expect(parseEnv(text)).toEqual({ A: '1', C: 'dua', D: 'x', E: 'e' });
   });
-
   it('melepas tanda kutip dan mempertahankan # di dalam kutip', () => {
     expect(parseEnv(`A="halo # bukan komentar"\nB='x'`)).toEqual({ A: 'halo # bukan komentar', B: 'x' });
   });
-
   it('nilai kosong yang diikuti komentar tetap dianggap kosong', () => {
     expect(parseEnv('GH_OWNER=                      # username/org\nX=#bukan nilai')).toEqual({});
   });
-
   it('# di tengah nilai tanpa spasi tetap bagian nilai (mis. warna)', () => {
     expect(parseEnv('COLOR=abc#123')).toEqual({ COLOR: 'abc#123' });
   });
-
   it('tahan CRLF (file diedit di Windows)', () => {
     expect(parseEnv('A=1\r\nB=2\r\n')).toEqual({ A: '1', B: '2' });
   });
@@ -33,28 +27,23 @@ describe('parseEnv', () => {
 
 describe('upsertEnv', () => {
   const template = ['# judul', 'A=', 'B=sudah', '', 'C=  # catatan', ''].join('\n');
-
   it('mengisi variabel kosong, mempertahankan komentar & urutan', () => {
     const { text, changed } = upsertEnv(template, { A: '1', C: '3' });
     expect(text).toBe(['# judul', 'A=1', 'B=sudah', '', 'C=3', ''].join('\n'));
     expect(changed).toEqual(['A', 'C']);
   });
-
   it('TIDAK menimpa nilai yang sudah diisi user (default)', () => {
     expect(upsertEnv(template, { B: 'baru' })).toEqual({ text: template, changed: [] });
   });
-
   it('overwrite hanya kalau diminta & nilainya memang beda', () => {
     expect(upsertEnv(template, { B: 'baru' }, { overwrite: true }).changed).toEqual(['B']);
     expect(upsertEnv(template, { B: 'sudah' }, { overwrite: true }).changed).toEqual([]);
   });
-
   it('variabel baru ditambahkan di akhir; nilai kosong diabaikan', () => {
     const { text, changed } = upsertEnv('A=1\n', { NEW: 'x', EMPTY: '' });
     expect(text).toBe('A=1\nNEW=x\n');
     expect(changed).toEqual(['NEW']);
   });
-
   it('idempotent: menjalankan dua kali tidak mengubah apa-apa lagi', () => {
     const once = upsertEnv(template, { A: '1' }).text;
     expect(upsertEnv(once, { A: '1' })).toEqual({ text: once, changed: [] });
@@ -63,16 +52,12 @@ describe('upsertEnv', () => {
 
 describe('setup helpers', () => {
   it('envsToSync hanya variabel yang sudah punya nilai', () => {
-    expect(envsToSync({ VITE_SUPABASE_URL: 'https://x.supabase.co', CRON_SECRET: '', OTHER: 'y' })).toEqual([
-      'VITE_SUPABASE_URL',
-    ]);
+    expect(envsToSync({ VITE_SUPABASE_URL: 'https://x.supabase.co', CRON_SECRET: '', OTHER: 'y' })).toEqual(['VITE_SUPABASE_URL']);
   });
-
   it('envsToSync tidak pernah menyertakan token user (GH/VERCEL/SUPABASE_ACCESS)', () => {
     const all = { GH_TOKEN: 'a', VERCEL_TOKEN: 'b', SUPABASE_ACCESS_TOKEN: 'c', SUPABASE_DB_PASSWORD: 'd' };
     expect(envsToSync(all)).toEqual([]);
   });
-
   it('pickLoginUrl mengabaikan tautan telemetri/dokumentasi (kasus nyata Vercel CLI run pertama)', () => {
     const out = [
       'Vercel CLI now collects telemetry. Learn more: https://vercel.com/docs/cli/about-telemetry',
@@ -81,21 +66,18 @@ describe('setup helpers', () => {
     expect(pickLoginUrl(out)).toBe('https://vercel.com/oauth/device?user_code=ABCD-EFGH');
     expect(pickLoginUrl('Learn more: https://vercel.com/docs/cli/about-telemetry')).toBeUndefined();
   });
-
   it('pickDeviceCode membaca kode device login', () => {
     expect(pickDeviceCode('! One-time code (C92E-2A3D) copied to clipboard')).toBe('C92E-2A3D');
     expect(pickDeviceCode('tidak ada kode')).toBeUndefined();
   });
-
   it('isProjectHelperList: wajib [kosong, helper proyek] persis (kasus nyata: output mentah git)', () => {
     const helper = '!f() { echo x; }; f';
     expect(isProjectHelperList(`\n${helper}\n`, helper)).toBe(true);
     expect(isProjectHelperList(`\r\n${helper}\r\n`, helper)).toBe(true);
-    expect(isProjectHelperList(`${helper}\n`, helper)).toBe(false); // tanpa reset helper global
+    expect(isProjectHelperList(`${helper}\n`, helper)).toBe(false);
     expect(isProjectHelperList(`\n!gh auth git-credential\n`, helper)).toBe(false);
     expect(isProjectHelperList('', helper)).toBe(false);
   });
-
   it('chromeArgs memilih profil kalau diisi', () => {
     expect(chromeArgs('https://x', 'Profile 2')).toEqual(['--profile-directory=Profile 2', 'https://x']);
     expect(chromeArgs('https://x', undefined)).toEqual(['https://x']);
@@ -104,11 +86,9 @@ describe('setup helpers', () => {
 
 describe('mask', () => {
   it('menyisakan prefix & 4 karakter terakhir saja', () => {
-    // Prefix dirakit supaya tidak ada literal berpola token di repo (gitleaks).
     const fakeToken = 'gh' + 'p_' + 'x'.repeat(30) + 'abcd';
     expect(mask(fakeToken)).toBe('ghp_****abcd');
   });
-
   it('nilai pendek disamarkan total, kosong ditandai', () => {
     expect(mask('rahasia')).toBe('****');
     expect(mask(undefined)).toBe('(kosong)');
@@ -121,7 +101,6 @@ describe('urutan task', () => {
     expect(parseTaskId('P12-3')).toEqual([12, 3, '']);
     expect(() => parseTaskId('X1')).toThrow();
   });
-
   it.each([
     ['P0-09', 'P0-10a'],
     ['P0-10a', 'P0-10b'],
@@ -132,16 +111,12 @@ describe('urutan task', () => {
     expect(compareTasks(a, b)).toBeLessThan(0);
     expect(compareTasks(b, a)).toBeGreaterThan(0);
   });
-
   it('currentTask: [~] didahulukan, lalu [ ] pertama, undefined kalau semua selesai', () => {
-    const todo = ['- [x] **P0-01** a', '- [ ] **P0-02** b', '- [~] **P0-10a** c', '- [ ] **P0-11** d'].join(
-      '\n',
-    );
+    const todo = ['- [x] **P0-01** a', '- [ ] **P0-02** b', '- [~] **P0-10a** c', '- [ ] **P0-11** d'].join('\n');
     expect(currentTask(todo)).toBe('P0-10a');
     expect(currentTask(todo.replace('[~]', '[x]'))).toBe('P0-02');
     expect(currentTask('- [x] **P0-01** a')).toBeUndefined();
   });
-
   it('isRequiredNow', () => {
     expect(isRequiredNow('P0-10a', 'P0-10a')).toBe(true);
     expect(isRequiredNow('P0-10a', 'P0-12')).toBe(false);
@@ -156,7 +131,6 @@ describe('report', () => {
     expect(gate(false, true)).toBe('fail');
     expect(gate(false, false)).toBe('later');
   });
-
   it('exitCode 1 hanya kalau ada fail (later/warn tidak menggagalkan)', () => {
     const base = { group: 'G', name: 'n' };
     expect(
@@ -167,7 +141,6 @@ describe('report', () => {
     ).toBe(0);
     expect(exitCode([{ ...base, status: 'fail' }])).toBe(1);
   });
-
   it('formatReport mengelompokkan & mendaftar perbaikan hanya untuk fail/warn', () => {
     const text = formatReport([
       { group: 'Tools', name: 'git', status: 'ok' },
@@ -189,11 +162,9 @@ describe('tools (gitleaks)', () => {
   ])('asset %s/%s → %s', (platform, arch, asset) => {
     expect(gitleaksAsset(platform, arch, '8.30.1')).toBe(asset);
   });
-
   it('platform tidak didukung → null', () => {
     expect(gitleaksAsset('aix', 'ppc64', '8.30.1')).toBeNull();
   });
-
   it('parseChecksums format sha256sum (termasuk mode biner *)', () => {
     const hash = 'a'.repeat(64);
     expect(parseChecksums(`${hash}  file.zip\n${'B'.repeat(64)} *other.tar.gz\nsampah`)).toEqual({

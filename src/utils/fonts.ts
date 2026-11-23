@@ -1,11 +1,7 @@
-// Tunggu font web siap (supaya teks Phaser tidak tergambar dengan font cadangan), dengan batas waktu.
-// Desain: docs/40-ui-ux.md §1
-
 export interface FontLoader {
   load(font: string): Promise<unknown>;
 }
 
-/** Selesai saat semua font termuat ATAU batas waktu habis; tidak pernah reject (game tetap jalan). */
 export async function waitForFonts(
   loader: FontLoader | undefined,
   fonts: readonly string[],

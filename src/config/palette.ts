@@ -1,4 +1,3 @@
-// Palet warna dasar (placeholder sebelum tileset LPC masuk). Desain: docs/42-aset-lisensi.md §1
 export const PALETTE = {
   night: 0x1d1a2f,
   sky: 0x87b5d9,
@@ -12,5 +11,4 @@ export const PALETTE = {
   dusk: 0xf29e4c,
 } as const;
 
-/** Versi string CSS untuk teks Phaser. */
 export const css = (color: number): string => `#${color.toString(16).padStart(6, '0')}`;

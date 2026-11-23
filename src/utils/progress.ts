@@ -1,10 +1,5 @@
-// Hitung isi loading bar. Murni supaya bisa dites tanpa Phaser.
-// Desain: docs/02-arsitektur.md §6 (PreloadScene: loading bar)
-
 export interface BarFill {
-  /** Lebar isi bar dalam pixel game (bilangan bulat, supaya tepi bar tetap tajam). */
   fillWidth: number;
-  /** Persen bulat 0–100 untuk teks. */
   percent: number;
 }
 

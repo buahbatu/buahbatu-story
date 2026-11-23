@@ -1,5 +1,4 @@
 import { describe, expect, it, vi } from 'vitest';
-
 import { createLogger } from './logger';
 import { EventBus } from './events';
 import { GameRuntime } from './runtime';
@@ -17,7 +16,6 @@ describe('GameRuntime', () => {
     expect(runtime.getState().world.flags.met).toBe(true);
     expect(listener).toHaveBeenCalledOnce();
   });
-
   it('reset mengganti state tapi listener bus tetap terpasang', () => {
     const runtime = GameRuntime.create(options, quietBus());
     const listener = vi.fn();

@@ -1,7 +1,3 @@
-/* Style pixel dasar overlay UI. Desain: docs/40-ui-ux.md §1 & §8, docs/42-aset-lisensi.md §1
- * Semua ukuran memakai satuan "pixel game" (--px) = 1px × zoom canvas, jadi UI ikut tajam
- * per pixel fisik seperti canvas (lihat src/utils/scale.ts). */
-
 @font-face {
   font-family: 'Pixelify Sans';
   src: url('/assets/fonts/pixelify-sans-400.woff2') format('woff2');
@@ -24,7 +20,6 @@
 :root {
   --zoom: 1;
   --px: calc(var(--zoom) * 1px);
-
   --color-night: #1d1a2f;
   --color-ink: #3b2a20;
   --color-cream: #f4e9d1;
@@ -32,14 +27,11 @@
   --color-wood-dark: #5c3a22;
   --color-strawberry: #d9465b;
   --color-leaf: #4f8f4a;
-
   --font-body: 'Pixelify Sans', system-ui, sans-serif;
   --font-title: 'Press Start 2P', monospace;
-
   --text-s: calc(var(--px) * 8);
   --text-m: calc(var(--px) * 10);
   --text-l: calc(var(--px) * 12);
-
   --dur-fast: 120ms;
   --dur-base: 180ms;
 }
@@ -49,7 +41,6 @@
   width: var(--game-w, 640px);
   height: var(--game-h, 360px);
   overflow: hidden;
-  /* Overlay tidak menghalangi klik ke canvas, kecuali elemen yang memang interaktif. */
   pointer-events: none;
   font-family: var(--font-body);
   font-size: var(--text-m);
@@ -69,7 +60,6 @@
   pointer-events: auto;
 }
 
-/* Panel krem/kayu, border pixel 2px, bayangan keras 1 tingkat (docs/40 §1). */
 .panel {
   background: var(--color-cream);
   color: var(--color-ink);

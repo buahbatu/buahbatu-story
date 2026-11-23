@@ -24,6 +24,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - **P0-00** Akun per folder: `scripts/platform.mjs` (wrapper `gh`/`vercel`/`supabase` memakai akun proyek tanpa mengubah login global), git identitas + credential helper lokal untuk akun `buahbatu`, `.gitignore` minimal.
 
 ### Diubah
+- ADR-019 (permintaan user): semua komentar dihapus dari kode (115 file, ±740 baris) dan kode dipadatkan (Prettier `printWidth` 140, tanpa baris kosong dalam blok). Penjaga baru `tests/no-comments.test.ts`. Skrip otomasi `scripts/*.mjs` → `scripts/*.ts` (TypeScript asli, dijalankan langsung Node 24, ikut typecheck strict); helper bersama `scripts/lib/proc.ts`. `tests/structure.test.ts` kini memetakan sistem → dokumen desain. `docs/03` §4 diganti.
 - ADR-018 (keputusan user, opsi B): di layar DPR ≥ 2 (HP/Retina), kalau integer mengisi < 80% ruang, pakai skala pecahan nearest-neighbor yang memenuhi layar. iPhone landscape 734×343 kini penuh (×2,86, sebelumnya ×2 & ±58% lebar). Desktop/laptop DPR < 2 & Android 780×360 tetap integer (snapshot tidak berubah). `docs/40` §7 diperbarui.
 - **P0-11** Playwright selalu build & menjalankan server baru (`reuseExistingServer: false`): server lama yang masih hidup sempat membuat E2E menguji build basi.
 - **P0-11** `docs/50` §2: status test hook, project perangkat, lokasi snapshot per OS, alasan 1 worker lokal & trace hanya saat retry (WebGL headless dirender CPU; perangkat dev 2 core / 4 GB).

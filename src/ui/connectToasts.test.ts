@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-
 import { TOAST } from '../config/ui';
 import { EventBus } from '../core/events';
 import { createLogger } from '../core/logger';
@@ -32,7 +31,6 @@ describe('connectToasts (EventBus → store UI)', () => {
     advance(TOAST.durationMs);
     expect(store.get().toasts).toEqual([]);
   });
-
   it(`maksimal ${TOAST.maxVisible} toast bertumpuk`, () => {
     const { bus, store } = setup();
     for (let i = 0; i < 5; i++) bus.emit({ type: 'ui/toast', key: 'error.internal' });

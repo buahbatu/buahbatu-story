@@ -10,5 +10,4 @@ public/assets/
 src/content/personal/
 .vercel/
 .vercel-cli/
-# Docs ditulis manual (tabel & spasi sengaja); jangan diformat ulang otomatis.
 *.md

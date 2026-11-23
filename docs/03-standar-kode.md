@@ -25,9 +25,12 @@ Identifier kode **Bahasa Inggris**. Teks yang tampil ke pemain **Bahasa Indonesi
 - Angka *magic* dilarang → masuk `config/balance.ts` atau konten JSON.
 - Aturan di atas sebagian **ditegakkan ESLint** (`eslint.config.js`): `src/core` & `logic/handlers/types.ts` sistem dilarang import Phaser/Preact/Supabase/`net`, `logic.ts` dilarang import `logic.ts` sistem lain, `any` dilarang, dan `SERVICE_ROLE` dilarang di luar `api/` & `scripts/`.
 
-## 4. Komentar
-- Komentar menjelaskan **kenapa**, bukan **apa**.
-- Setiap `logic.ts` diawali komentar singkat yang merujuk ke dokumen desain: `// Desain: docs/12-pertanian-peternakan.md §4`.
+## 4. Tanpa Komentar, Kode Padat (ADR-019)
+- **Tidak ada komentar di kode** (`.ts`, `.tsx`, `.css`, `.html`, workflow, hook). Ditegakkan oleh `tests/no-comments.test.ts`.
+- Maksud kode disampaikan lewat **nama** (fungsi, variabel, tipe) dan **tes** (judul tes = spesifikasi). Alasan desain & rujukan dokumen ditulis di `docs/`, ADR, CHANGELOG, atau pesan commit.
+- Kode **padat**: Prettier `printWidth` 140, tanpa baris kosong di dalam blok, satu baris kosong di antara deklarasi tingkat atas.
+- Pengecualian: shebang (`#!/usr/bin/env node`), pin versi action di workflow ditulis di `docs/51` §6, dan `.env.example` (template yang diisi user, boleh berisi petunjuk).
+- Skrip otomasi ditulis TypeScript (`scripts/*.ts`) dan dijalankan langsung oleh Node ≥ 24 (type stripping), jadi tipe tidak perlu JSDoc. Karena itu `tsconfig` memakai `erasableSyntaxOnly` (tanpa `enum`, `namespace`, atau parameter property).
 
 ## 5. Testing
 - **Wajib** unit test untuk setiap `logic.ts` (Vitest), dan E2E Playwright untuk gameplay/UI. Semua ditulis & dijalankan oleh AI.

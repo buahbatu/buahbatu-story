@@ -108,6 +108,13 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Alasan**: Di layar sepadat HP/Retina, piksel game yang 1 piksel fisik lebih tebal tidak terlihat; di desktop (piksel fisik besar) ketidakrataan 2/3 px terlihat dan mengganggu saat kamera bergerak.
 - **Konsekuensi**: Jendela browser desktop yang kecil (mis. 1366×657) tetap ×1 dengan bingkai lebar (perilaku lama). Kalau nanti terasa kurang, bisa ditinjau ulang (mis. mode "Isi layar" di Pengaturan, P16-03).
 
+### ADR-019 · Kode tanpa komentar & padat, skrip otomasi dalam TypeScript
+- **Status**: Diterima (2026-11-23, permintaan user). Menggantikan `03` §4 versi lama.
+- **Konteks**: User tidak ingin ada komentar di kode dan ingin kode padat.
+- **Keputusan**: Semua komentar dihapus dari kode (dijaga tes `tests/no-comments.test.ts` berbasis parser TypeScript). Prettier `printWidth` 110 → 140, baris kosong di dalam blok dihapus. Skrip `scripts/*.mjs` (yang tipenya dulu bergantung pada komentar JSDoc) diubah jadi `scripts/*.ts`, dijalankan langsung oleh Node 24. `tsconfig`: `erasableSyntaxOnly`, `allowImportingTsExtensions`, tanpa `allowJs`.
+- **Alasan**: Tanpa JSDoc, tipe skrip hilang dan lint strict di tes gagal; TypeScript asli memberi tipe tanpa komentar dan seluruh skrip kini ikut typecheck ketat.
+- **Konsekuensi**: Rujukan "Desain: docs/…" di kode hilang, digantikan tabel sistem → dokumen di `tests/structure.test.ts` dan rujukan di TODO/docs. Node < 24 tidak bisa menjalankan skrip (sudah dijaga `engines` & `.nvmrc`). Parameter property di class tidak dipakai.
+
 ---
 
 ## Template ADR Baru
