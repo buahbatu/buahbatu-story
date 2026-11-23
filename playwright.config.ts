@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { chromiumArgs } from './e2e/chromium-args.ts';
 
 const PORT = 4321;
 const CI = Boolean(process.env.CI);
@@ -17,7 +18,7 @@ export default defineConfig({
     toHaveScreenshot: { animations: 'disabled', caret: 'hide', maxDiffPixelRatio: 0.002 },
   },
   use: {
-    launchOptions: { args: ['--use-angle=swiftshader'] },
+    launchOptions: { args: chromiumArgs },
     baseURL: `http://localhost:${PORT}`,
     reducedMotion: 'reduce',
     trace: 'on-first-retry',

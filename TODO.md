@@ -20,7 +20,7 @@
 
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
-| P0 | Setup Proyek & Otomasi | v0.1 | 14 | 15 | 🟡 |
+| P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
 | P1 | Fondasi Dunia & Gerak | v0.1 | 0 | 11 | ⬜ |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
@@ -37,12 +37,12 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **14** | **184** | |
+| **Total** | | | **15** | **184** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
-**Sedang dikerjakan:** P0-13
-**Task berikutnya:** P0-13
+**Sedang dikerjakan:** —
+**Task berikutnya:** P1-01
 
 ---
 
@@ -61,7 +61,7 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 - [x] **P0-10b** Script `npm run setup` (git identitas, GitHub repo (public selama dev, ADR-010), Vercel link + env) idempotent · Ref: 51 · ✅ 2026-11-23 · setup 7 ok/0 gagal & idempotent (2x run tanpa perubahan); project Vercel buahbatu-story ter-link (akun buahbatu); doctor 14 ok
 - [x] **P0-11** Playwright + test hook `window.__BB__` + smoke E2E + snapshot visual + emulasi HP landscape + `npm run verify` · Ref: 50 · ✅ 2026-11-23 · Playwright 1.64.1, hook __BB__ (tidak ada di build prod), 25 E2E di desktop+Android+iPhone landscape, 6 baseline snapshot dinilai, npm run verify hijau
 - [x] **P0-12** GitHub Actions CI (`verify`) + deploy Preview/Production otomatis + smoke test URL + rollback · Ref: 51, 50 · ✅ 2026-11-23 · CI verify+deploy hijau; production https://buahbatu-story.vercel.app; preview terlindungi + smoke via bypass; baseline Linux; rollback dipasang tapi belum pernah terpicu
-- [~] **P0-13** Jalankan `npm run setup` end-to-end → push pertama → title screen online di Vercel (dibuktikan smoke E2E ke URL production) · Ref: 51 · 🟡 2026-11-23
+- [x] **P0-13** Jalankan `npm run setup` end-to-end → push pertama → title screen online di Vercel (dibuktikan smoke E2E ke URL production) · Ref: 51 · ✅ 2026-11-23 · setup e2e 12 ok idempotent; 20 commit & run CI oleh akun buahbatu (global tetap satuteknologi-id); CI hijau 0 warning; smoke production 4/4 + screenshot dinilai
 
 **Kriteria selesai P0:** `npm run verify` hijau; push ke `main` otomatis memakai akun proyek ini, lolos CI, dan ter-deploy; smoke E2E ke URL production lolos. User hanya mengisi token di `.env.local`.
 

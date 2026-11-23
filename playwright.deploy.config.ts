@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { chromiumArgs } from './e2e/chromium-args.ts';
 
 const url = process.env.DEPLOY_URL;
 if (!url) throw new Error('DEPLOY_URL wajib diisi');
@@ -11,7 +12,7 @@ export default defineConfig({
   timeout: 60_000,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
   use: {
-    launchOptions: { args: ['--use-angle=swiftshader'] },
+    launchOptions: { args: chromiumArgs },
     baseURL: url,
     extraHTTPHeaders: bypass ? { 'x-vercel-protection-bypass': bypass, 'x-vercel-set-bypass-cookie': 'true' } : {},
     trace: 'on-first-retry',
