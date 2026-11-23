@@ -1,4 +1,5 @@
-import { NearestFilter, PerspectiveCamera, SRGBColorSpace, Scene, TextureLoader, type Group, type Texture } from 'three';
+import { Color, Fog, NearestFilter, PerspectiveCamera, SRGBColorSpace, Scene, TextureLoader, type Group, type Texture } from 'three';
+import { PALETTE } from '../config/palette';
 import { DEFAULT_AREA, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { logger } from '../core/logger';
 import type { GameScene } from '../engine/engine';
@@ -64,6 +65,15 @@ export class WorldScene implements GameScene {
     this.root = buildArea(area, atlas);
     this.world.scene.add(this.root);
     this.area = area;
+    this.applySettings(area);
+  }
+
+  private applySettings({ settings }: AreaData): void {
+    const num = (v: unknown, d: number) => (typeof v === 'number' ? v : d);
+    const sky = typeof settings.sky === 'string' ? settings.sky : PALETTE.sky;
+    const fog = typeof settings.fog === 'string' ? settings.fog : PALETTE.fog;
+    this.world.scene.background = new Color(sky);
+    this.world.scene.fog = new Fog(fog, num(settings.fogNear, WORLD_FOG.near), num(settings.fogFar, WORLD_FOG.far));
   }
 
   private focus(spawnId?: string): void {

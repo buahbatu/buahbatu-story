@@ -48,6 +48,7 @@ export const tiledMapSchema = z.object({
   tileheight: z.literal(TILE_PX),
   layers: z.array(z.discriminatedUnion('type', [tileLayer, objectLayer])),
   tilesets: z.array(tileset).min(1),
+  properties,
 });
 
 export type TiledMap = z.infer<typeof tiledMapSchema>;

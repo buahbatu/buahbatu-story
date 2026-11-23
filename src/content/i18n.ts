@@ -21,3 +21,5 @@ export function interpolate(template: string, params: I18nParams = {}): string {
 export function t(key: I18nKey, params?: I18nParams): string {
   return interpolate(id[key], params);
 }
+
+export const isI18nKey = (key: unknown): key is I18nKey => typeof key === 'string' && Object.hasOwn(id, key);

@@ -13,11 +13,19 @@ test('pindah spawn di area yang sama tidak membangun ulang & tetap bersih', asyn
   expect(info?.props.tree).toBe(13);
 });
 
-for (const spawn of ['depan_rumah', 'bukit'])
-  test(`snapshot sandbox dari spawn ${spawn}`, async ({ game: { page } }) => {
-    await page.evaluate((s) => window.__BB__?.enterArea('sandbox', s), spawn);
+for (const [area, spawn] of [
+  ['sandbox', 'depan_rumah'],
+  ['sandbox', 'bukit'],
+  ['lembang', 'depan_toko_bibit'],
+  ['lembang', 'depan_kandang'],
+  ['buahbatu', 'depan_warung'],
+  ['buahbatu', 'depan_rumah_michelle'],
+] as const)
+  test(`snapshot ${area} dari spawn ${spawn}`, async ({ game: { page } }) => {
+    const info = await page.evaluate(([a, s]) => window.__BB__?.enterArea(a, s), [area, spawn] as const);
+    expect(info?.id).toBe(area);
     await page.evaluate(() => window.__BB__?.freeze(true));
-    await expect(page).toHaveScreenshot(`world-${spawn}.png`);
+    await expect(page).toHaveScreenshot(area === 'sandbox' ? `world-${spawn}.png` : `world-${area}-${spawn}.png`);
   });
 
 base('pratinjau ?area=sandbox langsung masuk dunia', async ({ page }) => {

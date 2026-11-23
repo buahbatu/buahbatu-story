@@ -27,6 +27,52 @@ function make(key: string, size: number, paint: Paint): Texture {
 }
 
 export const TEX = {
+  plasterWhite: () =>
+    make('plasterWhite', 32, (px, rnd) => {
+      px(0, 0, 32, 32, '#f4f1ea');
+      for (let i = 0; i < 46; i++) px(Math.floor(rnd() * 32), Math.floor(rnd() * 32), 1, 1, rnd() > 0.5 ? '#e2ddd2' : '#fbf9f4');
+      px(0, 31, 32, 1, '#d9d3c6');
+    }),
+  brick: () =>
+    make('brick', 32, (px, rnd) => {
+      px(0, 0, 32, 32, '#b5583d');
+      for (let row = 0; row < 8; row++) {
+        px(0, row * 4 + 3, 32, 1, '#d9c7ae');
+        for (let col = row % 2 ? 4 : 0; col < 32; col += 8) px(col, row * 4, 1, 3, '#d9c7ae');
+        for (let i = 0; i < 3; i++) px(Math.floor(rnd() * 32), row * 4 + Math.floor(rnd() * 3), 2, 1, rnd() > 0.5 ? '#9c4630' : '#c56a4c');
+      }
+    }),
+  bamboo: () =>
+    make('bamboo', 16, (px) => {
+      px(0, 0, 16, 16, '#d8bc7c');
+      for (let y = 0; y < 16; y += 4)
+        for (let x = 0; x < 16; x += 4) {
+          const odd = (x + y) % 8 === 0;
+          px(x, y, 4, 2, odd ? '#c4a362' : '#e6cf97');
+          px(x, y + 2, 4, 2, odd ? '#e6cf97' : '#c4a362');
+          px(x + 3, y, 1, 4, '#a98a4f');
+        }
+    }),
+  roofGray: () =>
+    make('roofGray', 32, (px) => {
+      px(0, 0, 32, 32, '#d6d6d6');
+      for (let row = 0; row < 4; row++) {
+        const y = row * 8;
+        px(0, y + 6, 32, 2, '#8c8c8c');
+        px(0, y, 32, 1, '#f2f2f2');
+        for (let col = row % 2 ? 4 : 0; col < 32; col += 8) px(col, y, 1, 6, '#a8a8a8');
+      }
+    }),
+  zinc: () =>
+    make('zinc', 16, (px, rnd) => {
+      px(0, 0, 16, 16, '#a9b0b5');
+      for (let x = 0; x < 16; x += 4) {
+        px(x, 0, 1, 16, '#cfd5d9');
+        px(x + 2, 0, 1, 16, '#858c91');
+      }
+      for (let i = 0; i < 6; i++) px(Math.floor(rnd() * 16), Math.floor(rnd() * 16), 2, 1, '#9b6a4a');
+    }),
+
   planks: () =>
     make('planks', 32, (px, rnd) => {
       for (let row = 0; row < 4; row++) {
@@ -112,6 +158,40 @@ export const TEX = {
       for (let i = 0; i < 12; i++) px(Math.floor(rnd() * 16), Math.floor(rnd() * 16), 1, 1, '#94603a');
     }),
 };
+
+export const awning = (a: string, b: string): Texture =>
+  make(`awning:${a}:${b}`, 16, (px) => {
+    for (let x = 0; x < 16; x += 4) px(x, 0, 2, 16, a);
+    for (let x = 2; x < 16; x += 4) px(x, 0, 2, 16, b);
+    px(0, 14, 16, 2, '#00000033');
+  });
+
+export function signTexture(text: string, background: string, ink: string): Texture {
+  const key = `sign:${text}:${background}:${ink}`;
+  const cached = cache.get(key);
+  if (cached) return cached;
+  const canvas = document.createElement('canvas');
+  const g = canvas.getContext('2d');
+  if (!g) throw new Error('canvas 2d tidak tersedia');
+  const font = '8px "Press Start 2P"';
+  g.font = font;
+  canvas.width = Math.ceil(g.measureText(text).width) + 6;
+  canvas.height = 12;
+  g.fillStyle = background;
+  g.fillRect(0, 0, canvas.width, canvas.height);
+  g.fillStyle = ink;
+  g.fillRect(0, 0, canvas.width, 1);
+  g.fillRect(0, canvas.height - 1, canvas.width, 1);
+  g.font = font;
+  g.textBaseline = 'top';
+  g.fillText(text, 3, 2);
+  const texture = new CanvasTexture(canvas);
+  texture.magFilter = texture.minFilter = NearestFilter;
+  texture.generateMipmaps = false;
+  texture.colorSpace = SRGBColorSpace;
+  cache.set(key, texture);
+  return texture;
+}
 
 export function repeated(texture: Texture, repeatX: number, repeatY: number): Texture {
   const t = texture.clone();

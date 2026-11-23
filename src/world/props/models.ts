@@ -1,5 +1,4 @@
 import {
-  BoxGeometry,
   ConeGeometry,
   CylinderGeometry,
   DoubleSide,
@@ -10,31 +9,9 @@ import {
   MeshLambertMaterial,
   Shape,
   ShapeGeometry,
-  type Material,
-  type Texture,
 } from 'three';
+import { box, color, textured, texturedBox } from './kit';
 import { TEX, repeated } from './textures';
-
-const flat = new Map<number, MeshLambertMaterial>();
-function color(hex: number): MeshLambertMaterial {
-  const cached = flat.get(hex);
-  if (cached) return cached;
-  const created = new MeshLambertMaterial({ color: hex, flatShading: true });
-  flat.set(hex, created);
-  return created;
-}
-const textured = (texture: Texture, rx = 1, ry = 1) => new MeshLambertMaterial({ map: repeated(texture, rx, ry) });
-
-function box(w: number, h: number, d: number, material: Material | Material[], x = 0, y = 0, z = 0): Mesh {
-  const mesh = new Mesh(new BoxGeometry(w, h, d), material);
-  mesh.position.set(x, y, z);
-  return mesh;
-}
-
-function texturedBox(w: number, h: number, d: number, texture: Texture, density: number, x = 0, y = 0, z = 0): Mesh {
-  const side = (a: number, b: number) => textured(texture, a * density, b * density);
-  return box(w, h, d, [side(d, h), side(d, h), side(w, d), side(w, d), side(w, h), side(w, h)], x, y, z);
-}
 
 function windowUnit(x: number, y: number, z: number, faceZ: number): Group {
   const g = new Group();
@@ -127,11 +104,23 @@ export function tree(scale = 1): Group {
   return g;
 }
 
-export function fence(length: number): Group {
+export const FENCE_STYLES = ['wood', 'bamboo', 'wall'] as const;
+
+export function fence(length: number, style: (typeof FENCE_STYLES)[number] = 'wood'): Group {
   const g = new Group();
+  if (style === 'wall') {
+    g.add(
+      texturedBox(length, 1.1, 0.22, TEX.plasterWhite(), 1, 0, 0.55, 0, '#ece4d2'),
+      box(length + 0.05, 0.1, 0.3, color('#b5583d'), 0, 1.13, 0),
+    );
+    for (let x = -length / 2; x <= length / 2 + 0.01; x += Math.max(1, length / Math.round(length / 2)))
+      g.add(box(0.3, 1.25, 0.3, color('#f4f1ea'), x, 0.62, 0));
+    return g;
+  }
+  const tex = style === 'bamboo' ? TEX.bamboo() : TEX.planks();
   const posts = Math.max(2, Math.round(length / 1.1) + 1);
-  for (let i = 0; i < posts; i++) g.add(texturedBox(0.16, 0.9, 0.16, TEX.planks(), 2, (i * length) / (posts - 1) - length / 2, 0.45, 0));
-  for (const y of [0.35, 0.7]) g.add(texturedBox(length, 0.1, 0.08, TEX.planks(), 1.5, 0, y, 0));
+  for (let i = 0; i < posts; i++) g.add(texturedBox(0.16, 0.9, 0.16, tex, 2, (i * length) / (posts - 1) - length / 2, 0.45, 0));
+  for (const y of [0.35, 0.7]) g.add(texturedBox(length, 0.1, 0.08, tex, 1.5, 0, y, 0));
   return g;
 }
 

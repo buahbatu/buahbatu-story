@@ -29,6 +29,7 @@ export interface AreaData {
   objects: MapObject[];
   spawns: Record<string, { x: number; y: number }>;
   tileset: { image: string; columns: number; rows: number; terrainTiles: Record<string, number> };
+  settings: Props;
 }
 
 export interface ParseResult {
@@ -111,6 +112,7 @@ export function parseArea(id: string, input: unknown): ParseResult {
     collisions,
     objects: parsedObjects,
     spawns,
+    settings: toProps(map.properties),
     tileset: {
       image: set?.image ?? '',
       columns: set?.columns ?? 1,

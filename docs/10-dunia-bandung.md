@@ -105,10 +105,29 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | `zone` | `name` (misal `fishing:river`, `music:cafe`) |
 | `road` | — (area yang bisa dilewati kendaraan) |
 | `bus_stop` | `stopId` |
-| `prop` | `model` ∈ `PROP_MODELS` (`farmhouse`, `tree`, `fence`, `strawberry_plot`); opsional `rotation` (derajat), `scale`, `length` (pagar) |
+| `prop` | `model` ∈ `PROP_MODELS` (lihat tabel prop di bawah); opsional `rotation` (derajat) |
 
 - Posisi objek titik (point) = pusat prop/spawn. Satuan dibaca dalam tile.
-- Atlas tanah placeholder: `public/assets/tilesets/ground.png` (8×2 tile 16px, buatan sendiri); diganti aset final di P12/P15. Peta uji: `sandbox` (40×30).
+- Atlas tanah placeholder: `public/assets/tilesets/ground.png` (8×2 tile 16px, buatan sendiri; id 14 `asphalt`, 15 `paving`); diganti aset final di P12/P15.
+- **Properti peta** (Map Properties di Tiled, opsional): `sky`, `fog` (warna hex), `fogNear`, `fogFar` untuk suasana area (mis. Lembang berkabut).
+- **Daftar area** `AREA_IDS` (`src/config/world.ts`): setiap file peta wajib terdaftar. Pintu/tepi boleh menuju area yang belum dibuat asalkan terdaftar; kalau petanya sudah ada, `targetSpawn` wajib ada di sana (dicek `tests/maps.test.ts`).
+- **Generator peta prototipe**: `npm run maps` (`scripts/maps/`: `atlas.ts`, `lib.ts` `MapBuilder`, satu file per area). Selama prototipe, ubah peta lewat generatornya; kalau sebuah peta mulai diedit manual di Tiled, hapus generatornya supaya tidak tertimpa.
+
+| Model prop | Properti opsional |
+|---|---|
+| `building` | `w`, `d`, `floors` (1–2), `wall` (`planks`/`plaster`/`brick`/`bamboo`), `wallColor` (plester), `roof` (`gable`/`hip`/`flat`; datar dapat toren), `roofColor`, `zinc` (atap seng), `trim`, `doorColor`, `doorX`, `windows`, `shutters`, `awning` (warna kanopi belang), `sign` (kunci i18n), `signColor`, `porch` |
+| `farmhouse` | — (rumah pertanian detail, layar judul & sandbox) |
+| `tree`, `pine`, `rock` | `scale` |
+| `bush` | `scale`, `flowers` (warna) |
+| `fence` | `length`, `style` (`wood`/`bamboo`/`wall` tembok kompleks) |
+| `strawberry_plot` | `cols`, `rows` |
+| `pot` | `flower` (warna) |
+| `food_cart` | `color`, `label` (kunci i18n) |
+| `sign` | `text` (kunci i18n), `color` |
+| `haystack`, `bench`, `street_lamp`, `power_pole` | — |
+
+- **Papan nama**: teks dari i18n (`sign.*`), **maksimal ±10 huruf** supaya terbaca di resolusi rendah (font Press Start 2P 8px, papan dimiringkan menghadap kamera). Nama panjang → papan berdiri (`sign`) yang lebih lebar.
+- Peta prototipe yang ada: `sandbox` (40×30), `lembang` (48×36), `buahbatu` (44×34).
 
 ## 7. Atmosfer per Area
 | Area | Musik | Ambience | Ciri khas |

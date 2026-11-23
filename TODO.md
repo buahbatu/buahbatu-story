@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 3 | 13 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 4 | 14 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,12 +37,37 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **18** | **186** | |
+| **Total** | | | **19** | **187** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
+## 🧠 Mode Effort (permintaan user, 2026-11-24)
+AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, dan mengingatkan user **sebelum** task yang modenya berbeda dari task sebelumnya.
+
+- **🔴 High**: sinkron multiplayer, keamanan/login/rahasia, save & migrasi, inti engine/render, logika uang & kredit, debug CI merah yang membandel.
+- **🟢 Medium**: isi konten (item, dialog, NPC, quest), peta prototipe, UI sederhana, docs.
+
+| Fase | Default | Pengecualian 🔴 High |
+|---|---|---|
+| P1 | 🟢 | P1-04 sprite billboard, P1-05 collision & urutan gambar, P1-06 kamera |
+| P2 | 🟢 | P2-04 Day Tick, P2-07 skema save & migrasi, P2-08 save/load |
+| P3 | 🟢 | — |
+| P4 | 🟢 | P4-06 karier generik, P4-08 simulasi ekonomi |
+| P5 | 🔴 | semua (Supabase, RLS, login, cloud save) |
+| P6 | 🔴 | semua (multiplayer) |
+| P7 | 🟢 | P7-01 layered sprite, P7-08 sinkron outfit realtime |
+| P8 | 🟢 | P8-04 pathfinding & jadwal, P8-05 dialog berkondisi, P8-07 quest engine, P8-09 cutscene sinkron |
+| P9 | 🟢 | P9-04 meter hubungan, P9-07 gate event berdua, P9-09 pasangan offline |
+| P10 | 🟢 | P10-04 mode foto + Storage, P10-06 gua, P10-10 minigame versus pasangan |
+| P11 | 🔴 | kecuali P11-01 & P11-02 (🟢) |
+| P12 | 🟢 | P12-01–03 art & map final, P12-05 sistem kendaraan, P12-07 bonceng sinkron |
+| P13 | 🟢 | P13-01 kredit, P13-04 dekor realtime, P13-11 aset bersama |
+| P14 | 🟢 | — |
+| P15 | 🟢 | P15-02 event tanggal asli (rahasia dari yang berulang tahun) |
+| P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
+
 **Sedang dikerjakan:** —
-**Task berikutnya:** P1-02
+**Task berikutnya:** P1-02b
 
 ---
 
@@ -71,7 +96,8 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 - [x] **P1-00** Migrasi engine ke Three.js: renderer resolusi rendah ala PS1 (render target dari `computeView`, diperbesar integer tanpa blur), scene manager (Boot → Preload → Title), latar judul 3D low-poly, hapus Phaser, test hook & E2E tetap hijau · Ref: 02, 40 · ✅ 2026-11-24 · Phaser → Three.js 0.187: render resolusi rendah ala PS1 + upscale integer, scene manager, layar judul 3D low-poly beranimasi (kamera bergerak), loading/error ke overlay; bundle 357→132 KB gzip
 - [x] **P1-01a** Format peta: konvensi layer 3D (Ground, Height, Farmable, Collision, Objects + prop), skema zod, logika murni pembaca peta + test, atlas tekstur tanah placeholder 16px, peta uji `sandbox` · Ref: 10, 42 · ✅ 2026-11-24 · skema zod + parseArea, semua peta divalidasi tes, atlas 16px & sandbox 40×30
 - [x] **P1-01b** Pembangun dunia 3D: lantai bertekstur, tebing ketinggian, prop low-poly, `WorldScene`, test hook masuk area, E2E + snapshot · Ref: 10, 02 · ✅ 2026-11-24 · tanah atlas + tebing + prop dari peta, WorldScene, enterArea, ?area=, snapshot dinilai
-- [ ] **P1-02** Map prototipe `lembang` (kecil) + `kos_a` interior + `buahbatu` (kecil) + interior rumah Michelle · Ref: 10
+- [x] **P1-02a** Peta prototipe luar ruang `lembang` & `buahbatu` (kecil) + kit bangunan bervariasi & prop jalanan, daftar area (`AREA_IDS`), generator peta di `scripts/maps/` · Ref: 10 · ✅ 2026-11-24 · kit bangunan + 14 prop, lembang & buahbatu, papan terbaca, AREA_IDS, npm run maps
+- [ ] **P1-02b** Interior `kos_a` & rumah Michelle: mode interior (latar gelap, tanpa tanah lanjutan), dinding ruangan, perabot · Ref: 10
 - [ ] **P1-03** Abstraksi input → Action (keyboard dulu) · Ref: 40
 - [ ] **P1-04** Entity Player: sprite chibi billboard 8 arah, lari, animasi idle/walk (placeholder) · Ref: 15
 - [ ] **P1-05** Collision berbasis grid & objek + urutan gambar sprite vs bangunan · Ref: 02, 10

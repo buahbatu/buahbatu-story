@@ -10,5 +10,19 @@
   "error.invalidCommand": "Aksinya nggak bisa dilakukan sekarang.",
   "error.internal": "Waduh, ada yang error. Progresmu aman, coba ulangi.",
   "rotate.title": "Putar HP kamu",
-  "rotate.body": "Buahbatu Story dimainkan dengan HP miring (landscape)."
+  "rotate.body": "Buahbatu Story dimainkan dengan HP miring (landscape).",
+  "sign.lembang": "Lembang",
+  "sign.kebunWarga": "Kebun Warga",
+  "sign.tokoBibit": "Toko Bibit",
+  "sign.peternakan": "Sapi Perah",
+  "sign.susuMurni": "Susu Murni",
+  "sign.buahbatu": "Jl. Buahbatu",
+  "sign.warungSunda": "Nasi Sunda",
+  "sign.kopi": "Ngopi",
+  "sign.batagor": "Batagor",
+  "sign.seblak": "Seblak",
+  "sign.laundry": "Laundry",
+  "sign.konter": "Pulsa",
+  "sign.tamanKompleks": "Taman",
+  "sign.cilok": "Cilok"
 }

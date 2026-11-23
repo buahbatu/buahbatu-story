@@ -23,6 +23,7 @@
     "tools": "node scripts/tools.ts",
     "prepare": "node scripts/hooks.ts",
     "setup": "node scripts/setup.ts",
+    "maps": "node scripts/maps/index.ts",
     "build:test": "vite build --mode test --outDir dist-test",
     "e2e": "playwright test",
     "e2e:update": "playwright test --update-snapshots",
