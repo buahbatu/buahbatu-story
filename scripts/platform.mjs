@@ -37,7 +37,9 @@ export function githubToken() {
   try {
     return execFileSync('gh', ['auth', 'token', '-u', GITHUB_ACCOUNT], { encoding: 'utf8' }).trim();
   } catch {
-    return fail(`Akun GitHub ${GITHUB_ACCOUNT} belum login. Jalankan: gh auth login --web (lalu gh auth switch kembali ke akun semula)`);
+    return fail(
+      `Akun GitHub ${GITHUB_ACCOUNT} belum login. Jalankan: gh auth login --web (lalu gh auth switch kembali ke akun semula)`,
+    );
   }
 }
 

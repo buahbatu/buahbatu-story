@@ -22,7 +22,12 @@ class PlaceholderScene extends Phaser.Scene {
   create(): void {
     const g = this.add.graphics();
     g.fillStyle(PALETTE.sky).fillRect(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
-    g.fillStyle(PALETTE.hillFar).fillEllipse(VIEW_WIDTH * 0.3, VIEW_HEIGHT * 0.72, VIEW_WIDTH, VIEW_HEIGHT * 0.5);
+    g.fillStyle(PALETTE.hillFar).fillEllipse(
+      VIEW_WIDTH * 0.3,
+      VIEW_HEIGHT * 0.72,
+      VIEW_WIDTH,
+      VIEW_HEIGHT * 0.5,
+    );
     g.fillStyle(PALETTE.hillNear).fillRect(0, VIEW_HEIGHT - TILE * 3, VIEW_WIDTH, TILE * 3);
     // Satu baris petak tanah sebagai penanda grid 32px (ADR-004).
     g.fillStyle(PALETTE.soil);
