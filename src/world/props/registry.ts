@@ -4,6 +4,7 @@ import { isI18nKey, t } from '../../content/i18n';
 import type { Props } from '../map/logic';
 import { DEFAULT_BUILDING, ROOFS, WALLS, building, type BuildingSpec } from './buildings';
 import { FENCE_STYLES, farmhouse, fence, strawberryPlot, tree } from './models';
+import { bed, bookshelf, chair, coffeeTable, desk, diningTable, fridge, kitchen, partition, room, rug, sofa, tv, vanity, wallFrame, wallWindow, wardrobe } from './furniture';
 import { bench, bush, foodCart, haystack, pine, pot, powerPole, rock, signBoard, streetLamp } from './street';
 
 export type PropModel = (typeof PROP_MODELS)[number];
@@ -54,6 +55,23 @@ export const PROP_FACTORIES: Record<PropModel, (props: Props) => Object3D> = {
   power_pole: () => powerPole(),
   food_cart: (p) => foodCart(str(p.color, '#d9534a'), text(p.label)),
   sign: (p) => signBoard(text(p.text), str(p.color, '#2f5d50')),
+  room: (p) => room(num(p.w, 6), num(p.d, 5), str(p.wallColor, '#f1e3c4'), str(p.trim, '#8a5a36')),
+  partition: (p) => partition(num(p.length, 3), str(p.wallColor, '#f1e3c4'), str(p.trim, '#8a5a36')),
+  wall_window: (p) => wallWindow(str(p.curtain, '#e8b4bc')),
+  wall_frame: (p) => wallFrame(str(p.color, '#e8b4bc')),
+  bed: (p) => bed(str(p.color, '#9cc8e8')),
+  wardrobe: (p) => wardrobe(str(p.color, '#a8723f')),
+  desk: () => desk(),
+  chair: (p) => chair(str(p.color, '#8a5a36')),
+  sofa: (p) => sofa(str(p.color, '#5a7fa8')),
+  tv: () => tv(),
+  coffee_table: () => coffeeTable(),
+  rug: (p) => rug(num(p.w, 2), num(p.d, 1.5), str(p.color, '#c9473d')),
+  bookshelf: () => bookshelf(),
+  kitchen: () => kitchen(),
+  fridge: () => fridge(),
+  dining_table: () => diningTable(),
+  vanity: () => vanity(),
 };
 
 export const isPropModel = (model: unknown): model is PropModel =>

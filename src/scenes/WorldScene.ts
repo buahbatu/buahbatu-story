@@ -1,6 +1,6 @@
 import { Color, Fog, NearestFilter, PerspectiveCamera, SRGBColorSpace, Scene, TextureLoader, type Group, type Texture } from 'three';
 import { PALETTE } from '../config/palette';
-import { DEFAULT_AREA, WORLD_CAMERA, WORLD_FOG } from '../config/world';
+import { DEFAULT_AREA, INTERIOR, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { logger } from '../core/logger';
 import type { GameScene } from '../engine/engine';
 import { uiStore } from '../ui/uiState';
@@ -70,20 +70,26 @@ export class WorldScene implements GameScene {
 
   private applySettings({ settings }: AreaData): void {
     const num = (v: unknown, d: number) => (typeof v === 'number' ? v : d);
-    const sky = typeof settings.sky === 'string' ? settings.sky : PALETTE.sky;
-    const fog = typeof settings.fog === 'string' ? settings.fog : PALETTE.fog;
+    const indoor = settings.interior === true;
+    const sky = typeof settings.sky === 'string' ? settings.sky : indoor ? INTERIOR.background : PALETTE.sky;
+    const fog = typeof settings.fog === 'string' ? settings.fog : indoor ? INTERIOR.background : PALETTE.fog;
+    const fogNear = indoor ? INTERIOR.fogNear : WORLD_FOG.near;
     this.world.scene.background = new Color(sky);
-    this.world.scene.fog = new Fog(fog, num(settings.fogNear, WORLD_FOG.near), num(settings.fogFar, WORLD_FOG.far));
+    this.world.scene.fog = new Fog(fog, num(settings.fogNear, fogNear), num(settings.fogFar, indoor ? INTERIOR.fogFar : WORLD_FOG.far));
   }
 
   private focus(spawnId?: string): void {
     if (!this.area) return;
     const spawns = this.area.spawns;
     const spawn = (spawnId ? spawns[spawnId] : undefined) ?? spawns.start ?? Object.values(spawns)[0] ?? { x: 0, y: 0 };
+    const { settings, width, height } = this.area;
+    const indoor = settings.interior === true;
+    const target = indoor ? { x: width / 2, y: height / 2 - INTERIOR.lookBack } : spawn;
+    const distance = typeof settings.cameraDistance === 'number' ? settings.cameraDistance : indoor ? INTERIOR.cameraDistance : WORLD_CAMERA.distance;
     const pitch = (WORLD_CAMERA.pitchDeg * Math.PI) / 180;
-    const y = elevation(this.area, spawn.x, spawn.y);
+    const y = elevation(this.area, target.x, target.y);
     const { camera } = this.world;
-    camera.position.set(spawn.x, y + Math.sin(pitch) * WORLD_CAMERA.distance, spawn.y + Math.cos(pitch) * WORLD_CAMERA.distance);
-    camera.lookAt(spawn.x, y, spawn.y);
+    camera.position.set(target.x, y + Math.sin(pitch) * distance, target.y + Math.cos(pitch) * distance);
+    camera.lookAt(target.x, y, target.y);
   }
 }

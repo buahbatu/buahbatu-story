@@ -8,8 +8,8 @@ Setiap aset pihak ketiga **wajib** dicatat di sini (lihat `docs/42-aset-lisensi.
 | Aset (path) | Pembuat | Sumber (URL) | Lisensi | Modifikasi |
 |---|---|---|---|---|
 | `public/assets/ui/icons/*.png` (ikon aplikasi stroberi 16×16, diperbesar nearest-neighbor) | Dibuat sendiri untuk proyek ini (AI agent, palet `config/palette.ts`) | — | Milik proyek | — |
-| `public/assets/tilesets/ground.png` (atlas tanah placeholder 16px: rumput, jalan, tanah garapan, pasir, air, batu, lantai kayu, tebing, aspal, paving + penanda ketinggian/garapan) | Dibuat sendiri untuk proyek ini (AI agent, digambar lewat kode) | — | Milik proyek | — |
-| `public/assets/maps/*.tmj` (`sandbox`, `lembang`, `buahbatu`; prototipe) | Dibuat sendiri untuk proyek ini (AI agent, dibangkitkan `scripts/maps/`) | — | Milik proyek | — |
+| `public/assets/tilesets/ground.png` (atlas tanah placeholder 16px: rumput, jalan, tanah garapan, pasir, air, batu, lantai kayu, tebing, aspal, paving, keramik, karpet + penanda ketinggian/garapan) | Dibuat sendiri untuk proyek ini (AI agent, digambar lewat kode) | — | Milik proyek | — |
+| `public/assets/maps/*.tmj` (`sandbox`, `lembang`, `buahbatu`, `kos_a`, `rumah_michelle`; prototipe) | Dibuat sendiri untuk proyek ini (AI agent, dibangkitkan `scripts/maps/`) | — | Milik proyek | — |
 
 *Belum ada grafis pihak ketiga: tekstur prop 3D (`src/world/props/textures.ts`) digambar lewat kode.*
 

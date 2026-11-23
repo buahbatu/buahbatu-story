@@ -6,6 +6,7 @@ export const WORLD_CAMERA = { fov: 30, pitchDeg: 52, distance: 24, near: 0.5, fa
 export const DEFAULT_AREA = 'sandbox';
 export const AREA_ID_PATTERN = /^[a-z0-9_]+$/;
 export const WORLD_SKIRT = 40;
+export const INTERIOR = { background: '#14111f', fogNear: 60, fogFar: 120, cameraDistance: 15, lookBack: 0.9 } as const;
 export const WORLD_FOG = { near: 30, far: 70 } as const;
 export const MAP_LAYERS = ['Ground', 'Height', 'Farmable', 'Collision', 'Objects'] as const;
 export const OBJECT_RULES = {
@@ -35,6 +36,23 @@ export const PROP_MODELS = [
   'power_pole',
   'food_cart',
   'sign',
+  'room',
+  'partition',
+  'wall_window',
+  'wall_frame',
+  'bed',
+  'wardrobe',
+  'desk',
+  'chair',
+  'sofa',
+  'tv',
+  'coffee_table',
+  'rug',
+  'bookshelf',
+  'kitchen',
+  'fridge',
+  'dining_table',
+  'vanity',
 ] as const;
 export const AREA_IDS = [
   'sandbox',

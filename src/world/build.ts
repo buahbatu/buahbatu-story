@@ -49,7 +49,8 @@ export function skirt(area: Pick<AreaData, 'width' | 'height'>, margin = WORLD_S
 export function buildArea(area: AreaData, atlas: Texture): Group {
   const root = new Group();
   root.name = `area:${area.id}`;
-  root.add(terrainMesh(area, atlas), skirt(area));
+  root.add(terrainMesh(area, atlas));
+  if (area.settings.interior !== true) root.add(skirt(area));
   for (const o of area.objects) {
     if (o.kind !== 'prop' || !isPropModel(o.props.model)) continue;
     const prop = PROP_FACTORIES[o.props.model](o.props);

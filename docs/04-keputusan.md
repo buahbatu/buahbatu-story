@@ -138,6 +138,13 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Alasan**: Satu-satunya cara memenuhi visi user. Three.js matang, gratis, jalan di browser & HP; low-poly + render resolusi rendah tetap ringan. Grid-based world menjaga semua desain sistem (farming, dekor, NPC) tetap berlaku.
 - **Konsekuensi**: Task berbasis Phaser (scene, kamera 2D, sprite LPC) disusun ulang (TODO P1). Pekerjaan grafik lebih besar (model + tekstur + sprite). Budget performa (`50` §6) diukur ulang untuk 3D. Snapshot visual dibuat ulang. Docs yang menyebut Phaser/LPC/top-down direvisi bertahap saat task terkait dikerjakan; yang inti (`00`, `01`, `02`, `10` §6, `42`) direvisi sekarang.
 
+### ADR-023 · Nama tempat mengikuti Bandung asli (permintaan user, 2026-11-24)
+- **Status**: Diterima
+- **Konteks**: User ingin peta terasa seperti Bandung sungguhan: nama jalan, landmark, dan tempat kopi/toko lokal sesuai kenyataan. Bentuk bangunan bebas.
+- **Keputusan**: (1) Nama jalan & landmark publik memakai **nama asli**, tata letak kira-kira mengikuti peta nyata. (2) Kafe, warung, dan toko **lokal** sekitar memakai **nama asli** (keputusan user). (3) **Merek besar/waralaba nasional & internasional** (SPBU, minimarket, kopi/fast food waralaba) memakai **plesetan** tanpa logo asli. (4) Sumber data posisi & nama: **OpenStreetMap** (ODbL, atribusi di `CREDITS.md`) + pengecekan manual; Google Maps hanya sebagai acuan lihat, **tidak di-scrape** (melanggar ketentuannya). Tempat kenangan kalian dari kuesioner (`43`).
+- **Alasan**: Rasa "Bandung beneran" (pilar visi #3) tanpa risiko merek dagang besar; repo masih publik selama development (ADR-010).
+- **Konsekuensi**: Dikerjakan saat peta final P12-01–03 & P15-06. Nama asli tetap teks i18n `sign.*` (maks. ±10 huruf per papan bangunan; nama panjang → papan berdiri). Daftar nama per area + sumbernya dicatat di `docs/10` saat area itu dikerjakan. Peta prototipe P1 tetap memakai nama umum.
+
 ---
 
 ## Template ADR Baru

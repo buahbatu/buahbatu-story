@@ -14,6 +14,8 @@ export const TERRAIN = {
   cliff: 9,
   asphalt: 14,
   paving: 15,
+  ceramic: 16,
+  carpet: 17,
 } as const;
 export type Terrain = keyof typeof TERRAIN;
 type Value = string | number | boolean;
@@ -155,6 +157,11 @@ export class MapBuilder {
     return vertical ? this.block(x0 - 0.15, y0, 0.3, length) : this.block(x0, y0 - 0.15, length, 0.3);
   }
 
+  item(model: string, x: number, y: number, w: number, d: number, props: Props = {}): this {
+    this.prop(model, x, y, props);
+    return this.block(x - w / 2, y - d / 2, w, d);
+  }
+
   solid(model: string, x: number, y: number, size: number, props: Props = {}): this {
     this.prop(model, x, y, props);
     return this.block(x - size / 2, y - size / 2, size, size);
@@ -219,9 +226,9 @@ export class MapBuilder {
           tilewidth: T,
           tileheight: T,
           columns: 8,
-          tilecount: 16,
+          tilecount: 24,
           imagewidth: 128,
-          imageheight: 32,
+          imageheight: 48,
           margin: 0,
           spacing: 0,
           tiles,

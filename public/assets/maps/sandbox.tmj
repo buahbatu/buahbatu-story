@@ -4340,9 +4340,9 @@
    "tilewidth": 16,
    "tileheight": 16,
    "columns": 8,
-   "tilecount": 16,
+   "tilecount": 24,
    "imagewidth": 128,
-   "imageheight": 32,
+   "imageheight": 48,
    "margin": 0,
    "spacing": 0,
    "tiles": [
@@ -4503,6 +4503,26 @@
        "name": "terrain",
        "type": "string",
        "value": "paving"
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "ceramic"
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "carpet"
       }
      ]
     }

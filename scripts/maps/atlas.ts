@@ -10,7 +10,7 @@ const png = await page.evaluate(() => {
   const T = 16;
   const c = document.createElement('canvas');
   c.width = T * 8;
-  c.height = T * 2;
+  c.height = T * 3;
   const g = c.getContext('2d');
   if (!g) throw new Error('canvas 2d tidak tersedia');
   let seed = 3;
@@ -128,6 +128,18 @@ const png = await page.evaluate(() => {
       }
       dots(x, y, ['#c9bfb2'], 10);
     },
+    (x, y) => {
+      fill(x, y, '#ece8e0');
+      px(x, y, 0, 0, '#cfc9bd', T, 1);
+      px(x, y, 0, 0, '#cfc9bd', 1, T);
+      px(x, y, 1, 1, '#f8f6f1', 6, 1);
+      dots(x, y, ['#e2ddd3'], 8);
+    },
+    (x, y) => {
+      fill(x, y, '#8e3b46');
+      for (let r = 1; r < T; r += 3) px(x, y, 0, r, '#7a3039', T, 1);
+      dots(x, y, ['#a34a56'], 18);
+    },
   ];
   tiles.forEach((draw, i) => {
     draw((i % 8) * T, Math.floor(i / 8) * T);
@@ -136,4 +148,4 @@ const png = await page.evaluate(() => {
 });
 writeFileSync(join(out, 'ground.png'), Buffer.from(png, 'base64'));
 await browser.close();
-console.log('ground.png 128×32');
+console.log('ground.png 128×48');

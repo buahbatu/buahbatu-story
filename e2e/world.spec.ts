@@ -20,6 +20,8 @@ for (const [area, spawn] of [
   ['lembang', 'depan_kandang'],
   ['buahbatu', 'depan_warung'],
   ['buahbatu', 'depan_rumah_michelle'],
+  ['kos_a', 'pintu'],
+  ['rumah_michelle', 'pintu'],
 ] as const)
   test(`snapshot ${area} dari spawn ${spawn}`, async ({ game: { page } }) => {
     const info = await page.evaluate(([a, s]) => window.__BB__?.enterArea(a, s), [area, spawn] as const);

@@ -75,6 +75,7 @@ Gaya: 2.5D low-poly + tekstur pixel, palet hangat, ikuti `42-aset-lisensi.md` (A
 - **Peta luas dan detail**, bukan petak kosong. Setiap area punya **identitas visual sendiri** (palet, material jalan/atap, vegetasi, properti jalanan) sehingga pemain langsung tahu sedang di mana. Contoh: Lembang = kayu, kebun, kabut; Braga = fasad kolonial krem, lampu jalan kuning, trotoar batu; Buahbatu = rumah kompleks, warung, gerobak jajanan.
 - **Setiap bangunan berbeda.** Tidak ada bangunan "copy-paste": bentuk, warna, atap, pintu/jendela, papan nama, dan detail depan (pot, sepeda, jemuran, kursi) divariasikan. Kalau memakai komponen modular, kombinasinya harus unik per bangunan.
 - Detail kecil yang membuat hidup: tanda jalan, tiang listrik, pot bunga, gerobak, kucing liar, bayangan pohon.
+- **Nama tempat (ADR-023)**: nama jalan, landmark, dan kafe/warung/toko lokal memakai **nama asli** (data OpenStreetMap + cek manual); merek besar/waralaba memakai **plesetan** (contoh: SPBU "Pertamani", minimarket "Alfamurah"/"Indomart-mart", kopi waralaba "Starbaks"). Bentuk bangunan bebas.
 - Konsekuensi: kebutuhan art besar; dikerjakan bertahap per area (P1-02 prototipe, P12 & P15 final) dan bergantung pada keputusan gaya grafik (`42`).
 
 ## 6. Konvensi Peta (WAJIB)
@@ -108,8 +109,9 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | `prop` | `model` ∈ `PROP_MODELS` (lihat tabel prop di bawah); opsional `rotation` (derajat) |
 
 - Posisi objek titik (point) = pusat prop/spawn. Satuan dibaca dalam tile.
-- Atlas tanah placeholder: `public/assets/tilesets/ground.png` (8×2 tile 16px, buatan sendiri; id 14 `asphalt`, 15 `paving`); diganti aset final di P12/P15.
-- **Properti peta** (Map Properties di Tiled, opsional): `sky`, `fog` (warna hex), `fogNear`, `fogFar` untuk suasana area (mis. Lembang berkabut).
+- Atlas tanah placeholder: `public/assets/tilesets/ground.png` (8×3 tile 16px, buatan sendiri; id 14 `asphalt`, 15 `paving`, 16 `ceramic`, 17 `carpet`); diganti aset final di P12/P15.
+- **Properti peta** (Map Properties di Tiled, opsional): `sky`, `fog` (warna hex), `fogNear`, `fogFar` untuk suasana area (mis. Lembang berkabut), `cameraDistance`, dan `interior` (bool).
+- **Interior**: peta seukuran ruangan; prop `room` (`w`, `d`, `wallColor`, `trim`) di tengah peta membangun dinding belakang & samping di luar tepi peta (dinding depan sengaja tidak ada, ala BTN), sekat `partition` (`length`, `rotation`). Latar gelap, tanpa tanah lanjutan, kamera melihat seluruh ruangan (pusat peta, sedikit ke belakang). Lantai: `wood_floor`, `ceramic` (keramik), `carpet`.
 - **Daftar area** `AREA_IDS` (`src/config/world.ts`): setiap file peta wajib terdaftar. Pintu/tepi boleh menuju area yang belum dibuat asalkan terdaftar; kalau petanya sudah ada, `targetSpawn` wajib ada di sana (dicek `tests/maps.test.ts`).
 - **Generator peta prototipe**: `npm run maps` (`scripts/maps/`: `atlas.ts`, `lib.ts` `MapBuilder`, satu file per area). Selama prototipe, ubah peta lewat generatornya; kalau sebuah peta mulai diedit manual di Tiled, hapus generatornya supaya tidak tertimpa.
 
@@ -125,9 +127,14 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | `food_cart` | `color`, `label` (kunci i18n) |
 | `sign` | `text` (kunci i18n), `color` |
 | `haystack`, `bench`, `street_lamp`, `power_pole` | — |
+| `room`, `partition` | lihat Interior |
+| `wall_window` | `curtain` (warna gorden) |
+| `wall_frame`, `bed`, `wardrobe`, `chair`, `sofa` | `color` |
+| `rug` | `w`, `d`, `color` |
+| `desk`, `tv`, `coffee_table`, `bookshelf`, `kitchen`, `fridge`, `dining_table`, `vanity` | — |
 
 - **Papan nama**: teks dari i18n (`sign.*`), **maksimal ±10 huruf** supaya terbaca di resolusi rendah (font Press Start 2P 8px, papan dimiringkan menghadap kamera). Nama panjang → papan berdiri (`sign`) yang lebih lebar.
-- Peta prototipe yang ada: `sandbox` (40×30), `lembang` (48×36), `buahbatu` (44×34).
+- Peta prototipe yang ada: `sandbox` (40×30), `lembang` (48×36), `buahbatu` (44×34), interior `kos_a` (7×6) & `rumah_michelle` (15×9: kamar Michelle, ruang tamu, dapur).
 
 ## 7. Atmosfer per Area
 | Area | Musik | Ambience | Ciri khas |

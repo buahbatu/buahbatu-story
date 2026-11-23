@@ -1,0 +1,815 @@
+{
+ "type": "map",
+ "version": "1.10",
+ "tiledversion": "1.11.0",
+ "orientation": "orthogonal",
+ "renderorder": "right-down",
+ "infinite": false,
+ "compressionlevel": -1,
+ "width": 7,
+ "height": 6,
+ "tilewidth": 16,
+ "tileheight": 16,
+ "nextlayerid": 6,
+ "nextobjectid": 21,
+ "properties": [
+  {
+   "name": "interior",
+   "type": "bool",
+   "value": true
+  },
+  {
+   "name": "cameraDistance",
+   "type": "float",
+   "value": 11.5
+  }
+ ],
+ "layers": [
+  {
+   "id": 1,
+   "name": "Ground",
+   "type": "tilelayer",
+   "width": 7,
+   "height": 6,
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "data": [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ]
+  },
+  {
+   "id": 2,
+   "name": "Height",
+   "type": "tilelayer",
+   "width": 7,
+   "height": 6,
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "data": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": 3,
+   "name": "Farmable",
+   "type": "tilelayer",
+   "width": 7,
+   "height": 6,
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "data": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": 4,
+   "name": "Collision",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "objects": [
+    {
+     "id": 7,
+     "name": "",
+     "x": 4,
+     "y": 2.3999999999999986,
+     "width": 20.8,
+     "height": 33.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 9,
+     "name": "",
+     "x": 86.39999999999999,
+     "y": 1.6000000000000005,
+     "width": 22.4,
+     "height": 9.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 11,
+     "name": "",
+     "x": 48,
+     "y": 1.6000000000000005,
+     "width": 22.4,
+     "height": 11.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 13,
+     "name": "",
+     "x": 55.2,
+     "y": 16.8,
+     "width": 8,
+     "height": 8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 15,
+     "name": "",
+     "x": 104.8,
+     "y": 32,
+     "width": 6.4,
+     "height": 19.2,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 20,
+     "name": "",
+     "x": 3.2,
+     "y": 82.4,
+     "width": 8,
+     "height": 8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "name": "Objects",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "objects": [
+    {
+     "id": 1,
+     "name": "",
+     "type": "prop",
+     "x": 56,
+     "y": 48,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "room"
+      },
+      {
+       "name": "w",
+       "type": "float",
+       "value": 7
+      },
+      {
+       "name": "d",
+       "type": "float",
+       "value": 6
+      },
+      {
+       "name": "wallColor",
+       "type": "string",
+       "value": "#e9efe0"
+      },
+      {
+       "name": "trim",
+       "type": "string",
+       "value": "#6b4223"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "name": "",
+     "type": "spawn",
+     "x": 56,
+     "y": 78.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "pintu"
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "name": "",
+     "type": "spawn",
+     "x": 36.8,
+     "y": 38.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "id",
+       "type": "string",
+       "value": "kasur"
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "name": "",
+     "type": "door",
+     "x": 48,
+     "y": 88,
+     "width": 16,
+     "height": 8,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "targetArea",
+       "type": "string",
+       "value": "dago"
+      },
+      {
+       "name": "targetSpawn",
+       "type": "string",
+       "value": "dari_kos_a"
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "name": "",
+     "type": "interact",
+     "x": 14.4,
+     "y": 19.2,
+     "width": 20.8,
+     "height": 33.6,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "action",
+       "type": "string",
+       "value": "bed"
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "name": "",
+     "type": "prop",
+     "x": 14.4,
+     "y": 19.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "bed"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#3f6e9a"
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "name": "",
+     "type": "prop",
+     "x": 97.6,
+     "y": 6.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "wardrobe"
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "name": "",
+     "type": "prop",
+     "x": 59.2,
+     "y": 7.2,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "desk"
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "name": "",
+     "type": "prop",
+     "x": 59.2,
+     "y": 20.8,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "chair"
+      },
+      {
+       "name": "rotation",
+       "type": "float",
+       "value": 180
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "name": "",
+     "type": "prop",
+     "x": 108,
+     "y": 41.6,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "bookshelf"
+      },
+      {
+       "name": "rotation",
+       "type": "float",
+       "value": 90
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "name": "",
+     "type": "prop",
+     "x": 57.6,
+     "y": 54.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "rug"
+      },
+      {
+       "name": "w",
+       "type": "float",
+       "value": 2.6
+      },
+      {
+       "name": "d",
+       "type": "float",
+       "value": 1.6
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#3f6e9a"
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "name": "",
+     "type": "prop",
+     "x": 35.2,
+     "y": 0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "wall_window"
+      },
+      {
+       "name": "curtain",
+       "type": "string",
+       "value": "#9cc8e8"
+      }
+     ]
+    },
+    {
+     "id": 18,
+     "name": "",
+     "type": "prop",
+     "x": 78.4,
+     "y": 0,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "wall_frame"
+      },
+      {
+       "name": "color",
+       "type": "string",
+       "value": "#f2c94c"
+      }
+     ]
+    },
+    {
+     "id": 19,
+     "name": "",
+     "type": "prop",
+     "x": 7.2,
+     "y": 86.4,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "pot"
+      },
+      {
+       "name": "flower",
+       "type": "string",
+       "value": "#f2c94c"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "tilesets": [
+  {
+   "firstgid": 1,
+   "name": "ground",
+   "image": "../tilesets/ground.png",
+   "tilewidth": 16,
+   "tileheight": 16,
+   "columns": 8,
+   "tilecount": 24,
+   "imagewidth": 128,
+   "imageheight": 48,
+   "margin": 0,
+   "spacing": 0,
+   "tiles": [
+    {
+     "id": 0,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "grass"
+      }
+     ]
+    },
+    {
+     "id": 1,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "grass_flowers"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "dirt"
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "path"
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "tilled"
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "sand"
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "water"
+      }
+     ]
+    },
+    {
+     "id": 7,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "stone"
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "wood_floor"
+      }
+     ]
+    },
+    {
+     "id": 9,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "cliff"
+      }
+     ]
+    },
+    {
+     "id": 10,
+     "properties": [
+      {
+       "name": "height",
+       "type": "int",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 11,
+     "properties": [
+      {
+       "name": "height",
+       "type": "int",
+       "value": 2
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "properties": [
+      {
+       "name": "height",
+       "type": "int",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "id": 13,
+     "properties": [
+      {
+       "name": "farmable",
+       "type": "bool",
+       "value": true
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "asphalt"
+      }
+     ]
+    },
+    {
+     "id": 15,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "paving"
+      }
+     ]
+    },
+    {
+     "id": 16,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "ceramic"
+      }
+     ]
+    },
+    {
+     "id": 17,
+     "properties": [
+      {
+       "name": "terrain",
+       "type": "string",
+       "value": "carpet"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
