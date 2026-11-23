@@ -4,5 +4,8 @@
   "title.version": "Versi {version}",
   "title.comingSoon": "Dunianya lagi dibangun, sabar nya…",
   "boot.loading": "Memuat… {percent}%",
-  "boot.contentError": "Data game rusak. Coba muat ulang halaman."
+  "boot.contentError": "Data game rusak. Coba muat ulang halaman.",
+  "error.unknownCommand": "Aksi ini belum dikenal. Coba lagi sebentar, ya.",
+  "error.invalidCommand": "Aksinya nggak bisa dilakukan sekarang.",
+  "error.internal": "Waduh, ada yang error. Progresmu aman, coba ulangi."
 }

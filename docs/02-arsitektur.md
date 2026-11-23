@@ -122,11 +122,21 @@ export interface CommandResult {
   events: GameEvent[];
 }
 
-// src/core/commands/dispatcher.ts
-export type Handler<C extends Command> = (state: GameState, cmd: C) => CommandResult;
+// src/core/commands/types.ts (implementasi P0-07, ADR-017)
+export type HandlerOutcome = { ok: true; events: GameEvent[] } | { ok: false; reason: I18nKey };
+export type Handler<C extends Command> = (draft: Draft<GameState>, cmd: C) => HandlerOutcome;
+export type HandlerMap = { [T in CommandType]: Handler<CommandOf<T>> }; // wajib lengkap
+
+// src/core/commands/world.ts (contoh)
+export const setFlag: Handler<CommandOf<'world/setFlag'>> = (draft, cmd) => {
+  if (!FLAG_KEY.test(cmd.key)) return reject('error.invalidCommand');
+  draft.world.flags[cmd.key] = cmd.value;
+  return succeed([{ type: 'world/flagChanged', /* ... */ }]);
+};
+// CommandDispatcher.dispatch(cmd) → { ok, reason?, events, patches, inversePatches }
 ```
 Aturan:
-- Handler **memutasi `state` secara terkontrol** (atau mengembalikan state baru dengan Immer), lalu mengembalikan event.
+- Handler **memutasi `draft` Immer**, lalu mengembalikan `succeed(events)` atau `reject(reasonKey)`. Dispatcher menjalankannya secara **atomik**: reject/throw → state tidak berubah sama sekali.
 - Handler **tidak boleh** menyentuh Phaser, DOM, atau jaringan.
 - Semua keputusan acak memakai `rng` dari state (seeded) supaya host dan klien konsisten.
 

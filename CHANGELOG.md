@@ -8,6 +8,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 ## [Unreleased]
 
 ### Ditambah
+- **P0-07** Core arsitektur: `core/rng.ts` (mulberry32, state RNG di dalam GameState, `int/chance/pick/weighted`, `hashSeed`), `core/events` (EventBus bertipe, listener error diisolasi), `core/state` (GameState v1 + `createInitialState` murni + selectors), `core/commands` (CommandDispatcher atomik berbasis Immer, `patches`/`inversePatches`, `HandlerMap` wajib lengkap, Command pertama `world/setFlag`), `core/logger.ts` (level, scope, redaksi otomatis JWT/token/field rahasia). Angka awal di `config/balance.ts`. Dependency baru: `immer`.
 - **P0-06** Scene `Boot` (validasi konten, pesan ramah kalau rusak) → `Preload` (loading bar dari event progress loader) → `Title` placeholder (langit bertingkat, bukit, petak kebun, judul, tagline, versi dari `package.json`). `src/content/i18n/id.json` + `t()` bertipe (key divalidasi zod), `src/config/palette.ts`, `src/utils/progress.ts`.
 - **P0-05** `src/config/game.ts`: config Phaser 640×360 (`pixelArt`, `roundPixels`, arcade physics) + `installIntegerScaling` (resize, rotasi HP, pindah monitor/zoom browser). `src/utils/scale.ts`: zoom integer dihitung per pixel fisik (tajam juga di display scaling 125%/150%), fallback pecahan untuk layar < 640×360.
 - **P0-04** Vitest (`vitest.config.ts`), kerangka validasi konten zod (`src/content/{schema,registry,validate,index}.ts`): ID snake_case, ID unik, setiap JSON wajib punya skema, `personal/` tidak pernah dimuat. Script `test`, `test:watch`, `validate:content`.
@@ -17,6 +18,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - **P0-00** Akun per folder: `scripts/platform.mjs` (wrapper `gh`/`vercel`/`supabase` memakai akun proyek tanpa mengubah login global), git identitas + credential helper lokal untuk akun `buahbatu`, `.gitignore` minimal.
 
 ### Diubah
+- **P0-07** ADR-017 (Immer untuk Command). `docs/02` §4 contoh Handler disesuaikan dengan implementasi (draft + `succeed`/`reject`).
 - **P0-06** File i18n `id.json` + helper `t()` dibuat lebih awal dari jadwal P0-08 (Title sudah butuh teks dan teks UI tidak boleh di-hardcode). P0-08 tetap mengerjakan font, overlay Preact, dan style.
 - **P0-05** `docs/40` §7: aturan integer scaling per pixel fisik. Canvas di-center oleh CSS (autoCenter Phaser membuat offset dobel).
 - **P0-04** `validate:content` memakai Vitest (bukan `tsx`) supaya tidak menambah dependency dan memakai loader `import.meta.glob` yang sama dengan game. `docs/01` §3 disesuaikan.

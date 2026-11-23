@@ -94,6 +94,13 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Alasan**: Phaser 4 adalah jalur yang masih dirawat; API scene/tilemap/arcade umumnya sama dengan v3. Pin TS mencegah lint rusak di P0-03.
 - **Konsekuensi**: Contoh kode Phaser 3 di docs perlu dicek ulang saat dipakai (renderer, pipeline/filter, beberapa API geometri berubah). Naikkan TS ke 7 begitu `typescript-eslint` mendukung (cek di task chore).
 
+### ADR-017 · Immer untuk Command (atomik + patch)
+- **Status**: Diterima (P0-07, 2026-11-23)
+- **Konteks**: `02` §4 membolehkan handler memutasi state "secara terkontrol" atau memakai Immer. Multiplayer butuh: Command gagal tidak boleh meninggalkan state setengah jadi, klien butuh rollback prediksi (P6-05), dan host butuh mengirim perubahan kecil (`state:patch`, P6-07).
+- **Keputusan**: Dependency baru **`immer`** (±5 KB gzip). `CommandDispatcher` menjalankan handler di dalam `produceWithPatches`; handler memutasi `draft` lalu mengembalikan `succeed(events)` / `reject(reasonKey)`. State hasil di-*freeze*.
+- **Alasan**: Atomik gratis (reject/throw → draft dibuang, termasuk state RNG), `patches` + `inversePatches` langsung jadi bahan sinkron & rollback, freeze mencegah mutasi diam-diam di luar Command.
+- **Konsekuensi**: Handler wajib memakai `createRng(draft.world)` (bukan `Math.random`) dan tidak boleh me-*return* objek state baru dari recipe. Peta handler (`HandlerMap`) diwajibkan lengkap oleh TypeScript untuk setiap jenis Command.
+
 ---
 
 ## Template ADR Baru

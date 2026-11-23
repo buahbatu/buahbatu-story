@@ -85,6 +85,11 @@ export default tseslint.config(
     },
   },
   {
+    // Logger adalah satu-satunya tempat yang memang bertugas menulis ke console (setelah redaksi rahasia).
+    files: ['src/core/logger.ts'],
+    rules: { 'no-console': 'off' },
+  },
+  {
     // Server (Vercel functions) & script admin memang boleh memakai service role.
     files: ['api/**/*.ts', 'scripts/**/*.ts'],
     rules: { 'no-restricted-syntax': 'off', 'no-console': 'off' },

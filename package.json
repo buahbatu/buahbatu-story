@@ -24,6 +24,7 @@
     "@supabase/supabase-js": "^2.119.2",
     "easystarjs": "^0.4.4",
     "idb-keyval": "^6.3.0",
+    "immer": "^11.2.10",
     "phaser": "^4.2.1",
     "preact": "^11.2.0",
     "zod": "^4.6.7"
