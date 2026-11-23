@@ -1,4 +1,5 @@
 import { WebGLRenderer, type Camera, type Scene } from 'three';
+import type { InputState } from '../input/logic';
 import type { SceneKey } from '../scenes/keys';
 import { setActiveScene } from '../ui/uiState';
 import type { ViewResult } from '../utils/scale';
@@ -14,6 +15,7 @@ export interface GameScene {
 
 export class Engine {
   readonly renderer: WebGLRenderer;
+  readonly input: InputState;
   view: ViewResult;
   private readonly scenes = new Map<SceneKey, GameScene>();
   private current: GameScene | null = null;
@@ -21,7 +23,8 @@ export class Engine {
   private time = 0;
   private last = 0;
 
-  constructor(parent: HTMLElement, scenes: GameScene[], view: ViewResult) {
+  constructor(parent: HTMLElement, scenes: GameScene[], view: ViewResult, input: InputState) {
+    this.input = input;
     this.renderer = new WebGLRenderer({ antialias: false, powerPreference: 'low-power' });
     this.renderer.setPixelRatio(1);
     this.renderer.domElement.style.imageRendering = 'pixelated';
@@ -85,6 +88,7 @@ export class Engine {
     this.last = now;
     this.time += dt;
     this.current?.update?.(dt, this.time);
+    this.input.endFrame();
     this.render();
   };
 }

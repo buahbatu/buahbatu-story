@@ -85,7 +85,8 @@ export class WorldScene implements GameScene {
     const { settings, width, height } = this.area;
     const indoor = settings.interior === true;
     const target = indoor ? { x: width / 2, y: height / 2 - INTERIOR.lookBack } : spawn;
-    const distance = typeof settings.cameraDistance === 'number' ? settings.cameraDistance : indoor ? INTERIOR.cameraDistance : WORLD_CAMERA.distance;
+    const distance =
+      typeof settings.cameraDistance === 'number' ? settings.cameraDistance : indoor ? INTERIOR.cameraDistance : WORLD_CAMERA.distance;
     const pitch = (WORLD_CAMERA.pitchDeg * Math.PI) / 180;
     const y = elevation(this.area, target.x, target.y);
     const { camera } = this.world;

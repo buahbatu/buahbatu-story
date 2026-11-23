@@ -75,7 +75,7 @@ Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kot
 | Dekor | B | — | Ikon | — |
 
 - Semua tombol bisa di-remap (Pengaturan → Kontrol).
-- Input diabstraksi menjadi **Action** (`src/input/`), bukan key langsung.
+- Input diabstraksi menjadi **Action** (`src/input/`), bukan key langsung. **Status (P1-03):** keyboard. Daftar Action di `src/input/actions.ts`, tombol bawaan di `src/config/controls.ts` (`KeyboardEvent.code`, jadi aman untuk layout keyboard apa pun; maks. 2 tombol per Action; `Enter` cadangan Interaksi; hotbar maju/mundur `]`/`[` sampai scroll mouse ditambahkan). `InputState` (`src/input/logic.ts`): ditahan / baru ditekan / baru dilepas per frame, vektor gerak dinormalisasi, `rebind` tanpa bentrok + skema zod (dipakai menu remap P16-03). Tombol milik game tidak menjalankan aksi browser (Tab tidak memindah fokus, Spasi/panah tidak menggulir); kombinasi Ctrl/Alt/Meta & mengetik di kolom teks diabaikan; semua tombol dilepas saat jendela kehilangan fokus.
 
 ## 7. Responsif (ADR-020)
 - **Area pandang fleksibel, zoom selalu integer.** Zoom `k` = piksel fisik per piksel game, dipilih supaya tinggi **resolusi render internal** ±240 ala PS1 (batas 180–300, lebar maks. 640; ADR-022). Ukuran dunia = layar ÷ k → **game selalu penuh layar dan selalu tajam**. Layar lebih lebar = melihat sedikit lebih banyak dunia. Logika: `src/utils/scale.ts`, batas: `VIEW_LIMITS` di `src/config/game.ts`.

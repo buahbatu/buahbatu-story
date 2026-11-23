@@ -12,7 +12,10 @@ export function room(w: number, d: number, wallColor = '#f1e3c4', trim = '#8a5a3
   for (const side of [-1, 1]) g.add(texturedBox(WALL_T, h, d, TEX.plasterWhite(), 0.8, side * (w / 2 + WALL_T / 2), h / 2, 0, wallColor));
   g.add(box(w, 0.14, 0.04, color(trim), 0, 0.07, -d / 2 + 0.02));
   for (const side of [-1, 1]) g.add(box(0.04, 0.14, d, color(trim), side * (w / 2 - 0.02), 0.07, 0));
-  g.add(box(w + WALL_T * 2, 0.08, WALL_T + 0.04, color(trim), 0, h, -d / 2 - WALL_T / 2), box(WALL_T + 0.04, 0.08, d, color(trim), -(w / 2 + WALL_T / 2), h, 0));
+  g.add(
+    box(w + WALL_T * 2, 0.08, WALL_T + 0.04, color(trim), 0, h, -d / 2 - WALL_T / 2),
+    box(WALL_T + 0.04, 0.08, d, color(trim), -(w / 2 + WALL_T / 2), h, 0),
+  );
   g.add(box(WALL_T + 0.04, 0.08, d, color(trim), w / 2 + WALL_T / 2, h, 0));
   return g;
 }
@@ -35,7 +38,11 @@ export function wallWindow(curtain = '#e8b4bc'): Group {
 
 export function wallFrame(tint = '#e8b4bc'): Group {
   const g = new Group();
-  g.add(box(0.7, 0.55, 0.05, color('#6b4223'), 0, 1.6, 0.02), box(0.56, 0.42, 0.03, color(tint), 0, 1.6, 0.05), box(0.2, 0.15, 0.02, color('#fff7e6'), -0.08, 1.64, 0.07));
+  g.add(
+    box(0.7, 0.55, 0.05, color('#6b4223'), 0, 1.6, 0.02),
+    box(0.56, 0.42, 0.03, color(tint), 0, 1.6, 0.05),
+    box(0.2, 0.15, 0.02, color('#fff7e6'), -0.08, 1.64, 0.07),
+  );
   return g;
 }
 
@@ -58,8 +65,17 @@ export function wardrobe(tint = '#a8723f'): Group {
 export function desk(): Group {
   const g = new Group();
   g.add(texturedBox(1.4, 0.08, 0.7, TEX.planks(), 1.2, 0, 0.75, 0));
-  for (const [x, z] of [[-0.62, -0.28], [0.62, -0.28], [-0.62, 0.28], [0.62, 0.28]] as const) g.add(box(0.08, 0.75, 0.08, color('#6b4223'), x, 0.37, z));
-  g.add(box(0.5, 0.35, 0.04, color('#2f3a3f'), 0.25, 1.0, -0.2), box(0.46, 0.3, 0.02, new MeshBasicMaterial({ color: '#7fb7dc' }), 0.25, 1.0, -0.17));
+  for (const [x, z] of [
+    [-0.62, -0.28],
+    [0.62, -0.28],
+    [-0.62, 0.28],
+    [0.62, 0.28],
+  ] as const)
+    g.add(box(0.08, 0.75, 0.08, color('#6b4223'), x, 0.37, z));
+  g.add(
+    box(0.5, 0.35, 0.04, color('#2f3a3f'), 0.25, 1.0, -0.2),
+    box(0.46, 0.3, 0.02, new MeshBasicMaterial({ color: '#7fb7dc' }), 0.25, 1.0, -0.17),
+  );
   g.add(box(0.3, 0.06, 0.22, color('#e04a5a'), -0.35, 0.82, 0.05), box(0.12, 0.2, 0.12, color('#f2c94c'), -0.55, 0.89, -0.2));
   return g;
 }
@@ -67,7 +83,13 @@ export function desk(): Group {
 export function chair(tint = '#8a5a36'): Group {
   const g = new Group();
   g.add(box(0.5, 0.07, 0.5, color(tint), 0, 0.45, 0), box(0.5, 0.5, 0.07, color(tint), 0, 0.72, -0.22));
-  for (const [x, z] of [[-0.2, -0.2], [0.2, -0.2], [-0.2, 0.2], [0.2, 0.2]] as const) g.add(box(0.06, 0.45, 0.06, color('#3b2a20'), x, 0.22, z));
+  for (const [x, z] of [
+    [-0.2, -0.2],
+    [0.2, -0.2],
+    [-0.2, 0.2],
+    [0.2, 0.2],
+  ] as const)
+    g.add(box(0.06, 0.45, 0.06, color('#3b2a20'), x, 0.22, z));
   return g;
 }
 
@@ -83,14 +105,23 @@ export function sofa(tint = '#5a7fa8'): Group {
 export function tv(): Group {
   const g = new Group();
   g.add(texturedBox(1.8, 0.5, 0.5, TEX.planks(), 1.2, 0, 0.25, 0), box(1.3, 0.75, 0.08, color('#1d1a2f'), 0, 0.95, -0.05));
-  g.add(box(1.2, 0.66, 0.02, new MeshBasicMaterial({ color: '#3d6d99' }), 0, 0.95, -0.005), box(0.3, 0.4, 0.3, color('#3b3f45'), 0.65, 0.7, 0));
+  g.add(
+    box(1.2, 0.66, 0.02, new MeshBasicMaterial({ color: '#3d6d99' }), 0, 0.95, -0.005),
+    box(0.3, 0.4, 0.3, color('#3b3f45'), 0.65, 0.7, 0),
+  );
   return g;
 }
 
 export function coffeeTable(): Group {
   const g = new Group();
   g.add(texturedBox(1.1, 0.08, 0.6, TEX.planks(), 1.2, 0, 0.4, 0));
-  for (const [x, z] of [[-0.45, -0.22], [0.45, -0.22], [-0.45, 0.22], [0.45, 0.22]] as const) g.add(box(0.06, 0.4, 0.06, color('#6b4223'), x, 0.2, z));
+  for (const [x, z] of [
+    [-0.45, -0.22],
+    [0.45, -0.22],
+    [-0.45, 0.22],
+    [0.45, 0.22],
+  ] as const)
+    g.add(box(0.06, 0.4, 0.06, color('#6b4223'), x, 0.2, z));
   const cup = new Mesh(new CylinderGeometry(0.06, 0.05, 0.1, 8), color('#fff7e6'));
   cup.position.set(0.2, 0.49, 0);
   g.add(cup, box(0.3, 0.04, 0.2, color('#e04a5a'), -0.2, 0.46, 0.05));
@@ -117,7 +148,8 @@ export function bookshelf(): Group {
   g.add(texturedBox(1.2, 1.8, 0.4, TEX.planks(), 1, 0, 0.9, 0));
   const books = ['#e04a5a', '#3f6e9a', '#f2c94c', '#3f8f4a', '#8e3b46', '#f6f0ff'];
   for (let shelf = 0; shelf < 3; shelf++)
-    for (let i = 0; i < 6; i++) g.add(box(0.13, 0.42, 0.28, color(books[(i + shelf * 2) % books.length] ?? '#e04a5a'), -0.45 + i * 0.17, 0.35 + shelf * 0.55, 0.08));
+    for (let i = 0; i < 6; i++)
+      g.add(box(0.13, 0.42, 0.28, color(books[(i + shelf * 2) % books.length] ?? '#e04a5a'), -0.45 + i * 0.17, 0.35 + shelf * 0.55, 0.08));
   return g;
 }
 
@@ -141,14 +173,24 @@ export function kitchen(): Group {
 export function fridge(): Group {
   const g = new Group();
   g.add(box(0.75, 1.8, 0.7, color('#e8eef2'), 0, 0.9, 0), box(0.73, 0.02, 0.02, color('#b9c2c8'), 0, 1.25, 0.36));
-  g.add(box(0.04, 0.35, 0.04, color('#8a9399'), 0.28, 1.5, 0.37), box(0.04, 0.3, 0.04, color('#8a9399'), 0.28, 0.95, 0.37), box(0.15, 0.15, 0.02, color('#e04a5a'), -0.15, 1.5, 0.36));
+  g.add(
+    box(0.04, 0.35, 0.04, color('#8a9399'), 0.28, 1.5, 0.37),
+    box(0.04, 0.3, 0.04, color('#8a9399'), 0.28, 0.95, 0.37),
+    box(0.15, 0.15, 0.02, color('#e04a5a'), -0.15, 1.5, 0.36),
+  );
   return g;
 }
 
 export function diningTable(): Group {
   const g = new Group();
   g.add(texturedBox(1.6, 0.08, 0.9, TEX.planks(), 1.2, 0, 0.75, 0));
-  for (const [x, z] of [[-0.7, -0.35], [0.7, -0.35], [-0.7, 0.35], [0.7, 0.35]] as const) g.add(box(0.08, 0.75, 0.08, color('#6b4223'), x, 0.37, z));
+  for (const [x, z] of [
+    [-0.7, -0.35],
+    [0.7, -0.35],
+    [-0.7, 0.35],
+    [0.7, 0.35],
+  ] as const)
+    g.add(box(0.08, 0.75, 0.08, color('#6b4223'), x, 0.37, z));
   for (const x of [-0.45, 0.45])
     for (const side of [-1, 1]) {
       const c = chair('#a8723f');
@@ -166,6 +208,11 @@ export function vanity(): Group {
   const g = new Group();
   g.add(texturedBox(1.1, 0.75, 0.45, TEX.planks(), 1.2, 0, 0.38, 0, '#f4e3d3'), box(0.7, 0.9, 0.05, color('#f4e3d3'), 0, 1.25, -0.18));
   g.add(box(0.6, 0.8, 0.02, new MeshBasicMaterial({ color: '#cfe3ef' }), 0, 1.25, -0.15));
-  for (const [x, c] of [[-0.35, '#e04a5a'], [-0.2, '#f6c9d3'], [0.3, '#f2c94c']] as const) g.add(box(0.08, 0.16, 0.08, color(c), x, 0.84, 0.05));
+  for (const [x, c] of [
+    [-0.35, '#e04a5a'],
+    [-0.2, '#f6c9d3'],
+    [0.3, '#f2c94c'],
+  ] as const)
+    g.add(box(0.08, 0.16, 0.08, color(c), x, 0.84, 0.05));
   return g;
 }

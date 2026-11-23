@@ -4,7 +4,25 @@ import { isI18nKey, t } from '../../content/i18n';
 import type { Props } from '../map/logic';
 import { DEFAULT_BUILDING, ROOFS, WALLS, building, type BuildingSpec } from './buildings';
 import { FENCE_STYLES, farmhouse, fence, strawberryPlot, tree } from './models';
-import { bed, bookshelf, chair, coffeeTable, desk, diningTable, fridge, kitchen, partition, room, rug, sofa, tv, vanity, wallFrame, wallWindow, wardrobe } from './furniture';
+import {
+  bed,
+  bookshelf,
+  chair,
+  coffeeTable,
+  desk,
+  diningTable,
+  fridge,
+  kitchen,
+  partition,
+  room,
+  rug,
+  sofa,
+  tv,
+  vanity,
+  wallFrame,
+  wallWindow,
+  wardrobe,
+} from './furniture';
 import { bench, bush, foodCart, haystack, pine, pot, powerPole, rock, signBoard, streetLamp } from './street';
 
 export type PropModel = (typeof PROP_MODELS)[number];

@@ -23,6 +23,7 @@ Identifier kode **Bahasa Inggris**. Teks yang tampil ke pemain **Bahasa Indonesi
 - Satu sistem = satu folder (`types`, `logic`, `handlers`, `view`, `test`).
 - Tidak ada import silang antar `logic.ts` sistem berbeda; komunikasi via event atau selector.
 - Angka *magic* dilarang → masuk `config/balance.ts` atau konten JSON.
+- `npm run lint` = ESLint (`--max-warnings 0`) **+ Prettier `--check`**: kode yang belum diformat ikut menggagalkan `verify` & CI.
 - Aturan di atas sebagian **ditegakkan ESLint** (`eslint.config.js`): `src/core` & `logic/handlers/types.ts` sistem dilarang import Phaser/Preact/Supabase/`net`, `logic.ts` dilarang import `logic.ts` sistem lain, `any` dilarang, dan `SERVICE_ROLE` dilarang di luar `api/` & `scripts/`.
 
 ## 4. Tanpa Komentar, Kode Padat (ADR-019)

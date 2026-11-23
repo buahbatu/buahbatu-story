@@ -63,6 +63,8 @@ function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
       });
       return { id, width: area.width, height: area.height, props };
     },
+    actions: () => engine.input.down(),
+    move: () => engine.input.move(),
     freeze(on) {
       if (on) engine.freezeAt(0);
       else engine.wake();

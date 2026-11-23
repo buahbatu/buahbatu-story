@@ -1,6 +1,7 @@
 import type { Command, DispatchResult } from '../core/commands';
 import type { GameEvent } from '../core/events';
 import type { GameState } from '../core/state';
+import type { Action, MoveVector } from '../input';
 import type { SceneKey } from '../scenes/keys';
 
 export interface AreaInfo {
@@ -20,6 +21,8 @@ export interface TestApi {
   freeze(on: boolean): void;
   view(): { width: number; height: number; zoom: number; pixelScale: number };
   enterArea(id: string, spawn?: string): Promise<AreaInfo | null>;
+  actions(): Action[];
+  move(): MoveVector;
 }
 
 declare global {
