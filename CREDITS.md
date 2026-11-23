@@ -8,8 +8,10 @@ Setiap aset pihak ketiga **wajib** dicatat di sini (lihat `docs/42-aset-lisensi.
 | Aset (path) | Pembuat | Sumber (URL) | Lisensi | Modifikasi |
 |---|---|---|---|---|
 | `public/assets/ui/icons/*.png` (ikon aplikasi stroberi 16×16, diperbesar nearest-neighbor) | Dibuat sendiri untuk proyek ini (AI agent, palet `config/palette.ts`) | — | Milik proyek | — |
+| `public/assets/tilesets/ground.png` (atlas tanah placeholder 16px: rumput, jalan, tanah garapan, pasir, air, batu, lantai kayu, tebing + penanda ketinggian/garapan) | Dibuat sendiri untuk proyek ini (AI agent, digambar lewat kode) | — | Milik proyek | — |
+| `public/assets/maps/sandbox.tmj` (peta uji 40×30) | Dibuat sendiri untuk proyek ini (AI agent, dibangkitkan skrip) | — | Milik proyek | — |
 
-*Selain ikon aplikasi, belum ada grafis pihak ketiga: latar layar judul masih digambar dengan kode (Phaser Graphics) sebagai placeholder sampai tileset LPC masuk di P1-01.*
+*Belum ada grafis pihak ketiga: tekstur prop 3D (`src/world/props/textures.ts`) digambar lewat kode.*
 
 ## Audio
 | Aset (path) | Pembuat | Sumber (URL) | Lisensi | Modifikasi |
@@ -23,4 +25,4 @@ Setiap aset pihak ketiga **wajib** dicatat di sini (lihat `docs/42-aset-lisensi.
 | Press Start 2P (`public/assets/fonts/press-start-2p-400.woff2`) | Copyright 2012 The Press Start 2P Project Authors (cody@zone38.net), Reserved Font Name "Press Start 2P" | https://fonts.google.com/specimen/Press+Start+2P · file woff2 subset latin dari https://fontsource.org/fonts/press-start-2p | SIL OFL 1.1 (`public/assets/licenses/OFL-PressStart2P.txt`) |
 
 ## Library
-Library open source mengikuti lisensi masing-masing (lihat `package.json` dan `node_modules/<paket>/LICENSE`). Yang dibundel ke game: Phaser (MIT), Preact (MIT), zod (MIT), Immer (MIT), idb-keyval (Apache-2.0), EasyStar.js (MIT), supabase-js (MIT).
+Library open source mengikuti lisensi masing-masing (lihat `package.json` dan `node_modules/<paket>/LICENSE`). Yang dibundel ke game: Three.js (MIT), Preact (MIT), zod (MIT), Immer (MIT), idb-keyval (Apache-2.0), EasyStar.js (MIT), supabase-js (MIT).

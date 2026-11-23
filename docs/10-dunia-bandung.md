@@ -77,26 +77,27 @@ Gaya: 2.5D low-poly + tekstur pixel, palet hangat, ikuti `42-aset-lisensi.md` (A
 - Detail kecil yang membuat hidup: tanda jalan, tiang listrik, pot bunga, gerobak, kucing liar, bayangan pohon.
 - Konsekuensi: kebutuhan art besar; dikerjakan bertahap per area (P1-02 prototipe, P12 & P15 final) dan bergantung pada keputusan gaya grafik (`42`).
 
-## 6. Konvensi Tiled (WAJIB)
-- Tile size: **32×32**. Ukuran area outdoor: 60×40 sampai 100×70 tile.
-- Format export: **JSON (.tmj)** → `public/assets/maps/<areaId>.tmj`.
-- Urutan layer:
+## 6. Konvensi Peta (WAJIB)
+Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-poly (ADR-022). Satu tile = 1 satuan dunia 3D.
+- Tile size: **16×16** (`TILE_PX` di `src/config/world.ts`). Ukuran area outdoor: 60×40 sampai 100×70 tile.
+- Format: **JSON (.tmj)** → `public/assets/maps/<areaId>.tmj`, tileset **embedded** (bukan `.tsx` terpisah). File bisa langsung dibuka & diedit di Tiled.
+- Validasi: `parseArea` (`src/world/map/logic.ts`, skema zod `schema.ts`) dan `tests/maps.test.ts` memeriksa **semua** peta di repo (urutan layer, ukuran data, properti wajib, tileset ada, tujuan pintu ada, model prop dikenal). Peta yang melanggar → tes gagal.
+- Urutan layer (persis, `MAP_LAYERS`):
 
 | Layer | Tipe | Isi |
 |---|---|---|
-| `Ground` | tile | tanah, rumput, jalan |
-| `GroundDetail` | tile | bunga kecil, retakan, garis jalan |
+| `Ground` | tile | jenis permukaan; **setiap** tile wajib punya properti `terrain` (`grass`, `grass_flowers`, `dirt`, `path`, `tilled`, `sand`, `water`, `stone`, `wood_floor`, `cliff`). `water` otomatis tidak bisa dilewati |
+| `Height` | tile | ketinggian dataran: tile berproperti `height` = 1/2/3 (× `HEIGHT_STEP` 0,5 satuan); kosong = 0. Beda tinggi jadi tebing |
 | `Farmable` | tile | penanda tile yang bisa dicangkul (properti `farmable=true`) |
-| `Decor` | tile | pagar, semak (di bawah karakter) |
-| `Above` | tile | atap, tajuk pohon (di atas karakter) |
-| `Collision` | object | rectangle/polygon tabrakan |
-| `Objects` | object | spawn, pintu, interactable, zona |
+| `Collision` | object | rectangle tabrakan (bangunan, batang pohon, batu) |
+| `Objects` | object | spawn, pintu, interactable, zona, **prop 3D** |
 
-- Properti objek di layer `Objects`:
+- Layer `GroundDetail`, `Decor`, `Above` dari konsep 2D dihapus: hiasan & benda tinggi kini jadi **prop 3D** (objek `prop`), dan "di atas karakter" ditangani kedalaman 3D.
+- Properti objek di layer `Objects` (`OBJECT_RULES`):
 
 | `type` | Properti wajib |
 |---|---|
-| `spawn` | `id` |
+| `spawn` | `id` (unik; minimal satu per peta) |
 | `door` | `targetArea`, `targetSpawn` |
 | `edge` | `targetArea`, `targetSpawn` (transisi ujung peta) |
 | `interact` | `action` (misal `shop:seed_shop`, `bed`, `shipping_bin`, `board`) |
@@ -104,6 +105,10 @@ Gaya: 2.5D low-poly + tekstur pixel, palet hangat, ikuti `42-aset-lisensi.md` (A
 | `zone` | `name` (misal `fishing:river`, `music:cafe`) |
 | `road` | — (area yang bisa dilewati kendaraan) |
 | `bus_stop` | `stopId` |
+| `prop` | `model` ∈ `PROP_MODELS` (`farmhouse`, `tree`, `fence`, `strawberry_plot`); opsional `rotation` (derajat), `scale`, `length` (pagar) |
+
+- Posisi objek titik (point) = pusat prop/spawn. Satuan dibaca dalam tile.
+- Atlas tanah placeholder: `public/assets/tilesets/ground.png` (8×2 tile 16px, buatan sendiri); diganti aset final di P12/P15. Peta uji: `sandbox` (40×30).
 
 ## 7. Atmosfer per Area
 | Area | Musik | Ambience | Ciri khas |

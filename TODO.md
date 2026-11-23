@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 1 | 13 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 2 | 13 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,12 +37,12 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **16** | **186** | |
+| **Total** | | | **17** | **186** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
-**Sedang dikerjakan:** P1-01a
-**Task berikutnya:** P1-01a
+**Sedang dikerjakan:** —
+**Task berikutnya:** P1-01b
 
 ---
 
@@ -69,7 +69,7 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
 ## P1 · Fondasi Dunia 2.5D & Gerak (ADR-022)
 - [x] **P1-00** Migrasi engine ke Three.js: renderer resolusi rendah ala PS1 (render target dari `computeView`, diperbesar integer tanpa blur), scene manager (Boot → Preload → Title), latar judul 3D low-poly, hapus Phaser, test hook & E2E tetap hijau · Ref: 02, 40 · ✅ 2026-11-24 · Phaser → Three.js 0.187: render resolusi rendah ala PS1 + upscale integer, scene manager, layar judul 3D low-poly beranimasi (kamera bergerak), loading/error ke overlay; bundle 357→132 KB gzip
-- [~] **P1-01a** Format peta: konvensi layer 3D (Ground, Height, Farmable, Collision, Objects + prop), skema zod, logika murni pembaca peta + test, atlas tekstur tanah placeholder 16px, peta uji `sandbox` · Ref: 10, 42 · 🟡 2026-11-24
+- [x] **P1-01a** Format peta: konvensi layer 3D (Ground, Height, Farmable, Collision, Objects + prop), skema zod, logika murni pembaca peta + test, atlas tekstur tanah placeholder 16px, peta uji `sandbox` · Ref: 10, 42 · ✅ 2026-11-24 · skema zod + parseArea, semua peta divalidasi tes, atlas 16px & sandbox 40×30
 - [ ] **P1-01b** Pembangun dunia 3D: lantai bertekstur, tebing ketinggian, prop low-poly, `WorldScene`, test hook masuk area, E2E + snapshot · Ref: 10, 02
 - [ ] **P1-02** Map prototipe `lembang` (kecil) + `kos_a` interior + `buahbatu` (kecil) + interior rumah Michelle · Ref: 10
 - [ ] **P1-03** Abstraksi input → Action (keyboard dulu) · Ref: 40
