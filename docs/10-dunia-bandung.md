@@ -87,7 +87,7 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | Layer | Tipe | Isi |
 |---|---|---|
 | `Ground` | tile | jenis permukaan; **setiap** tile wajib punya properti `terrain` (`grass`, `grass_flowers`, `dirt`, `path`, `tilled`, `sand`, `water`, `stone`, `wood_floor`, `cliff`). `water` otomatis tidak bisa dilewati |
-| `Height` | tile | ketinggian dataran: tile berproperti `height` = 1/2/3 (× `HEIGHT_STEP` 0,5 satuan); kosong = 0. Beda tinggi jadi tebing |
+| `Height` | tile | ketinggian dataran: tile berproperti `height` = 1/2/3 (× `HEIGHT_STEP` 1 satuan = setinggi 1 tile); kosong = 0. Beda tinggi jadi tebing |
 | `Farmable` | tile | penanda tile yang bisa dicangkul (properti `farmable=true`) |
 | `Collision` | object | rectangle tabrakan (bangunan, batang pohon, batu) |
 | `Objects` | object | spawn, pintu, interactable, zona, **prop 3D** |

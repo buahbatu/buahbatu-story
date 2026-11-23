@@ -12,13 +12,14 @@ const uiRoot = document.getElementById('ui');
 if (uiRoot) mountUi(uiRoot, runtime.bus);
 const gameRoot = document.getElementById('game');
 if (!gameRoot) throw new Error('#game tidak ada');
-const engine = new Engine(gameRoot, createScenes(), currentView());
+const { scenes, world } = createScenes();
+const engine = new Engine(gameRoot, scenes, currentView());
 installViewScaling(engine);
 installTouchFullscreen();
 void engine.start(SCENE.boot);
 
 if (import.meta.env.MODE === 'test' || (import.meta.env.DEV && new URLSearchParams(location.search).has('test'))) {
   void import('./testing/hook').then(({ installTestHook }) => {
-    installTestHook({ engine, runtime });
+    installTestHook({ engine, runtime, world });
   });
 }

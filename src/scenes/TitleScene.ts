@@ -1,18 +1,7 @@
-import {
-  Color,
-  DirectionalLight,
-  Fog,
-  HemisphereLight,
-  IcosahedronGeometry,
-  Mesh,
-  MeshLambertMaterial,
-  PerspectiveCamera,
-  PlaneGeometry,
-  Scene,
-  type Object3D,
-} from 'three';
+import { IcosahedronGeometry, Mesh, MeshLambertMaterial, PerspectiveCamera, PlaneGeometry, Scene, type Object3D } from 'three';
 import { PALETTE } from '../config/palette';
 import type { GameScene } from '../engine/engine';
+import { addEnvironment } from '../world/environment';
 import { farmhouse, fence, strawberryPlot, tree } from '../world/props/models';
 import { SCENE } from './keys';
 
@@ -62,12 +51,7 @@ export class TitleScene implements GameScene {
 
   constructor() {
     const scene = new Scene();
-    scene.background = new Color(PALETTE.sky);
-    scene.fog = new Fog(PALETTE.fog, 35, 95);
-    scene.add(new HemisphereLight(PALETTE.sun, PALETTE.grassDark, 1.6));
-    const sun = new DirectionalLight(PALETTE.sun, 1.4);
-    sun.position.set(10, 20, 8);
-    scene.add(sun);
+    addEnvironment(scene, { near: 35, far: 95 });
     scene.add(plane(160, 160, PALETTE.grass, 0, 0, 0), plane(2.2, 40, PALETTE.path, -1.6, 0.01, 4));
     const trees: [number, number, number][] = [
       [-11, -9, 1.2],

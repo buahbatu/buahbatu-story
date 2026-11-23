@@ -1,4 +1,4 @@
-import { MAP_LAYERS, OBJECT_RULES, TILE_PX } from '../../config/world';
+import { HEIGHT_STEP, MAP_LAYERS, OBJECT_RULES, TILE_PX, WATER_DEPTH } from '../../config/world';
 import { tiledMapSchema, type PropertyValue, type TiledMap, type TiledObject } from './schema';
 
 export type ObjectKind = keyof typeof OBJECT_RULES;
@@ -28,7 +28,7 @@ export interface AreaData {
   collisions: Rect[];
   objects: MapObject[];
   spawns: Record<string, { x: number; y: number }>;
-  tileset: { image: string; columns: number; terrainTiles: Record<string, number> };
+  tileset: { image: string; columns: number; rows: number; terrainTiles: Record<string, number> };
 }
 
 export interface ParseResult {
@@ -111,12 +111,24 @@ export function parseArea(id: string, input: unknown): ParseResult {
     collisions,
     objects: parsedObjects,
     spawns,
-    tileset: { image: set?.image ?? '', columns: set?.columns ?? 1, terrainTiles },
+    tileset: {
+      image: set?.image ?? '',
+      columns: set?.columns ?? 1,
+      rows: Math.ceil((set?.imageheight ?? TILE_PX) / TILE_PX),
+      terrainTiles,
+    },
   };
   return { area: issues.length === 0 ? area : null, issues };
 }
 
 export const tileIndex = (area: Pick<AreaData, 'width'>, x: number, y: number): number => y * area.width + x;
+
+export function elevation(area: Pick<AreaData, 'width' | 'height' | 'heights' | 'terrain'>, x: number, y: number): number {
+  const tx = Math.min(area.width - 1, Math.max(0, Math.floor(x)));
+  const ty = Math.min(area.height - 1, Math.max(0, Math.floor(y)));
+  const i = tileIndex(area, tx, ty);
+  return (area.heights[i] ?? 0) * HEIGHT_STEP - (area.terrain[i] === 'water' ? WATER_DEPTH : 0);
+}
 
 export function isBlocked(area: AreaData, x: number, y: number): boolean {
   if (x < 0 || y < 0 || x >= area.width || y >= area.height) return true;

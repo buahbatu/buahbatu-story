@@ -100,6 +100,11 @@ export const TEX = {
       for (let i = 0; i < 70; i++)
         px(Math.floor(rnd() * 31), Math.floor(rnd() * 31), 2, 2, ['#2c6b37', '#58a85e', '#357a40'][i % 3] ?? '#2c6b37');
     }),
+  grass: () =>
+    make('grass', 16, (px, rnd) => {
+      px(0, 0, 16, 16, '#6fb35f');
+      for (let i = 0; i < 22; i++) px(Math.floor(rnd() * 16), Math.floor(rnd() * 16), 1, 1, i % 2 ? '#58994d' : '#8fcc72');
+    }),
   soil: () =>
     make('soil', 16, (px, rnd) => {
       px(0, 0, 16, 16, '#7a4a2a');

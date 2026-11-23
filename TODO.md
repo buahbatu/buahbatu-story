@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 2 | 13 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 3 | 13 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,12 +37,12 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **17** | **186** | |
+| **Total** | | | **18** | **186** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
 **Sedang dikerjakan:** —
-**Task berikutnya:** P1-01b
+**Task berikutnya:** P1-02
 
 ---
 
@@ -70,7 +70,7 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 ## P1 · Fondasi Dunia 2.5D & Gerak (ADR-022)
 - [x] **P1-00** Migrasi engine ke Three.js: renderer resolusi rendah ala PS1 (render target dari `computeView`, diperbesar integer tanpa blur), scene manager (Boot → Preload → Title), latar judul 3D low-poly, hapus Phaser, test hook & E2E tetap hijau · Ref: 02, 40 · ✅ 2026-11-24 · Phaser → Three.js 0.187: render resolusi rendah ala PS1 + upscale integer, scene manager, layar judul 3D low-poly beranimasi (kamera bergerak), loading/error ke overlay; bundle 357→132 KB gzip
 - [x] **P1-01a** Format peta: konvensi layer 3D (Ground, Height, Farmable, Collision, Objects + prop), skema zod, logika murni pembaca peta + test, atlas tekstur tanah placeholder 16px, peta uji `sandbox` · Ref: 10, 42 · ✅ 2026-11-24 · skema zod + parseArea, semua peta divalidasi tes, atlas 16px & sandbox 40×30
-- [ ] **P1-01b** Pembangun dunia 3D: lantai bertekstur, tebing ketinggian, prop low-poly, `WorldScene`, test hook masuk area, E2E + snapshot · Ref: 10, 02
+- [x] **P1-01b** Pembangun dunia 3D: lantai bertekstur, tebing ketinggian, prop low-poly, `WorldScene`, test hook masuk area, E2E + snapshot · Ref: 10, 02 · ✅ 2026-11-24 · tanah atlas + tebing + prop dari peta, WorldScene, enterArea, ?area=, snapshot dinilai
 - [ ] **P1-02** Map prototipe `lembang` (kecil) + `kos_a` interior + `buahbatu` (kecil) + interior rumah Michelle · Ref: 10
 - [ ] **P1-03** Abstraksi input → Action (keyboard dulu) · Ref: 40
 - [ ] **P1-04** Entity Player: sprite chibi billboard 8 arah, lari, animasi idle/walk (placeholder) · Ref: 15
@@ -341,3 +341,4 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 - Mini "TikTok" in-game: rekam GIF momen berdua
 - *(teknis, dari P0-08)* Teks Phaser pakai **BitmapText** (font pixel di-bake jadi atlas) supaya tepi huruf 100% tajam; `fillText` canvas masih memberi antialias 1 px di tepi glyph. Cocok digarap bareng pipeline aset P1-01.
 - *(dari user, dikerjakan bareng P5-04)* Layar judul beranimasi: huruf judul bergelombang pelan, subtitle muncul pelan, awan/parallax & kilau stroberi; hormati `prefers-reduced-motion`.
+- *(dari user, 2026-11-24)* **Warga figuran ala GTA**: orang-orang tanpa nama yang jalan kaki, nongkrong, naik motor/angkot di kota (Braga, Alun-alun, Dago) supaya Bandung terasa ramai; beda dari NPC bernama di `18` (P8). Bisa disapa singkat, tanpa hubungan/quest. Perlu dibahas: kepadatan per area & jam, sinkron 2 pemain (cukup deterministik dari seed, tidak dikirim lewat jaringan), batas performa HP. Kandidat fase: P12 (kendaraan & peta Bandung).

@@ -3,6 +3,13 @@ import type { GameEvent } from '../core/events';
 import type { GameState } from '../core/state';
 import type { SceneKey } from '../scenes/keys';
 
+export interface AreaInfo {
+  id: string;
+  width: number;
+  height: number;
+  props: Record<string, number>;
+}
+
 export interface TestApi {
   ready(): Promise<void>;
   getState(): GameState;
@@ -12,6 +19,7 @@ export interface TestApi {
   scene(): SceneKey | null;
   freeze(on: boolean): void;
   view(): { width: number; height: number; zoom: number; pixelScale: number };
+  enterArea(id: string, spawn?: string): Promise<AreaInfo | null>;
 }
 
 declare global {

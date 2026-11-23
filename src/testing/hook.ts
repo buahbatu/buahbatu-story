@@ -1,6 +1,7 @@
 import type { GameRuntime } from '../core/runtime';
 import type { Engine } from '../engine/engine';
 import { createInitialState } from '../core/state';
+import type { WorldScene } from '../scenes';
 import { SCENE } from '../scenes/keys';
 import { uiStore } from '../ui/uiState';
 import type { TestApi } from './types';
@@ -8,6 +9,7 @@ import type { TestApi } from './types';
 interface TestHookContext {
   engine: Engine;
   runtime: GameRuntime;
+  world: WorldScene;
 }
 
 const nextFrame = () =>
@@ -31,7 +33,7 @@ function waitForTitle(): Promise<void> {
   });
 }
 
-function createTestApi({ engine, runtime }: TestHookContext): TestApi {
+function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
   return {
     async ready() {
       await waitForTitle();
@@ -49,6 +51,18 @@ function createTestApi({ engine, runtime }: TestHookContext): TestApi {
     },
     scene: () => uiStore.get().scene,
     view: () => ({ ...engine.view }),
+    async enterArea(id, spawn) {
+      world.goto(id, spawn);
+      await engine.start(SCENE.world);
+      await nextFrame();
+      const area = world.area;
+      if (area?.id !== id) return null;
+      const props: Record<string, number> = {};
+      world.world.scene.traverse((node) => {
+        if (node.name.startsWith('prop:')) props[node.name.slice(5)] = (props[node.name.slice(5)] ?? 0) + 1;
+      });
+      return { id, width: area.width, height: area.height, props };
+    },
     freeze(on) {
       if (on) engine.freezeAt(0);
       else engine.wake();
