@@ -17,6 +17,9 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
+    // File ber-hash ke /_app/ (di-cache immutable di vercel.json), terpisah dari public/assets/
+    // (font, tileset) yang namanya tetap sehingga cache-nya harus lebih pendek.
+    assetsDir: '_app',
     chunkSizeWarningLimit: PHASER_CHUNK_LIMIT_KB,
     rolldownOptions: {
       output: {

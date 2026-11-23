@@ -3,7 +3,13 @@ node_modules/
 dist/
 *.tsbuildinfo
 
-# Rahasia & akun per folder (ADR-014)
+# Hasil tes (Vitest/Playwright). Snapshot visual di e2e/__screenshots__/ TETAP di-commit.
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# Rahasia & akun per folder (ADR-014, docs/51 §7)
 .env
 .env.*
 !.env.example
@@ -11,11 +17,19 @@ dist/
 .vercel/
 .vercel-cli/
 supabase/.temp/
+supabase/.branches/
 
-# Konten personal (ADR-010, docs/43)
+# Konten personal: foto, audio, kuesioner (ADR-010, docs/43). Tidak pernah ke repo.
 src/content/personal/
 
+# Sumber Tiled: file cadangan/sesi editor
+maps/**/*.tiled-session
+maps/**/*.tmx~
+
 # Editor & OS
+.idea/
+*.swp
 .DS_Store
 Thumbs.db
+desktop.ini
 *.log

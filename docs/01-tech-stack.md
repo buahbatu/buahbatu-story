@@ -71,7 +71,10 @@ Buat `.env.example` (di-commit) dan `.env.local` (JANGAN di-commit).
 | `SUPABASE_URL` | Vercel function | Tidak |
 | `SUPABASE_SERVICE_ROLE_KEY` | Vercel function saja | **YA** |
 | `CRON_SECRET` | Vercel Cron | **YA** |
-| `TURN_API_KEY` / kredensial TURN | Vercel function saja | **YA** |
+| `METERED_APP_NAME` | Vercel function (TURN, P11) | Tidak |
+| `METERED_API_KEY` | Vercel function saja (TURN, P11) | **YA** |
+
+> Daftar lengkap & otoritatif ada di `51-otomasi-akun-env.md` §4 dan `.env.example` (dijaga sinkron oleh `tests/repo-config.test.ts`).
 
 > Aturan: variabel `VITE_*` ikut ter-bundle ke browser, jadi jangan pernah taruh secret di sana.
 
