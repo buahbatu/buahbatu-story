@@ -8,6 +8,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 ## [Unreleased]
 
 ### Ditambah
+- **P0-05** `src/config/game.ts`: config Phaser 640×360 (`pixelArt`, `roundPixels`, arcade physics) + `installIntegerScaling` (resize, rotasi HP, pindah monitor/zoom browser). `src/utils/scale.ts`: zoom integer dihitung per pixel fisik (tajam juga di display scaling 125%/150%), fallback pecahan untuk layar < 640×360.
 - **P0-04** Vitest (`vitest.config.ts`), kerangka validasi konten zod (`src/content/{schema,registry,validate,index}.ts`): ID snake_case, ID unik, setiap JSON wajib punya skema, `personal/` tidak pernah dimuat. Script `test`, `test:watch`, `validate:content`.
 - **P0-03** ESLint flat config (`typescript-eslint` strictTypeChecked + stylistic) dengan aturan arsitektur: logika murni tanpa Phaser/Preact/Supabase, tanpa import silang `logic.ts`, `SERVICE_ROLE` dilarang di client. Prettier, EditorConfig, `.gitattributes` (LF), rekomendasi VS Code, script `lint`, `lint:fix`, `format`, `format:check`.
 - **P0-02** Struktur folder lengkap sesuai `docs/02` §2: 28 folder `src/systems/*`, core, config, scenes, entities, input, ui, net, save, content, utils (placeholder `index.ts` + rujukan dokumen), folder aset `public/assets/*`, `maps/`, `api/`, `supabase/migrations/`, `e2e/`. `src/config/constants.ts` berisi `TILE_SIZE` & `DEPTH`. Tes `tests/structure.test.ts` menjaga struktur.
@@ -15,6 +16,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - **P0-00** Akun per folder: `scripts/platform.mjs` (wrapper `gh`/`vercel`/`supabase` memakai akun proyek tanpa mengubah login global), git identitas + credential helper lokal untuk akun `buahbatu`, `.gitignore` minimal.
 
 ### Diubah
+- **P0-05** `docs/40` §7: aturan integer scaling per pixel fisik. Canvas di-center oleh CSS (autoCenter Phaser membuat offset dobel).
 - **P0-04** `validate:content` memakai Vitest (bukan `tsx`) supaya tidak menambah dependency dan memakai loader `import.meta.glob` yang sama dengan game. `docs/01` §3 disesuaikan.
 - **P0-01** ADR-016: Phaser 4 + TypeScript dipin ~6.0 (belum didukung typescript-eslint untuk TS 7). `docs/01` §1 & §3 disesuaikan.
 - ADR-015: login tertutup tanpa registrasi publik, Lupa password mendeteksi email terdaftar (rate limit). `docs/32` §1–2 dan task P5-04 disesuaikan.
