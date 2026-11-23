@@ -56,7 +56,7 @@ Node.js ≥ 24 (`.nvmrc`).
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "validate:content": "tsx scripts/validate-content.ts"
+    "validate:content": "vitest run src/content/content.test.ts"
   }
 }
 ```

@@ -15,7 +15,10 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "validate:content": "vitest run src/content/content.test.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.2",
