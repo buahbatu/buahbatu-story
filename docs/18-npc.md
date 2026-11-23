@@ -29,6 +29,7 @@
 | `npc_kucing_oren` | Si Oren | Kucing liar yang bisa diadopsi | Berpindah |
 | `npc_mamah_michelle` | Mamah Michelle | Ibu Michelle; kasih tugas rumah, resep keluarga, restu | Buahbatu ⭐ |
 | `npc_papah_michelle` | Papah Michelle | Ayah Michelle; "ujian" calon menantu yang lucu, restu | Buahbatu ⭐ |
+| `npc_eldyi` | Eldyi | Sepupu Michelle (permintaan user, 2026-11-24); peran, sifat & jadwal menyusul | Buahbatu ⭐ |
 | `npc_family_*` | (keluarga asli) | Saudara/keluarga Michelle (opsional) | Buahbatu ⭐ |
 | `npc_friend_*` | (teman asli) | Teman kalian | Sesuai isi |
 
