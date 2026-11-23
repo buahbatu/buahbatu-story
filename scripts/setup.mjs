@@ -317,10 +317,17 @@ function stepVercelLink(vercel) {
 
 const VERCEL_TOKEN_PAGE = 'https://vercel.com/account/settings/tokens';
 
-/** Token Vercel untuk CI (Vercel tidak mengizinkan token dibuat lewat CLI → user membuatnya). */
+const TOKEN_FIX = `buat token baru di ${VERCEL_TOKEN_PAGE} dengan Scope = team/akun buahbatu (Full Account, BUKAN dibatasi per project) → ganti baris VERCEL_TOKEN= di .env.local → npm run setup -- --refresh-secrets`;
+
+export const vercelTokenChecks = (id, org) => [
+  ['akun', 'https://api.vercel.com/v2/user'],
+  ...(org?.startsWith('team_') ? [['team', `https://api.vercel.com/v2/teams/${org}`]] : []),
+  ['project', `https://api.vercel.com/v9/projects/${id}${org?.startsWith('team_') ? `?teamId=${org}` : ''}`],
+];
+
 async function stepVercelToken() {
   const now = currentTask(readFileSync(join(ROOT, 'TODO.md'), 'utf8'));
-  const token = env().VERCEL_TOKEN;
+  const { VERCEL_TOKEN: token, VERCEL_PROJECT_ID: id, VERCEL_ORG_ID: org } = env();
   if (!token) {
     if (!isRequiredNow(now, 'P0-12'))
       return step('VERCEL_TOKEN (untuk CI)', { status: 'later', detail: 'P0-12' });
@@ -328,22 +335,26 @@ async function stepVercelToken() {
     return step('VERCEL_TOKEN (untuk CI)', {
       status: 'fail',
       detail: `halaman token dibuka: ${VERCEL_TOKEN_PAGE}`,
-      fix: 'buat token (nama: buahbatu-story-ci, scope: akun proyek, expiration sesuai selera) → tempel di .env.local baris VERCEL_TOKEN= → ulangi npm run setup',
+      fix: TOKEN_FIX,
     });
   }
-  const { VERCEL_PROJECT_ID: id, VERCEL_ORG_ID: org } = env();
-  const team = org?.startsWith('team_') ? `?teamId=${org}` : '';
-  const response = await fetch(`https://api.vercel.com/v9/projects/${id}${team}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (!response.ok)
+  const results = await Promise.all(
+    vercelTokenChecks(id, org).map(async ([what, url]) => [
+      what,
+      (await fetch(url, { headers: { Authorization: `Bearer ${token}` } })).status,
+    ]),
+  );
+  const denied = results.filter(([, status]) => status !== 200);
+  if (denied.length === 0)
     return step('VERCEL_TOKEN (untuk CI)', {
-      status: 'fail',
-      detail: `tidak bisa mengakses project (HTTP ${response.status})`,
-      fix: `buat ulang token dengan scope akun/project buahbatu di ${VERCEL_TOKEN_PAGE}`,
+      detail: 'valid (akun, team, project) sama seperti yang dibutuhkan Vercel CLI',
     });
-  const { name } = await response.json();
-  return step('VERCEL_TOKEN (untuk CI)', { detail: `valid, akses project ${name}` });
+  openUrl(VERCEL_TOKEN_PAGE, loginProfile());
+  return step('VERCEL_TOKEN (untuk CI)', {
+    status: 'fail',
+    detail: `scope terlalu sempit, ditolak: ${denied.map(([w, s]) => `${w} ${s}`).join(', ')}`,
+    fix: TOKEN_FIX,
+  });
 }
 
 const BASE62 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
