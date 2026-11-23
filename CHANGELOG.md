@@ -23,6 +23,8 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - **P0-00** Akun per folder: `scripts/platform.mjs` (wrapper `gh`/`vercel`/`supabase` memakai akun proyek tanpa mengubah login global), git identitas + credential helper lokal untuk akun `buahbatu`, `.gitignore` minimal.
 
 ### Diubah
+- ADR-018 (keputusan user, opsi B): di layar DPR ≥ 2 (HP/Retina), kalau integer mengisi < 80% ruang, pakai skala pecahan nearest-neighbor yang memenuhi layar. iPhone landscape 734×343 kini penuh (×2,86, sebelumnya ×2 & ±58% lebar). Desktop/laptop DPR < 2 & Android 780×360 tetap integer (snapshot tidak berubah). `docs/40` §7 diperbarui.
+- **P0-11** Playwright selalu build & menjalankan server baru (`reuseExistingServer: false`): server lama yang masih hidup sempat membuat E2E menguji build basi.
 - **P0-11** `docs/50` §2: status test hook, project perangkat, lokasi snapshot per OS, alasan 1 worker lokal & trace hanya saat retry (WebGL headless dirender CPU; perangkat dev 2 core / 4 GB).
 - **P0-10b** `.gitignore` memakai pola `.env*` & `.vercel` persis seperti yang dicari `vercel link` (sebelumnya CLI menambahkan baris sendiri yang membuat `!.env.example` tidak berlaku); urutannya dijaga tes. `.env.example` + `LOGIN_CHROME_PROFILE` (opsional). `docs/51` §5: status implementasi setup.
 - Tagline layar judul diganti jadi bahasa Inggris atas permintaan user: "A game made with love for Michelle Melinda" (pengecualian dari aturan teks UI berbahasa Indonesia; tetap lewat `i18n/id.json`).

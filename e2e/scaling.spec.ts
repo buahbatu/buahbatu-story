@@ -20,9 +20,12 @@ test('canvas di-scale integer per pixel fisik, utuh di dalam layar, overlay seja
     };
   });
 
+  // ADR-018: integer per pixel fisik, ATAU (layar DPR ≥ 2) pecahan yang memenuhi layar.
   const devicePerGamePixel = (m.canvas.w * m.dpr) / 640;
-  expect(Math.abs(devicePerGamePixel - Math.round(devicePerGamePixel))).toBeLessThan(0.01);
-  expect(Math.round(devicePerGamePixel)).toBeGreaterThanOrEqual(1);
+  const integer = Math.abs(devicePerGamePixel - Math.round(devicePerGamePixel)) < 0.01;
+  const fills = m.vh - m.canvas.h < 1 || m.vw - m.canvas.w < 1;
+  expect(integer || (m.dpr >= 2 && fills), `×${devicePerGamePixel.toFixed(3)} @DPR ${m.dpr}`).toBe(true);
+  expect(devicePerGamePixel).toBeGreaterThanOrEqual(1);
   expect(m.canvas.w / m.canvas.h).toBeCloseTo(16 / 9, 2);
 
   // Utuh di dalam viewport (tidak terpotong) & di tengah.
@@ -35,6 +38,16 @@ test('canvas di-scale integer per pixel fisik, utuh di dalam layar, overlay seja
   // Overlay Preact menempel tepat di atas canvas.
   for (const key of ['x', 'y', 'w', 'h'] as const)
     expect(Math.abs(m.ui[key] - m.canvas[key])).toBeLessThan(1);
+});
+
+test('iPhone landscape: game memenuhi tinggi layar (pecahan, ADR-018)', async ({
+  game: { page },
+}, testInfo) => {
+  test.skip(testInfo.project.name !== 'iphone-landscape', 'khusus iPhone');
+  const size = await page.locator('#game canvas').boundingBox();
+  const vh = page.viewportSize()?.height ?? 0;
+  expect(size?.height).toBeGreaterThan(vh - 1);
+  expect(size?.height).toBeLessThanOrEqual(vh + 0.5);
 });
 
 test('desktop 1280×720 → tepat ×2', async ({ game: { page } }, testInfo) => {

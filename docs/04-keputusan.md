@@ -101,6 +101,13 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Alasan**: Atomik gratis (reject/throw → draft dibuang, termasuk state RNG), `patches` + `inversePatches` langsung jadi bahan sinkron & rollback, freeze mencegah mutasi diam-diam di luar Command.
 - **Konsekuensi**: Handler wajib memakai `createRng(draft.world)` (bukan `Math.random`) dan tidak boleh me-*return* objek state baru dari recipe. Peta handler (`HandlerMap`) diwajibkan lengkap oleh TypeScript untuk setiap jenis Command.
 
+### ADR-018 · Skala pecahan di layar HP yang pendek
+- **Status**: Diterima (2026-11-23, keputusan user, opsi B)
+- **Konteks**: Integer scaling murni (P0-05) membuat game di iPhone landscape (734×343, sedikit di bawah 360) hanya ×2 piksel fisik → memakai ±58% lebar layar.
+- **Keputusan**: Di layar DPR ≥ 2, kalau integer mengisi < 80% ruang, pakai skala pecahan nearest-neighbor yang memenuhi layar. Di DPR < 2 (desktop/laptop) tetap integer murni.
+- **Alasan**: Di layar sepadat HP/Retina, piksel game yang 1 piksel fisik lebih tebal tidak terlihat; di desktop (piksel fisik besar) ketidakrataan 2/3 px terlihat dan mengganggu saat kamera bergerak.
+- **Konsekuensi**: Jendela browser desktop yang kecil (mis. 1366×657) tetap ×1 dengan bingkai lebar (perilaku lama). Kalau nanti terasa kurang, bisa ditinjau ulang (mis. mode "Isi layar" di Pengaturan, P16-03).
+
 ---
 
 ## Template ADR Baru

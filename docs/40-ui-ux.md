@@ -80,7 +80,8 @@ Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kot
 ## 7. Responsif
 - Desktop: resolusi dasar 640×360 di-scale integer (×2 = 1280×720, ×3 = 1920×1080).
   - Integer dihitung dalam **pixel fisik** (`src/utils/scale.ts`): di laptop dengan display scaling 125%/150%, 1 pixel game tetap = tepat N pixel layar (mis. 1536×864 @125% → ×3 fisik, zoom CSS 2,4).
-  - Layar lebih kecil dari 640×360 (HP lama) → diperkecil pecahan (sedikit blur, tapi tidak terpotong).
+  - **Layar berkerapatan tinggi (DPR ≥ 2: HP, Retina)**: integer hanya kalau mengisi ≥ 80% ruang; kalau tidak, skala pecahan nearest-neighbor yang memenuhi layar (mis. iPhone landscape 734×343 → ×2,86). Di layar desktop DPR < 2 tetap integer murni (ADR-018).
+  - Layar lebih kecil dari 640×360 (HP lama) → diperkecil pecahan (tidak terpotong).
   - Zoom dihitung ulang saat resize, rotasi HP, pindah monitor, atau zoom browser. Canvas di-center oleh CSS (bukan `autoCenter` Phaser).
 - HP: mode landscape, tombol sentuh ≥ 44px, UI menu memakai layout 1 kolom.
 - Kalau HP dalam posisi portrait: tampilkan ajakan "Putar HP kamu 🔄".

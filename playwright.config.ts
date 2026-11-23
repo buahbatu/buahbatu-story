@@ -42,7 +42,9 @@ export default defineConfig({
     // Build mode `test` = build produksi + test hook window.__BB__ (docs/50 §2).
     command: `npm run build:test && npx vite preview --outDir dist-test --port ${PORT} --strictPort`,
     url: `http://localhost:${PORT}`,
-    reuseExistingServer: !CI,
+    // Selalu build & server baru: memakai server lama berarti menguji build basi (pernah terjadi).
+    // Kalau port terpakai, tes gagal dengan jelas, bukan diam-diam memakai kode lama.
+    reuseExistingServer: false,
     timeout: 180_000,
   },
 });

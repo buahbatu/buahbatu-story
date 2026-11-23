@@ -42,6 +42,36 @@ describe('computeScale', () => {
     expect(r).toEqual({ zoom: 1, devicePixelsPerGamePixel: 3, integer: true });
   });
 
+  it('iPhone landscape (734×343, DPR 3) → pecahan ×2,86 yang memenuhi layar (ADR-018)', () => {
+    const r = computeScale({ ...base, viewportWidth: 734, viewportHeight: 343, devicePixelRatio: 3 });
+    expect(r.integer).toBe(false);
+    expect(r.devicePixelsPerGamePixel).toBeCloseTo((343 * 3) / 360, 2);
+    expect(360 * r.zoom).toBeLessThanOrEqual(343);
+    expect(360 * r.zoom).toBeGreaterThan(343 - 1);
+    // Tepi canvas jatuh di pixel fisik penuh.
+    expect(Number.isInteger(Math.round(640 * r.zoom * 3 * 1e6) / 1e6)).toBe(true);
+  });
+
+  it('Android landscape (780×360, DPR 3) → tetap integer ×3', () => {
+    const r = computeScale({ ...base, viewportWidth: 780, viewportHeight: 360, devicePixelRatio: 3 });
+    expect(r).toEqual({ zoom: 1, devicePixelsPerGamePixel: 3, integer: true });
+  });
+
+  it.each([
+    { w: 1920, h: 960, dpr: 1, zoom: 2 },
+    { w: 1366, h: 657, dpr: 1, zoom: 1 },
+    { w: 1536, h: 750, dpr: 1.25, zoom: 1.6 },
+  ])('desktop DPR < 2 ($w×$h @$dpr) selalu integer walau tidak penuh', ({ w, h, dpr, zoom }) => {
+    const r = computeScale({ ...base, viewportWidth: w, viewportHeight: h, devicePixelRatio: dpr });
+    expect(r.integer).toBe(true);
+    expect(r.zoom).toBeCloseTo(zoom);
+  });
+
+  it('Retina yang hampir penuh tetap integer (fill ≥ 80%)', () => {
+    const r = computeScale({ ...base, viewportWidth: 1440, viewportHeight: 800, devicePixelRatio: 2 });
+    expect(r).toEqual({ zoom: 2, devicePixelsPerGamePixel: 4, integer: true });
+  });
+
   it('layar lebih kecil dari 640×360 → diperkecil pecahan, ditandai tidak integer', () => {
     const r = computeScale({ ...base, viewportWidth: 568, viewportHeight: 320, devicePixelRatio: 1 });
     expect(r.integer).toBe(false);
