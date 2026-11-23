@@ -1,6 +1,7 @@
 # Dependensi & hasil build
 node_modules/
 dist/
+dist-test/
 *.tsbuildinfo
 
 # Hasil tes (Vitest/Playwright). Snapshot visual di e2e/__screenshots__/ TETAP di-commit.

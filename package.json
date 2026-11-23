@@ -22,7 +22,11 @@
     "doctor": "node scripts/doctor.mjs",
     "tools": "node scripts/tools.mjs",
     "prepare": "node scripts/hooks.mjs",
-    "setup": "node scripts/setup.mjs"
+    "setup": "node scripts/setup.mjs",
+    "build:test": "vite build --mode test --outDir dist-test",
+    "e2e": "playwright test",
+    "e2e:update": "playwright test --update-snapshots",
+    "verify": "npm run lint && npm run typecheck && npm test && npm run build && npm run e2e"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.2",
@@ -36,6 +40,7 @@
   "devDependencies": {
     "@babel/core": "^7.29.13",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.64.1",
     "@preact/preset-vite": "^2.10.6",
     "@types/node": "^26.6.6",
     "eslint": "^10.15.0",

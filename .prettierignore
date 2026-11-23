@@ -1,4 +1,6 @@
 dist/
+dist-test/
+e2e/__screenshots__/
 coverage/
 playwright-report/
 test-results/

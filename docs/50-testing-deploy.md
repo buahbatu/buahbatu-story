@@ -43,6 +43,12 @@ interface TestApi {
 - **Tidak ikut** di build production (dibuang lewat `import.meta.env`).
 - Dengan seed + waktu beku, screenshot selalu identik, jadi snapshot visual stabil.
 
+**Status implementasi (P0-11):** `src/testing/{types,hook}.ts`. Sudah ada: `ready`, `getState`, `dispatch`, `setSeed`, `freeze`, plus `emit(event)` (memicu event UI seperti toast) dan `scene()`. Menyusul bersama sistemnya: `press`/`walkTo` (P1-03/P8-04), `setTime` (P2-01), `setWeather` (P2-05), `teleport` (P1-09).
+- Hook dimuat lewat dynamic import hanya kalau `MODE === 'test'` (`npm run build:test` → `dist-test/`) atau dev + `?test=1`. E2E berjalan di **build produksi mode test**, bukan dev server.
+- Project Playwright: `desktop` (1280×720), `android-landscape` (Galaxy S24, 780×360 DPR 3), `iphone-landscape` (iPhone 15 734×343, diemulasikan di Chromium).
+- Snapshot: `e2e/__screenshots__/<spec>/<nama>-<project>-<os>.png`, dengan `reducedMotion: 'reduce'` + `freeze(true)`. Baseline Windows dibuat lokal; baseline Linux dibuat oleh CI (P0-12) karena render font beda antar OS.
+- Lokal 1 worker & trace hanya saat retry: WebGL headless dirender CPU (SwiftShader) dan perangkat dev hanya 2 core / 4 GB.
+
 ### Contoh skenario E2E
 ```ts
 // e2e/farming.spec.ts
