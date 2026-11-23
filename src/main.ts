@@ -2,9 +2,10 @@
 // Konfigurasi final (resolusi, scaling, scene) menyusul di P0-05 dan P0-06.
 import * as Phaser from 'phaser';
 
+import { TILE_SIZE as TILE } from './config/constants';
+
 const VIEW_WIDTH = 640;
 const VIEW_HEIGHT = 360;
-const TILE = 32;
 
 const PALETTE = {
   sky: 0x87b5d9,

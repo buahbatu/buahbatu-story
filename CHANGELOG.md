@@ -8,6 +8,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 ## [Unreleased]
 
 ### Ditambah
+- **P0-02** Struktur folder lengkap sesuai `docs/02` §2: 28 folder `src/systems/*`, core, config, scenes, entities, input, ui, net, save, content, utils (placeholder `index.ts` + rujukan dokumen), folder aset `public/assets/*`, `maps/`, `api/`, `supabase/migrations/`, `e2e/`. `src/config/constants.ts` berisi `TILE_SIZE` & `DEPTH`. Tes `tests/structure.test.ts` menjaga struktur.
 - **P0-01** Proyek Vite 8 + TypeScript strict + Phaser 4.2.1 di root repo; dependency inti (preact, zod, idb-keyval, easystarjs, supabase-js) + dev tools (vitest, eslint stack, prettier, @preact/preset-vite). Scene placeholder 640×360 `pixelArt`, Phaser dipisah ke chunk sendiri (±357 KB gzip).
 - **P0-00** Akun per folder: `scripts/platform.mjs` (wrapper `gh`/`vercel`/`supabase` memakai akun proyek tanpa mengubah login global), git identitas + credential helper lokal untuk akun `buahbatu`, `.gitignore` minimal.
 
