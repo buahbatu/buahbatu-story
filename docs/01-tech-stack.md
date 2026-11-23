@@ -17,7 +17,7 @@
 | Testing | **Vitest** (unit), **Playwright** (smoke, opsional) | |
 | Kualitas | **ESLint** + **Prettier** | |
 
-> ⚠️ Docs ini menulis contoh dengan API Phaser 3. Kalau memakai Phaser 4, sesuaikan dan catat di `04-keputusan.md`.
+> ⚠️ Proyek memakai **Phaser 4** (ADR-016). Contoh kode di docs masih bergaya Phaser 3, jadi cek ulang API-nya saat dipakai.
 
 ## 2. Tools (semua gratis)
 | Tool | Fungsi |
@@ -35,15 +35,14 @@
 - ESLint, Prettier, Error Lens, GitLens, Vitest, Pretty TypeScript Errors
 
 ## 3. Setup Awal
+Proyek dibuat langsung di root repo (sudah dikerjakan di P0-01, tidak perlu `npm create vite`). Versi saat init: Phaser 4.2, Vite 8, TypeScript ~6.0 (dipin, lihat ADR-016), Preact 11, zod 4, Vitest 5, ESLint 10.
 ```bash
-npm create vite@latest buahbatu-story -- --template vanilla-ts
-cd buahbatu-story
-
 npm i phaser preact zod idb-keyval easystarjs @supabase/supabase-js
-npm i -D typescript vitest @preact/preset-vite \
+npm i -D typescript@~6.0 vite vitest @preact/preset-vite @babel/core \
   eslint @eslint/js typescript-eslint eslint-config-prettier prettier \
   @types/node
 ```
+Node.js ≥ 24 (`.nvmrc`).
 
 ### Script `package.json`
 ```json

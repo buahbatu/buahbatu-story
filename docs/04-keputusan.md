@@ -80,6 +80,20 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
   6. Deploy hanya lewat CI (`git.deploymentEnabled: false`), sama seperti kis.
 - **Konsekuensi**: `GH_TOKEN` di `.env.local` tidak wajib (opsional untuk CI/mesin lain). Folder `.vercel-cli/` wajib di-`.gitignore`. Kalau repo dipindah folder, config lokal ikut karena tersimpan di `.git/config`.
 
+### ADR-015 · Login tertutup tanpa registrasi publik
+- **Status**: Diterima (2026-11-23, keputusan user)
+- **Konteks**: Game hanya untuk 2 orang, sedangkan URL Vercel bisa dibuka siapa saja.
+- **Keputusan**: Sign up publik dimatikan sejak awal. Akun A & B dibuat oleh kita lewat script admin. Layar login hanya punya **Masuk** dan **Lupa password**. Lupa password **mendeteksi apakah email terdaftar** (lewat Vercel function + service role) sebelum mengirim email reset.
+- **Alasan**: Tidak ada orang asing yang bisa masuk. Pesan "email belum terdaftar" lebih jelas untuk 2 pemain daripada pesan generik.
+- **Konsekuensi**: Deteksi email membuka celah enumerasi akun, jadi endpoint wajib di-rate-limit. Konten personal tetap wajib dari bucket privat (bukan bundle JS), karena login tidak melindungi file statis. Detail: `32` §2.
+
+### ADR-016 · Phaser 4 + versi toolchain awal
+- **Status**: Diterima (P0-01, 2026-11-23)
+- **Konteks**: `01` meminta "Phaser versi stabil terbaru". Per November 2026 versinya **4.2.1** (4.0 stabil sejak April 2026; 3.90 adalah rilis terakhir v3). Contoh kode di docs masih memakai API Phaser 3. TypeScript terbaru (7.x, compiler native) belum didukung `typescript-eslint` (peer `<6.1.0`).
+- **Keputusan**: Pakai **Phaser 4.2.x** (`import * as Phaser from 'phaser'`). TypeScript dipin **~6.0** sampai `typescript-eslint` mendukung TS 7. Vite 8 (Rolldown): opsi build memakai `build.rolldownOptions`, dan Phaser dipisah ke chunk sendiri.
+- **Alasan**: Phaser 4 adalah jalur yang masih dirawat; API scene/tilemap/arcade umumnya sama dengan v3. Pin TS mencegah lint rusak di P0-03.
+- **Konsekuensi**: Contoh kode Phaser 3 di docs perlu dicek ulang saat dipakai (renderer, pipeline/filter, beberapa API geometri berubah). Naikkan TS ke 7 begitu `typescript-eslint` mendukung (cek di task chore).
+
 ---
 
 ## Template ADR Baru

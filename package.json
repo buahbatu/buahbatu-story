@@ -1,0 +1,37 @@
+{
+  "name": "buahbatu-story",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Life-sim pixel 2D berdua berlatar Bandung",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.2",
+    "easystarjs": "^0.4.4",
+    "idb-keyval": "^6.3.0",
+    "phaser": "^4.2.1",
+    "preact": "^11.2.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.13",
+    "@eslint/js": "^10.0.1",
+    "@preact/preset-vite": "^2.10.6",
+    "@types/node": "^26.6.6",
+    "eslint": "^10.15.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.10.1",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.73.0",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
+  }
+}

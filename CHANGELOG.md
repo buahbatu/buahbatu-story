@@ -8,9 +8,12 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 ## [Unreleased]
 
 ### Ditambah
+- **P0-01** Proyek Vite 8 + TypeScript strict + Phaser 4.2.1 di root repo; dependency inti (preact, zod, idb-keyval, easystarjs, supabase-js) + dev tools (vitest, eslint stack, prettier, @preact/preset-vite). Scene placeholder 640×360 `pixelArt`, Phaser dipisah ke chunk sendiri (±357 KB gzip).
 - **P0-00** Akun per folder: `scripts/platform.mjs` (wrapper `gh`/`vercel`/`supabase` memakai akun proyek tanpa mengubah login global), git identitas + credential helper lokal untuk akun `buahbatu`, `.gitignore` minimal.
 
 ### Diubah
+- **P0-01** ADR-016: Phaser 4 + TypeScript dipin ~6.0 (belum didukung typescript-eslint untuk TS 7). `docs/01` §1 & §3 disesuaikan.
+- ADR-015: login tertutup tanpa registrasi publik, Lupa password mendeteksi email terdaftar (rate limit). `docs/32` §1–2 dan task P5-04 disesuaikan.
 - **P0-00** ADR-014 diterima (pola shaflow). ADR-010 diubah: repo **public selama development**, private saat final. Docs 01/03/43/50/51 disesuaikan.
 
 ### Docs

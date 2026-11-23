@@ -20,7 +20,7 @@
 
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
-| P0 | Setup Proyek & Otomasi | v0.1 | 1 | 14 | 🟡 |
+| P0 | Setup Proyek & Otomasi | v0.1 | 2 | 14 | 🟡 |
 | P1 | Fondasi Dunia & Gerak | v0.1 | 0 | 11 | ⬜ |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
@@ -37,18 +37,18 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **1** | **183** | |
+| **Total** | | | **2** | **183** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
 **Sedang dikerjakan:** —
-**Task berikutnya:** P0-01
+**Task berikutnya:** P0-02
 
 ---
 
 ## P0 · Setup Proyek & Otomasi
 - [x] **P0-00** Deteksi pola akun per folder dari proyek **kelola, prins, shaflow, kis** (tanpa menampilkan rahasia) → ringkas ke user → konfirmasi akun → ADR · Ref: 51 · ✅ 2026-11-23 · pola shaflow (wrapper `scripts/platform.mjs`), akun `buahbatu`, git config lokal, repo public selama dev (ADR-010, ADR-014)
-- [ ] **P0-01** Init Vite + TypeScript, install Phaser, Preact, zod, idb-keyval, easystarjs, supabase-js · Ref: 01
+- [x] **P0-01** Init Vite + TypeScript, install Phaser, Preact, zod, idb-keyval, easystarjs, supabase-js · Ref: 01 · ✅ 2026-11-23 · Phaser 4.2.1, Vite 8, TS ~6.0 dipin (ADR-016); typecheck+build hijau, lint/test menyusul P0-03/P0-04
 - [ ] **P0-02** Buat struktur folder lengkap sesuai arsitektur (folder kosong + `index.ts` placeholder) · Ref: 02
 - [ ] **P0-03** tsconfig strict, ESLint (typescript-eslint), Prettier, EditorConfig, script npm · Ref: 01, 03
 - [ ] **P0-04** Vitest + contoh test + script `validate:content` (kerangka) · Ref: 03, 50
@@ -133,7 +133,7 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 - [ ] **P5-01** Setup Supabase otomatis lewat `npm run setup` (buat project, ambil keys → `.env.local`, `supabase link`, `db push` migrasi `001_init.sql`, matikan signup publik) · Ref: 32, 51
 - [ ] **P5-02** RLS `002_rls.sql` + uji akses (user lain tidak bisa baca) · Ref: 32
 - [ ] **P5-03** Fungsi `create_household` & `join_household(code)` (maks. 2 anggota) · Ref: 32
-- [ ] **P5-04** UI login/daftar + buat/gabung household di Title · Ref: 32, 40
+- [ ] **P5-04** UI login (tanpa daftar) + Lupa password dengan cek email terdaftar (`api/password-reset.ts`, rate limit) + buat/gabung household di Title (ADR-015) · Ref: 32, 40
 - [ ] **P5-05** Cloud save world & player + `save_world` optimistic version · Ref: 32
 - [ ] **P5-06** Sinkron lokal ↔ cloud saat login + resolusi konflik · Ref: 32
 - [ ] **P5-07** Snapshot harian + restore dari Pengaturan · Ref: 32
