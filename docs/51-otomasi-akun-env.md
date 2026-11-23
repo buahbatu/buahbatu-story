@@ -114,7 +114,8 @@ Output akhir berupa tabel ✅/❌ per langkah. Kalau ada yang kurang, script men
 Perintah lain:
 | Perintah | Fungsi |
 |---|---|
-| `npm run doctor` | Cek kesehatan tools & env (tanpa mengubah apa pun) |
+| `npm run doctor` | Cek kesehatan tools, akun & env (tanpa mengubah apa pun). Kebutuhan mengikuti fase di `TODO.md`: yang belum waktunya ⏳, yang wajib sekarang ❌ + cara memperbaikinya |
+| `npm run tools` | Pasang tool biner proyek ke `.tools/` (gitleaks, versi dipin, checksum SHA-256 diverifikasi) + aktifkan hook |
 | `npm run env:sync` | Sinkron `.env.local` → Vercel env & GitHub secrets |
 | `npm run ship` | lint → typecheck → test → e2e → build → commit/push → deploy (lihat §6) |
 
@@ -135,6 +136,8 @@ AI selesai task
 ## 7. Keamanan
 - `.env.local`, `.envrc` (kalau berisi nilai), `.vercel/`, `supabase/.temp/` masuk `.gitignore`.
 - Pasang **secret scanning** sebelum commit (`gitleaks` via pre-commit hook). Commit diblok kalau ada token.
+  - Implementasi (P0-10a): hook native `.githooks/pre-commit` (tanpa husky) diaktifkan lewat `core.hooksPath` lokal oleh `npm install` (script `prepare`) dan `npm run tools`. Biner gitleaks di `.tools/` (gitignore). Kalau gitleaks tidak ada, commit **ditolak** (gagal tertutup, bukan dilewati).
+  - Fixture tes yang butuh pola token dirakit saat runtime (`'gh' + 'p_' + …`), jangan ditulis sebagai literal.
 - Saat menampilkan konfigurasi, AI **wajib** menyamarkan nilai (`ghp_****abcd`).
 - Token kedaluwarsa → `npm run doctor` memberi tahu token mana yang perlu diperbarui.
 - `SUPABASE_SERVICE_ROLE_KEY` **tidak pernah** dipakai di kode client (dicek oleh lint rule/grep di CI).

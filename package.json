@@ -18,7 +18,10 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "validate:content": "vitest run src/content/content.test.ts"
+    "validate:content": "vitest run src/content/content.test.ts",
+    "doctor": "node scripts/doctor.mjs",
+    "tools": "node scripts/tools.mjs",
+    "prepare": "node scripts/hooks.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.2",

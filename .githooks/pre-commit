@@ -1,0 +1,20 @@
+#!/bin/sh
+# Blok commit yang berisi rahasia (token, key, password). Desain: docs/51 §7
+# Biner: .tools/gitleaks (dipasang `npm run tools`), atau gitleaks di PATH.
+root=$(git rev-parse --show-toplevel)
+bin=""
+for candidate in "$root/.tools/gitleaks/gitleaks.exe" "$root/.tools/gitleaks/gitleaks"; do
+  [ -x "$candidate" ] && bin="$candidate" && break
+done
+[ -z "$bin" ] && command -v gitleaks >/dev/null 2>&1 && bin="gitleaks"
+if [ -z "$bin" ]; then
+  echo "❌ gitleaks belum terpasang, commit dibatalkan supaya rahasia tidak lolos."
+  echo "   Jalankan: npm run tools"
+  exit 1
+fi
+if ! "$bin" git --pre-commit --staged --redact --no-banner --exit-code 1 "$root"; then
+  echo ""
+  echo "❌ gitleaks menemukan kemungkinan rahasia di perubahan yang akan di-commit (nilai disamarkan)."
+  echo "   Pindahkan nilainya ke .env.local, lalu commit ulang."
+  exit 1
+fi

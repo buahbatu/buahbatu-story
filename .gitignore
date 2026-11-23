@@ -33,3 +33,4 @@ maps/**/*.tmx~
 Thumbs.db
 desktop.ini
 *.log
+.tools/
