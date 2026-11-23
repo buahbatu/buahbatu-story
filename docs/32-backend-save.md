@@ -4,10 +4,14 @@
 1. Buat project di supabase.com (region terdekat, misal Singapore).
 2. Simpan `Project URL` dan `anon/publishable key` ke `.env.local`.
 3. Semua perubahan skema ditulis sebagai file SQL di `supabase/migrations/NNN_nama.sql` (jangan klik-klik manual tanpa dicatat).
-4. Aktifkan Auth **Email + Password**. Nonaktifkan sign up publik setelah dua akun dibuat (atau pakai kode undangan).
+4. Aktifkan Auth **Email + Password**. Sign up publik **dimatikan sejak awal** (ADR-015).
 
 ## 2. Auth & Household
-- 2 akun (A & B).
+- 2 akun (A & B), **dibuat oleh kita lewat script admin** (`npm run setup`, Supabase Admin API). Tidak ada halaman daftar.
+- Layar login hanya berisi: **Masuk** dan **Lupa password**.
+- **Lupa password**: email dicek dulu lewat Vercel function (`api/password-reset.ts`, service role). Kalau email tidak terdaftar, tampilkan pesan "Email ini belum terdaftar". Kalau terdaftar, kirim email reset Supabase. Dibatasi rate limit (mis. 5×/jam per IP) supaya tidak dipakai menebak email.
+- Media personal **tidak pernah** di-`import` ke bundle JS (bundle bisa diunduh tanpa login). Media hanya diambil dari bucket privat setelah login (`43` §1).
+- Household A+B bisa langsung dibuat oleh script admin. Alur kode undangan di bawah tetap ada untuk household tes / cadangan.
 - Pemain A membuat **household** → mendapat **kode undangan** (6 karakter).
 - Pemain B memasukkan kode → bergabung sebagai role `B`.
 - Maksimal 2 anggota per household (dicek di fungsi SQL `join_household`).
