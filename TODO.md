@@ -167,6 +167,8 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 ---
 
 ## P7 · Karakter & Outfit
+> 📣 **Sebelum P7-02 dimulai, kabari user** (permintaan user, 2026-11-24) & minta data karakter **Michelle** dan pemain A: foto wajah jelas (depan, terang), gaya rambut/hijab, kacamata, warna kulit, warna & outfit favorit/khas, outfit momen penting, tanggal lahir, nama panggilan & panggilan sayang. Kuesioner lengkap tentang kalian (kenangan, tempat, lagu, inside joke, dll.) menyusul di P8-11 (`docs/43` §3).
+
 - [ ] **P7-01** Sistem layered sprite chibi (bake layer ke satu tekstur untuk billboard) · Ref: 15
 - [ ] **P7-02** Layer karakter chibi (body, rambut, hijab, baju dasar) + `CREDITS.md` · Ref: 15, 42
 - [ ] **P7-03** Character Creator scene (kulit, wajah, rambut, hijab, warna, trait, ultah) · Ref: 15, 16
@@ -182,6 +184,8 @@ Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 ---
 
 ## P8 · HP, NPC, Dialog & Quest
+> 📣 **Sebelum P8-03 dimulai, kabari user** (permintaan user, 2026-11-24) & minta data NPC dari keluarga/teman asli, mulai dari **Eldyi** (sepupu Michelle) serta Mamah & Papah Michelle: sifat & cara bicara, panggilan ke Michelle & pasangannya, kegiatan/pekerjaan sehari-hari, tempat tinggal, ulang tahun, hadiah yang disukai & tidak disukai, ciri penampilan untuk sprite, cerita/kenangan bareng. Data asli masuk `src/content/personal/` (tidak di-commit, `docs/43`).
+
 - [ ] **P8-01** Kerangka HP (app launcher, navigasi, wallpaper) · Ref: 40
 - [ ] **P8-02** App Quest, Kalender, Cuaca, Peta (dasar) · Ref: 40
 - [ ] **P8-03** Data NPC + spawn + potret · Ref: 18
