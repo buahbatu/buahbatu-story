@@ -11,6 +11,7 @@ export default defineConfig({
   timeout: 60_000,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
   use: {
+    launchOptions: { args: ['--use-angle=swiftshader'] },
     baseURL: url,
     extraHTTPHeaders: bypass ? { 'x-vercel-protection-bypass': bypass, 'x-vercel-set-bypass-cookie': 'true' } : {},
     trace: 'on-first-retry',

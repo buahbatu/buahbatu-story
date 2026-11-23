@@ -5,7 +5,7 @@
   "description": "Life-sim pixel 2D berdua berlatar Bandung",
   "type": "module",
   "engines": {
-    "node": ">=24"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "vite",

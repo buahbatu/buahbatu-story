@@ -17,6 +17,7 @@ export default defineConfig({
     toHaveScreenshot: { animations: 'disabled', caret: 'hide', maxDiffPixelRatio: 0.002 },
   },
   use: {
+    launchOptions: { args: ['--use-angle=swiftshader'] },
     baseURL: `http://localhost:${PORT}`,
     reducedMotion: 'reduce',
     trace: 'on-first-retry',

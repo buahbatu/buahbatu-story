@@ -1,11 +1,11 @@
 import { expect, test } from './fixtures';
 
-test('boot → Preload → Title tanpa error', async ({ game: { page, errors } }) => {
+test('boot → Preload → Title tanpa error', async ({ game: { page, problems } }) => {
   expect(await page.evaluate(() => window.__BB__?.scene())).toBe('Title');
   await expect(page.locator('#game canvas')).toBeVisible();
   await expect(page.locator('.version-badge')).toHaveText(/^Versi \d+\.\d+\.\d+$/);
   await expect(page).toHaveTitle('Buahbatu Story');
-  expect(errors).toEqual([]);
+  expect(problems).toEqual([]);
 });
 
 test('font pixel termuat (bukan font cadangan)', async ({ game: { page } }) => {

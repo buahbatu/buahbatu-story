@@ -329,6 +329,22 @@ async function stepVercelToken(): Promise<CheckResult> {
   });
 }
 
+export const nodeMajor = (engines: string): string => `${/(\d+)/.exec(engines)?.[1] ?? ''}.x`;
+
+async function stepVercelNode(): Promise<CheckResult> {
+  const { VERCEL_TOKEN: token, VERCEL_PROJECT_ID: id, VERCEL_ORG_ID: org } = env();
+  const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as { engines?: { node?: string } };
+  const wanted = nodeMajor(pkg.engines?.node ?? '');
+  const url = `https://api.vercel.com/v9/projects/${id ?? ''}${org?.startsWith('team_') ? `?teamId=${org}` : ''}`;
+  const headers = { Authorization: `Bearer ${token ?? ''}`, 'Content-Type': 'application/json' };
+  const current = ((await (await fetch(url, { headers })).json()) as { nodeVersion?: string }).nodeVersion;
+  if (current === wanted) return step('Vercel Node.js', { detail: `${wanted} (sama dengan engines)` });
+  const response = await fetch(url, { method: 'PATCH', headers, body: JSON.stringify({ nodeVersion: wanted }) });
+  return response.ok
+    ? step('Vercel Node.js', { detail: `${current ?? '?'} → ${wanted}` })
+    : step('Vercel Node.js', { status: 'fail', detail: `HTTP ${response.status}`, fix: 'cek izin token' });
+}
+
 async function stepVercelBypass(): Promise<CheckResult> {
   const { VERCEL_AUTOMATION_BYPASS_SECRET: existing, VERCEL_TOKEN: token, VERCEL_PROJECT_ID: id, VERCEL_ORG_ID: org } = env();
   if (existing) return step('Vercel bypass untuk smoke test', { detail: 'sudah ada' });
@@ -386,7 +402,7 @@ export async function runSetup(): Promise<CheckResult[]> {
     results.push(login, ...(login.status === 'ok' ? [stepVercelLink(vercel), stepVercelEnv(vercel)] : []));
   }
   const token = await stepVercelToken();
-  results.push(token, ...(token.status === 'ok' ? [await stepVercelBypass(), stepCiSecrets()] : []));
+  results.push(token, ...(token.status === 'ok' ? [await stepVercelNode(), await stepVercelBypass(), stepCiSecrets()] : []));
   results.push(step('Supabase (project, migrasi, akun tes)', { status: 'later', detail: 'P5-01' }));
   return results;
 }

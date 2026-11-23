@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { chromeArgs, pickDeviceCode, pickLoginUrl } from '../scripts/lib/browser.ts';
 import { mask, parseEnv, upsertEnv } from '../scripts/lib/env.ts';
-import { envsToSync, isProjectHelperList } from '../scripts/setup.ts';
+import { envsToSync, isProjectHelperList, nodeMajor } from '../scripts/setup.ts';
 import { exitCode, formatReport, gate } from '../scripts/lib/report.ts';
 import { compareTasks, currentTask, isRequiredNow, parseTaskId } from '../scripts/lib/tasks.ts';
 import { gitleaksAsset, parseChecksums } from '../scripts/tools.ts';
@@ -171,5 +171,15 @@ describe('tools (gitleaks)', () => {
       'file.zip': hash,
       'other.tar.gz': 'b'.repeat(64),
     });
+  });
+});
+
+describe('nodeMajor', () => {
+  it.each([
+    ['24.x', '24.x'],
+    ['>=24', '24.x'],
+    ['^24.1.0', '24.x'],
+  ])('%s → %s', (engines, major) => {
+    expect(nodeMajor(engines)).toBe(major);
   });
 });

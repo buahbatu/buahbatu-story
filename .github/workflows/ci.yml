@@ -15,7 +15,7 @@ concurrency:
 
 env:
   NODE_VERSION: '24'
-  VERCEL_CLI_VERSION: '59.5.0'
+  VERCEL_CLI_VERSION: '65.12.1'
 
 jobs:
   verify:
@@ -80,7 +80,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci
-      - run: npm install --global vercel@${{ env.VERCEL_CLI_VERSION }}
+      - run: npm install --global vercel@${{ env.VERCEL_CLI_VERSION }} --allow-scripts=esbuild
       - name: Production aktif sebelumnya
         id: previous
         if: env.TARGET == 'production'

@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('URL deploy menampilkan layar judul tanpa error', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  page.on('console', (m) => (m.type() === 'error' || m.type() === 'warning') && errors.push(`${m.type()}: ${m.text()}`));
   const response = await page.goto('/');
   expect(response?.status()).toBe(200);
   await expect(page).toHaveTitle('Buahbatu Story');
