@@ -15,6 +15,23 @@ export const DEFAULT_AREA = 'sandbox';
 export const AREA_ID_PATTERN = /^[a-z0-9_]+$/;
 export const WORLD_SKIRT = 40;
 export const INTERIOR = { background: '#14111f', fogNear: 60, fogFar: 120, cameraDistance: 15, lookBack: 0.9 } as const;
+export const WATER_FX = {
+  dryTime: 8,
+  dripTime: 4,
+  dripRate: 14,
+  splashCount: 28,
+  dropSize: 0.14,
+  maxParticles: 160,
+  gravity: 9.8,
+  rippleEvery: 0.4,
+  rippleLife: 0.9,
+  rippleGrow: 1.8,
+  drop: '#f4fbff',
+  ripple: '#eef8ff',
+  wetTint: '#6f84a8',
+  wetAmount: 0.45,
+  sink: 12,
+} as const;
 export const OCCLUSION = { opacity: 0.3, speed: 5, margin: 0.4, skip: ['room', 'rug', 'stairs'] } as const;
 export const CHARACTER = { height: 1.6, turnSpeed: 16 } as const;
 export const WORLD_FOG = { near: 30, far: 70 } as const;

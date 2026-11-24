@@ -187,22 +187,65 @@ export function standHeight(area: AreaData, x: number, y: number): number {
 export interface Body {
   radius: number;
   maxStep: number;
+  shallowTiles: number;
+}
+
+export type WaterDepth = 'none' | 'shallow' | 'deep';
+const shoreCache = new WeakMap<AreaData, number[]>();
+
+export function shoreDistance(area: AreaData): number[] {
+  const cached = shoreCache.get(area);
+  if (cached) return cached;
+  const dist = area.terrain.map((t) => (t === 'water' ? Infinity : 0));
+  const queue: number[] = [];
+  dist.forEach((d, i) => {
+    if (d === 0) queue.push(i);
+  });
+  for (const i of queue) {
+    const x = i % area.width;
+    const y = Math.floor(i / area.width);
+    for (let dy = -1; dy <= 1; dy++)
+      for (let dx = -1; dx <= 1; dx++) {
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= area.width || ny >= area.height) continue;
+        const j = tileIndex(area, nx, ny);
+        if ((dist[j] ?? 0) > (dist[i] ?? 0) + 1) {
+          dist[j] = (dist[i] ?? 0) + 1;
+          queue.push(j);
+        }
+      }
+  }
+  shoreCache.set(area, dist);
+  return dist;
+}
+
+export function waterAt(area: AreaData, x: number, y: number, shallowTiles: number): WaterDepth {
+  if (x < 0 || y < 0 || x >= area.width || y >= area.height) return 'none';
+  const d = shoreDistance(area)[tileIndex(area, Math.floor(x), Math.floor(y))] ?? 0;
+  return d === 0 ? 'none' : d <= shallowTiles ? 'shallow' : 'deep';
+}
+
+export function walkLevel(area: AreaData, x: number, y: number): number {
+  const lowered = area.terrain[tileIndex(area, Math.floor(x), Math.floor(y))] === 'water' ? WATER_DEPTH : 0;
+  return standHeight(area, x, y) + (x >= 0 && y >= 0 && x < area.width && y < area.height ? lowered : 0);
 }
 
 export function bodyBlocked(area: AreaData, x: number, y: number, from: number, body: Body): boolean {
   const r = body.radius;
   if (x - r < 0 || y - r < 0 || x + r > area.width || y + r > area.height) return true;
-  const here = standHeight(area, x, y);
+  const here = walkLevel(area, x, y);
   if (Math.abs(here - from) > body.maxStep) return true;
+  const shore = shoreDistance(area);
   for (let ty = Math.floor(y - r); ty <= Math.floor(y + r - 1e-6); ty++)
     for (let tx = Math.floor(x - r); tx <= Math.floor(x + r - 1e-6); tx++)
-      if (area.terrain[tileIndex(area, tx, ty)] === 'water') return true;
+      if ((shore[tileIndex(area, tx, ty)] ?? 0) > body.shallowTiles) return true;
   for (const [dx, dy] of [
     [-r, -r],
     [r, -r],
     [-r, r],
     [r, r],
   ] as const)
-    if (Math.abs(standHeight(area, x + dx, y + dy) - here) > body.maxStep) return true;
+    if (Math.abs(walkLevel(area, x + dx, y + dy) - here) > body.maxStep) return true;
   return area.collisions.some((c) => x + r > c.x && x - r < c.x + c.w && y + r > c.y && y - r < c.y + c.h);
 }

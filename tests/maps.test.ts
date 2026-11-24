@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { AREA_IDS, PROP_MODELS } from '../src/config/world';
 import { isI18nKey } from '../src/content/i18n';
 import { PLAYER } from '../src/config/balance';
-import { bodyBlocked, parseArea, standHeight, type AreaData } from '../src/world/map/logic';
+import { bodyBlocked, parseArea, walkLevel, type AreaData } from '../src/world/map/logic';
 import { DEFAULT_BUILDING } from '../src/world/props/buildings';
 import { TEXT_PROPS } from '../src/world/props/registry';
 
@@ -47,7 +47,7 @@ describe('peta di public/assets/maps (docs/10 §6)', () => {
     });
     it('setiap spawn berada di tempat bebas (pemain tidak muncul terjebak)', () => {
       if (!area) return;
-      const stuck = Object.entries(area.spawns).filter(([, p]) => bodyBlocked(area, p.x, p.y, standHeight(area, p.x, p.y), PLAYER));
+      const stuck = Object.entries(area.spawns).filter(([, p]) => bodyBlocked(area, p.x, p.y, walkLevel(area, p.x, p.y), PLAYER));
       expect(stuck.map(([k]) => k)).toEqual([]);
     });
     it('properti bangunan dikenal kit (tanpa salah ketik)', () => {

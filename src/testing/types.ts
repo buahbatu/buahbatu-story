@@ -25,6 +25,7 @@ export interface TestApi {
   actions(): Action[];
   clock(): number;
   occluding(): string[];
+  water(): { inWater: boolean; wetness: number; particles: number; ripples: number };
   player(): (PlayerMotion & { area: string }) | null;
   placePlayer(x: number, y: number, facing: Direction): void;
   playerLook(look: 'A' | 'B' | Appearance): Promise<void>;

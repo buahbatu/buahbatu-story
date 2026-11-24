@@ -20,4 +20,6 @@ export const PLAYER = {
   turnDelay: 0.06,
   radius: 0.28,
   maxStep: 0.35,
+  shallowTiles: 1,
+  wadeFactor: 0.5,
 } as const;

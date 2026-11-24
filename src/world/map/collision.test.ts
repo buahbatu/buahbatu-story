@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { PLAYER } from '../../config/balance';
 import { stepMotion, type PlayerMotion } from '../../entities/player/logic';
-import { bodyBlocked, rampProgress, rampsOf, standHeight, type AreaData, type MapObject } from './logic';
+import { bodyBlocked, rampProgress, rampsOf, shoreDistance, standHeight, walkLevel, waterAt, type AreaData, type MapObject } from './logic';
 
 const W = 10;
 const H = 6;
-const body = { radius: 0.28, maxStep: 0.35 };
+const body = { radius: 0.28, maxStep: 0.35, shallowTiles: 1 };
+const lake = Array.from({ length: 5 }, (_, y) => [4, 5, 6, 7, 8].map((x) => [x, y] as [number, number])).flat();
 
 function makeArea(
   opts: { water?: [number, number][]; high?: [number, number][]; collisions?: AreaData['collisions']; objects?: MapObject[] } = {},
@@ -42,14 +43,16 @@ const stairs: MapObject = {
 };
 
 describe('bodyBlocked', () => {
-  it('kotak tabrakan, air & tepi peta menghalangi; tanah lapang bebas', () => {
-    const area = makeArea({ water: [[5, 1]], collisions: [{ x: 2, y: 3, w: 1, h: 1 }] });
+  it('kotak tabrakan, air dalam & tepi peta menghalangi; tanah lapang bebas', () => {
+    const area = makeArea({ water: lake, collisions: [{ x: 2, y: 3, w: 1, h: 1 }] });
     expect(bodyBlocked(area, 1, 1, 0, body)).toBe(false);
     expect(bodyBlocked(area, 2.5, 3.5, 0, body)).toBe(true);
     expect(bodyBlocked(area, 1.8, 3.5, 0, body)).toBe(true);
     expect(bodyBlocked(area, 1.6, 3.5, 0, body)).toBe(false);
-    expect(bodyBlocked(area, 5.5, 1.5, 0, body)).toBe(true);
-    expect(bodyBlocked(area, 4.8, 1.5, 0, body)).toBe(true);
+    expect(bodyBlocked(area, 6.5, 2.5, 0, body)).toBe(true);
+    expect(bodyBlocked(area, 5.9, 2.5, 0, body)).toBe(true);
+    expect(bodyBlocked(area, 4.5, 2.5, 0, body)).toBe(false);
+    expect(bodyBlocked(area, 5.5, 4.5, 0, body)).toBe(false);
     expect(bodyBlocked(area, 0.2, 1, 0, body)).toBe(true);
   });
 
@@ -85,7 +88,7 @@ describe('tangga (ramp)', () => {
 
   it('pemain bisa naik tangga sampai ke dataran tinggi, tapi tidak dari samping tebing', () => {
     let m: PlayerMotion = { x: 3, y: 3, facing: 'e', anim: 'idle', animTime: 0 };
-    const blocked = (x: number, y: number, fx: number, fy: number) => bodyBlocked(area, x, y, standHeight(area, fx, fy), PLAYER);
+    const blocked = (x: number, y: number, fx: number, fy: number) => bodyBlocked(area, x, y, walkLevel(area, fx, fy), PLAYER);
     for (let i = 0; i < 60; i++) m = stepMotion(m, { x: 1, y: 0 }, false, 1 / 30, area, PLAYER, blocked);
     expect(m.x).toBeGreaterThan(7.5);
     expect(standHeight(area, m.x, m.y)).toBe(1);
@@ -117,5 +120,27 @@ describe('stepMotion dengan tabrakan', () => {
     let m: PlayerMotion = { x: 4.5, y: 1, facing: 'w', anim: 'idle', animTime: 0 };
     for (let i = 0; i < 30; i++) m = stepMotion(m, { x: -1, y: 0 }, false, 1 / 30, area, PLAYER, blocked);
     expect(m.x).toBeLessThan(4);
+  });
+});
+
+describe('air dangkal & dalam', () => {
+  const area = makeArea({ water: lake });
+
+  it('jarak ke tepi menentukan dangkal/dalam', () => {
+    expect(shoreDistance(area)[2 * W + 6]).toBe(3);
+    expect(waterAt(area, 4.5, 2.5, 1)).toBe('shallow');
+    expect(waterAt(area, 6.5, 2.5, 1)).toBe('deep');
+    expect(waterAt(area, 2.5, 2.5, 1)).toBe('none');
+    expect(waterAt(area, -1, 2, 1)).toBe('none');
+  });
+
+  it('pemain bisa melangkah ke air dangkal, terendam lebih rendah dari daratan, tapi berhenti sebelum air dalam', () => {
+    expect(walkLevel(area, 4.5, 2.5)).toBe(0);
+    expect(standHeight(area, 4.5, 2.5)).toBeLessThan(0);
+    let m: PlayerMotion = { x: 2.5, y: 2.5, facing: 'e', anim: 'idle', animTime: 0 };
+    const blocked = (x: number, y: number, fx: number, fy: number) => bodyBlocked(area, x, y, walkLevel(area, fx, fy), PLAYER);
+    for (let i = 0; i < 90; i++) m = stepMotion(m, { x: 1, y: 0 }, false, 1 / 30, area, PLAYER, blocked);
+    expect(waterAt(area, m.x, m.y, 1)).toBe('shallow');
+    expect(m.x).toBeLessThanOrEqual(6 - PLAYER.radius + 1e-9);
   });
 });

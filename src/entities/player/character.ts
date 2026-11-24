@@ -1,5 +1,6 @@
 import {
   AnimationMixer,
+  Color,
   Box3,
   CanvasTexture,
   ImageLoader,
@@ -14,7 +15,7 @@ import {
 } from 'three';
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
-import { CHARACTER } from '../../config/world';
+import { CHARACTER, WATER_FX } from '../../config/world';
 import type { Appearance, PaletteCell } from './appearance';
 import type { PlayerAnim } from './logic';
 
@@ -73,16 +74,20 @@ function recolor(image: HTMLImageElement, colors: Appearance['colors']): Texture
 export interface Character {
   root: Object3D;
   play(anim: PlayerAnim, time: number): void;
+  setWet(amount: number): void;
 }
 
 export async function createCharacter(look: Appearance): Promise<Character> {
   const [gltf, image] = await Promise.all([loadModel(look.model), loadPalette()]);
   const root = clone(gltf.scene);
   const map = recolor(image, look.colors);
+  const materials: MeshLambertMaterial[] = [];
   root.traverse((node) => {
     if (!(node instanceof Mesh)) return;
     node.castShadow = true;
-    node.material = new MeshLambertMaterial({ map });
+    const material = new MeshLambertMaterial({ map });
+    materials.push(material);
+    node.material = material;
   });
   const height = new Box3().setFromObject(root).getSize(new Vector3()).y || 1;
   root.scale.setScalar(CHARACTER.height / height);
@@ -93,8 +98,13 @@ export async function createCharacter(look: Appearance): Promise<Character> {
     if (clip) actions.set(anim, mixer.clipAction(clip));
   }
   let current: AnimationAction | null = null;
+  const dry = new Color('#ffffff');
+  const wet = new Color(WATER_FX.wetTint);
   return {
     root,
+    setWet(amount) {
+      for (const m of materials) m.color.copy(dry).lerp(wet, amount * WATER_FX.wetAmount);
+    },
     play(anim, time) {
       const action = actions.get(anim) ?? null;
       if (action !== current) {

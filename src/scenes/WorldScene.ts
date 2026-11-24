@@ -15,15 +15,17 @@ import {
 } from 'three';
 import { PLAYER } from '../config/balance';
 import { PALETTE } from '../config/palette';
-import { DEFAULT_AREA, INTERIOR, WATER, WORLD_CAMERA, WORLD_FOG } from '../config/world';
+import { DEFAULT_AREA, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { OcclusionFader } from '../world/occlusion';
+import { WaterFx } from '../world/waterFx';
+import { DRY, drip, seeded, splashBurst, stepWet, type WetState } from '../entities/player/wet';
 import { logger } from '../core/logger';
 import type { Engine, GameScene } from '../engine/engine';
 import { APPEARANCE, PlayerView, stepMotion, type Appearance, type Direction, type PlayerMotion } from '../entities';
 import { uiStore } from '../ui/uiState';
 import { buildArea, disposeTree, preloadArea } from '../world/build';
 import { addEnvironment, aimSun } from '../world/environment';
-import { bodyBlocked, parseArea, standHeight, type AreaData } from '../world/map/logic';
+import { bodyBlocked, parseArea, standHeight, walkLevel, waterAt, type AreaData } from '../world/map/logic';
 import { SCENE } from './keys';
 
 const OCCLUSION_POINTS = [0.8, 1.5] as const;
@@ -50,6 +52,10 @@ export class WorldScene implements GameScene {
   private water: Texture | null = null;
   private readonly playerView = new PlayerView();
   readonly occlusion = new OcclusionFader();
+  private readonly fx = new WaterFx();
+  private wet: WetState = DRY;
+  private fxTick = 0;
+  private rippleIn = 0;
   private look = APPEARANCE.A;
   private lookReady: Promise<void> | null = null;
   player: PlayerMotion | null = null;
@@ -80,10 +86,37 @@ export class WorldScene implements GameScene {
     this.water?.offset.set(time * WATER.flow, time * WATER.flow * 0.6);
     const { area, player, engine } = this;
     if (!area || !player || !engine) return;
-    this.player = stepMotion(player, engine.input.move(), engine.input.isDown('run'), dt, area, PLAYER, (x, y, fx, fy) =>
-      bodyBlocked(area, x, y, standHeight(area, fx, fy), PLAYER),
+    const raw = engine.input.move();
+    const wade = waterAt(area, player.x, player.y, PLAYER.shallowTiles) === 'none' ? 1 : PLAYER.wadeFactor;
+    this.player = stepMotion(player, { x: raw.x * wade, y: raw.y * wade }, engine.input.isDown('run'), dt, area, PLAYER, (x, y, fx, fy) =>
+      bodyBlocked(area, x, y, walkLevel(area, fx, fy), PLAYER),
     );
+    this.splashAndDrip(area, this.player, dt);
     this.showPlayer(dt);
+  }
+
+  waterState(): { inWater: boolean; wetness: number; particles: number; ripples: number } {
+    return { inWater: this.wet.inWater, wetness: this.wet.wetness, ...this.fx.counts() };
+  }
+
+  private splashAndDrip(area: AreaData, p: PlayerMotion, dt: number): void {
+    const inWater = waterAt(area, p.x, p.y, PLAYER.shallowTiles) !== 'none';
+    const step = stepWet(this.wet, inWater, dt, WATER_FX);
+    this.wet = step.state;
+    const rnd = seeded(p.x * 31.7 + p.y * 17.3 + this.fxTick++);
+    if (step.splash) {
+      this.fx.add(splashBurst(p.x, WATER.surface, p.y, WATER_FX.splashCount, rnd));
+      this.fx.ripple(p.x, WATER.surface + 0.01, p.y);
+    }
+    this.rippleIn -= dt;
+    if (inWater && p.anim !== 'idle' && this.rippleIn <= 0) {
+      this.fx.ripple(p.x, WATER.surface + 0.01, p.y);
+      this.rippleIn = WATER_FX.rippleEvery;
+    }
+    const ground = standHeight(area, p.x, p.y);
+    for (let i = 0; i < step.drips; i++) this.fx.add([drip(p.x, ground, p.y, rnd)]);
+    this.fx.update(dt);
+    this.playerView.setWet(this.wet.wetness);
   }
 
   resize(width: number, height: number): void {
@@ -99,6 +132,9 @@ export class WorldScene implements GameScene {
     if (!area) throw new Error(`peta ${id} tidak valid: ${issues.join('; ')}`);
     const [atlas] = await Promise.all([loadAtlas(new URL(area.tileset.image, url)), preloadArea(area)]);
     this.occlusion.clear();
+    this.fx.clear();
+    this.wet = DRY;
+    this.playerView.setWet(0);
     if (this.root) disposeTree(this.root);
     this.atlas?.dispose();
     this.atlas = atlas;
@@ -146,7 +182,7 @@ export class WorldScene implements GameScene {
     const spawns = this.area.spawns;
     const at = (spawnId ? spawns[spawnId] : undefined) ?? spawns.start ?? Object.values(spawns)[0] ?? { x: 0, y: 0 };
     this.player = { x: at.x, y: at.y, facing: 's', anim: 'idle', animTime: 0 };
-    this.world.scene.add(this.playerView.object);
+    this.world.scene.add(this.playerView.object, this.fx.object);
     this.showPlayer(null);
   }
 
