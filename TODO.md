@@ -111,7 +111,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-07** Sistem interaksi: deteksi objek terdekat + prompt "E ..." · Ref: 10, 40 · ✅ 2026-11-25 · objek terdekat+di depan, prompt [E] melayang (pindah ke atas kepala bila objek di depan), log interaksi; tombol: lompat Spasi, alat C
 - [x] **P1-08** Kotak dialog Preact (typewriter, pilihan, potret placeholder, log) · Ref: 40, 18 · ✅ 2026-11-25 · bingkai ornamen, teks mengetik, pilihan (keyboard/angka/klik), riwayat L, papan Kebun Warga bisa dibaca
 - [x] **P1-09** Transisi area (pintu & tepi peta) + fade + spawn point · Ref: 10 · ✅ 2026-11-25 · pintu (E) & tepi (otomatis) + fade, area belum ada → pesan ramah, index.json peta
-- [ ] **P1-10** Kontrol sentuh: joystick virtual + tombol aksi (deteksi portrait + layar penuh HP sudah dikerjakan lebih awal, ADR-020) · Ref: 40
+- [~] **P1-10** Kontrol sentuh: joystick virtual + tombol aksi (deteksi portrait + layar penuh HP sudah dikerjakan lebih awal, ADR-020) · Ref: 40 · 🚧 2026-11-25
 - [ ] **P1-11** Mode debug `?debug=1` (FPS, collision, grid) · Ref: 50
 
 **Kriteria selesai P1:** bisa jalan di Lembang, masuk/keluar kos, ngobrol dengan papan (dialog), main di HP & laptop.
@@ -378,3 +378,5 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - *(teknis, dari P0-08)* Teks Phaser pakai **BitmapText** (font pixel di-bake jadi atlas) supaya tepi huruf 100% tajam; `fillText` canvas masih memberi antialias 1 px di tepi glyph. Cocok digarap bareng pipeline aset P1-01.
 - *(dari user, dikerjakan bareng P5-04)* Layar judul beranimasi: huruf judul bergelombang pelan, subtitle muncul pelan, awan/parallax & kilau stroberi; hormati `prefers-reduced-motion`.
 - *(dari user, 2026-11-24)* **Warga figuran ala GTA**: orang-orang tanpa nama yang jalan kaki, nongkrong, naik motor/angkot di kota (Braga, Alun-alun, Dago) supaya Bandung terasa ramai; beda dari NPC bernama di `18` (P8). Bisa disapa singkat, tanpa hubungan/quest. Perlu dibahas: kepadatan per area & jam, sinkron 2 pemain (cukup deterministik dari seed, tidak dikirim lewat jaringan), batas performa HP. Kandidat fase: P12 (kendaraan & peta Bandung).
+- *(dari user, 2026-11-25)* **Kontur tanah tidak rata**: peta jangan datar per level; pakai bukit, lembah, lereng landai (bukan hanya undakan + tangga), terutama Lembang/Dago/Ciwidey. Perlu dibahas: lereng halus per-vertex vs. undakan bertingkat lebih banyak, dampak ke kolisi (`maxStep`) & ladang (tanah tani tetap datar).
+- *(dari user, 2026-11-25)* **Air terjun & tempat alam**: air terjun (mis. Curug Dago/Curug Maribaya ala game), sungai mengalir antar ketinggian, kolam di bawah tebing; efek percikan & suara gemericik. Nyambung dengan ide kontur tanah dan sistem air P1-05b.

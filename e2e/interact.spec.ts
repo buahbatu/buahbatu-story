@@ -4,10 +4,10 @@ import { expect, test } from './fixtures';
 const prompt = (page: Page) => page.evaluate(() => window.__BB__?.prompt() ?? null);
 const interactions = (page: Page) => page.evaluate(() => window.__BB__?.interactions() ?? []);
 
-test('prompt muncul di dekat pintu & kasur, hilang saat menjauh, E mencatat interaksi', async ({ game: { page } }) => {
+test('prompt muncul di dekat pintu & kasur, hilang saat menjauh, E mencatat interaksi', async ({ game: { page }, isMobile }) => {
   await page.evaluate(() => window.__BB__?.enterArea('kos_a', 'pintu'));
   await expect.poll(() => prompt(page)).toMatchObject({ key: 'E', text: 'prompt.exit' });
-  await expect(page.locator('.interact-prompt')).toHaveText('EKeluar');
+  await expect(page.locator('.interact-prompt')).toHaveText(isMobile ? 'AKeluar' : 'EKeluar');
 
   await page.evaluate(() => window.__BB__?.placePlayer(2.6, 2.2, 'w'));
   await expect.poll(() => prompt(page)).toMatchObject({ text: 'prompt.sleep' });

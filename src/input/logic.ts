@@ -39,6 +39,8 @@ export class InputState {
   private byKey = new Map<string, Action>();
   private bindings: Bindings;
   private gesture = { zoom: 0, panX: 0, panY: 0, twist: 0 };
+  private readonly virtual = new Set<Action>();
+  private stick: MoveVector = { x: 0, y: 0 };
 
   constructor(bindings: Bindings) {
     this.bindings = bindings;
@@ -77,15 +79,29 @@ export class InputState {
   }
 
   releaseAll(): void {
-    for (const key of this.held) {
-      const action = this.byKey.get(key);
-      if (action) this.released.add(action);
-    }
+    const before = this.down();
     this.held.clear();
+    this.virtual.clear();
+    this.stick = { x: 0, y: 0 };
+    for (const action of before) this.released.add(action);
+  }
+
+  setVirtual(action: Action, down: boolean): void {
+    const was = this.isDown(action);
+    if (down) this.virtual.add(action);
+    else this.virtual.delete(action);
+    const now = this.isDown(action);
+    if (now && !was) this.pressed.add(action);
+    if (!now && was) this.released.add(action);
+  }
+
+  setStick(v: MoveVector): void {
+    const len = Math.hypot(v.x, v.y);
+    this.stick = len > 1 ? { x: v.x / len, y: v.y / len } : { x: v.x, y: v.y };
   }
 
   isDown(action: Action): boolean {
-    return this.bindings[action].some((k) => this.held.has(k));
+    return this.virtual.has(action) || this.bindings[action].some((k) => this.held.has(k));
   }
 
   justPressed(action: Action): boolean {
@@ -101,6 +117,7 @@ export class InputState {
   }
 
   move(): MoveVector {
+    if (this.stick.x !== 0 || this.stick.y !== 0) return { ...this.stick };
     const x = Number(this.isDown('right')) - Number(this.isDown('left'));
     const y = Number(this.isDown('down')) - Number(this.isDown('up'));
     const len = Math.hypot(x, y);

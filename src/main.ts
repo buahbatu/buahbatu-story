@@ -7,6 +7,7 @@ import { InputState, attachKeyboard, attachPointer } from './input';
 import { SCENE, createScenes } from './scenes';
 import { mountUi } from './ui';
 import { installTouchFullscreen } from './ui/fullscreen';
+import { connectTouch } from './ui/touch/bridge';
 
 const createdAt = new Date().toISOString();
 const runtime = GameRuntime.create({ householdId: 'local', seed: hashSeed(createdAt), createdAt });
@@ -18,6 +19,7 @@ const { scenes, world } = createScenes();
 const input = new InputState(DEFAULT_BINDINGS);
 attachKeyboard(input);
 attachPointer(input, gameRoot);
+connectTouch(input);
 world.notify = (key) => {
   runtime.bus.emit({ type: 'ui/toast', key });
 };
