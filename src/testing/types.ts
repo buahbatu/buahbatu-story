@@ -24,6 +24,7 @@ export interface TestApi {
   enterArea(id: string, spawn?: string): Promise<AreaInfo | null>;
   actions(): Action[];
   clock(): number;
+  occluding(): string[];
   player(): (PlayerMotion & { area: string }) | null;
   placePlayer(x: number, y: number, facing: Direction): void;
   playerLook(look: 'A' | 'B' | Appearance): Promise<void>;

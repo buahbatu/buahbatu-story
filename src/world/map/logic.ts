@@ -135,9 +135,74 @@ export function elevation(area: Pick<AreaData, 'width' | 'height' | 'heights' | 
 export function isBlocked(area: AreaData, x: number, y: number): boolean {
   if (x < 0 || y < 0 || x >= area.width || y >= area.height) return true;
   if (area.terrain[tileIndex(area, Math.floor(x), Math.floor(y))] === 'water') return true;
-  return area.collisions.some((r) => x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h);
+  return area.collisions.some((r) => inside(r, x, y));
 }
 
 export function doorTargets(area: AreaData): string[] {
   return [...new Set(area.objects.filter((o) => o.kind === 'door' || o.kind === 'edge').map((o) => String(o.props.targetArea)))];
+}
+
+export const RAMP_DIRS = ['n', 's', 'e', 'w'] as const;
+export type RampDir = (typeof RAMP_DIRS)[number];
+export interface Ramp extends Rect {
+  dir: RampDir;
+  base: number;
+  rise: number;
+}
+
+const rampCache = new WeakMap<AreaData, Ramp[]>();
+const UP: Record<RampDir, [number, number]> = { n: [0, -1], s: [0, 1], e: [1, 0], w: [-1, 0] };
+
+export function rampsOf(area: AreaData): Ramp[] {
+  const cached = rampCache.get(area);
+  if (cached) return cached;
+  const ramps = area.objects
+    .filter((o) => o.kind === 'prop' && o.props.model === 'stairs')
+    .map((o) => {
+      const w = Number(o.props.w ?? 1);
+      const h = Number(o.props.d ?? 1);
+      const dir = RAMP_DIRS.find((d) => d === o.props.dir) ?? 'n';
+      const [ux, uy] = UP[dir];
+      const cx = o.x + o.w / 2;
+      const cy = o.y + o.h / 2;
+      const base = elevation(area, cx - (ux * w) / 2 + ux * 0.01, cy - (uy * h) / 2 + uy * 0.01);
+      return { x: cx - w / 2, y: cy - h / 2, w, h, dir, base, rise: Number(o.props.rise ?? 1) * HEIGHT_STEP };
+    });
+  rampCache.set(area, ramps);
+  return ramps;
+}
+
+export function rampProgress(r: Ramp, x: number, y: number): number {
+  const t = { n: (r.y + r.h - y) / r.h, s: (y - r.y) / r.h, e: (x - r.x) / r.w, w: (r.x + r.w - x) / r.w }[r.dir];
+  return Math.min(1, Math.max(0, t));
+}
+
+const inside = (r: Rect, x: number, y: number) => x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h;
+
+export function standHeight(area: AreaData, x: number, y: number): number {
+  const ramp = rampsOf(area).find((r) => inside(r, x, y));
+  return ramp ? ramp.base + rampProgress(ramp, x, y) * ramp.rise : elevation(area, x, y);
+}
+
+export interface Body {
+  radius: number;
+  maxStep: number;
+}
+
+export function bodyBlocked(area: AreaData, x: number, y: number, from: number, body: Body): boolean {
+  const r = body.radius;
+  if (x - r < 0 || y - r < 0 || x + r > area.width || y + r > area.height) return true;
+  const here = standHeight(area, x, y);
+  if (Math.abs(here - from) > body.maxStep) return true;
+  for (let ty = Math.floor(y - r); ty <= Math.floor(y + r - 1e-6); ty++)
+    for (let tx = Math.floor(x - r); tx <= Math.floor(x + r - 1e-6); tx++)
+      if (area.terrain[tileIndex(area, tx, ty)] === 'water') return true;
+  for (const [dx, dy] of [
+    [-r, -r],
+    [r, -r],
+    [-r, r],
+    [r, r],
+  ] as const)
+    if (Math.abs(standHeight(area, x + dx, y + dy) - here) > body.maxStep) return true;
+  return area.collisions.some((c) => x + r > c.x && x - r < c.x + c.w && y + r > c.y && y - r < c.y + c.h);
 }

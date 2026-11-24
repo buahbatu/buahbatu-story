@@ -97,9 +97,9 @@ m.fence(3, 22.5, 10.5, 22.5)
   .fence(29, 27.5, 29, 35)
   .fence(45, 27.5, 45, 35)
   .prop('strawberry_plot', 6, 26, { cols: 3, rows: 5 })
-  .prop('sign', 7.5, 21.6, { text: 'sign.kebunWarga', color: '#6b4223' })
-  .prop('sign', 44.5, 17.2, { text: 'sign.lembang', color: '#2f5d50' })
-  .prop('sign', 30, 25.2, { text: 'sign.susuMurni', color: '#3f6e9a' })
+  .item('sign', 7.5, 21.6, 2.4, 0.3, { text: 'sign.kebunWarga', color: '#6b4223' })
+  .item('sign', 44.5, 17.2, 2.4, 0.3, { text: 'sign.lembang', color: '#2f5d50' })
+  .item('sign', 30, 25.2, 2.4, 0.3, { text: 'sign.susuMurni', color: '#3f6e9a' })
   .object('interact', 13, 21, { action: 'board:kebun_warga' }, 1, 1);
 for (const [x, y] of [
   [31, 30],

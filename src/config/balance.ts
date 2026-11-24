@@ -18,4 +18,6 @@ export const PLAYER = {
   runSpeed: 5.6,
   edgeMargin: 0.35,
   turnDelay: 0.06,
+  radius: 0.28,
+  maxStep: 0.35,
 } as const;

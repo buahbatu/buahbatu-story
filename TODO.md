@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 11 | 19 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 11 | 20 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +37,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **26** | **192** | |
+| **Total** | | | **26** | **193** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -104,9 +104,10 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-04c** Pemuat aset 3D CC0 (ADR-025) + alam & jalan: pohon, pinus, semak, batu, pagar, pot, lampu jalan, tiang listrik (Kenney Nature/City Roads, diwarnai alami) · Ref: 42, 10 · ✅ 2026-11-24 · pohon/pinus/semak/batu/pagar/pot/lampu jalan Kenney CC0 bertekstur pixel, tiang PLN tetap custom
 - [x] **P1-04d** Furnitur interior ke Kenney Furniture Kit (CC0) · Ref: 42, 10 · ✅ 2026-11-24 · 13 perabot dari tabel data FURNITURE, tapak tetap, kayu bertekstur papan
 - [x] **P1-04e** Bangunan: dibandingkan dengan Kenney City Kit, **user memilih tetap rakitan kode** (lebih Bandung & PS1) lalu dipoles detail khas rumah Indonesia (roster, lisplang, talang, bubungan, kanopi pintu, meteran PLN, teralis, AC) · Ref: 42, 10 · ✅ 2026-11-24 · Kenney City Kit dicoba, user pilih rakitan kode; +roster, lisplang, talang, bubungan, kanopi pintu, meteran, teralis, AC
-- [ ] **P1-05** Collision berbasis grid & objek + pemain tetap terlihat saat tertutup pohon/bangunan (siluet/memudar) · Ref: 02, 10
+- [~] **P1-05** Collision berbasis grid & objek + pemain tetap terlihat saat tertutup pohon/bangunan (siluet/memudar) · Ref: 02, 10 · 🕐 2026-11-24
 - [ ] **P1-05b** Nyebur ke kolam (permintaan user): air dangkal bisa dimasuki (gerak melambat, karakter terendam sebagian), efek cipratan saat masuk, karakter tampak basah, tetesan air jatuh dari pakaian setelah naik ke darat (beberapa detik); air dalam tetap tidak bisa dimasuki · Ref: 10, 40
-- [ ] **P1-06** Kamera 2.5D miring ala Back to Nature: follow pemain, batas peta, **zoom in/out** (scroll/pinch/`+``-`, dibatasi agar tetap tajam; permintaan user, bentrok scroll-hotbar diputuskan bersama user) · Ref: 40
+- [ ] **P1-05c** Lompat (permintaan user 2026-11-24): tombol lompat, animasi & lengkung lompatan, bisa melompati rintangan rendah/naik tepian rendah sesuai aturan tabrakan; tombol diputuskan bersama user (Spasi kini dipakai alat) · Ref: 40, 15
+- [ ] **P1-06** Kamera 2.5D miring ala Back to Nature: follow pemain, batas peta, **zoom in/out**, **putar & geser kamera** (pan/arahkan sudut pandang, permintaan user 2026-11-24; kamera kembali mengikuti pemain) (scroll/pinch/`+``-`, dibatasi agar tetap tajam; permintaan user, bentrok scroll-hotbar diputuskan bersama user) · Ref: 40
 - [ ] **P1-07** Sistem interaksi: deteksi objek terdekat + prompt "E ..." · Ref: 10, 40
 - [ ] **P1-08** Kotak dialog Preact (typewriter, pilihan, potret placeholder, log) · Ref: 40, 18
 - [ ] **P1-09** Transisi area (pintu & tepi peta) + fade + spawn point · Ref: 10

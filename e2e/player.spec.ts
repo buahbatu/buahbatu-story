@@ -48,10 +48,10 @@ test('pemain muncul di spawn menghadap kamera, jalan & lari dengan keyboard', as
 
 test('pemain tertahan tepi ruangan', async ({ game: { page } }) => {
   await page.evaluate(() => window.__BB__?.enterArea('kos_a', 'pintu'));
-  const p = await hold(page, ['ShiftLeft', 'KeyA', 'KeyW'], 2500);
-  expect(p?.x).toBeCloseTo(0.35, 2);
-  expect(p?.y).toBeCloseTo(0.35, 2);
-  expect(p?.facing).toBe('nw');
+  const p = await hold(page, ['ShiftLeft', 'KeyD', 'KeyS'], 2500);
+  expect(p?.x).toBeCloseTo(7 - 0.35, 2);
+  expect(p?.y).toBeCloseTo(6 - 0.35, 2);
+  expect(p?.facing).toBe('se');
 });
 
 test('snapshot pemain menghadap barat setelah berjalan', async ({ game: { page } }) => {

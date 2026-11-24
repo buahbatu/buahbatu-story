@@ -172,8 +172,8 @@ for (const [x0, x1, y] of [
   m.fence(x0, y, x1, y, 'wall');
 m.fence(31, 25.5, 31, 33, 'bamboo').fence(43, 25.5, 43, 33, 'bamboo');
 
-m.prop('sign', 1.2, 17.4, { text: 'sign.buahbatu', color: '#3f6e9a' })
-  .prop('sign', 34, 25.6, { text: 'sign.tamanKompleks', color: '#3f8f4a' })
+m.item('sign', 1.2, 17.4, 2.4, 0.3, { text: 'sign.buahbatu', color: '#3f6e9a' })
+  .item('sign', 34, 25.6, 2.4, 0.3, { text: 'sign.tamanKompleks', color: '#3f8f4a' })
   .solid('food_cart', 12, 17.1, 1.4, { color: '#d9534a', label: 'sign.batagor' })
   .solid('food_cart', 33, 10.9, 1.4, { color: '#3f6e9a', label: 'sign.cilok' })
   .solid('bench', 34, 29.5, 1)

@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 6,
- "nextobjectid": 37,
+ "nextobjectid": 41,
  "properties": [],
  "layers": [
   {
@@ -3664,7 +3664,7 @@
    "visible": true,
    "objects": [
     {
-     "id": 5,
+     "id": 7,
      "name": "",
      "x": 104,
      "y": 73.6,
@@ -3675,7 +3675,29 @@
      "properties": []
     },
     {
+     "id": 10,
+     "name": "",
+     "x": 368,
+     "y": 69.6,
+     "width": 144,
+     "height": 4.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
      "id": 12,
+     "name": "",
+     "x": 368,
+     "y": 181.6,
+     "width": 144,
+     "height": 4.8,
+     "rotation": 0,
+     "visible": true,
+     "properties": []
+    },
+    {
+     "id": 16,
      "name": "",
      "x": 35.2,
      "y": 35.2,
@@ -3686,7 +3708,7 @@
      "properties": []
     },
     {
-     "id": 14,
+     "id": 18,
      "name": "",
      "x": 243.2,
      "y": 51.2,
@@ -3697,7 +3719,7 @@
      "properties": []
     },
     {
-     "id": 16,
+     "id": 20,
      "name": "",
      "x": 259.2,
      "y": 147.2,
@@ -3708,7 +3730,7 @@
      "properties": []
     },
     {
-     "id": 18,
+     "id": 22,
      "name": "",
      "x": 51.2,
      "y": 195.2,
@@ -3719,7 +3741,7 @@
      "properties": []
     },
     {
-     "id": 20,
+     "id": 24,
      "name": "",
      "x": 579.2,
      "y": 51.2,
@@ -3730,7 +3752,7 @@
      "properties": []
     },
     {
-     "id": 22,
+     "id": 26,
      "name": "",
      "x": 595.2,
      "y": 179.2,
@@ -3741,7 +3763,7 @@
      "properties": []
     },
     {
-     "id": 24,
+     "id": 28,
      "name": "",
      "x": 419.2,
      "y": 227.2,
@@ -3752,7 +3774,7 @@
      "properties": []
     },
     {
-     "id": 26,
+     "id": 30,
      "name": "",
      "x": 227.2,
      "y": 371.2,
@@ -3763,7 +3785,7 @@
      "properties": []
     },
     {
-     "id": 28,
+     "id": 32,
      "name": "",
      "x": 387.2,
      "y": 435.2,
@@ -3774,7 +3796,7 @@
      "properties": []
     },
     {
-     "id": 30,
+     "id": 34,
      "name": "",
      "x": 611.2,
      "y": 435.2,
@@ -3785,7 +3807,7 @@
      "properties": []
     },
     {
-     "id": 32,
+     "id": 36,
      "name": "",
      "x": 83.2,
      "y": 339.2,
@@ -3796,7 +3818,7 @@
      "properties": []
     },
     {
-     "id": 34,
+     "id": 38,
      "name": "",
      "x": 163.2,
      "y": 419.2,
@@ -3807,7 +3829,7 @@
      "properties": []
     },
     {
-     "id": 36,
+     "id": 40,
      "name": "",
      "x": 531.2,
      "y": 211.2,
@@ -3832,6 +3854,84 @@
     {
      "id": 1,
      "name": "",
+     "type": "prop",
+     "x": 208,
+     "y": 336,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "stairs"
+      },
+      {
+       "name": "w",
+       "type": "float",
+       "value": 2
+      },
+      {
+       "name": "d",
+       "type": "float",
+       "value": 2
+      },
+      {
+       "name": "dir",
+       "type": "string",
+       "value": "w"
+      },
+      {
+       "name": "rise",
+       "type": "float",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "name": "",
+     "type": "prop",
+     "x": 160,
+     "y": 384,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "stairs"
+      },
+      {
+       "name": "w",
+       "type": "float",
+       "value": 2
+      },
+      {
+       "name": "d",
+       "type": "float",
+       "value": 2
+      },
+      {
+       "name": "dir",
+       "type": "string",
+       "value": "w"
+      },
+      {
+       "name": "rise",
+       "type": "float",
+       "value": 1
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "name": "",
      "type": "spawn",
      "x": 328,
      "y": 280,
@@ -3849,7 +3949,7 @@
      ]
     },
     {
-     "id": 2,
+     "id": 4,
      "name": "",
      "type": "spawn",
      "x": 152,
@@ -3868,7 +3968,7 @@
      ]
     },
     {
-     "id": 3,
+     "id": 5,
      "name": "",
      "type": "spawn",
      "x": 264,
@@ -3887,7 +3987,7 @@
      ]
     },
     {
-     "id": 4,
+     "id": 6,
      "name": "",
      "type": "prop",
      "x": 152,
@@ -3911,7 +4011,7 @@
      ]
     },
     {
-     "id": 6,
+     "id": 8,
      "name": "",
      "type": "door",
      "x": 144,
@@ -3934,7 +4034,7 @@
      ]
     },
     {
-     "id": 7,
+     "id": 9,
      "name": "",
      "type": "prop",
      "x": 440,
@@ -3954,11 +4054,21 @@
        "name": "length",
        "type": "float",
        "value": 9
+      },
+      {
+       "name": "style",
+       "type": "string",
+       "value": "wood"
+      },
+      {
+       "name": "rotation",
+       "type": "float",
+       "value": 0
       }
      ]
     },
     {
-     "id": 8,
+     "id": 11,
      "name": "",
      "type": "prop",
      "x": 440,
@@ -3978,11 +4088,21 @@
        "name": "length",
        "type": "float",
        "value": 9
+      },
+      {
+       "name": "style",
+       "type": "string",
+       "value": "wood"
+      },
+      {
+       "name": "rotation",
+       "type": "float",
+       "value": 0
       }
      ]
     },
     {
-     "id": 9,
+     "id": 13,
      "name": "",
      "type": "interact",
      "x": 352,
@@ -4000,7 +4120,7 @@
      ]
     },
     {
-     "id": 10,
+     "id": 14,
      "name": "",
      "type": "zone",
      "x": 424,
@@ -4018,7 +4138,7 @@
      ]
     },
     {
-     "id": 11,
+     "id": 15,
      "name": "",
      "type": "prop",
      "x": 40,
@@ -4042,7 +4162,7 @@
      ]
     },
     {
-     "id": 13,
+     "id": 17,
      "name": "",
      "type": "prop",
      "x": 248,
@@ -4066,7 +4186,7 @@
      ]
     },
     {
-     "id": 15,
+     "id": 19,
      "name": "",
      "type": "prop",
      "x": 264,
@@ -4090,7 +4210,7 @@
      ]
     },
     {
-     "id": 17,
+     "id": 21,
      "name": "",
      "type": "prop",
      "x": 56,
@@ -4114,7 +4234,7 @@
      ]
     },
     {
-     "id": 19,
+     "id": 23,
      "name": "",
      "type": "prop",
      "x": 584,
@@ -4138,7 +4258,7 @@
      ]
     },
     {
-     "id": 21,
+     "id": 25,
      "name": "",
      "type": "prop",
      "x": 600,
@@ -4162,7 +4282,7 @@
      ]
     },
     {
-     "id": 23,
+     "id": 27,
      "name": "",
      "type": "prop",
      "x": 424,
@@ -4186,7 +4306,7 @@
      ]
     },
     {
-     "id": 25,
+     "id": 29,
      "name": "",
      "type": "prop",
      "x": 232,
@@ -4210,7 +4330,7 @@
      ]
     },
     {
-     "id": 27,
+     "id": 31,
      "name": "",
      "type": "prop",
      "x": 392,
@@ -4234,7 +4354,7 @@
      ]
     },
     {
-     "id": 29,
+     "id": 33,
      "name": "",
      "type": "prop",
      "x": 616,
@@ -4258,7 +4378,7 @@
      ]
     },
     {
-     "id": 31,
+     "id": 35,
      "name": "",
      "type": "prop",
      "x": 88,
@@ -4282,7 +4402,7 @@
      ]
     },
     {
-     "id": 33,
+     "id": 37,
      "name": "",
      "type": "prop",
      "x": 168,
@@ -4306,7 +4426,7 @@
      ]
     },
     {
-     "id": 35,
+     "id": 39,
      "name": "",
      "type": "prop",
      "x": 536,

@@ -15,6 +15,7 @@ export const DEFAULT_AREA = 'sandbox';
 export const AREA_ID_PATTERN = /^[a-z0-9_]+$/;
 export const WORLD_SKIRT = 40;
 export const INTERIOR = { background: '#14111f', fogNear: 60, fogFar: 120, cameraDistance: 15, lookBack: 0.9 } as const;
+export const OCCLUSION = { opacity: 0.3, speed: 5, margin: 0.4, skip: ['room', 'rug', 'stairs'] } as const;
 export const CHARACTER = { height: 1.6, turnSpeed: 16 } as const;
 export const WORLD_FOG = { near: 30, far: 70 } as const;
 export const MAP_LAYERS = ['Ground', 'Height', 'Farmable', 'Collision', 'Objects'] as const;
@@ -38,6 +39,7 @@ export const PROP_MODELS = [
   'rock',
   'fence',
   'strawberry_plot',
+  'stairs',
   'haystack',
   'pot',
   'bench',

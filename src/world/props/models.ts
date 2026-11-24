@@ -84,6 +84,22 @@ export function farmhouse(): Group {
   return g;
 }
 
+const STAIR_TURN = { n: 0, w: Math.PI / 2, s: Math.PI, e: -Math.PI / 2 } as const;
+
+export function stairs(w: number, d: number, dir: keyof typeof STAIR_TURN, rise: number): Group {
+  const along = dir === 'n' || dir === 's';
+  const width = along ? w : d;
+  const length = along ? d : w;
+  const count = Math.max(2, Math.round(rise * 4));
+  const stepH = rise / count;
+  const stepL = length / count;
+  const inner = new Group();
+  for (let i = 0; i < count; i++)
+    inner.add(texturedBox(width, (i + 1) * stepH, length - i * stepL, TEX.stone(), 1.2, 0, ((i + 1) * stepH) / 2, (-i * stepL) / 2));
+  inner.rotation.y = STAIR_TURN[dir];
+  return new Group().add(inner);
+}
+
 export function strawberryPlot(cols: number, rows: number): Group {
   const g = new Group();
   g.add(texturedBox(cols * 1.1, 0.22, rows * 1.1, TEX.soil(), 1.2, 0, 0.11, 0));

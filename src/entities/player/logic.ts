@@ -20,6 +20,8 @@ export interface MotionRules {
   turnDelay: number;
 }
 
+const MAX_SUBSTEP = 0.1;
+
 export function facingOf(x: number, y: number, fallback: Direction): Direction {
   if (x === 0 && y === 0) return fallback;
   const deg = (Math.atan2(-x, y) * 180) / Math.PI;
@@ -34,6 +36,7 @@ export function stepMotion(
   dt: number,
   bounds: { width: number; height: number },
   rules: MotionRules,
+  blocked: (x: number, y: number, fromX: number, fromY: number) => boolean = () => false,
 ): PlayerMotion {
   const moving = move.x !== 0 || move.y !== 0;
   const anim: PlayerAnim = moving ? (running ? 'run' : 'walk') : 'idle';
@@ -44,9 +47,21 @@ export function stepMotion(
   const turnTime = wanted === m.turn?.facing ? m.turn.time + step : step;
   const instant = m.anim === 'idle' || wanted === m.facing;
   const facing = instant || turnTime >= rules.turnDelay ? wanted : m.facing;
+  let x = m.x;
+  let y = m.y;
+  if (moving) {
+    const free = !blocked(x, y, x, y);
+    const steps = Math.max(1, Math.ceil((Math.hypot(move.x, move.y) * speed * dt) / MAX_SUBSTEP));
+    for (let i = 0; i < steps; i++) {
+      const nx = clamp(x + (move.x * speed * dt) / steps, bounds.width);
+      if (!free || !blocked(nx, y, x, y)) x = nx;
+      const ny = clamp(y + (move.y * speed * dt) / steps, bounds.height);
+      if (!free || !blocked(x, ny, x, y)) y = ny;
+    }
+  }
   return {
-    x: moving ? clamp(m.x + move.x * speed * dt, bounds.width) : m.x,
-    y: moving ? clamp(m.y + move.y * speed * dt, bounds.height) : m.y,
+    x,
+    y,
     facing,
     anim,
     animTime: anim === m.anim ? m.animTime + dt : 0,

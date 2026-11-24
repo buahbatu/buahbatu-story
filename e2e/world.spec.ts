@@ -3,7 +3,7 @@ import { expect, test, watchConsole } from './fixtures';
 
 test('masuk area sandbox: tanah, tebing & semua prop terbangun tanpa error', async ({ game: { page } }) => {
   const info = await page.evaluate(() => window.__BB__?.enterArea('sandbox'));
-  expect(info).toEqual({ id: 'sandbox', width: 40, height: 30, props: { farmhouse: 1, fence: 2, tree: 13 } });
+  expect(info).toEqual({ id: 'sandbox', width: 40, height: 30, props: { farmhouse: 1, fence: 2, stairs: 2, tree: 13 } });
   expect(await page.evaluate(() => window.__BB__?.scene())).toBe('World');
 });
 

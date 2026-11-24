@@ -3,7 +3,8 @@ import { PROP_MODELS, type PropModel } from '../../config/world';
 import { isI18nKey, t } from '../../content/i18n';
 import type { Props } from '../map/logic';
 import { DEFAULT_BUILDING, ROOFS, WALLS, building, type BuildingSpec } from './buildings';
-import { farmhouse, strawberryPlot } from './models';
+import { farmhouse, stairs, strawberryPlot } from './models';
+import { RAMP_DIRS } from '../map/logic';
 import { FENCE_STYLES, bush, fence, pine, pot, rock, streetLamp, tree } from './nature';
 import { furnish, partition, room, wallFrame, wallWindow } from './furniture';
 import { bench, foodCart, haystack, powerPole, signBoard } from './street';
@@ -50,6 +51,7 @@ export const PROP_FACTORIES: Record<PropModel, (props: Props, seed: number) => O
   bush: (p, seed) => bush(num(p.scale, 1), str(p.flowers, ''), seed),
   rock: (p, seed) => rock(num(p.scale, 1), seed),
   fence: (p) => fence(num(p.length, 1), oneOf(FENCE_STYLES, p.style, 'wood')),
+  stairs: (p) => stairs(num(p.w, 2), num(p.d, 2), oneOf(RAMP_DIRS, p.dir, 'n'), num(p.rise, 1)),
   strawberry_plot: (p) => strawberryPlot(num(p.cols, 4), num(p.rows, 3)),
   haystack: () => haystack(),
   pot: (p, seed) => pot(str(p.flower, '#e04a5a'), seed),

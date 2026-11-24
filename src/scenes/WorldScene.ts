@@ -6,6 +6,7 @@ import {
   SRGBColorSpace,
   Scene,
   TextureLoader,
+  Vector3,
   type Group,
   type Texture,
   type DirectionalLight,
@@ -15,14 +16,17 @@ import {
 import { PLAYER } from '../config/balance';
 import { PALETTE } from '../config/palette';
 import { DEFAULT_AREA, INTERIOR, WATER, WORLD_CAMERA, WORLD_FOG } from '../config/world';
+import { OcclusionFader } from '../world/occlusion';
 import { logger } from '../core/logger';
 import type { Engine, GameScene } from '../engine/engine';
 import { APPEARANCE, PlayerView, stepMotion, type Appearance, type Direction, type PlayerMotion } from '../entities';
 import { uiStore } from '../ui/uiState';
 import { buildArea, disposeTree, preloadArea } from '../world/build';
 import { addEnvironment, aimSun } from '../world/environment';
-import { elevation, parseArea, type AreaData } from '../world/map/logic';
+import { bodyBlocked, parseArea, standHeight, type AreaData } from '../world/map/logic';
 import { SCENE } from './keys';
+
+const OCCLUSION_POINTS = [0.8, 1.5] as const;
 
 const mapUrl = (id: string) => new URL(`${import.meta.env.BASE_URL}assets/maps/${id}.tmj`, location.href);
 
@@ -45,6 +49,7 @@ export class WorldScene implements GameScene {
   private readonly sun: DirectionalLight;
   private water: Texture | null = null;
   private readonly playerView = new PlayerView();
+  readonly occlusion = new OcclusionFader();
   private look = APPEARANCE.A;
   private lookReady: Promise<void> | null = null;
   player: PlayerMotion | null = null;
@@ -75,7 +80,9 @@ export class WorldScene implements GameScene {
     this.water?.offset.set(time * WATER.flow, time * WATER.flow * 0.6);
     const { area, player, engine } = this;
     if (!area || !player || !engine) return;
-    this.player = stepMotion(player, engine.input.move(), engine.input.isDown('run'), dt, area, PLAYER);
+    this.player = stepMotion(player, engine.input.move(), engine.input.isDown('run'), dt, area, PLAYER, (x, y, fx, fy) =>
+      bodyBlocked(area, x, y, standHeight(area, fx, fy), PLAYER),
+    );
     this.showPlayer(dt);
   }
 
@@ -91,10 +98,13 @@ export class WorldScene implements GameScene {
     const { area, issues } = parseArea(id, await response.json());
     if (!area) throw new Error(`peta ${id} tidak valid: ${issues.join('; ')}`);
     const [atlas] = await Promise.all([loadAtlas(new URL(area.tileset.image, url)), preloadArea(area)]);
+    this.occlusion.clear();
     if (this.root) disposeTree(this.root);
     this.atlas?.dispose();
     this.atlas = atlas;
     this.root = buildArea(area, atlas);
+    this.root.updateMatrixWorld(true);
+    this.occlusion.setCandidates(this.root.children.filter((n) => n.name.startsWith('prop:')));
     const water = this.root.getObjectByName('water');
     this.water = water instanceof Mesh && water.material instanceof MeshLambertMaterial ? water.material.map : null;
     this.world.scene.add(this.root);
@@ -142,8 +152,14 @@ export class WorldScene implements GameScene {
 
   private showPlayer(dt: number | null): void {
     if (!this.area || !this.player) return;
-    this.playerView.apply(this.player, elevation(this.area, this.player.x, this.player.y), dt);
+    this.playerView.apply(this.player, standHeight(this.area, this.player.x, this.player.y), dt);
     this.placeCamera(this.player);
+    const h = standHeight(this.area, this.player.x, this.player.y);
+    this.occlusion.update(
+      this.world.camera,
+      OCCLUSION_POINTS.map((dy) => new Vector3(this.player?.x ?? 0, h + dy, this.player?.y ?? 0)),
+      dt,
+    );
   }
 
   private placeCamera(focus: { x: number; y: number }): void {
@@ -154,7 +170,7 @@ export class WorldScene implements GameScene {
     const distance =
       typeof settings.cameraDistance === 'number' ? settings.cameraDistance : indoor ? INTERIOR.cameraDistance : WORLD_CAMERA.distance;
     const pitch = (WORLD_CAMERA.pitchDeg * Math.PI) / 180;
-    const y = elevation(this.area, target.x, target.y);
+    const y = standHeight(this.area, target.x, target.y);
     const { camera } = this.world;
     camera.position.set(target.x, y + Math.sin(pitch) * distance, target.y + Math.cos(pitch) * distance);
     camera.lookAt(target.x, y, target.y);

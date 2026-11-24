@@ -11,14 +11,15 @@ m.sprinkle('grass_flowers', 0.07)
   .ellipse('water', 31, 22, 4.5, 3.2, 'sand')
   .raise(1, 2, 19, 10, 9)
   .raise(2, 4, 22, 5, 4);
+m.prop('stairs', 13, 21, { w: 2, d: 2, dir: 'w', rise: 1 }).prop('stairs', 10, 24, { w: 2, d: 2, dir: 'w', rise: 1 });
 m.object('spawn', 20.5, 17.5, { id: 'start' })
   .object('spawn', 9.5, 12, { id: 'depan_rumah' })
   .object('spawn', 16.5, 20.5, { id: 'bukit' })
   .prop('farmhouse', 9.5, 7, { rotation: 0 })
   .block(6.5, 4.6, 6, 4.8)
   .object('door', 9, 9.5, { targetArea: 'sandbox', targetSpawn: 'depan_rumah' }, 1, 0.5)
-  .prop('fence', 27.5, 4.5, { length: 9 })
-  .prop('fence', 27.5, 11.5, { length: 9 })
+  .fence(23, 4.5, 32, 4.5)
+  .fence(23, 11.5, 32, 11.5)
   .object('interact', 22, 8, { action: 'shipping_bin' }, 1, 1)
   .object('zone', 26.5, 18.8, { name: 'fishing:pond' }, 9, 6.4);
 for (const [x, y, s] of [

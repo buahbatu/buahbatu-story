@@ -123,6 +123,7 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | `bush` | `scale`, `flowers` (warna) |
 | `fence` | `length`, `style` (`wood`/`bamboo`/`wall` tembok kompleks) |
 | `strawberry_plot` | `cols`, `rows` |
+| `stairs` | `w`, `d` (tapak di tanah bawah), `dir` (`n`/`s`/`e`/`w` arah naik), `rise` (jumlah tingkat); tinggi pijakan naik bertahap di atas tapaknya |
 | `pot` | `flower` (warna) |
 | `food_cart` | `color`, `label` (kunci i18n) |
 | `sign` | `text` (kunci i18n), `color` |
@@ -135,6 +136,8 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 
 - **Tampilan ala PS1 (P1-04b)**: bayangan matahari (`SHADOW`, shadow map dasar yang tajam, mengikuti kamera), air = **cekungan** sedalam `WATER_DEPTH` dengan tepi menurun + **permukaan transparan beriak** (`WATER`, mesh `water`, riak bergerak pelan), tanah alami = rotasi tekstur acak per petak untuk tanah organik + variasi terang tipis + **rumput 3D** (instanced, deterministik per petak, tidak di petak terhalang). Semua angka di `config/world.ts`.
 - **Aset 3D CC0 (P1-04c, ADR-025)**: `tree`, `pine`, `bush`, `rock`, `fence` (kayu/bambu), `pot`, `street_lamp` dan **perabot interior** (P1-04d, tabel `FURNITURE`: tiap perabot = bagian model Kenney Furniture Kit dengan ukuran tapak tetap, warna kain/kayu dari properti `color`) memakai model Kenney (`public/assets/models/`), dipramuat per peta (`PROP_ASSETS`), material Lambert berwarna alami + tekstur pixel proyek (`ASSET_LOOK`), ukuran diseragamkan. Tetap custom: tembok kompleks, tiang PLN, gerobak, papan nama, petak stroberi, jerami (sampai P3), dinding ruangan/sekat/jendela/bingkai foto, bangunan (P1-04e).
+- **Tabrakan (P1-05)**: badan pemain kotak ±`PLAYER.radius` (`balance.ts`). Terhalang oleh: kotak layer `Collision` (generator: `building`, `item`, `solid`, `tree`, `fence` otomatis menambah kotak), petak air, tepi peta, dan **beda tinggi pijakan > `PLAYER.maxStep`** (tebing tidak bisa dipanjat/diturun; pakai prop `stairs`). Gerak dipecah langkah ≤0,1 supaya tidak menembus pagar tipis, dan meluncur sepanjang dinding saat diagonal. Spawn wajib di tempat bebas (dicek `tests/maps.test.ts`).
+- **Pemain tetap terlihat (P1-05)**: prop yang memotong garis kamera → dada/kepala pemain dipudarkan transparan (`OCCLUSION`, `src/world/occlusion.ts`), kembali pelan saat tidak menutupi; `room`, `rug`, `stairs` tidak ikut.
 - **Papan nama**: teks dari i18n (`sign.*`), **maksimal ±10 huruf** supaya terbaca di resolusi rendah (font Press Start 2P 8px, papan dimiringkan menghadap kamera). Nama panjang → papan berdiri (`sign`) yang lebih lebar.
 - Peta prototipe yang ada: `sandbox` (40×30), `lembang` (48×36), `buahbatu` (44×34), interior `kos_a` (7×6) & `rumah_michelle` (15×9: kamar Michelle, ruang tamu, dapur).
 

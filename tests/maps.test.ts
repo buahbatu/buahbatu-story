@@ -3,7 +3,8 @@ import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { AREA_IDS, PROP_MODELS } from '../src/config/world';
 import { isI18nKey } from '../src/content/i18n';
-import { parseArea, type AreaData } from '../src/world/map/logic';
+import { PLAYER } from '../src/config/balance';
+import { bodyBlocked, parseArea, standHeight, type AreaData } from '../src/world/map/logic';
 import { DEFAULT_BUILDING } from '../src/world/props/buildings';
 import { TEXT_PROPS } from '../src/world/props/registry';
 
@@ -43,6 +44,11 @@ describe('peta di public/assets/maps (docs/10 §6)', () => {
       expect(props.map((o) => o.props.model).filter((m) => !(PROP_MODELS as readonly unknown[]).includes(m))).toEqual([]);
       const texts = props.flatMap((o) => TEXT_PROPS.map((k) => o.props[k]).filter((v) => v !== undefined));
       expect(texts.filter((v) => !isI18nKey(v))).toEqual([]);
+    });
+    it('setiap spawn berada di tempat bebas (pemain tidak muncul terjebak)', () => {
+      if (!area) return;
+      const stuck = Object.entries(area.spawns).filter(([, p]) => bodyBlocked(area, p.x, p.y, standHeight(area, p.x, p.y), PLAYER));
+      expect(stuck.map(([k]) => k)).toEqual([]);
     });
     it('properti bangunan dikenal kit (tanpa salah ketik)', () => {
       const known = new Set(['model', 'rotation', ...Object.keys(DEFAULT_BUILDING)]);
