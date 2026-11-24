@@ -15,9 +15,10 @@ import {
 } from 'three';
 import { PLAYER } from '../config/balance';
 import { PALETTE } from '../config/palette';
-import { DEFAULT_AREA, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
+import { DEFAULT_AREA, INTERACTION, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { OcclusionFader } from '../world/occlusion';
 import { WaterFx } from '../world/waterFx';
+import { keyLabel, nearestInteractable, type Interactable } from '../world/interact/logic';
 import { NEUTRAL, cameraOffset, rotateVec, stepCamera, type CameraInput, type CameraRig } from '../world/camera/logic';
 import { DRY, drip, seeded, splashBurst, stepWet, type WetState } from '../entities/player/wet';
 import { logger } from '../core/logger';
@@ -30,6 +31,12 @@ import { bodyBlocked, parseArea, standHeight, walkLevel, waterAt, type AreaData 
 import { SCENE } from './keys';
 
 const OCCLUSION_POINTS = [0.8, 1.5] as const;
+export interface InteractionEvent {
+  id: number;
+  kind: Interactable['kind'];
+  action: string;
+  area: string;
+}
 const STILL: CameraInput = { rotate: 0, zoom: 0, pan: { x: 0, y: 0 }, twist: 0 };
 
 const mapUrl = (id: string) => new URL(`${import.meta.env.BASE_URL}assets/maps/${id}.tmj`, location.href);
@@ -60,6 +67,8 @@ export class WorldScene implements GameScene {
   private rippleIn = 0;
   private splashes = 0;
   private rig: CameraRig = NEUTRAL;
+  private nearby: Interactable | null = null;
+  private done: InteractionEvent[] = [];
   private look = APPEARANCE.A;
   private lookReady: Promise<void> | null = null;
   player: PlayerMotion | null = null;
@@ -97,6 +106,8 @@ export class WorldScene implements GameScene {
       bodyBlocked(area, x, y, walkLevel(area, fx, fy), body),
     );
     this.player = stepJump(moved, engine.input.justPressed('jump'), dt, PLAYER);
+    if (engine.input.justPressed('interact') && this.nearby)
+      this.done = [...this.done.slice(-19), { id: this.nearby.id, kind: this.nearby.kind, action: this.nearby.action, area: area.id }];
     this.splashAndDrip(area, this.player, dt);
     const g = engine.input.gestures();
     const key = Number(engine.input.isDown('zoomOut')) - Number(engine.input.isDown('zoomIn'));
@@ -219,6 +230,33 @@ export class WorldScene implements GameScene {
       OCCLUSION_POINTS.map((dy) => new Vector3(this.player?.x ?? 0, h + dy, this.player?.y ?? 0)),
       dt,
     );
+    this.updatePrompt(this.area, this.player);
+  }
+
+  interactions(): readonly InteractionEvent[] {
+    return this.done;
+  }
+
+  private updatePrompt(area: AreaData, player: PlayerMotion): void {
+    this.nearby = nearestInteractable(area, player, INTERACTION);
+    const current = uiStore.get().prompt;
+    if (!this.nearby) {
+      if (current) uiStore.set({ prompt: null });
+      return;
+    }
+    const at = new Vector3(
+      this.nearby.x,
+      standHeight(area, this.nearby.x, this.nearby.y) + INTERACTION.promptHeight,
+      this.nearby.y,
+    ).project(this.world.camera);
+    const next = {
+      key: keyLabel(this.engine?.input.keysFor('interact')[0]),
+      text: this.nearby.prompt,
+      x: Math.round(((at.x + 1) / 2) * 1000) / 1000,
+      y: Math.round(((1 - at.y) / 2) * 1000) / 1000,
+    };
+    if (current?.key !== next.key || current.text !== next.text || current.x !== next.x || current.y !== next.y)
+      uiStore.set({ prompt: next });
   }
 
   private placeCamera(player: PlayerMotion, dt: number | null, input: CameraInput): void {

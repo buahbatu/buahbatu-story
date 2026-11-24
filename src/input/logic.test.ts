@@ -8,10 +8,11 @@ describe('DEFAULT_BINDINGS (docs/40 §6)', () => {
     expect(bindingsSchema.safeParse(DEFAULT_BINDINGS).success).toBe(true);
     for (const a of ACTIONS) expect(DEFAULT_BINDINGS[a].length, a).toBeGreaterThan(0);
   });
-  it('mengikuti tabel kontrol: WASD/panah, E, Spasi, Tab, Shift, F, V, B, 1–0', () => {
+  it('mengikuti tabel kontrol: WASD/panah, E, C alat, Spasi lompat, Tab, 1–0', () => {
     expect(DEFAULT_BINDINGS.up).toEqual(['KeyW', 'ArrowUp']);
     expect(DEFAULT_BINDINGS.interact[0]).toBe('KeyE');
-    expect(DEFAULT_BINDINGS.useTool).toEqual(['Space']);
+    expect(DEFAULT_BINDINGS.useTool).toEqual(['KeyC']);
+    expect(DEFAULT_BINDINGS.jump).toEqual(['Space']);
     expect(DEFAULT_BINDINGS.phone).toEqual(['Tab']);
     expect(DEFAULT_BINDINGS.hotbar10).toEqual(['Digit0']);
   });
@@ -29,10 +30,10 @@ describe('InputState', () => {
 
   it('justPressed hanya di frame pertama; auto-repeat tidak memicu ulang', () => {
     const input = make();
-    input.keyDown('Space');
+    input.keyDown('KeyC');
     expect(input.justPressed('useTool')).toBe(true);
     input.endFrame();
-    input.keyDown('Space');
+    input.keyDown('KeyC');
     expect(input.justPressed('useTool')).toBe(false);
     expect(input.isDown('useTool')).toBe(true);
   });
@@ -83,13 +84,13 @@ describe('InputState', () => {
 
 describe('rebind', () => {
   it('memindahkan tombol dari Action lain supaya tidak bentrok', () => {
-    const next = rebind(DEFAULT_BINDINGS, 'interact', 'Space');
-    expect(next.interact).toEqual(['Space', 'Enter']);
+    const next = rebind(DEFAULT_BINDINGS, 'interact', 'KeyC');
+    expect(next.interact).toEqual(['KeyC', 'Enter']);
     expect(next.useTool).toEqual([]);
     expect(bindingsSchema.safeParse(next).success).toBe(true);
   });
   it('slot kedua menambah/mengganti tombol cadangan, maksimal 2', () => {
-    expect(rebind(DEFAULT_BINDINGS, 'useTool', 'KeyJ', 1).useTool).toEqual(['Space', 'KeyJ']);
+    expect(rebind(DEFAULT_BINDINGS, 'useTool', 'KeyJ', 1).useTool).toEqual(['KeyC', 'KeyJ']);
     expect(rebind(DEFAULT_BINDINGS, 'up', 'KeyI', 1).up).toEqual(['KeyW', 'KeyI']);
     expect(rebind(DEFAULT_BINDINGS, 'up', 'KeyI', 5).up).toEqual(['KeyW', 'ArrowUp']);
   });
@@ -112,12 +113,14 @@ describe('gestur kamera (scroll, seret, dua jari)', () => {
   it('Q/R dan +/- punya tombol bawaan tanpa bentrok dengan Interaksi (E)', () => {
     const input = new InputState(DEFAULT_BINDINGS);
     expect([input.actionOf('KeyQ'), input.actionOf('KeyR'), input.actionOf('KeyE')]).toEqual(['cameraLeft', 'cameraRight', 'interact']);
-    expect([input.actionOf('Equal'), input.actionOf('Minus'), input.actionOf('KeyB'), input.actionOf('KeyG')]).toEqual([
-      'zoomIn',
-      'zoomOut',
-      'jump',
-      'decor',
-    ]);
+    expect([
+      input.actionOf('Equal'),
+      input.actionOf('Minus'),
+      input.actionOf('Space'),
+      input.actionOf('KeyG'),
+      input.actionOf('KeyC'),
+      input.actionOf('KeyV'),
+    ]).toEqual(['zoomIn', 'zoomOut', 'jump', 'decor', 'useTool', 'talk']);
     expect(bindingsSchema.safeParse(DEFAULT_BINDINGS).success).toBe(true);
   });
 });

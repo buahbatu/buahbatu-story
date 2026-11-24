@@ -1,10 +1,10 @@
 import { expect, test } from './fixtures';
 
-test('tombol B membuat pemain melompat lalu mendarat, bisa sambil berjalan', async ({ game: { page } }) => {
+test('tombol Spasi membuat pemain melompat lalu mendarat, bisa sambil berjalan', async ({ game: { page } }) => {
   await page.evaluate(() => window.__BB__?.enterArea('sandbox'));
   const start = await page.evaluate(() => window.__BB__?.player());
   await page.keyboard.down('KeyD');
-  await page.keyboard.press('KeyB');
+  await page.keyboard.press('Space');
   await expect.poll(async () => (await page.evaluate(() => window.__BB__?.player()))?.anim, { timeout: 5_000 }).toBe('jump');
   const air = await page.evaluate(() => window.__BB__?.player());
   expect(air?.air).toBeGreaterThanOrEqual(0);
@@ -19,7 +19,7 @@ test('lompat tidak membuat pemain menembus rumah', async ({ game: { page } }) =>
   await page.evaluate(() => window.__BB__?.enterArea('sandbox', 'depan_rumah'));
   await page.keyboard.down('KeyW');
   for (let i = 0; i < 4; i++) {
-    await page.keyboard.press('KeyB');
+    await page.keyboard.press('Space');
     await page.waitForTimeout(600);
   }
   await page.keyboard.up('KeyW');

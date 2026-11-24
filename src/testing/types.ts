@@ -25,6 +25,8 @@ export interface TestApi {
   actions(): Action[];
   clock(): number;
   occluding(): string[];
+  prompt(): { key: string; text: string; x: number; y: number } | null;
+  interactions(): { id: number; kind: string; action: string; area: string }[];
   setCamera(change: { yaw?: number; zoom?: number }): void;
   camera(): { yaw: number; zoom: number; focus: { x: number; y: number }; pan: { x: number; y: number } };
   water(): { inWater: boolean; wetness: number; particles: number; ripples: number; splashes: number };

@@ -56,6 +56,16 @@ export const WATER_FX = {
   wetAmount: 0.45,
   sink: 12,
 } as const;
+export const INTERACTION = { reach: 0.9, facingBias: 0.35, promptHeight: 1.6 } as const;
+export const INTERACT_PROMPTS = {
+  bed: 'prompt.sleep',
+  shipping_bin: 'prompt.ship',
+  board: 'prompt.read',
+  shop: 'prompt.shop',
+  enter: 'prompt.enter',
+  exit: 'prompt.exit',
+  use: 'prompt.use',
+} as const;
 export const OCCLUSION = { opacity: 0.3, speed: 5, margin: 0.4, skip: ['room', 'rug', 'stairs'] } as const;
 export const CHARACTER = { height: 1.6, turnSpeed: 16 } as const;
 export const WORLD_FOG = { near: 30, far: 70 } as const;

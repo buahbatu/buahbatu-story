@@ -24,5 +24,12 @@
   "sign.laundry": "Laundry",
   "sign.konter": "Pulsa",
   "sign.tamanKompleks": "Taman",
-  "sign.cilok": "Cilok"
+  "sign.cilok": "Cilok",
+  "prompt.sleep": "Tidur",
+  "prompt.ship": "Kirim",
+  "prompt.read": "Baca",
+  "prompt.shop": "Belanja",
+  "prompt.enter": "Masuk",
+  "prompt.exit": "Keluar",
+  "prompt.use": "Pakai"
 }

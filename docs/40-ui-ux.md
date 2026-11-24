@@ -66,13 +66,13 @@ Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kot
 |---|---|---|---|---|
 | Gerak | WASD / panah | — | Joystick virtual kiri | Stik kiri |
 | Interaksi | E | Klik kanan | Tombol A | A |
-| Pakai alat | Spasi | Klik kiri | Tombol B | X |
+| Pakai alat | C (keputusan user) | Klik kiri | Tombol B | X |
 | Hotbar | 1–0, `[` `]` | — | Ketuk slot | LB/RB |
 | HP | Tab | Ikon | Ikon HP | Start |
 | Lari | Shift | — | Joystick penuh | Stik ditekan |
 | Emote | F | — | Tombol emote | Y |
 | Push-to-talk | V (tahan) | — | Tombol mic | RT |
-| Lompat | B (keputusan user: dekat Spasi) | — | Tombol lompat | B |
+| Lompat | Spasi (keputusan user) | — | Tombol lompat | B |
 | Dekor | G | — | Ikon | — |
 | Zoom kamera | `+` / `-` | Scroll | Cubit dua jari | — |
 | Putar kamera | Q / R | — | Putar dua jari | Stik kanan |

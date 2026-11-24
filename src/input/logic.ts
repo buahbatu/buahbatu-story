@@ -51,6 +51,10 @@ export class InputState {
     this.releaseAll();
   }
 
+  keysFor(action: Action): readonly string[] {
+    return this.bindings[action];
+  }
+
   actionOf(key: string): Action | undefined {
     return this.byKey.get(key);
   }

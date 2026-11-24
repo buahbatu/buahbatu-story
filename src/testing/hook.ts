@@ -75,6 +75,8 @@ function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
     occluding: () => world.occlusion.occluding(),
     water: () => world.waterState(),
     camera: () => world.cameraState(),
+    prompt: () => uiStore.get().prompt,
+    interactions: () => [...world.interactions()],
     setCamera(change) {
       world.setCamera(change);
     },
