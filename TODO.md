@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 9 | 19 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 10 | 19 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +37,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **24** | **192** | |
+| **Total** | | | **25** | **192** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -67,7 +67,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
 **Sedang dikerjakan:** —
-**Task berikutnya:** P1-04d
+**Task berikutnya:** P1-04e
 
 ---
 
@@ -102,7 +102,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-04** Entity Player: karakter **3D chibi** (ADR-024/025: Kenney Mini CC0 diwarnai ulang, animasi idle/walk/sprint asli), gerak 8 arah, jalan/lari · Ref: 15 · ✅ 2026-11-24 · karakter 3D Kenney Mini CC0 diwarnai ulang (A & Michelle), animasi asli, kamera 40°
 - [x] **P1-04b** Tampilan dunia ala PS1 (ADR-024): air bercekungan + permukaan transparan beriak, bayangan matahari (shadow map), tanah alami (variasi warna & rotasi tekstur per petak, rumput 3D), poles papan nama · Ref: 42, 10 · ✅ 2026-11-24 · bayangan matahari, air cekung transparan beriak, rumput 3D, tekstur diputar acak
 - [x] **P1-04c** Pemuat aset 3D CC0 (ADR-025) + alam & jalan: pohon, pinus, semak, batu, pagar, pot, lampu jalan, tiang listrik (Kenney Nature/City Roads, diwarnai alami) · Ref: 42, 10 · ✅ 2026-11-24 · pohon/pinus/semak/batu/pagar/pot/lampu jalan Kenney CC0 bertekstur pixel, tiang PLN tetap custom
-- [~] **P1-04d** Furnitur interior ke Kenney Furniture Kit (CC0) · Ref: 42, 10 · 🕐 2026-11-24
+- [x] **P1-04d** Furnitur interior ke Kenney Furniture Kit (CC0) · Ref: 42, 10 · ✅ 2026-11-24 · 13 perabot dari tabel data FURNITURE, tapak tetap, kayu bertekstur papan
 - [ ] **P1-04e** Bangunan ke aset 3D CC0 (rumah Suburban genteng, ruko Commercial, rumah kebun Fantasy Town), landmark/papan nama/gerobak tetap custom · Ref: 42, 10
 - [ ] **P1-05** Collision berbasis grid & objek + pemain tetap terlihat saat tertutup pohon/bangunan (siluet/memudar) · Ref: 02, 10
 - [ ] **P1-05b** Nyebur ke kolam (permintaan user): air dangkal bisa dimasuki (gerak melambat, karakter terendam sebagian), efek cipratan saat masuk, karakter tampak basah, tetesan air jatuh dari pakaian setelah naik ke darat (beberapa detik); air dalam tetap tidak bisa dimasuki · Ref: 10, 40
