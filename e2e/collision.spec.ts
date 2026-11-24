@@ -21,20 +21,18 @@ test('pemain tidak menembus rumah, berhenti tepat di depan dinding', async ({ ga
   expect(p?.y).toBeGreaterThanOrEqual(9.4 + PLAYER.radius - 0.01);
 });
 
-test('pemain tidak bisa berjalan ke dalam kolam', async ({ game: { page } }) => {
+test('pemain tidak bisa berjalan ke bagian kolam yang dalam', async ({ game: { page } }) => {
   await page.evaluate(async () => {
     await window.__BB__?.enterArea('sandbox');
     window.__BB__?.placePlayer(31, 16.5, 's');
   });
+  const edge = 20 - PLAYER.radius;
   await page.keyboard.down('KeyS');
-  await expect.poll(async () => (await player(page))?.y ?? 0, { timeout: 10_000 }).toBeGreaterThan(17.5);
-  await page.waitForTimeout(1500);
-  const p = await player(page);
+  await expect.poll(async () => (await player(page))?.y ?? 0, { timeout: 20_000 }).toBeGreaterThan(edge - 0.05);
   await page.waitForTimeout(800);
   const q = await player(page);
   await page.keyboard.up('KeyS');
-  expect(q?.y).toBeCloseTo(p?.y ?? 0, 5);
-  expect(q?.y).toBeLessThan(22);
+  expect(q?.y).toBeLessThanOrEqual(edge + 1e-6);
 });
 
 test('tebing menghalangi, tangga batu membawa pemain naik ke dataran tinggi', async ({ game: { page } }) => {
