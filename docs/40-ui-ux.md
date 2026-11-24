@@ -72,7 +72,8 @@ Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kot
 | Lari | Shift | — | Joystick penuh | Stik ditekan |
 | Emote | F | — | Tombol emote | Y |
 | Push-to-talk | V (tahan) | — | Tombol mic | RT |
-| Dekor | B | — | Ikon | — |
+| Lompat | B (keputusan user: dekat Spasi) | — | Tombol lompat | B |
+| Dekor | G | — | Ikon | — |
 
 - Semua tombol bisa di-remap (Pengaturan → Kontrol).
 - Input diabstraksi menjadi **Action** (`src/input/`), bukan key langsung. **Status (P1-03):** keyboard. Daftar Action di `src/input/actions.ts`, tombol bawaan di `src/config/controls.ts` (`KeyboardEvent.code`, jadi aman untuk layout keyboard apa pun; maks. 2 tombol per Action; `Enter` cadangan Interaksi; hotbar maju/mundur `]`/`[` sampai scroll mouse ditambahkan). `InputState` (`src/input/logic.ts`): ditahan / baru ditekan / baru dilepas per frame, vektor gerak dinormalisasi, `rebind` tanpa bentrok + skema zod (dipakai menu remap P16-03). Tombol milik game tidak menjalankan aksi browser (Tab tidak memindah fokus, Spasi/panah tidak menggulir); kombinasi Ctrl/Alt/Meta & mengetik di kolom teks diabaikan; semua tombol dilepas saat jendela kehilangan fokus.

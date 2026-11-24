@@ -2,7 +2,7 @@ import type { MoveVector } from '../../input/logic';
 
 export const DIRECTIONS = ['s', 'sw', 'w', 'nw', 'n', 'ne', 'e', 'se'] as const;
 export type Direction = (typeof DIRECTIONS)[number];
-export type PlayerAnim = 'idle' | 'walk' | 'run';
+export type PlayerAnim = 'idle' | 'walk' | 'run' | 'jump';
 
 export interface PlayerMotion {
   x: number;
@@ -11,6 +11,7 @@ export interface PlayerMotion {
   anim: PlayerAnim;
   animTime: number;
   turn?: { facing: Direction; time: number };
+  air?: number;
 }
 
 export interface MotionRules {
@@ -66,10 +67,33 @@ export function stepMotion(
     anim,
     animTime: anim === m.anim ? m.animTime + dt : 0,
     ...(moving && facing !== wanted ? { turn: { facing: wanted, time: turnTime } } : {}),
+    ...(m.air === undefined ? {} : { air: m.air }),
   };
 }
 
 export function yawOf(facing: Direction): number {
   const i = DIRECTIONS.indexOf(facing);
   return (-i * Math.PI) / 4;
+}
+
+export interface JumpRules {
+  jumpTime: number;
+  jumpHeight: number;
+}
+
+export function stepJump(m: PlayerMotion, pressed: boolean, dt: number, rules: JumpRules): PlayerMotion {
+  if (m.air !== undefined) {
+    const air = m.air + dt;
+    if (air < rules.jumpTime) return { ...m, air, anim: 'jump', animTime: air };
+    const landed = { ...m, anim: m.anim === 'jump' ? ('idle' as const) : m.anim, animTime: 0 };
+    delete landed.air;
+    return landed;
+  }
+  return pressed ? { ...m, air: 0, anim: 'jump', animTime: 0 } : m;
+}
+
+export function jumpHeight(m: Pick<PlayerMotion, 'air'>, rules: JumpRules): number {
+  if (m.air === undefined) return 0;
+  const t = Math.min(1, Math.max(0, m.air / rules.jumpTime));
+  return 4 * rules.jumpHeight * t * (1 - t);
 }

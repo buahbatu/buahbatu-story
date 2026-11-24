@@ -22,4 +22,6 @@ export const PLAYER = {
   maxStep: 0.35,
   shallowTiles: 1,
   wadeFactor: 0.5,
+  jumpTime: 0.55,
+  jumpHeight: 0.6,
 } as const;

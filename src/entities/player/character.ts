@@ -22,7 +22,7 @@ import type { PlayerAnim } from './logic';
 const BASE = `${import.meta.env.BASE_URL}assets/models/characters/`;
 const CELL_W = 32;
 const CELL_H = 128;
-const CLIP: Record<PlayerAnim, string> = { idle: 'idle', walk: 'walk', run: 'sprint' };
+const CLIP: Record<PlayerAnim, string> = { idle: 'idle', walk: 'walk', run: 'sprint', jump: 'jump' };
 
 const models = new Map<string, Promise<GLTF>>();
 let palette: Promise<HTMLImageElement> | null = null;

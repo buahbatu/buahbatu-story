@@ -23,9 +23,9 @@ export class PlayerView {
     next.setWet(this.wet);
   }
 
-  apply(motion: PlayerMotion, ground: number, dt: number | null): void {
+  apply(motion: PlayerMotion, ground: number, dt: number | null, lift = 0): void {
     this.height = dt === null || this.height === null ? ground : this.height + (ground - this.height) * Math.min(1, dt * WATER_FX.sink);
-    this.object.position.set(motion.x, this.height, motion.y);
+    this.object.position.set(motion.x, this.height + lift, motion.y);
     const target = yawOf(motion.facing);
     const diff = Math.atan2(Math.sin(target - this.yaw), Math.cos(target - this.yaw));
     const step = dt === null ? Math.abs(diff) : CHARACTER.turnSpeed * dt;

@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 13 | 20 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 14 | 20 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +37,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **28** | **193** | |
+| **Total** | | | **29** | **193** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -67,7 +67,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
 **Sedang dikerjakan:** —
-**Task berikutnya:** P1-05c
+**Task berikutnya:** P1-06
 
 ---
 
@@ -106,7 +106,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-04e** Bangunan: dibandingkan dengan Kenney City Kit, **user memilih tetap rakitan kode** (lebih Bandung & PS1) lalu dipoles detail khas rumah Indonesia (roster, lisplang, talang, bubungan, kanopi pintu, meteran PLN, teralis, AC) · Ref: 42, 10 · ✅ 2026-11-24 · Kenney City Kit dicoba, user pilih rakitan kode; +roster, lisplang, talang, bubungan, kanopi pintu, meteran, teralis, AC
 - [x] **P1-05** Collision berbasis grid & objek + pemain tetap terlihat saat tertutup pohon/bangunan (siluet/memudar) · Ref: 02, 10 · ✅ 2026-11-24 · tabrakan kotak/air/tebing anti-tembus, tangga batu, prop penutup memudar transparan
 - [x] **P1-05b** Nyebur ke kolam (permintaan user): air dangkal bisa dimasuki (gerak melambat, karakter terendam sebagian), efek cipratan saat masuk, karakter tampak basah, tetesan air jatuh dari pakaian setelah naik ke darat (beberapa detik); air dalam tetap tidak bisa dimasuki · Ref: 10, 40 · ✅ 2026-11-24 · tepi kolam dangkal (×0,5), cipratan + riak, basah & mengering, tetesan; tengah kolam tetap dalam
-- [ ] **P1-05c** Lompat (permintaan user 2026-11-24): tombol lompat, animasi & lengkung lompatan, bisa melompati rintangan rendah/naik tepian rendah sesuai aturan tabrakan; tombol diputuskan bersama user (Spasi kini dipakai alat) · Ref: 40, 15
+- [x] **P1-05c** Lompat (permintaan user 2026-11-24): tombol lompat, animasi & lengkung lompatan, bisa melompati rintangan rendah/naik tepian rendah sesuai aturan tabrakan; tombol diputuskan bersama user (Spasi kini dipakai alat) · Ref: 40, 15 · ✅ 2026-11-24 · tombol B (Dekor → G), lengkung 0,55 dtk/0,6, animasi jump Kenney, naik tepian rendah saat melayang
 - [ ] **P1-06** Kamera 2.5D miring ala Back to Nature: follow pemain, batas peta, **zoom in/out**, **putar & geser kamera** (pan/arahkan sudut pandang, permintaan user 2026-11-24; kamera kembali mengikuti pemain) (scroll/pinch/`+``-`, dibatasi agar tetap tajam; permintaan user, bentrok scroll-hotbar diputuskan bersama user) · Ref: 40
 - [ ] **P1-07** Sistem interaksi: deteksi objek terdekat + prompt "E ..." · Ref: 10, 40
 - [ ] **P1-08** Kotak dialog Preact (typewriter, pilihan, potret placeholder, log) · Ref: 40, 18

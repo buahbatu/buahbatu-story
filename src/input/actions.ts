@@ -21,6 +21,7 @@ export const ACTIONS = [
   'phone',
   'emote',
   'talk',
+  'jump',
   'decor',
   'hotbarNext',
   'hotbarPrev',

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PLAYER } from '../../config/balance';
-import { facingOf, stepMotion, yawOf, type PlayerMotion } from './logic';
+import { facingOf, jumpHeight, stepJump, stepMotion, yawOf, type PlayerMotion } from './logic';
 
 const start: PlayerMotion = { x: 5, y: 5, facing: 's', anim: 'idle', animTime: 0 };
 const bounds = { width: 10, height: 8 };
@@ -82,5 +82,33 @@ describe('yawOf', () => {
     const yaw = yawOf('sw');
     expect(Math.sin(yaw)).toBeCloseTo(-Math.SQRT1_2);
     expect(Math.cos(yaw)).toBeCloseTo(Math.SQRT1_2);
+  });
+});
+
+describe('lompat', () => {
+  const rules = { jumpTime: 0.5, jumpHeight: 0.6 };
+  const idle: PlayerMotion = { x: 1, y: 1, facing: 's', anim: 'idle', animTime: 0 };
+
+  it('mulai saat tombol ditekan, melengkung naik-turun, lalu mendarat', () => {
+    let m = stepJump(idle, true, 0.016, rules);
+    expect(m).toMatchObject({ air: 0, anim: 'jump' });
+    expect(jumpHeight(m, rules)).toBe(0);
+    m = stepJump(m, false, 0.25, rules);
+    expect(jumpHeight(m, rules)).toBeCloseTo(0.6);
+    m = stepJump(m, true, 0.2, rules);
+    expect(m.air).toBeCloseTo(0.45);
+    m = stepJump(m, false, 0.1, rules);
+    expect(m.air).toBeUndefined();
+    expect(m.anim).toBe('idle');
+    expect(jumpHeight(m, rules)).toBe(0);
+  });
+
+  it('tidak bisa lompat ganda & tetap bisa bergerak di udara', () => {
+    let m = stepJump(idle, true, 0, rules);
+    m = stepMotion(m, { x: 1, y: 0 }, false, 0.1, { width: 10, height: 10 }, PLAYER);
+    expect(m.air).toBe(0);
+    m = stepJump(m, true, 0.1, rules);
+    expect(m).toMatchObject({ anim: 'jump', air: 0.1 });
+    expect(m.x).toBeGreaterThan(1);
   });
 });

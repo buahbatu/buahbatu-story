@@ -21,7 +21,7 @@ import { WaterFx } from '../world/waterFx';
 import { DRY, drip, seeded, splashBurst, stepWet, type WetState } from '../entities/player/wet';
 import { logger } from '../core/logger';
 import type { Engine, GameScene } from '../engine/engine';
-import { APPEARANCE, PlayerView, stepMotion, type Appearance, type Direction, type PlayerMotion } from '../entities';
+import { APPEARANCE, PlayerView, jumpHeight, stepJump, stepMotion, type Appearance, type Direction, type PlayerMotion } from '../entities';
 import { uiStore } from '../ui/uiState';
 import { buildArea, disposeTree, preloadArea } from '../world/build';
 import { addEnvironment, aimSun } from '../world/environment';
@@ -89,9 +89,11 @@ export class WorldScene implements GameScene {
     if (!area || !player || !engine) return;
     const raw = engine.input.move();
     const wade = waterAt(area, player.x, player.y, PLAYER.shallowTiles) === 'none' ? 1 : PLAYER.wadeFactor;
-    this.player = stepMotion(player, { x: raw.x * wade, y: raw.y * wade }, engine.input.isDown('run'), dt, area, PLAYER, (x, y, fx, fy) =>
-      bodyBlocked(area, x, y, walkLevel(area, fx, fy), PLAYER),
+    const body = { ...PLAYER, maxStep: PLAYER.maxStep + jumpHeight(player, PLAYER) };
+    const moved = stepMotion(player, { x: raw.x * wade, y: raw.y * wade }, engine.input.isDown('run'), dt, area, PLAYER, (x, y, fx, fy) =>
+      bodyBlocked(area, x, y, walkLevel(area, fx, fy), body),
     );
+    this.player = stepJump(moved, engine.input.justPressed('jump'), dt, PLAYER);
     this.splashAndDrip(area, this.player, dt);
     this.showPlayer(dt);
   }
@@ -190,7 +192,7 @@ export class WorldScene implements GameScene {
 
   private showPlayer(dt: number | null): void {
     if (!this.area || !this.player) return;
-    this.playerView.apply(this.player, standHeight(this.area, this.player.x, this.player.y), dt);
+    this.playerView.apply(this.player, standHeight(this.area, this.player.x, this.player.y), dt, jumpHeight(this.player, PLAYER));
     this.placeCamera(this.player);
     const h = standHeight(this.area, this.player.x, this.player.y);
     this.occlusion.update(
