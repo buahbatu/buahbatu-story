@@ -23,6 +23,7 @@ export const ACTIONS = [
   'talk',
   'jump',
   'decor',
+  'log',
   'cameraLeft',
   'cameraRight',
   'zoomIn',

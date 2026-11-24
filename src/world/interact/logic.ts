@@ -79,3 +79,8 @@ export function keyLabel(code: string | undefined): string {
   const named: Record<string, string> = { Space: 'Spasi', Enter: 'Enter', Tab: 'Tab', ShiftLeft: 'Shift', ShiftRight: 'Shift' };
   return named[code] ?? code.replace(/^(Key|Digit|Numpad)/, '');
 }
+
+export function dialogFor(action: string): string | null {
+  const [kind, id] = action.split(':');
+  return kind === 'board' && id ? `board_${id}` : null;
+}

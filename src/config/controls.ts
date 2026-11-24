@@ -13,6 +13,7 @@ export const DEFAULT_BINDINGS: Bindings = {
   talk: ['KeyV'],
   jump: ['Space'],
   decor: ['KeyG'],
+  log: ['KeyL'],
   cameraLeft: ['KeyQ'],
   cameraRight: ['KeyR'],
   zoomIn: ['Equal', 'NumpadAdd'],

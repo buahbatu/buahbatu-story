@@ -60,6 +60,7 @@ Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kot
 - Klik/`E` mempercepat teks; klik lagi lanjut.
 - Pilihan maksimal 4, bisa dipilih dengan keyboard.
 - **Log dialog** (scroll ke belakang).
+- **Status (P1-08):** `src/ui/dialog/DialogBox.tsx` + logika murni `src/systems/dialog/logic.ts`. Potret placeholder (kotak warna + inisial, ±60 px UI; potret asli P7/P8), teks mengetik `DIALOG.cps` huruf/detik, E/Enter/klik = percepat lalu lanjut, pilihan dengan W/S/panah + E, angka 1–4, atau klik; tombol **L** membuka/menutup riwayat (60 baris terakhir). Selama dialog pemain diam & prompt disembunyikan. Bunyi blip menyusul bersama sistem audio.
 
 ## 6. Kontrol
 | Aksi | Keyboard | Mouse | Sentuh | Gamepad |
@@ -74,6 +75,7 @@ Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kot
 | Push-to-talk | V (tahan) | — | Tombol mic | RT |
 | Lompat | Spasi (keputusan user) | — | Tombol lompat | B |
 | Dekor | G | — | Ikon | — |
+| Riwayat obrolan | L | — | — | — |
 | Zoom kamera | `+` / `-` | Scroll | Cubit dua jari | — |
 | Putar kamera | Q / R | — | Putar dua jari | Stik kanan |
 | Geser pandangan | — | Tahan klik kanan + seret | Geser dua jari | — |

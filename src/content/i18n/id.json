@@ -31,5 +31,11 @@
   "prompt.shop": "Belanja",
   "prompt.enter": "Masuk",
   "prompt.exit": "Keluar",
-  "prompt.use": "Pakai"
+  "prompt.use": "Pakai",
+  "speaker.papan": "Papan Pengumuman",
+  "dialog.log": "Riwayat Obrolan",
+  "dialog.logEmpty": "Belum ada obrolan.",
+  "dialog.next": "Lanjut",
+  "speaker.player": "Kamu",
+  "player.defaultName": "Kamu"
 }

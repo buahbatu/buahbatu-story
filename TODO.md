@@ -109,7 +109,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-05c** Lompat (permintaan user 2026-11-24): tombol lompat, animasi & lengkung lompatan, bisa melompati rintangan rendah/naik tepian rendah sesuai aturan tabrakan; tombol diputuskan bersama user (Spasi kini dipakai alat) · Ref: 40, 15 · ✅ 2026-11-24 · tombol B (Dekor → G), lengkung 0,55 dtk/0,6, animasi jump Kenney, naik tepian rendah saat melayang
 - [x] **P1-06** Kamera 2.5D miring ala Back to Nature: follow pemain, batas peta, **zoom in/out**, **putar & geser kamera** (pan/arahkan sudut pandang, permintaan user 2026-11-24; kamera kembali mengikuti pemain) (diputuskan user: scroll/cubit/`+` `-` = zoom, Q/R putar, klik kanan seret = geser) · Ref: 40 · ✅ 2026-11-24 · follow halus, batas peta, zoom scroll/+−/cubit, putar Q/R, geser klik kanan, WASD relatif kamera
 - [x] **P1-07** Sistem interaksi: deteksi objek terdekat + prompt "E ..." · Ref: 10, 40 · ✅ 2026-11-25 · objek terdekat+di depan, prompt [E] melayang (pindah ke atas kepala bila objek di depan), log interaksi; tombol: lompat Spasi, alat C
-- [ ] **P1-08** Kotak dialog Preact (typewriter, pilihan, potret placeholder, log) · Ref: 40, 18
+- [~] **P1-08** Kotak dialog Preact (typewriter, pilihan, potret placeholder, log) · Ref: 40, 18 · 🕐 2026-11-25
 - [ ] **P1-09** Transisi area (pintu & tepi peta) + fade + spawn point · Ref: 10
 - [ ] **P1-10** Kontrol sentuh: joystick virtual + tombol aksi (deteksi portrait + layar penuh HP sudah dikerjakan lebih awal, ADR-020) · Ref: 40
 - [ ] **P1-11** Mode debug `?debug=1` (FPS, collision, grid) · Ref: 50

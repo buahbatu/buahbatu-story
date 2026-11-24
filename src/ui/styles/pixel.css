@@ -95,6 +95,106 @@
   font-size: var(--text-s);
 }
 
+.ornate {
+  border: calc(var(--px) * 14) solid transparent;
+  border-image: url('/assets/ui/frame-ornate.svg') 7 fill / calc(var(--px) * 14) stretch;
+  background: none;
+  box-shadow: calc(var(--px) * 3) calc(var(--px) * 3) 0 0 rgb(29 26 47 / 45%);
+}
+
+.dialog-box {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--px) * 10);
+  transform: translateX(-50%);
+  width: min(92%, calc(var(--px) * 420));
+  min-height: calc(var(--px) * 72);
+  display: flex;
+  gap: calc(var(--px) * 8);
+  padding: calc(var(--px) * 2);
+  cursor: pointer;
+}
+
+.dialog-portrait {
+  flex: none;
+  width: calc(var(--px) * 60);
+  height: calc(var(--px) * 60);
+  display: grid;
+  place-items: center;
+  border: calc(var(--px) * 3) solid var(--color-wood-dark);
+  outline: calc(var(--px) * 1) solid #e8b04a;
+  outline-offset: calc(var(--px) * -5);
+  color: var(--color-cream);
+  font-family: var(--font-title);
+  font-size: calc(var(--px) * 22);
+}
+
+.dialog-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.dialog-name {
+  font-family: var(--font-title);
+  font-size: var(--text-s);
+  color: var(--color-wood-dark);
+  margin-bottom: calc(var(--px) * 4);
+}
+
+.dialog-text {
+  margin: 0;
+  font-size: var(--text-m);
+  line-height: 1.35;
+}
+
+.dialog-next {
+  margin-left: calc(var(--px) * 4);
+  color: var(--color-strawberry);
+  animation: blink 0.8s steps(2, end) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.dialog-choices {
+  margin: 0;
+  padding-left: 0;
+  list-style-position: inside;
+  font-size: var(--text-m);
+}
+
+.dialog-choices li {
+  padding: calc(var(--px) * 1) calc(var(--px) * 3);
+}
+
+.dialog-choices li.selected {
+  background: var(--color-wood);
+  color: var(--color-cream);
+}
+
+.dialog-log {
+  position: absolute;
+  top: calc(var(--px) * 10);
+  right: calc(var(--px) * 10);
+  width: min(60%, calc(var(--px) * 260));
+  max-height: 60%;
+  overflow-y: auto;
+  font-size: var(--text-s);
+}
+
+.dialog-log ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dialog-log li {
+  margin-bottom: calc(var(--px) * 3);
+}
+
 .toast-host {
   position: absolute;
   top: calc(var(--px) * 8);

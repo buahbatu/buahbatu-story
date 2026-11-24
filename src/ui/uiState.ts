@@ -9,6 +9,18 @@ export interface UiState {
   loading: number | null;
   fatal: I18nKey | null;
   prompt: InteractPrompt | null;
+  dialog: DialogView | null;
+  dialogLog: { speaker: string; text: string }[];
+  dialogLogOpen: boolean;
+}
+
+export interface DialogView {
+  speaker: string;
+  portrait: string;
+  text: string;
+  complete: boolean;
+  choices: string[];
+  choice: number;
 }
 
 export interface InteractPrompt {
@@ -18,7 +30,16 @@ export interface InteractPrompt {
   y: number;
 }
 
-export const uiStore = createStore<UiState>({ scene: null, toasts: [], loading: null, fatal: null, prompt: null });
+export const uiStore = createStore<UiState>({
+  scene: null,
+  toasts: [],
+  loading: null,
+  fatal: null,
+  prompt: null,
+  dialog: null,
+  dialogLog: [],
+  dialogLogOpen: false,
+});
 
 export function setActiveScene(scene: SceneKey): void {
   uiStore.set({ scene });

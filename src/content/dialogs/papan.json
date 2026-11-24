@@ -1,0 +1,28 @@
+[
+  {
+    "id": "board_kebun_warga",
+    "lines": [
+      {
+        "speaker": "papan",
+        "portrait": "papan",
+        "text": "KEBUN WARGA LEMBANG — Punten, petak kosong boleh dipakai siapa saja, asal dirawat ya!"
+      },
+      {
+        "speaker": "papan",
+        "portrait": "papan",
+        "text": "Jadwal siram: pagi sebelum jam 9. Stroberi yang sudah merah boleh dipetik, sisakan buat tetangga."
+      },
+      {
+        "choices": [
+          { "text": "Siap, nanti aku bantu siram!", "next": "board_kebun_warga_siap" },
+          { "text": "Baca lagi dari awal", "next": "board_kebun_warga" },
+          { "text": "Sudah, makasih" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "board_kebun_warga_siap",
+    "lines": [{ "speaker": "papan", "portrait": "papan", "text": "Hatur nuhun, {player}! Kebunnya pasti makin subur." }]
+  }
+]

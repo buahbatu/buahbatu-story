@@ -83,6 +83,7 @@ Jadwal per hari dalam seminggu, bisa di-override oleh musim, cuaca, dan festival
   "priority": 5
 }
 ```
+- **Status (P1-08):** skema zod `src/systems/dialog/schema.ts` (baris `speaker`/`portrait`/`text`, pilihan maks. 4 di baris terakhir dengan `next`/`effects`, id unik, `next` wajib menunjuk dialog yang ada — dites), alur & variabel `{player}` sudah jalan; contoh nyata `dialogs/papan.json` (papan Kebun Warga Lembang, aksi `board:<id>` → dialog `board_<id>`). Kondisi, prioritas, cooldown & efek ke NPC menyusul di P8.
 - Kondisi yang didukung: musim, hari, cuaca, jam, hati, tahap hubungan pemain, flag quest, area, item di inventory, siapa yang online.
 - Variabel di teks: `{player}`, `{partner}`, `{season}`, `{npc}`.
 - Prioritas: dialog event > quest > kondisi spesifik > umum. Dialog yang sudah tampil diberi cooldown.

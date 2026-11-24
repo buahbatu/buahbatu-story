@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { INTERACTION } from '../../config/world';
 import { t } from '../../content/i18n';
 import type { AreaData, MapObject } from '../map/logic';
-import { keyLabel, nearestInteractable, promptFor, rectDistance } from './logic';
+import { dialogFor, keyLabel, nearestInteractable, promptFor, rectDistance } from './logic';
 
 const obj = (id: number, kind: MapObject['kind'], x: number, y: number, w: number, h: number, props: MapObject['props']): MapObject => ({
   id,
@@ -83,5 +83,13 @@ describe('helper', () => {
       'Spasi',
       '?',
     ]);
+  });
+});
+
+describe('dialogFor', () => {
+  it('papan membuka dialog board_<id>, aksi lain belum punya dialog', () => {
+    expect(dialogFor('board:kebun_warga')).toBe('board_kebun_warga');
+    expect(dialogFor('bed')).toBeNull();
+    expect(dialogFor('board:')).toBeNull();
   });
 });

@@ -18,7 +18,11 @@ import { PALETTE } from '../config/palette';
 import { DEFAULT_AREA, INTERACTION, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { OcclusionFader } from '../world/occlusion';
 import { WaterFx } from '../world/waterFx';
-import { keyLabel, nearestInteractable, type Interactable } from '../world/interact/logic';
+import { dialogFor, keyLabel, nearestInteractable, type Interactable } from '../world/interact/logic';
+import { DialogController } from '../systems/dialog/controller';
+import { bookOf } from '../systems/dialog/logic';
+import { dialogFiles } from '../systems/dialog/content';
+import { t } from '../content/i18n';
 import { NEUTRAL, cameraOffset, rotateVec, stepCamera, type CameraInput, type CameraRig } from '../world/camera/logic';
 import { DRY, drip, seeded, splashBurst, stepWet, type WetState } from '../entities/player/wet';
 import { logger } from '../core/logger';
@@ -68,6 +72,7 @@ export class WorldScene implements GameScene {
   private splashes = 0;
   private rig: CameraRig = NEUTRAL;
   private nearby: Interactable | null = null;
+  readonly dialog = new DialogController(bookOf(dialogFiles()));
   private done: InteractionEvent[] = [];
   private look = APPEARANCE.A;
   private lookReady: Promise<void> | null = null;
@@ -99,15 +104,20 @@ export class WorldScene implements GameScene {
     this.water?.offset.set(time * WATER.flow, time * WATER.flow * 0.6);
     const { area, player, engine } = this;
     if (!area || !player || !engine) return;
-    const raw = rotateVec(engine.input.move(), this.rig.yaw);
+    const talking = this.dialog.open;
+    this.dialog.update(dt, engine.input);
+    const raw = talking ? { x: 0, y: 0 } : rotateVec(engine.input.move(), this.rig.yaw);
     const wade = waterAt(area, player.x, player.y, PLAYER.shallowTiles) === 'none' ? 1 : PLAYER.wadeFactor;
     const body = { ...PLAYER, maxStep: PLAYER.maxStep + jumpHeight(player, PLAYER) };
     const moved = stepMotion(player, { x: raw.x * wade, y: raw.y * wade }, engine.input.isDown('run'), dt, area, PLAYER, (x, y, fx, fy) =>
       bodyBlocked(area, x, y, walkLevel(area, fx, fy), body),
     );
-    this.player = stepJump(moved, engine.input.justPressed('jump'), dt, PLAYER);
-    if (engine.input.justPressed('interact') && this.nearby)
+    this.player = stepJump(moved, !talking && engine.input.justPressed('jump'), dt, PLAYER);
+    if (!talking && engine.input.justPressed('interact') && this.nearby) {
       this.done = [...this.done.slice(-19), { id: this.nearby.id, kind: this.nearby.kind, action: this.nearby.action, area: area.id }];
+      const id = dialogFor(this.nearby.action);
+      if (id && this.dialog.has(id)) this.dialog.start(id, { player: t('player.defaultName') });
+    }
     this.splashAndDrip(area, this.player, dt);
     const g = engine.input.gestures();
     const key = Number(engine.input.isDown('zoomOut')) - Number(engine.input.isDown('zoomIn'));
@@ -238,7 +248,7 @@ export class WorldScene implements GameScene {
   }
 
   private updatePrompt(area: AreaData, player: PlayerMotion): void {
-    this.nearby = nearestInteractable(area, player, INTERACTION);
+    this.nearby = this.dialog.open ? null : nearestInteractable(area, player, INTERACTION);
     const current = uiStore.get().prompt;
     if (!this.nearby) {
       if (current) uiStore.set({ prompt: null });

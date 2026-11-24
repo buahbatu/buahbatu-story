@@ -4,6 +4,7 @@ import { LoadingBar } from './components/LoadingBar';
 import { TitleOverlay } from './components/TitleOverlay';
 import { ToastHost } from './components/ToastHost';
 import { InteractPrompt } from './hud/InteractPrompt';
+import { DialogBox, DialogLog } from './dialog/DialogBox';
 import { VersionBadge } from './components/VersionBadge';
 import { uiStore } from './uiState';
 import { useStore } from './useStore';
@@ -19,6 +20,8 @@ export function App() {
       {scene === SCENE.title && <TitleOverlay />}
       {scene === SCENE.title && <VersionBadge />}
       {scene === SCENE.world && <InteractPrompt />}
+      {scene === SCENE.world && <DialogBox />}
+      {scene === SCENE.world && <DialogLog />}
       <ToastHost />
     </div>
   );
