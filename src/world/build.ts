@@ -1,17 +1,19 @@
 import {
   BufferGeometry,
   Float32BufferAttribute,
+  DoubleSide,
   Group,
+  InstancedMesh,
   Mesh,
+  Object3D,
   MeshLambertMaterial,
   PlaneGeometry,
   type Material,
-  type Object3D,
   type Texture,
 } from 'three';
-import { WORLD_SKIRT } from '../config/world';
-import { elevation, type AreaData } from './map/logic';
-import { buildTerrain } from './map/terrain';
+import { WATER, WORLD_SKIRT } from '../config/world';
+import { elevation, isBlocked, type AreaData } from './map/logic';
+import { buildTerrain, buildWater, scatterTufts } from './map/terrain';
 import { PROP_FACTORIES, isPropModel } from './props/registry';
 import { TEX, repeated } from './props/textures';
 
@@ -21,10 +23,52 @@ export function terrainMesh(area: AreaData, atlas: Texture): Mesh {
   geometry.setAttribute('position', new Float32BufferAttribute(data.positions, 3));
   geometry.setAttribute('normal', new Float32BufferAttribute(data.normals, 3));
   geometry.setAttribute('uv', new Float32BufferAttribute(data.uvs, 2));
+  geometry.setAttribute('color', new Float32BufferAttribute(data.colors, 3));
   geometry.setIndex(data.indices);
   geometry.computeBoundingSphere();
-  const mesh = new Mesh(geometry, new MeshLambertMaterial({ map: atlas }));
+  const mesh = new Mesh(geometry, new MeshLambertMaterial({ map: atlas, vertexColors: true }));
   mesh.name = 'terrain';
+  mesh.receiveShadow = true;
+  return mesh;
+}
+
+export function waterMesh(area: AreaData): Mesh | null {
+  const data = buildWater(area);
+  if (data.indices.length === 0) return null;
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(data.positions, 3));
+  geometry.setAttribute('uv', new Float32BufferAttribute(data.uvs, 2));
+  geometry.setIndex(data.indices);
+  geometry.computeVertexNormals();
+  const map = repeated(TEX.ripple(), 0.5, 0.5);
+  const mesh = new Mesh(
+    geometry,
+    new MeshLambertMaterial({ color: WATER.color, map, transparent: true, opacity: WATER.opacity, depthWrite: false }),
+  );
+  mesh.name = 'water';
+  mesh.receiveShadow = true;
+  mesh.renderOrder = 1;
+  return mesh;
+}
+
+export function tuftMesh(area: AreaData): InstancedMesh | null {
+  const tufts = scatterTufts(area, (x, y) => isBlocked(area, x, y));
+  if (tufts.length === 0) return null;
+  const blade = new PlaneGeometry(0.55, 0.55);
+  blade.translate(0, 0.27, 0);
+  const mesh = new InstancedMesh(blade, new MeshLambertMaterial({ map: TEX.tuft(), alphaTest: 0.5, side: DoubleSide }), tufts.length * 2);
+  const dummy = new Object3D();
+  tufts.forEach((t, i) => {
+    for (let k = 0; k < 2; k++) {
+      dummy.position.set(t.x, t.y, t.z);
+      dummy.rotation.set(0, t.turn + (k * Math.PI) / 2, 0);
+      dummy.scale.setScalar(t.scale);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i * 2 + k, dummy.matrix);
+    }
+  });
+  mesh.name = 'tufts';
+  mesh.receiveShadow = true;
   return mesh;
 }
 
@@ -50,7 +94,18 @@ export function buildArea(area: AreaData, atlas: Texture): Group {
   const root = new Group();
   root.name = `area:${area.id}`;
   root.add(terrainMesh(area, atlas));
-  if (area.settings.interior !== true) root.add(skirt(area));
+  const outdoor = area.settings.interior !== true;
+  if (outdoor) {
+    const s = skirt(area);
+    s.traverse((n) => {
+      n.receiveShadow = true;
+    });
+    root.add(s);
+    const tufts = tuftMesh(area);
+    if (tufts) root.add(tufts);
+  }
+  const water = waterMesh(area);
+  if (water) root.add(water);
   for (const o of area.objects) {
     if (o.kind !== 'prop' || !isPropModel(o.props.model)) continue;
     const prop = PROP_FACTORIES[o.props.model](o.props);
@@ -59,6 +114,10 @@ export function buildArea(area: AreaData, atlas: Texture): Group {
     prop.position.set(x, elevation(area, x, z), z);
     prop.rotation.y = (-Number(o.props.rotation ?? 0) * Math.PI) / 180;
     prop.name = `prop:${o.props.model}`;
+    prop.traverse((n) => {
+      n.castShadow = true;
+      n.receiveShadow = true;
+    });
     root.add(prop);
   }
   return root;

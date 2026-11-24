@@ -27,6 +27,29 @@ function make(key: string, size: number, paint: Paint): Texture {
 }
 
 export const TEX = {
+  tuft: () =>
+    make('tuft', 16, (px) => {
+      for (const [x, h, c] of [
+        [2, 9, '#4f9a45'],
+        [5, 13, '#6fb35f'],
+        [7, 15, '#58994d'],
+        [9, 12, '#8fcc72'],
+        [12, 10, '#58994d'],
+        [14, 7, '#6fb35f'],
+      ] as const)
+        px(x, 16 - h, 1, h, c);
+    }),
+  ripple: () =>
+    make('ripple', 32, (px, rnd) => {
+      px(0, 0, 32, 32, '#ffffff');
+      for (let i = 0; i < 9; i++) {
+        const x = Math.floor(rnd() * 28);
+        const y = Math.floor(rnd() * 30);
+        px(x, y, 3 + Math.floor(rnd() * 5), 1, '#cfe6f5');
+      }
+      for (let i = 0; i < 14; i++) px(Math.floor(rnd() * 32), Math.floor(rnd() * 32), 1, 1, '#e8f4fb');
+    }),
+
   plasterWhite: () =>
     make('plasterWhite', 32, (px, rnd) => {
       px(0, 0, 32, 32, '#f4f1ea');

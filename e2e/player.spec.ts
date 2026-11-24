@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { PLAYER } from '../src/config/balance';
 import { expect, test } from './fixtures';
 
 const player = (page: Page) => page.evaluate(() => window.__BB__?.player() ?? null);
@@ -6,12 +7,12 @@ const player = (page: Page) => page.evaluate(() => window.__BB__?.player() ?? nu
 async function speed(page: Page, keys: string[]) {
   for (const k of keys) await page.keyboard.down(k);
   await page.waitForTimeout(150);
-  const sample = () => page.evaluate(() => ({ x: window.__BB__?.player()?.x ?? 0, t: performance.now() }));
+  const sample = () => page.evaluate(() => ({ x: window.__BB__?.player()?.x ?? 0, t: window.__BB__?.clock() ?? 0 }));
   const a = await sample();
   await page.waitForTimeout(600);
   const b = await sample();
   for (const k of keys) await page.keyboard.up(k);
-  return ((b.x - a.x) / (b.t - a.t)) * 1000;
+  return (b.x - a.x) / (b.t - a.t);
 }
 
 async function hold(page: Page, keys: string[], ms: number) {
@@ -37,8 +38,8 @@ test('pemain muncul di spawn menghadap kamera, jalan & lari dengan keyboard', as
   expect(await hold(page, ['ShiftLeft', 'KeyA'], 300)).toMatchObject({ facing: 'w', anim: 'run' });
   const walk = await speed(page, ['KeyD']);
   const run = await speed(page, ['ShiftLeft', 'KeyA']);
-  expect(walk).toBeGreaterThan(1.5);
-  expect(-run / walk).toBeGreaterThan(1.4);
+  expect(walk).toBeCloseTo(PLAYER.walkSpeed, 0);
+  expect(-run).toBeCloseTo(PLAYER.runSpeed, 0);
 
   const diagonal = await hold(page, ['KeyS', 'KeyA'], 300);
   expect(diagonal).toMatchObject({ facing: 'sw', anim: 'walk' });

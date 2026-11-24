@@ -1,13 +1,21 @@
 export const TILE_PX = 16;
 export const HEIGHT_STEP = 1;
-export const WATER_DEPTH = 0.2;
+export const WATER_DEPTH = 0.55;
+export const WATER = { surface: -0.14, opacity: 0.62, color: '#5aa6d6', flow: 0.05 } as const;
+export const TERRAIN_LOOK = {
+  jitter: 0.02,
+  sideShade: 0.8,
+  tuftDensity: 0.6,
+  organic: ['grass', 'grass_flowers', 'dirt', 'sand', 'path'],
+} as const;
+export const SHADOW = { extent: 15, mapSize: 1024, bias: -0.0015 } as const;
 export const ATLAS_INSET = 0.01;
 export const WORLD_CAMERA = { fov: 30, pitchDeg: 40, distance: 13, near: 0.5, far: 120 } as const;
 export const DEFAULT_AREA = 'sandbox';
 export const AREA_ID_PATTERN = /^[a-z0-9_]+$/;
 export const WORLD_SKIRT = 40;
 export const INTERIOR = { background: '#14111f', fogNear: 60, fogFar: 120, cameraDistance: 15, lookBack: 0.9 } as const;
-export const CHARACTER = { height: 1.6, shadowRadius: 0.4, turnSpeed: 16 } as const;
+export const CHARACTER = { height: 1.6, turnSpeed: 16 } as const;
 export const WORLD_FOG = { near: 30, far: 70 } as const;
 export const MAP_LAYERS = ['Ground', 'Height', 'Farmable', 'Collision', 'Objects'] as const;
 export const OBJECT_RULES = {

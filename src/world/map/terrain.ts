@@ -1,10 +1,11 @@
-import { ATLAS_INSET, HEIGHT_STEP } from '../../config/world';
+import { ATLAS_INSET, HEIGHT_STEP, TERRAIN_LOOK, WATER } from '../../config/world';
 import { elevation, tileIndex, type AreaData } from './logic';
 
 export interface TerrainMesh {
   positions: number[];
   normals: number[];
   uvs: number[];
+  colors: number[];
   indices: number[];
   quads: { top: number; side: number };
 }
@@ -19,6 +20,12 @@ const SIDES = [
   { dx: -1, dy: 0, left: [0, 0], right: [0, 1] },
 ] as const;
 
+export function tileHash(x: number, y: number, salt = 0): number {
+  let h = (x * 374761393 + y * 668265263 + salt * 2246822519) | 0;
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+
 export function atlasRect(tileset: Area['tileset'], tile: number, fraction = 1): [number, number, number, number] {
   const col = tile % tileset.columns;
   const row = Math.floor(tile / tileset.columns);
@@ -30,9 +37,10 @@ export function atlasRect(tileset: Area['tileset'], tile: number, fraction = 1):
 }
 
 export function buildTerrain(area: Area): TerrainMesh {
-  const mesh: TerrainMesh = { positions: [], normals: [], uvs: [], indices: [], quads: { top: 0, side: 0 } };
+  const mesh: TerrainMesh = { positions: [], normals: [], uvs: [], colors: [], indices: [], quads: { top: 0, side: 0 } };
+  const organic = new Set<string>(TERRAIN_LOOK.organic);
   const tileOf = (terrain: string) => area.tileset.terrainTiles[terrain] ?? 0;
-  const quad = (corners: [Vec3, Vec3, Vec3, Vec3], [u0, u1, vTop, vBottom]: [number, number, number, number]) => {
+  const quad = (corners: [Vec3, Vec3, Vec3, Vec3], [u0, u1, vTop, vBottom]: [number, number, number, number], shade = 1, turns = 0) => {
     const [a, b, c] = corners;
     const [ux, uy, uz] = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
     const [vx, vy, vz] = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
@@ -43,7 +51,10 @@ export function buildTerrain(area: Area): TerrainMesh {
       mesh.positions.push(...p);
       mesh.normals.push(n[0] / len, n[1] / len, n[2] / len);
     });
-    mesh.uvs.push(u0, vTop, u0, vBottom, u1, vBottom, u1, vTop);
+    const uv = [u0, vTop, u0, vBottom, u1, vBottom, u1, vTop];
+    const k = (turns % 4) * 2;
+    mesh.uvs.push(...uv.slice(k), ...uv.slice(0, k));
+    for (let i = 0; i < 4; i++) mesh.colors.push(shade, shade, shade);
     mesh.indices.push(base, base + 1, base + 2, base, base + 2, base + 3);
   };
   for (let y = 0; y < area.height; y++)
@@ -58,6 +69,8 @@ export function buildTerrain(area: Area): TerrainMesh {
           [x + 1, top, y],
         ],
         atlasRect(area.tileset, tileOf(terrain)),
+        1 + (tileHash(x, y, 1) - 0.5) * 2 * TERRAIN_LOOK.jitter,
+        organic.has(terrain) ? Math.floor(tileHash(x, y, 2) * 4) : 0,
       );
       mesh.quads.top++;
       for (const side of SIDES) {
@@ -79,10 +92,72 @@ export function buildTerrain(area: Area): TerrainMesh {
               [rx, hi, rz],
             ],
             atlasRect(area.tileset, tile, hi - lo),
+            TERRAIN_LOOK.sideShade,
           );
           mesh.quads.side++;
         }
       }
     }
   return mesh;
+}
+
+export interface WaterMesh {
+  positions: number[];
+  uvs: number[];
+  indices: number[];
+}
+
+export function buildWater(area: Pick<AreaData, 'width' | 'height' | 'terrain'>): WaterMesh {
+  const mesh: WaterMesh = { positions: [], uvs: [], indices: [] };
+  for (let y = 0; y < area.height; y++)
+    for (let x = 0; x < area.width; x++) {
+      if (area.terrain[tileIndex(area, x, y)] !== 'water') continue;
+      const base = mesh.positions.length / 3;
+      for (const [cx, cy] of [
+        [x, y],
+        [x, y + 1],
+        [x + 1, y + 1],
+        [x + 1, y],
+      ] as const) {
+        mesh.positions.push(cx, WATER.surface, cy);
+        mesh.uvs.push(cx, -cy);
+      }
+      mesh.indices.push(base, base + 1, base + 2, base, base + 2, base + 3);
+    }
+  return mesh;
+}
+
+export interface Tuft {
+  x: number;
+  y: number;
+  z: number;
+  turn: number;
+  scale: number;
+}
+
+export function scatterTufts(
+  area: Pick<AreaData, 'width' | 'height' | 'terrain' | 'heights'>,
+  blocked: (x: number, y: number) => boolean,
+  density: number = TERRAIN_LOOK.tuftDensity,
+): Tuft[] {
+  const tufts: Tuft[] = [];
+  for (let y = 0; y < area.height; y++)
+    for (let x = 0; x < area.width; x++) {
+      const terrain = area.terrain[tileIndex(area, x, y)];
+      if (terrain !== 'grass' && terrain !== 'grass_flowers') continue;
+      const count = Math.floor(tileHash(x, y, 3) * density * 3);
+      for (let i = 0; i < count; i++) {
+        const tx = x + 0.15 + tileHash(x, y, 10 + i) * 0.7;
+        const ty = y + 0.15 + tileHash(x, y, 20 + i) * 0.7;
+        if (blocked(tx, ty)) continue;
+        tufts.push({
+          x: tx,
+          y: elevation(area, tx, ty),
+          z: ty,
+          turn: tileHash(x, y, 30 + i) * Math.PI,
+          scale: 0.7 + tileHash(x, y, 40 + i) * 0.6,
+        });
+      }
+    }
+  return tufts;
 }

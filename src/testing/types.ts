@@ -23,6 +23,7 @@ export interface TestApi {
   view(): { width: number; height: number; zoom: number; pixelScale: number };
   enterArea(id: string, spawn?: string): Promise<AreaInfo | null>;
   actions(): Action[];
+  clock(): number;
   player(): (PlayerMotion & { area: string }) | null;
   placePlayer(x: number, y: number, facing: Direction): void;
   playerLook(look: 'A' | 'B' | Appearance): Promise<void>;

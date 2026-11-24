@@ -1,4 +1,4 @@
-import { CircleGeometry, Group, Mesh, MeshBasicMaterial } from 'three';
+import { Group } from 'three';
 import { CHARACTER } from '../../config/world';
 import type { Appearance } from './appearance';
 import { createCharacter, type Character } from './character';
@@ -10,14 +10,6 @@ export class PlayerView {
   private yaw = 0;
 
   constructor() {
-    const shadow = new Mesh(
-      new CircleGeometry(CHARACTER.shadowRadius, 12),
-      new MeshBasicMaterial({ color: '#000000', transparent: true, opacity: 0.28, depthWrite: false }),
-    );
-    shadow.rotation.x = -Math.PI / 2;
-    shadow.scale.y = 0.7;
-    shadow.position.y = 0.03;
-    this.object.add(shadow);
     this.object.name = 'player';
   }
 

@@ -63,6 +63,12 @@ Poin didapat dari interaksi, aktivitas bareng, hadiah, quest romantis, dan bonus
 | 6 | Menikah | Persiapan pernikahan selesai | *"Hari Bahagia"* |
 | 7 | Orang Tua | Keputusan bersama (`17`) | *"Kabar Bahagia"* |
 
+### Nembak, Lamaran & Jeda Waktu (permintaan user, 2026-11-24: "bener-bener seperti real life")
+- **Tidak ada jalan pintas ke menikah.** Setiap tahap punya **durasi minimal** (hari game) selain syarat meter, supaya terasa seperti hubungan sungguhan: Teman → PDKT min. 7 hari, PDKT → Pacaran min. 7 hari di tahap PDKT, Pacaran → Tunangan min. 1 musim (28 hari), Tunangan → Menikah min. 14 hari (persiapan). Angka final di `config/balance.ts` (P9-07).
+- **Nembak (PDKT → Pacaran)**: **siapa saja boleh nembak duluan**, Michelle maupun pemain A. Syarat: Romansa ≥ 50, sudah lewat durasi minimal PDKT, **membawa bunga** (item buket; bunga favorit penerima memberi bonus), dan memilih tempat & waktu (cutscene *"Nembak"*, wajib berdua online).
+- **Penerima memilih**: **Terima** (jadian 💗, kenangan terbuka) · **"Aku butuh waktu dulu"** (jawaban ditunda, ditanya lagi setelah 3 hari game) · **Tolak** dengan halus. Ditolak **tidak menurunkan tahap** dan romansa hanya turun sedikit (pilar tanpa hukuman berat); boleh mencoba lagi setelah **jeda 7 hari game** dengan bunga baru.
+- **Lamaran (Pacaran → Tunangan)**: sama-sama bisa melamar; butuh cincin, Restu orang tua Michelle, dan durasi pacaran; bisa diterima, ditunda, atau ditolak dengan jeda yang sama.
+- **Menikah**: setelah tunangan & persiapan selesai (gedung, undangan, baju; `19`).
 - Meter tidak turun drastis. Hanya ada **decay** sangat kecil kalau lama tidak berinteraksi, dan tidak pernah membuat tahap turun.
 - Tahap 1–4 dibumbui **kenangan asli kalian** (`43`).
 

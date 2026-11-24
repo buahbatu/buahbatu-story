@@ -1,13 +1,26 @@
-import { Color, Fog, NearestFilter, PerspectiveCamera, SRGBColorSpace, Scene, TextureLoader, type Group, type Texture } from 'three';
+import {
+  Color,
+  Fog,
+  NearestFilter,
+  PerspectiveCamera,
+  SRGBColorSpace,
+  Scene,
+  TextureLoader,
+  type Group,
+  type Texture,
+  type DirectionalLight,
+  Mesh,
+  MeshLambertMaterial,
+} from 'three';
 import { PLAYER } from '../config/balance';
 import { PALETTE } from '../config/palette';
-import { DEFAULT_AREA, INTERIOR, WORLD_CAMERA, WORLD_FOG } from '../config/world';
+import { DEFAULT_AREA, INTERIOR, WATER, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { logger } from '../core/logger';
 import type { Engine, GameScene } from '../engine/engine';
 import { APPEARANCE, PlayerView, stepMotion, type Appearance, type Direction, type PlayerMotion } from '../entities';
 import { uiStore } from '../ui/uiState';
 import { buildArea, disposeTree } from '../world/build';
-import { addEnvironment } from '../world/environment';
+import { addEnvironment, aimSun } from '../world/environment';
 import { elevation, parseArea, type AreaData } from '../world/map/logic';
 import { SCENE } from './keys';
 
@@ -29,6 +42,8 @@ export class WorldScene implements GameScene {
   private root: Group | null = null;
   private atlas: Texture | null = null;
   private engine: Engine | null = null;
+  private readonly sun: DirectionalLight;
+  private water: Texture | null = null;
   private readonly playerView = new PlayerView();
   private look = APPEARANCE.A;
   private lookReady: Promise<void> | null = null;
@@ -36,7 +51,7 @@ export class WorldScene implements GameScene {
 
   constructor() {
     const scene = new Scene();
-    addEnvironment(scene, WORLD_FOG);
+    this.sun = addEnvironment(scene, WORLD_FOG, true);
     this.world = { scene, camera: new PerspectiveCamera(WORLD_CAMERA.fov, 16 / 9, WORLD_CAMERA.near, WORLD_CAMERA.far) };
   }
 
@@ -56,7 +71,8 @@ export class WorldScene implements GameScene {
     }
   }
 
-  update(dt: number): void {
+  update(dt: number, time: number): void {
+    this.water?.offset.set(time * WATER.flow, time * WATER.flow * 0.6);
     const { area, player, engine } = this;
     if (!area || !player || !engine) return;
     this.player = stepMotion(player, engine.input.move(), engine.input.isDown('run'), dt, area, PLAYER);
@@ -79,6 +95,8 @@ export class WorldScene implements GameScene {
     this.atlas?.dispose();
     this.atlas = atlas;
     this.root = buildArea(area, atlas);
+    const water = this.root.getObjectByName('water');
+    this.water = water instanceof Mesh && water.material instanceof MeshLambertMaterial ? water.material.map : null;
     this.world.scene.add(this.root);
     this.area = area;
     this.applySettings(area);
@@ -140,5 +158,6 @@ export class WorldScene implements GameScene {
     const { camera } = this.world;
     camera.position.set(target.x, y + Math.sin(pitch) * distance, target.y + Math.cos(pitch) * distance);
     camera.lookAt(target.x, y, target.y);
+    aimSun(this.sun, target.x, y, target.y);
   }
 }

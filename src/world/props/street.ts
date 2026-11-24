@@ -141,7 +141,7 @@ export function signBoard(text: string, background = '#2f5d50'): Group {
   const g = new Group();
   const tex = signTexture(text, background, '#fff7e6');
   const canvas = tex.image as HTMLCanvasElement;
-  const h = 0.7;
+  const h = 0.55;
   const w = (canvas.width / canvas.height) * h;
   for (const x of [-w / 2 + 0.1, w / 2 - 0.1]) g.add(box(0.1, 1.4, 0.1, color('#6b4223'), x, 0.7, 0));
   g.add(signPanel(tex, w, h, 0, 1.35, 0.1));

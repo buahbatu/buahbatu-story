@@ -1,4 +1,4 @@
-import { WebGLRenderer, type Camera, type Scene } from 'three';
+import { BasicShadowMap, WebGLRenderer, type Camera, type Scene } from 'three';
 import type { InputState } from '../input/logic';
 import type { SceneKey } from '../scenes/keys';
 import { setActiveScene } from '../ui/uiState';
@@ -27,6 +27,8 @@ export class Engine {
     this.input = input;
     this.renderer = new WebGLRenderer({ antialias: false, powerPreference: 'low-power' });
     this.renderer.setPixelRatio(1);
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = BasicShadowMap;
     this.renderer.domElement.style.imageRendering = 'pixelated';
     this.renderer.domElement.style.display = 'block';
     parent.append(this.renderer.domElement);
@@ -34,6 +36,10 @@ export class Engine {
     this.view = view;
     this.resize(view);
     this.renderer.setAnimationLoop(this.tick);
+  }
+
+  get elapsed(): number {
+    return this.time;
   }
 
   get scene(): SceneKey | null {

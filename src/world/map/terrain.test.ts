@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { HEIGHT_STEP, WATER_DEPTH } from '../../config/world';
+import { HEIGHT_STEP, WATER, WATER_DEPTH } from '../../config/world';
 import { elevation } from './logic';
-import { atlasRect, buildTerrain } from './terrain';
+import { atlasRect, buildTerrain, buildWater, scatterTufts, tileHash } from './terrain';
 
 const tileset = { image: 'x.png', columns: 4, rows: 2, terrainTiles: { grass: 0, water: 1, sand: 2, cliff: 5 } };
 const area = (terrain: string[], heights: number[], width = terrain.length, height = 1) => ({ width, height, terrain, heights, tileset });
@@ -75,5 +75,38 @@ describe('buildTerrain', () => {
       [0, 0, 1],
       [0, 0, -1],
     ]);
+  });
+});
+
+describe('tampilan tanah alami (P1-04b)', () => {
+  it('tileHash deterministik di [0,1) & berbeda antar petak', () => {
+    expect(tileHash(3, 4)).toBe(tileHash(3, 4));
+    expect(tileHash(3, 4)).not.toBe(tileHash(4, 3));
+    for (let i = 0; i < 50; i++) {
+      const h = tileHash(i, i * 7, i % 3);
+      expect(h).toBeGreaterThanOrEqual(0);
+      expect(h).toBeLessThan(1);
+    }
+  });
+  it('setiap vertex punya warna; dinding tebing lebih gelap dari permukaan', () => {
+    const mesh = buildTerrain(area(['grass', 'grass'], [0, 1]));
+    expect(mesh.colors).toHaveLength(mesh.positions.length);
+    const sideShade = mesh.colors[4 * 3 * 2] ?? 1;
+    expect(sideShade).toBeLessThan(0.9);
+  });
+  it('air: satu permukaan transparan per petak air, di bawah tanah & di atas dasar kolam', () => {
+    const water = buildWater(area(['grass', 'water', 'water'], [0, 0, 0]));
+    expect(water.indices).toHaveLength(2 * 6);
+    const ys = water.positions.filter((_, i) => i % 3 === 1);
+    expect(new Set(ys)).toEqual(new Set([WATER.surface]));
+    expect(WATER.surface).toBeLessThan(0);
+    expect(WATER.surface).toBeGreaterThan(-WATER_DEPTH);
+  });
+  it('rumput 3D hanya di petak rumput, tidak di petak terhalang, & deterministik', () => {
+    const a = area(['grass', 'dirt', 'grass_flowers', 'water'], [0, 0, 0, 0]);
+    const tufts = scatterTufts(a, () => false, 1);
+    expect(tufts.every((t) => t.x < 1 || (t.x >= 2 && t.x < 3))).toBe(true);
+    expect(scatterTufts(a, () => false, 1)).toEqual(tufts);
+    expect(scatterTufts(a, () => true, 1)).toEqual([]);
   });
 });

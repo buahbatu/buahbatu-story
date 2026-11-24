@@ -133,6 +133,7 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | `rug` | `w`, `d`, `color` |
 | `desk`, `tv`, `coffee_table`, `bookshelf`, `kitchen`, `fridge`, `dining_table`, `vanity` | — |
 
+- **Tampilan ala PS1 (P1-04b)**: bayangan matahari (`SHADOW`, shadow map dasar yang tajam, mengikuti kamera), air = **cekungan** sedalam `WATER_DEPTH` dengan tepi menurun + **permukaan transparan beriak** (`WATER`, mesh `water`, riak bergerak pelan), tanah alami = rotasi tekstur acak per petak untuk tanah organik + variasi terang tipis + **rumput 3D** (instanced, deterministik per petak, tidak di petak terhalang). Semua angka di `config/world.ts`.
 - **Papan nama**: teks dari i18n (`sign.*`), **maksimal ±10 huruf** supaya terbaca di resolusi rendah (font Press Start 2P 8px, papan dimiringkan menghadap kamera). Nama panjang → papan berdiri (`sign`) yang lebih lebar.
 - Peta prototipe yang ada: `sandbox` (40×30), `lembang` (48×36), `buahbatu` (44×34), interior `kos_a` (7×6) & `rumah_michelle` (15×9: kamar Michelle, ruang tamu, dapur).
 
