@@ -7,6 +7,9 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 
 ## [Unreleased]
 
+### Diperbaiki
+- Klik kanan (geser kamera) di HP tidak lagi memicu permintaan layar penuh yang ditolak browser (hanya sentuhan/klik utama).
+
 ### Diubah
 - Tombol (keputusan user): **Lompat = Spasi**, **Pakai alat = C**, Push-to-talk tetap V, B kosong.
 

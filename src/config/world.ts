@@ -56,7 +56,7 @@ export const WATER_FX = {
   wetAmount: 0.45,
   sink: 12,
 } as const;
-export const INTERACTION = { reach: 0.9, facingBias: 0.35, promptHeight: 1.6 } as const;
+export const INTERACTION = { reach: 0.9, facingBias: 0.35, promptHeight: 1.6, headHeight: 2.1 } as const;
 export const INTERACT_PROMPTS = {
   bed: 'prompt.sleep',
   shipping_bin: 'prompt.ship',

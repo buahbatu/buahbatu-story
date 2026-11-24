@@ -11,7 +11,8 @@ export function installTouchFullscreen(): () => void {
   const touch = window.matchMedia('(pointer: coarse)');
   const installed = window.matchMedia('(display-mode: fullscreen), (display-mode: standalone)');
   const root = document.documentElement;
-  const enter = () => {
+  const enter = (e: PointerEvent) => {
+    if (e.pointerType !== 'touch' && e.button !== 0) return;
     const env = {
       touch: touch.matches,
       supported: 'requestFullscreen' in root,

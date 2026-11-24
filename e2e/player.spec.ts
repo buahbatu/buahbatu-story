@@ -19,6 +19,9 @@ async function hold(page: Page, keys: string[], ms: number) {
   for (const k of keys) await page.keyboard.down(k);
   await page.waitForTimeout(ms);
   const during = await player(page);
+  await page.evaluate((codes) => {
+    for (const code of codes) window.dispatchEvent(new KeyboardEvent('keyup', { code }));
+  }, keys);
   for (const k of keys) await page.keyboard.up(k);
   await page.evaluate(
     () =>

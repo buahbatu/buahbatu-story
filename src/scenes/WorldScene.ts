@@ -244,11 +244,13 @@ export class WorldScene implements GameScene {
       if (current) uiStore.set({ prompt: null });
       return;
     }
-    const at = new Vector3(
+    const spot = new Vector3(
       this.nearby.x,
       standHeight(area, this.nearby.x, this.nearby.y) + INTERACTION.promptHeight,
       this.nearby.y,
     ).project(this.world.camera);
+    const head = new Vector3(player.x, standHeight(area, player.x, player.y) + INTERACTION.headHeight, player.y).project(this.world.camera);
+    const at = spot.y > head.y ? spot : head;
     const next = {
       key: keyLabel(this.engine?.input.keysFor('interact')[0]),
       text: this.nearby.prompt,
