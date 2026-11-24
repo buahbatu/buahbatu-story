@@ -15,9 +15,11 @@ import {
 } from 'three';
 import { PLAYER } from '../config/balance';
 import { PALETTE } from '../config/palette';
-import { DEFAULT_AREA, INTERACTION, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
+import { DEFAULT_AREA, INTERACTION, TRAVEL, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { OcclusionFader } from '../world/occlusion';
 import { WaterFx } from '../world/waterFx';
+import { doorById, edgeAt, enteredEdge } from '../world/travel/logic';
+import type { I18nKey } from '../content/i18n';
 import { dialogFor, keyLabel, nearestInteractable, type Interactable } from '../world/interact/logic';
 import { DialogController } from '../systems/dialog/controller';
 import { bookOf } from '../systems/dialog/logic';
@@ -70,6 +72,10 @@ export class WorldScene implements GameScene {
   private fxTick = 0;
   private rippleIn = 0;
   private splashes = 0;
+  private trip: Promise<boolean> | null = null;
+  private trips = 0;
+  private manifest: Promise<Set<string>> | null = null;
+  private insideEdge: number | null = null;
   private rig: CameraRig = NEUTRAL;
   private nearby: Interactable | null = null;
   readonly dialog = new DialogController(bookOf(dialogFiles()));
@@ -82,6 +88,48 @@ export class WorldScene implements GameScene {
     const scene = new Scene();
     this.sun = addEnvironment(scene, WORLD_FOG, true);
     this.world = { scene, camera: new PerspectiveCamera(WORLD_CAMERA.fov, 16 / 9, WORLD_CAMERA.near, WORLD_CAMERA.far) };
+  }
+
+  notify: (key: I18nKey) => void = () => undefined;
+
+  get travelling(): boolean {
+    return this.trip !== null;
+  }
+
+  travel(area: string, spawn: string): Promise<boolean> {
+    this.trip ??= this.runTrip(area, spawn).finally(() => {
+      this.trip = null;
+    });
+    return this.trip;
+  }
+
+  private async runTrip(area: string, spawn: string): Promise<boolean> {
+    uiStore.set({ fade: true, prompt: null });
+    await new Promise((done) => setTimeout(done, TRAVEL.fadeMs));
+    let ok = true;
+    try {
+      if (!(await this.availableAreas()).has(area)) throw new Error('closed');
+      if (this.area?.id !== area) await this.load(area);
+      this.spawn(spawn);
+      this.insideEdge = this.area && this.player ? (edgeAt(this.area, this.player.x, this.player.y)?.objectId ?? null) : null;
+      this.trips++;
+    } catch {
+      this.notify('travel.closed');
+      ok = false;
+    }
+    uiStore.set({ fade: false });
+    return ok;
+  }
+
+  private availableAreas(): Promise<Set<string>> {
+    this.manifest ??= fetch(new URL(`${import.meta.env.BASE_URL}assets/maps/index.json`, location.href))
+      .then((r) => r.json() as Promise<{ areas: string[] }>)
+      .then((m) => new Set(m.areas));
+    return this.manifest;
+  }
+
+  travelState(): { travelling: boolean; trips: number } {
+    return { travelling: this.travelling, trips: this.trips };
   }
 
   goto(area: string, spawn?: string): void {
@@ -113,6 +161,14 @@ export class WorldScene implements GameScene {
       bodyBlocked(area, x, y, walkLevel(area, fx, fy), body),
     );
     this.player = stepJump(moved, !talking && engine.input.justPressed('jump'), dt, PLAYER);
+    if (this.travelling) return;
+    const crossed = enteredEdge(area, this.player.x, this.player.y, this.insideEdge);
+    this.insideEdge = crossed.inside;
+    if (crossed.edge) void this.travel(crossed.edge.area, crossed.edge.spawn);
+    if (!talking && engine.input.justPressed('interact') && this.nearby?.kind === 'door') {
+      const door = doorById(area, this.nearby.id);
+      if (door) void this.travel(door.area, door.spawn);
+    }
     if (!talking && engine.input.justPressed('interact') && this.nearby) {
       this.done = [...this.done.slice(-19), { id: this.nearby.id, kind: this.nearby.kind, action: this.nearby.action, area: area.id }];
       const id = dialogFor(this.nearby.action);

@@ -37,5 +37,6 @@
   "dialog.logEmpty": "Belum ada obrolan.",
   "dialog.next": "Lanjut",
   "speaker.player": "Kamu",
-  "player.defaultName": "Kamu"
+  "player.defaultName": "Kamu",
+  "travel.closed": "Tempat ini belum dibuka. Sabar ya, lagi dibangun!"
 }

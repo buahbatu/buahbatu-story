@@ -195,6 +195,19 @@
   margin-bottom: calc(var(--px) * 3);
 }
 
+.fade-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--color-night);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms steps(6, end);
+}
+
+.fade-overlay.on {
+  opacity: 1;
+}
+
 .toast-host {
   position: absolute;
   top: calc(var(--px) * 8);

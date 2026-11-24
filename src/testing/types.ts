@@ -25,6 +25,7 @@ export interface TestApi {
   actions(): Action[];
   clock(): number;
   occluding(): string[];
+  travel(): { travelling: boolean; trips: number };
   dialog(): { open: boolean; dialogId: string | null; line: number; done: number };
   prompt(): { key: string; text: string; x: number; y: number } | null;
   interactions(): { id: number; kind: string; action: string; area: string }[];

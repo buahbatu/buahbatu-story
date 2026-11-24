@@ -12,6 +12,7 @@ export interface UiState {
   dialog: DialogView | null;
   dialogLog: { speaker: string; text: string }[];
   dialogLogOpen: boolean;
+  fade: boolean;
 }
 
 export interface DialogView {
@@ -39,6 +40,7 @@ export const uiStore = createStore<UiState>({
   dialog: null,
   dialogLog: [],
   dialogLogOpen: false,
+  fade: false,
 });
 
 export function setActiveScene(scene: SceneKey): void {

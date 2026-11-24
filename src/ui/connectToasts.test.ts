@@ -27,6 +27,7 @@ function setup() {
     dialog: null,
     dialogLog: [],
     dialogLogOpen: false,
+    fade: false,
   });
   connectToasts(bus, store, clock);
   return { bus, store, advance };

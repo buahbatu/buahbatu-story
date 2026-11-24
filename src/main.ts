@@ -18,6 +18,9 @@ const { scenes, world } = createScenes();
 const input = new InputState(DEFAULT_BINDINGS);
 attachKeyboard(input);
 attachPointer(input, gameRoot);
+world.notify = (key) => {
+  runtime.bus.emit({ type: 'ui/toast', key });
+};
 const engine = new Engine(gameRoot, scenes, currentView(), input);
 installViewScaling(engine);
 installTouchFullscreen();

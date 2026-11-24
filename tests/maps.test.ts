@@ -16,6 +16,10 @@ const parsed = new Map<string, ReturnType<typeof parseArea>>([...raw].map(([id, 
 const planned = new Set<string>(AREA_IDS);
 
 describe('peta di public/assets/maps (docs/10 §6)', () => {
+  it('index.json mendaftar semua peta yang ada (dipakai transisi area)', () => {
+    const manifest = JSON.parse(readFileSync(join(dir, 'index.json'), 'utf8')) as { areas: string[] };
+    expect(manifest.areas).toEqual([...raw.keys()].sort());
+  });
   it('minimal ada peta sandbox & setiap peta terdaftar di AREA_IDS', () => {
     expect(raw.has('sandbox')).toBe(true);
     expect([...raw.keys()].filter((id) => !planned.has(id))).toEqual([]);
