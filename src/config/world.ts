@@ -73,6 +73,75 @@ export const PROP_ASSETS = {
   pot: ['nature/pot_small', 'nature/flower_redA'],
   street_lamp: ['roads/light-curved'],
 } as const satisfies Partial<Record<PropModel, readonly string[]>>;
+export interface FurniturePart {
+  file: string;
+  size: readonly [number, number, number];
+  at?: readonly [number, number, number];
+  yaw?: number;
+}
+export interface FurnitureSpec {
+  tint?: string;
+  color?: string;
+  parts: readonly FurniturePart[];
+}
+const F = (name: string) => `furniture/${name}`;
+export const FURNITURE = {
+  bed: { tint: 'carpet', color: '#9cc8e8', parts: [{ file: F('bedSingle'), size: [1.3, 0.95, 2.1] }] },
+  wardrobe: { tint: 'wood', parts: [{ file: F('bookcaseClosedDoors'), size: [1.4, 2.1, 0.6] }] },
+  desk: {
+    parts: [
+      { file: F('desk'), size: [1.4, 0.78, 0.7] },
+      { file: F('laptop'), size: [0.45, 0.32, 0.36], at: [0.25, 0.78, -0.05] },
+      { file: F('books'), size: [0.32, 0.22, 0.22], at: [-0.42, 0.78, -0.12] },
+    ],
+  },
+  chair: { tint: 'wood', parts: [{ file: F('chair'), size: [0.5, 0.95, 0.5] }] },
+  sofa: { tint: 'carpet', color: '#5a7fa8', parts: [{ file: F('loungeSofa'), size: [2.2, 0.9, 0.9] }] },
+  tv: {
+    parts: [
+      { file: F('cabinetTelevision'), size: [1.8, 0.55, 0.5] },
+      { file: F('televisionModern'), size: [1.3, 0.85, 0.16], at: [0, 0.55, -0.06] },
+    ],
+  },
+  coffee_table: { parts: [{ file: F('tableCoffee'), size: [1.1, 0.45, 0.6] }] },
+  bookshelf: {
+    parts: [
+      { file: F('bookcaseOpen'), size: [1.2, 1.8, 0.4] },
+      { file: F('books'), size: [0.5, 0.3, 0.26], at: [-0.25, 0.08, 0] },
+      { file: F('books'), size: [0.45, 0.3, 0.26], at: [0.2, 0.92, 0], yaw: Math.PI },
+      { file: F('books'), size: [0.5, 0.3, 0.26], at: [-0.2, 1.34, 0] },
+    ],
+  },
+  kitchen: {
+    parts: [
+      { file: F('kitchenCabinet'), size: [0.6, 0.9, 0.65], at: [-0.9, 0, 0] },
+      { file: F('kitchenStove'), size: [0.6, 0.9, 0.65], at: [-0.3, 0, 0] },
+      { file: F('kitchenSink'), size: [0.6, 0.98, 0.65], at: [0.3, 0, 0] },
+      { file: F('kitchenCabinet'), size: [0.6, 0.9, 0.65], at: [0.9, 0, 0] },
+      { file: F('kitchenCabinetUpper'), size: [1.2, 0.6, 0.35], at: [-0.6, 1.55, -0.15] },
+      { file: F('kitchenCabinetUpper'), size: [1.2, 0.6, 0.35], at: [0.6, 1.55, -0.15] },
+    ],
+  },
+  fridge: { parts: [{ file: F('kitchenFridge'), size: [0.75, 1.8, 0.7] }] },
+  dining_table: {
+    parts: [
+      { file: F('table'), size: [1.6, 0.78, 0.9] },
+      { file: F('chair'), size: [0.5, 0.95, 0.5], at: [-0.45, 0, -0.72] },
+      { file: F('chair'), size: [0.5, 0.95, 0.5], at: [0.45, 0, -0.72] },
+      { file: F('chair'), size: [0.5, 0.95, 0.5], at: [-0.45, 0, 0.72], yaw: Math.PI },
+      { file: F('chair'), size: [0.5, 0.95, 0.5], at: [0.45, 0, 0.72], yaw: Math.PI },
+    ],
+  },
+  vanity: {
+    tint: 'wood',
+    color: '#f4e3d3',
+    parts: [
+      { file: F('sideTableDrawers'), size: [1.1, 0.75, 0.45] },
+      { file: F('bathroomMirror'), size: [0.6, 0.9, 0.1], at: [0, 0.75, -0.17] },
+    ],
+  },
+  rug: { tint: 'carpet', color: '#c9473d', parts: [{ file: F('rugRectangle'), size: [2, 0.02, 1.5] }] },
+} as const satisfies Partial<Record<PropModel, FurnitureSpec>>;
 export const ASSET_LOOK = {
   colors: {
     leafsGreen: '#5c9a45',
@@ -95,7 +164,9 @@ export const ASSET_LOOK = {
     woodBarkDark: { texture: 'bark', tint: '#d8c8c0' },
     _defaultMat: { texture: 'bark', tint: '#ffffff' },
     stone: { texture: 'rock', tint: '#ffffff' },
-  } as Record<string, { texture: 'leaves' | 'bark' | 'rock'; tint: string }>,
+    wood: { texture: 'planks', tint: '#f4dcc0' },
+    woodDark: { texture: 'planks', tint: '#b89478' },
+  } as Record<string, { texture: 'leaves' | 'bark' | 'rock' | 'planks'; tint: string }>,
   uvDensity: 3,
   jitter: 0.12,
   bamboo: { wood: '#c2ad5c', woodDark: '#9a8a45' },

@@ -5,30 +5,13 @@ import type { Props } from '../map/logic';
 import { DEFAULT_BUILDING, ROOFS, WALLS, building, type BuildingSpec } from './buildings';
 import { farmhouse, strawberryPlot } from './models';
 import { FENCE_STYLES, bush, fence, pine, pot, rock, streetLamp, tree } from './nature';
-import {
-  bed,
-  bookshelf,
-  chair,
-  coffeeTable,
-  desk,
-  diningTable,
-  fridge,
-  kitchen,
-  partition,
-  room,
-  rug,
-  sofa,
-  tv,
-  vanity,
-  wallFrame,
-  wallWindow,
-  wardrobe,
-} from './furniture';
+import { furnish, partition, room, wallFrame, wallWindow } from './furniture';
 import { bench, foodCart, haystack, powerPole, signBoard } from './street';
 
 type Value = Props[string] | undefined;
 
 const num = (value: Value, fallback: number) => (typeof value === 'number' && Number.isFinite(value) ? value : fallback);
+const tintOf = (value: Value) => (typeof value === 'string' && value !== '' ? value : undefined);
 const str = (value: Value, fallback: string) => (typeof value === 'string' && value !== '' ? value : fallback);
 const oneOf = <T extends string>(options: readonly T[], value: Value, fallback: T): T => options.find((o) => o === value) ?? fallback;
 export const TEXT_PROPS = ['sign', 'label', 'text'] as const;
@@ -77,19 +60,19 @@ export const PROP_FACTORIES: Record<PropModel, (props: Props, seed: number) => O
   partition: (p) => partition(num(p.length, 3), str(p.wallColor, '#f1e3c4'), str(p.trim, '#8a5a36')),
   wall_window: (p) => wallWindow(str(p.curtain, '#e8b4bc')),
   wall_frame: (p) => wallFrame(str(p.color, '#e8b4bc')),
-  bed: (p) => bed(str(p.color, '#9cc8e8')),
-  wardrobe: (p) => wardrobe(str(p.color, '#a8723f')),
-  desk: () => desk(),
-  chair: (p) => chair(str(p.color, '#8a5a36')),
-  sofa: (p) => sofa(str(p.color, '#5a7fa8')),
-  tv: () => tv(),
-  coffee_table: () => coffeeTable(),
-  rug: (p) => rug(num(p.w, 2), num(p.d, 1.5), str(p.color, '#c9473d')),
-  bookshelf: () => bookshelf(),
-  kitchen: () => kitchen(),
-  fridge: () => fridge(),
-  dining_table: () => diningTable(),
-  vanity: () => vanity(),
+  bed: (p) => furnish('bed', tintOf(p.color)),
+  wardrobe: (p) => furnish('wardrobe', tintOf(p.color)),
+  desk: () => furnish('desk'),
+  chair: (p) => furnish('chair', tintOf(p.color)),
+  sofa: (p) => furnish('sofa', tintOf(p.color)),
+  tv: () => furnish('tv'),
+  coffee_table: () => furnish('coffee_table'),
+  rug: (p) => furnish('rug', tintOf(p.color), [num(p.w, 2), num(p.d, 1.5)]),
+  bookshelf: () => furnish('bookshelf'),
+  kitchen: () => furnish('kitchen'),
+  fridge: () => furnish('fridge'),
+  dining_table: () => furnish('dining_table'),
+  vanity: (p) => furnish('vanity', tintOf(p.color)),
 };
 
 export const isPropModel = (model: unknown): model is PropModel =>

@@ -1,4 +1,4 @@
-import { PROP_ASSETS, type PropModel } from '../../config/world';
+import { FURNITURE, PROP_ASSETS, type PropModel } from '../../config/world';
 
 export const pickIndex = (count: number, seed: number): number => (count <= 0 ? 0 : Math.min(count - 1, Math.floor(seed * count)));
 
@@ -15,8 +15,10 @@ export function fenceLayout(length: number, segment: number): { count: number; s
 export const assetsFor = (models: Iterable<unknown>): string[] => {
   const files = new Set<string>();
   for (const model of models) {
-    if (typeof model !== 'string' || !Object.hasOwn(PROP_ASSETS, model)) continue;
-    for (const file of (PROP_ASSETS as Partial<Record<PropModel, readonly string[]>>)[model as PropModel] ?? []) files.add(file);
+    if (typeof model !== 'string') continue;
+    if (Object.hasOwn(PROP_ASSETS, model))
+      for (const file of (PROP_ASSETS as Partial<Record<PropModel, readonly string[]>>)[model as PropModel] ?? []) files.add(file);
+    if (Object.hasOwn(FURNITURE, model)) for (const part of FURNITURE[model as keyof typeof FURNITURE].parts) files.add(part.file);
   }
   return [...files].sort();
 };

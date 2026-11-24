@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { ASSET_LOOK, PROP_ASSETS, PROP_MODELS } from '../../config/world';
+import { ASSET_LOOK, FURNITURE, PROP_ASSETS, PROP_MODELS } from '../../config/world';
 import { assetsFor, fenceLayout, fitScale, pickIndex, projectUVs, varied } from './logic';
 
 describe('pickIndex', () => {
@@ -79,5 +79,23 @@ describe('projectUVs', () => {
   it('jumlah UV mengikuti jumlah titik', () => {
     expect(projectUVs([], [], 3)).toHaveLength(0);
     expect(projectUVs([0, 0, 0, 1, 1, 1], [0, 0, 1, 0, 0, 1], 1)).toHaveLength(4);
+  });
+});
+
+describe('FURNITURE', () => {
+  it('perabot memakai model prop sah, file ada, ukuran positif', () => {
+    for (const [model, spec] of Object.entries(FURNITURE)) {
+      expect(PROP_MODELS).toContain(model);
+      expect(spec.parts.length).toBeGreaterThan(0);
+      for (const part of spec.parts) {
+        expect(existsSync(`public/assets/models/${part.file}.glb`), part.file).toBe(true);
+        for (const v of part.size) expect(v).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('assetsFor ikut mengumpulkan bagian perabot', () => {
+    expect(assetsFor(['dining_table'])).toEqual(['furniture/chair', 'furniture/table']);
+    expect(assetsFor(['rug', 'pot'])).toContain('furniture/rugRectangle');
   });
 });
