@@ -25,6 +25,8 @@ export interface TestApi {
   actions(): Action[];
   clock(): number;
   occluding(): string[];
+  setCamera(change: { yaw?: number; zoom?: number }): void;
+  camera(): { yaw: number; zoom: number; focus: { x: number; y: number }; pan: { x: number; y: number } };
   water(): { inWater: boolean; wetness: number; particles: number; ripples: number; splashes: number };
   player(): (PlayerMotion & { area: string }) | null;
   placePlayer(x: number, y: number, facing: Direction): void;

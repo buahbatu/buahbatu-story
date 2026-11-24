@@ -74,6 +74,10 @@ function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
     clock: () => engine.elapsed,
     occluding: () => world.occlusion.occluding(),
     water: () => world.waterState(),
+    camera: () => world.cameraState(),
+    setCamera(change) {
+      world.setCamera(change);
+    },
     player: () => (world.player && world.area ? { ...world.player, area: world.area.id } : null),
     move: () => engine.input.move(),
     freeze(on) {

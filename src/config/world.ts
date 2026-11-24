@@ -10,11 +10,35 @@ export const TERRAIN_LOOK = {
 } as const;
 export const SHADOW = { extent: 15, mapSize: 1024, bias: -0.0015 } as const;
 export const ATLAS_INSET = 0.01;
-export const WORLD_CAMERA = { fov: 30, pitchDeg: 40, distance: 13, near: 0.5, far: 120 } as const;
+export const WORLD_CAMERA = {
+  fov: 30,
+  pitchDeg: 40,
+  distance: 13,
+  near: 0.5,
+  far: 120,
+  minZoom: 0.55,
+  maxZoom: 1.7,
+  zoomStep: 0.12,
+  keyZoom: 8,
+  rotateSpeed: 2.2,
+  follow: 9,
+  recenter: 2.5,
+  maxPan: 9,
+  panPerPixel: 0.0018,
+  edgeInset: 3,
+} as const;
 export const DEFAULT_AREA = 'sandbox';
 export const AREA_ID_PATTERN = /^[a-z0-9_]+$/;
 export const WORLD_SKIRT = 40;
-export const INTERIOR = { background: '#14111f', fogNear: 60, fogFar: 120, cameraDistance: 15, lookBack: 0.9 } as const;
+export const INTERIOR = {
+  background: '#14111f',
+  fogNear: 60,
+  fogFar: 120,
+  cameraDistance: 15,
+  lookBack: 0.9,
+  minZoom: 0.7,
+  maxZoom: 1.3,
+} as const;
 export const WATER_FX = {
   dryTime: 8,
   dripTime: 4,

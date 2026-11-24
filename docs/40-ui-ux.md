@@ -67,15 +67,19 @@ Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kot
 | Gerak | WASD / panah | — | Joystick virtual kiri | Stik kiri |
 | Interaksi | E | Klik kanan | Tombol A | A |
 | Pakai alat | Spasi | Klik kiri | Tombol B | X |
-| Hotbar | 1–0, scroll | Scroll | Ketuk slot | LB/RB |
+| Hotbar | 1–0, `[` `]` | — | Ketuk slot | LB/RB |
 | HP | Tab | Ikon | Ikon HP | Start |
 | Lari | Shift | — | Joystick penuh | Stik ditekan |
 | Emote | F | — | Tombol emote | Y |
 | Push-to-talk | V (tahan) | — | Tombol mic | RT |
 | Lompat | B (keputusan user: dekat Spasi) | — | Tombol lompat | B |
 | Dekor | G | — | Ikon | — |
+| Zoom kamera | `+` / `-` | Scroll | Cubit dua jari | — |
+| Putar kamera | Q / R | — | Putar dua jari | Stik kanan |
+| Geser pandangan | — | Tahan klik kanan + seret | Geser dua jari | — |
 
 - Semua tombol bisa di-remap (Pengaturan → Kontrol).
+- **Kamera (P1-06, keputusan user):** scroll = zoom (hotbar tidak memakai scroll), Q/R memutar kamera (E tetap Interaksi), tahan klik kanan + seret menggeser pandangan; pandangan kembali mengikuti pemain begitu pemain berjalan. WASD selalu relatif terhadap kamera (W = menjauh dari layar). Di dalam ruangan kamera tidak bisa diputar/digeser, hanya zoom. Angka di `WORLD_CAMERA` / `INTERIOR` (`config/world.ts`), logika murni `src/world/camera/logic.ts`, input mouse/sentuh `src/input/pointer.ts`.
 - Input diabstraksi menjadi **Action** (`src/input/`), bukan key langsung. **Status (P1-03):** keyboard. Daftar Action di `src/input/actions.ts`, tombol bawaan di `src/config/controls.ts` (`KeyboardEvent.code`, jadi aman untuk layout keyboard apa pun; maks. 2 tombol per Action; `Enter` cadangan Interaksi; hotbar maju/mundur `]`/`[` sampai scroll mouse ditambahkan). `InputState` (`src/input/logic.ts`): ditahan / baru ditekan / baru dilepas per frame, vektor gerak dinormalisasi, `rebind` tanpa bentrok + skema zod (dipakai menu remap P16-03). Tombol milik game tidak menjalankan aksi browser (Tab tidak memindah fokus, Spasi/panah tidak menggulir); kombinasi Ctrl/Alt/Meta & mengetik di kolom teks diabaikan; semua tombol dilepas saat jendela kehilangan fokus.
 
 ## 7. Responsif (ADR-020)

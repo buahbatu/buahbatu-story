@@ -22,7 +22,7 @@ describe('InputState', () => {
 
   it('tombol tak terikat diabaikan, tombol terikat dilaporkan', () => {
     const input = make();
-    expect(input.keyDown('KeyQ')).toBe(false);
+    expect(input.keyDown('KeyP')).toBe(false);
     expect(input.keyDown('KeyE')).toBe(true);
     expect(input.down()).toEqual(['interact']);
   });
@@ -96,5 +96,28 @@ describe('rebind', () => {
   it('skema menolak tombol ganda antar Action', () => {
     const bad = { ...DEFAULT_BINDINGS, emote: ['KeyE'] };
     expect(bindingsSchema.safeParse(bad).success).toBe(false);
+  });
+});
+
+describe('gestur kamera (scroll, seret, dua jari)', () => {
+  it('dijumlahkan dalam satu frame lalu dikosongkan di endFrame', () => {
+    const input = new InputState(DEFAULT_BINDINGS);
+    input.addGesture({ zoom: 1, panX: 5 });
+    input.addGesture({ zoom: 0.5, panY: -2, twist: 0.1 });
+    expect(input.gestures()).toEqual({ zoom: 1.5, panX: 5, panY: -2, twist: 0.1 });
+    input.endFrame();
+    expect(input.gestures()).toEqual({ zoom: 0, panX: 0, panY: 0, twist: 0 });
+  });
+
+  it('Q/R dan +/- punya tombol bawaan tanpa bentrok dengan Interaksi (E)', () => {
+    const input = new InputState(DEFAULT_BINDINGS);
+    expect([input.actionOf('KeyQ'), input.actionOf('KeyR'), input.actionOf('KeyE')]).toEqual(['cameraLeft', 'cameraRight', 'interact']);
+    expect([input.actionOf('Equal'), input.actionOf('Minus'), input.actionOf('KeyB'), input.actionOf('KeyG')]).toEqual([
+      'zoomIn',
+      'zoomOut',
+      'jump',
+      'decor',
+    ]);
+    expect(bindingsSchema.safeParse(DEFAULT_BINDINGS).success).toBe(true);
   });
 });

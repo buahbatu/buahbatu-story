@@ -18,6 +18,7 @@ import { PALETTE } from '../config/palette';
 import { DEFAULT_AREA, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { OcclusionFader } from '../world/occlusion';
 import { WaterFx } from '../world/waterFx';
+import { NEUTRAL, cameraOffset, rotateVec, stepCamera, type CameraInput, type CameraRig } from '../world/camera/logic';
 import { DRY, drip, seeded, splashBurst, stepWet, type WetState } from '../entities/player/wet';
 import { logger } from '../core/logger';
 import type { Engine, GameScene } from '../engine/engine';
@@ -29,6 +30,7 @@ import { bodyBlocked, parseArea, standHeight, walkLevel, waterAt, type AreaData 
 import { SCENE } from './keys';
 
 const OCCLUSION_POINTS = [0.8, 1.5] as const;
+const STILL: CameraInput = { rotate: 0, zoom: 0, pan: { x: 0, y: 0 }, twist: 0 };
 
 const mapUrl = (id: string) => new URL(`${import.meta.env.BASE_URL}assets/maps/${id}.tmj`, location.href);
 
@@ -57,6 +59,7 @@ export class WorldScene implements GameScene {
   private fxTick = 0;
   private rippleIn = 0;
   private splashes = 0;
+  private rig: CameraRig = NEUTRAL;
   private look = APPEARANCE.A;
   private lookReady: Promise<void> | null = null;
   player: PlayerMotion | null = null;
@@ -87,7 +90,7 @@ export class WorldScene implements GameScene {
     this.water?.offset.set(time * WATER.flow, time * WATER.flow * 0.6);
     const { area, player, engine } = this;
     if (!area || !player || !engine) return;
-    const raw = engine.input.move();
+    const raw = rotateVec(engine.input.move(), this.rig.yaw);
     const wade = waterAt(area, player.x, player.y, PLAYER.shallowTiles) === 'none' ? 1 : PLAYER.wadeFactor;
     const body = { ...PLAYER, maxStep: PLAYER.maxStep + jumpHeight(player, PLAYER) };
     const moved = stepMotion(player, { x: raw.x * wade, y: raw.y * wade }, engine.input.isDown('run'), dt, area, PLAYER, (x, y, fx, fy) =>
@@ -95,7 +98,23 @@ export class WorldScene implements GameScene {
     );
     this.player = stepJump(moved, engine.input.justPressed('jump'), dt, PLAYER);
     this.splashAndDrip(area, this.player, dt);
-    this.showPlayer(dt);
+    const g = engine.input.gestures();
+    const key = Number(engine.input.isDown('zoomOut')) - Number(engine.input.isDown('zoomIn'));
+    this.showPlayer(dt, {
+      rotate: Number(engine.input.isDown('cameraRight')) - Number(engine.input.isDown('cameraLeft')),
+      zoom: g.zoom + key * WORLD_CAMERA.keyZoom * dt,
+      pan: { x: g.panX, y: g.panY },
+      twist: g.twist,
+    });
+  }
+
+  setCamera(change: Partial<Pick<CameraRig, 'yaw' | 'zoom'>>): void {
+    this.rig = { ...this.rig, ...change };
+    this.showPlayer(null);
+  }
+
+  cameraState(): CameraRig {
+    return { ...this.rig, focus: { ...this.rig.focus }, pan: { ...this.rig.pan } };
   }
 
   waterState(): { inWater: boolean; wetness: number; particles: number; ripples: number; splashes: number } {
@@ -190,10 +209,10 @@ export class WorldScene implements GameScene {
     this.showPlayer(null);
   }
 
-  private showPlayer(dt: number | null): void {
+  private showPlayer(dt: number | null, input: CameraInput = STILL): void {
     if (!this.area || !this.player) return;
     this.playerView.apply(this.player, standHeight(this.area, this.player.x, this.player.y), dt, jumpHeight(this.player, PLAYER));
-    this.placeCamera(this.player);
+    this.placeCamera(this.player, dt, input);
     const h = standHeight(this.area, this.player.x, this.player.y);
     this.occlusion.update(
       this.world.camera,
@@ -202,18 +221,23 @@ export class WorldScene implements GameScene {
     );
   }
 
-  private placeCamera(focus: { x: number; y: number }): void {
+  private placeCamera(player: PlayerMotion, dt: number | null, input: CameraInput): void {
     if (!this.area) return;
     const { settings, width, height } = this.area;
     const indoor = settings.interior === true;
-    const target = indoor ? { x: width / 2, y: height / 2 - INTERIOR.lookBack } : focus;
+    const target = indoor ? { x: width / 2, y: height / 2 - INTERIOR.lookBack } : { x: player.x, y: player.y };
     const distance =
       typeof settings.cameraDistance === 'number' ? settings.cameraDistance : indoor ? INTERIOR.cameraDistance : WORLD_CAMERA.distance;
     const pitch = (WORLD_CAMERA.pitchDeg * Math.PI) / 180;
-    const y = standHeight(this.area, target.x, target.y);
+    const rules = indoor ? { ...WORLD_CAMERA, minZoom: INTERIOR.minZoom, maxZoom: INTERIOR.maxZoom } : WORLD_CAMERA;
+    const ctx = { target, moving: player.anim !== 'idle', bounds: { width, height }, locked: indoor, distance };
+    this.rig = stepCamera(this.rig, input, ctx, dt, rules);
+    const { focus } = this.rig;
+    const y = standHeight(this.area, focus.x, focus.y);
+    const o = cameraOffset(this.rig, distance, pitch);
     const { camera } = this.world;
-    camera.position.set(target.x, y + Math.sin(pitch) * distance, target.y + Math.cos(pitch) * distance);
-    camera.lookAt(target.x, y, target.y);
-    aimSun(this.sun, target.x, y, target.y);
+    camera.position.set(focus.x + o.x, y + o.y, focus.y + o.z);
+    camera.lookAt(focus.x, y, focus.y);
+    aimSun(this.sun, focus.x, y, focus.y);
   }
 }

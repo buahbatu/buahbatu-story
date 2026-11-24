@@ -38,6 +38,7 @@ export class InputState {
   private readonly released = new Set<Action>();
   private byKey = new Map<string, Action>();
   private bindings: Bindings;
+  private gesture = { zoom: 0, panX: 0, panY: 0, twist: 0 };
 
   constructor(bindings: Bindings) {
     this.bindings = bindings;
@@ -102,8 +103,22 @@ export class InputState {
     return len === 0 ? { x: 0, y: 0 } : { x: x / len, y: y / len };
   }
 
+  addGesture(g: Partial<{ zoom: number; panX: number; panY: number; twist: number }>): void {
+    this.gesture = {
+      zoom: this.gesture.zoom + (g.zoom ?? 0),
+      panX: this.gesture.panX + (g.panX ?? 0),
+      panY: this.gesture.panY + (g.panY ?? 0),
+      twist: this.gesture.twist + (g.twist ?? 0),
+    };
+  }
+
+  gestures(): { zoom: number; panX: number; panY: number; twist: number } {
+    return { ...this.gesture };
+  }
+
   endFrame(): void {
     this.pressed.clear();
     this.released.clear();
+    this.gesture = { zoom: 0, panX: 0, panY: 0, twist: 0 };
   }
 }

@@ -26,7 +26,7 @@ test('Tab & Spasi milik game: tidak memindah fokus atau menggulir halaman', asyn
     expect(await page.evaluate(() => document.body.dataset.lastPrevented), key).toBe('true');
   }
   expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
-  await page.keyboard.press('KeyQ');
+  await page.keyboard.press('KeyP');
   expect(await page.evaluate(() => document.body.dataset.lastPrevented)).toBe('false');
 });
 
