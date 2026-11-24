@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 18 | 20 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 19 | 20 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +37,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **33** | **193** | |
+| **Total** | | | **34** | **193** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -67,7 +67,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
 **Sedang dikerjakan:** —
-**Task berikutnya:** P1-10
+**Task berikutnya:** P1-11
 
 ---
 
@@ -111,7 +111,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-07** Sistem interaksi: deteksi objek terdekat + prompt "E ..." · Ref: 10, 40 · ✅ 2026-11-25 · objek terdekat+di depan, prompt [E] melayang (pindah ke atas kepala bila objek di depan), log interaksi; tombol: lompat Spasi, alat C
 - [x] **P1-08** Kotak dialog Preact (typewriter, pilihan, potret placeholder, log) · Ref: 40, 18 · ✅ 2026-11-25 · bingkai ornamen, teks mengetik, pilihan (keyboard/angka/klik), riwayat L, papan Kebun Warga bisa dibaca
 - [x] **P1-09** Transisi area (pintu & tepi peta) + fade + spawn point · Ref: 10 · ✅ 2026-11-25 · pintu (E) & tepi (otomatis) + fade, area belum ada → pesan ramah, index.json peta
-- [~] **P1-10** Kontrol sentuh: joystick virtual + tombol aksi (deteksi portrait + layar penuh HP sudah dikerjakan lebih awal, ADR-020) · Ref: 40 · 🚧 2026-11-25
+- [x] **P1-10** Kontrol sentuh: joystick virtual + tombol aksi (deteksi portrait + layar penuh HP sudah dikerjakan lebih awal, ADR-020) · Ref: 40 · ✅ 2026-11-25 · joystick melayang analog (penuh = lari), tombol A/B/Lompat, prompt "A", sembunyi saat dialog
 - [ ] **P1-11** Mode debug `?debug=1` (FPS, collision, grid) · Ref: 50
 
 **Kriteria selesai P1:** bisa jalan di Lembang, masuk/keluar kos, ngobrol dengan papan (dialog), main di HP & laptop.
