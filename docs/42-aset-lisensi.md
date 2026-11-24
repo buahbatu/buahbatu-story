@@ -1,7 +1,7 @@
 # 42 · Aset, Art Direction & Lisensi
 
 ## 1. Art Direction
-- **Gaya**: **2.5D ala Harvest Moon: Back to Nature** (ADR-022): dunia **3D low-poly** bertekstur pixel kecil (filter nearest), karakter & NPC **sprite chibi** (billboard, 8 arah), kamera miring dari atas, render resolusi rendah ala PS1, palet hangat. Semua orisinal.
+- **Gaya**: **3D low-poly ala Harvest Moon: Back to Nature** (ADR-022/024/025): dunia & karakter **model 3D low-poly**, karakter **chibi 3D** (Kenney Mini Characters CC0, diwarnai ulang), kamera miring, render resolusi rendah ala PS1 (filter nearest), palet hangat.
 - **Konsistensi > kemewahan**: semua aset harus terlihat dari "dunia yang sama". Jangan campur aset 16px dan 32px.
 - **Palet utama**: hijau daun Lembang, krem kolonial Braga, merah stroberi, biru langit Bandung, oranye senja.
 - Landmark & bangunan Bandung dibentuk **custom** (model low-poly modular + tekstur), setiap bangunan berbeda (`10` §5).
@@ -9,8 +9,9 @@
 ## 2. Sumber Aset Gratis
 | Kebutuhan | Sumber | Lisensi umum |
 |---|---|---|
-| Karakter berlapis + baju | Universal LPC Spritesheet Generator, OpenGameArt (LPC) | CC-BY-SA 3.0 / GPL 3 / OGA-BY (berbeda per bagian) |
-| Tileset alam/kota | OpenGameArt koleksi LPC (terrain, city, interior, farming) | CC-BY-SA / GPL / CC0 |
+| Karakter 3D bertulang + animasi | **Kenney Mini Characters** (kenney.nl), alternatif KayKit / Quaternius | CC0 |
+| Bangunan, prop, alam 3D | Paket 3D Kenney (kota, perumahan, alam), Quaternius, KayKit | CC0 |
+| Landmark Bandung | Dirakit custom dari potongan aset / AI text-to-3D lalu dirapikan | Milik proyek (cek ketentuan tool AI) |
 | Ikon item | OpenGameArt, aset LPC item | Beragam |
 | UI pixel | Kenney (pixel UI), OpenGameArt | CC0 |
 | Audio | Freesound (filter CC0), OpenGameArt, Kenney | CC0 / CC-BY |

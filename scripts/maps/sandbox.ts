@@ -13,7 +13,7 @@ m.sprinkle('grass_flowers', 0.07)
   .raise(2, 4, 22, 5, 4);
 m.object('spawn', 20.5, 17.5, { id: 'start' })
   .object('spawn', 9.5, 12, { id: 'depan_rumah' })
-  .object('spawn', 15, 22, { id: 'bukit' })
+  .object('spawn', 16.5, 20.5, { id: 'bukit' })
   .prop('farmhouse', 9.5, 7, { rotation: 0 })
   .block(6.5, 4.6, 6, 4.8)
   .object('door', 9, 9.5, { targetArea: 'sandbox', targetSpawn: 'depan_rumah' }, 1, 0.5)

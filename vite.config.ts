@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import preact from '@preact/preset-vite';
 import { defineConfig } from 'vite';
 
-const ENGINE_CHUNK_LIMIT_KB = 600;
+const ENGINE_CHUNK_LIMIT_KB = 700;
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as {
   version: string;
@@ -19,7 +19,8 @@ export default defineConfig({
     chunkSizeWarningLimit: ENGINE_CHUNK_LIMIT_KB,
     rolldownOptions: {
       output: {
-        manualChunks: (id) => (id.includes('node_modules/three') ? 'three' : undefined),
+        manualChunks: (id) =>
+          id.includes('node_modules/three/examples') ? 'three-addons' : id.includes('node_modules/three') ? 'three' : undefined,
       },
     },
   },

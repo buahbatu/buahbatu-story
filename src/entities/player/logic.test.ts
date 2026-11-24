@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PLAYER } from '../../config/balance';
-import { facingOf, frameOf, stepMotion, type PlayerMotion } from './logic';
+import { facingOf, stepMotion, yawOf, type PlayerMotion } from './logic';
 
 const start: PlayerMotion = { x: 5, y: 5, facing: 's', anim: 'idle', animTime: 0 };
 const bounds = { width: 10, height: 8 };
@@ -62,13 +62,25 @@ describe('jeda belok', () => {
     expect(m.facing).toBe('w');
     expect(m.turn).toBeUndefined();
   });
+  it('frame lambat (dt besar) tetap butuh minimal 2 frame untuk berbelok', () => {
+    const slow = stepMotion(moving, { x: -1, y: 0 }, false, 0.1, bounds, PLAYER);
+    expect(slow.facing).toBe('sw');
+    expect(stepMotion(slow, { x: -1, y: 0 }, false, 0.1, bounds, PLAYER).facing).toBe('w');
+  });
 });
 
-describe('frameOf', () => {
-  it('idle memakai kolom 0–1, jalan/lari kolom 2–5 berulang; lari lebih cepat', () => {
-    expect(frameOf('idle', 0)).toBe(0);
-    expect(frameOf('idle', 0.7)).toBe(1);
-    expect([0, 0.13, 0.26, 0.38, 0.5].map((t) => frameOf('walk', t))).toEqual([2, 3, 4, 5, 2]);
-    expect(frameOf('run', 0.25)).toBeGreaterThan(frameOf('walk', 0.25));
+describe('yawOf', () => {
+  it.each([
+    ['s', 0],
+    ['w', -Math.PI / 2],
+    ['n', -Math.PI],
+    ['e', (-3 * Math.PI) / 2],
+  ] as const)('%s → model menghadap arah gerak', (dir, yaw) => {
+    expect(yawOf(dir)).toBeCloseTo(yaw);
+  });
+  it('arah hadap sama dengan atan2 vektor gerak (sumbu z = selatan)', () => {
+    const yaw = yawOf('sw');
+    expect(Math.sin(yaw)).toBeCloseTo(-Math.SQRT1_2);
+    expect(Math.cos(yaw)).toBeCloseTo(Math.SQRT1_2);
   });
 });

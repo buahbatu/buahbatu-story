@@ -1,36 +1,41 @@
-import { CircleGeometry, Group, Mesh, MeshBasicMaterial, PlaneGeometry, type Texture } from 'three';
-import { CHARACTER_SPRITE } from '../../config/world';
-import { DIRECTIONS, SHEET_COLUMNS, frameOf, type PlayerMotion } from './logic';
-import { FRAME_H, FRAME_W, sheetTexture, type Appearance } from './sprite';
+import { CircleGeometry, Group, Mesh, MeshBasicMaterial } from 'three';
+import { CHARACTER } from '../../config/world';
+import type { Appearance } from './appearance';
+import { createCharacter, type Character } from './character';
+import { yawOf, type PlayerMotion } from './logic';
 
 export class PlayerView {
   readonly object = new Group();
-  private readonly texture: Texture;
+  private character: Character | null = null;
+  private yaw = 0;
 
-  constructor(look: Appearance) {
-    this.texture = sheetTexture(look).clone();
-    this.texture.repeat.set(1 / SHEET_COLUMNS, 1 / DIRECTIONS.length);
-    const h = CHARACTER_SPRITE.height;
-    const geometry = new PlaneGeometry((h * FRAME_W) / FRAME_H, h);
-    geometry.translate(0, h / 2, 0);
-    const sprite = new Mesh(geometry, new MeshBasicMaterial({ map: this.texture, alphaTest: 0.5 }));
-    sprite.rotation.x = -CHARACTER_SPRITE.lean;
-    sprite.name = 'sprite';
+  constructor() {
     const shadow = new Mesh(
-      new CircleGeometry(CHARACTER_SPRITE.shadowRadius, 12),
+      new CircleGeometry(CHARACTER.shadowRadius, 12),
       new MeshBasicMaterial({ color: '#000000', transparent: true, opacity: 0.28, depthWrite: false }),
     );
     shadow.rotation.x = -Math.PI / 2;
-    shadow.scale.y = 0.6;
+    shadow.scale.y = 0.7;
     shadow.position.y = 0.03;
-    this.object.add(shadow, sprite);
+    this.object.add(shadow);
     this.object.name = 'player';
   }
 
-  apply(motion: PlayerMotion, ground: number): void {
+  async setLook(look: Appearance): Promise<void> {
+    const next = await createCharacter(look);
+    this.character?.root.removeFromParent();
+    this.character = next;
+    this.object.add(next.root);
+  }
+
+  apply(motion: PlayerMotion, ground: number, dt: number | null): void {
     this.object.position.set(motion.x, ground, motion.y);
-    const row = DIRECTIONS.indexOf(motion.facing);
-    const col = frameOf(motion.anim, motion.animTime);
-    this.texture.offset.set(col / SHEET_COLUMNS, 1 - (row + 1) / DIRECTIONS.length);
+    const target = yawOf(motion.facing);
+    const diff = Math.atan2(Math.sin(target - this.yaw), Math.cos(target - this.yaw));
+    const step = dt === null ? Math.abs(diff) : CHARACTER.turnSpeed * dt;
+    this.yaw += Math.sign(diff) * Math.min(Math.abs(diff), step);
+    if (!this.character) return;
+    this.character.root.rotation.y = this.yaw;
+    this.character.play(motion.anim, motion.animTime);
   }
 }

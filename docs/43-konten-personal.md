@@ -60,6 +60,7 @@ Teman/keluarga asli → NPC dengan sifat, kesukaan, dan gaya bicara mereka. **Mi
 **✅ Sudah diketahui**
 - Judul game: **Buahbatu Story**
 - Pemain B: **Michelle Melinda**, asal **Buahbatu**, Bandung (area spesial `buahbatu`, lihat `10`)
+- Kucing Michelle (dari user, 2026-11-24): **Luna** (putih) & **Ngkok** (putih-abu bercorak). Tinggal di rumah Michelle (`rumah_michelle`); bisa dielus & jadi peliharaan bersama (P3-11).
 
 **Tentang Buahbatu & keluarga Michelle**
 - Tempat-tempat Buahbatu yang berarti buat Michelle (rumah, sekolah, jajanan & kafe langganan, taman)

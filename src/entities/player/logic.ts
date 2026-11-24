@@ -20,13 +20,6 @@ export interface MotionRules {
   turnDelay: number;
 }
 
-export const ANIM_FRAMES: Record<PlayerAnim, { first: number; count: number; fps: number }> = {
-  idle: { first: 0, count: 2, fps: 1.6 },
-  walk: { first: 2, count: 4, fps: 8 },
-  run: { first: 2, count: 4, fps: 13 },
-};
-export const SHEET_COLUMNS = 6;
-
 export function facingOf(x: number, y: number, fallback: Direction): Direction {
   if (x === 0 && y === 0) return fallback;
   const deg = (Math.atan2(-x, y) * 180) / Math.PI;
@@ -47,7 +40,8 @@ export function stepMotion(
   const speed = running ? rules.runSpeed : rules.walkSpeed;
   const clamp = (v: number, max: number) => Math.min(max - rules.edgeMargin, Math.max(rules.edgeMargin, v));
   const wanted = facingOf(move.x, move.y, m.facing);
-  const turnTime = wanted === m.turn?.facing ? m.turn.time + dt : dt;
+  const step = Math.min(dt, rules.turnDelay / 2);
+  const turnTime = wanted === m.turn?.facing ? m.turn.time + step : step;
   const instant = m.anim === 'idle' || wanted === m.facing;
   const facing = instant || turnTime >= rules.turnDelay ? wanted : m.facing;
   return {
@@ -60,7 +54,7 @@ export function stepMotion(
   };
 }
 
-export function frameOf(anim: PlayerAnim, animTime: number): number {
-  const { first, count, fps } = ANIM_FRAMES[anim];
-  return first + (Math.floor(animTime * fps) % count);
+export function yawOf(facing: Direction): number {
+  const i = DIRECTIONS.indexOf(facing);
+  return (-i * Math.PI) / 4;
 }

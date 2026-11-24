@@ -170,10 +170,10 @@ Laporkan checklist beserta statusnya masing-masing.
 
 ---
 
-## #11 · Bantu Bikin Aset Pixel (untuk tool gambar AI, opsional)
+## #11 · Bantu Bikin Tekstur & Acuan Visual (untuk tool gambar AI, opsional)
+Game ini 3D low-poly ala Harvest Moon PS1 (ADR-022/024); model dibuat lewat kode. Tool gambar AI hanya membantu **tekstur pixel** yang ditempel ke model, atau **acuan visual** sebuah tempat.
 ```
-Pixel art top-down, LPC style, 32x32 tile grid, warm palette, soft dark outline, no anti-aliasing, transparent background, orthographic 3/4 top-down view.
-Subject: <misal "Gedung Sate building facade, Bandung landmark, white colonial building with tiered roof and small spire">
-Size: <misal 192x160 px>
+Seamless tileable pixel art texture, 32x32 px, PS1-era game texture, warm palette, no anti-aliasing, flat front view (no perspective), no text, no logo.
+Subject: <misal "red clay roof tiles", "Sundanese woven bamboo wall (bilik)", "white plaster wall with slight stains">
 ```
-⚠️ Hasil tool gambar AI hampir selalu perlu dirapikan manual supaya konsisten dengan aset LPC (`docs/42` §3).
+⚠️ Kirim hasilnya ke AI agent untuk dicek ukuran, palet & lisensinya, lalu dicatat di `CREDITS.md` (`docs/42`). Jangan pakai foto/aset game lain sebagai input.

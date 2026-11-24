@@ -127,7 +127,7 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Status**: Diganti oleh ADR-022 sebelum dikerjakan. User sempat memilih gaya chibi 2D, lalu menegaskan acuan sebenarnya adalah *Harvest Moon: Back to Nature* (PS1), bukan Stardew Valley.
 
 ### ADR-022 · Visual 2.5D ala Harvest Moon: Back to Nature, engine Three.js
-- **Status**: Diterima (2026-11-24, keputusan user). Menggantikan ADR-001 (2D top-down), ADR-004 (LPC 32px), ADR-016 (Phaser 4). Merevisi Non-Goals `00` §6.
+- **Status**: Diterima (2026-11-24, keputusan user). Menggantikan ADR-001 (2D top-down), ADR-004 (LPC 32px), ADR-016 (Phaser 4). Merevisi Non-Goals `00` §6. **Bagian karakter sprite & sudut kamera diganti ADR-024.**
 - **Konteks**: Acuan user adalah **Harvest Moon: Back to Nature** (PS1): dunia 3D low-poly bertekstur, kamera miring dari atas, karakter berupa sprite 2D chibi. Docs lama mengarah ke 2D pixel top-down (lebih mirip Stardew Valley) sehingga tidak sesuai.
 - **Keputusan**:
   1. **Engine**: **Three.js** (WebGL) menggantikan Phaser. Logika game, Command, state, UI Preact, CI, tes, layar penuh/putar HP tetap.
@@ -137,6 +137,20 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
   5. Bangunan unik per daerah (`10` §5) dibuat dari model low-poly modular + tekstur, digenerate lewat kode/data sehingga variasinya banyak.
 - **Alasan**: Satu-satunya cara memenuhi visi user. Three.js matang, gratis, jalan di browser & HP; low-poly + render resolusi rendah tetap ringan. Grid-based world menjaga semua desain sistem (farming, dekor, NPC) tetap berlaku.
 - **Konsekuensi**: Task berbasis Phaser (scene, kamera 2D, sprite LPC) disusun ulang (TODO P1). Pekerjaan grafik lebih besar (model + tekstur + sprite). Budget performa (`50` §6) diukur ulang untuk 3D. Snapshot visual dibuat ulang. Docs yang menyebut Phaser/LPC/top-down direvisi bertahap saat task terkait dikerjakan; yang inti (`00`, `01`, `02`, `10` §6, `42`) direvisi sekarang.
+
+### ADR-024 · Karakter 3D low-poly & tampilan dunia ala PS1 (koreksi ADR-022)
+- **Status**: Diterima (2026-11-24, keputusan user). Mengganti bagian "karakter & NPC sprite chibi billboard" dan sudut kamera di ADR-022.
+- **Konteks**: Setelah sprite chibi P1-04 dibuat, user menilai tampilannya masih "2D, tidak seperti Harvest Moon PS1". Pengecekan ulang: engine Back to Nature diturunkan dari Harvest Moon 64; karakter, hewan, dan dunianya **poligon 3D low-poly** dengan kamera tetap bersudut miring. Asumsi ADR-022 bahwa karakter BTN berupa sprite 2D keliru.
+- **Keputusan**: (1) Pemain, NPC, dan hewan menjadi **model 3D low-poly chibi** (kepala besar, wajah & baju bertekstur pixel kecil, anggota badan kaku yang berayun; animasi prosedural per bagian, tanpa rig tulang), terkena cahaya & bayangan seperti objek dunia. (2) **Sudut kamera diturunkan** dari 52° supaya dinding & volume 3D lebih terlihat. (3) **Tanah tidak lagi terasa tilemap**: transisi antar jenis tanah, variasi warna per petak, rumput/semak 3D kecil. (4) **Bayangan nyata** dari matahari (shadow map) + shading lebih kontras ala PS1. Grid gameplay tetap.
+- **Alasan**: Memenuhi acuan visual user secara benar.
+- **Konsekuensi**: P1-04 dikerjakan ulang (sprite 2D dihapus); task baru **P1-04b** (tampilan dunia ala PS1: kamera, tanah alami, bayangan). Sistem outfit P7 memakai part/tekstur 3D, bukan layer spritesheet (`15` direvisi saat P7). Semua snapshot dunia dibuat ulang.
+
+### ADR-025 · Aset 3D jadi (CC0) untuk karakter & objek dunia, bukan model buatan kode
+- **Status**: Diterima (2026-11-24, keputusan user). Merevisi ADR-022 poin 5 & ADR-024 poin 1.
+- **Konteks**: Model karakter buatan kode terasa kaku. User mengingatkan rencana awal memakai aset jadi; ADR-022 sempat memutuskan bangunan "digenerate lewat kode" tanpa menjelaskan kelebihan-kekurangannya. Dicoba juga AI text-to-3D (FLUX → Hunyuan3D/TRELLIS): konsep bagus, tetapi kuota GPU gratis terbatas & model hasilnya tanpa rig (tidak bisa melangkah).
+- **Keputusan**: (1) **Karakter** memakai **Kenney Mini Characters 2.0 (CC0)**: GLB bertulang dengan animasi (idle, walk, sprint, sit, pick-up, interact, emote, …), **diwarnai ulang per sel palet** (`colormap.png`, gradasi dipertahankan) untuk pemain A, Michelle, dan NPC; dimuat `GLTFLoader` + `SkeletonUtils.clone`, material Lambert agar kena cahaya dunia. (2) **Bangunan, prop & alam** berangsur pindah ke paket 3D CC0 dari keluarga gaya yang serasi (Kenney), landmark Bandung dirakit custom (P1-04b/P12). (3) Kode tetap untuk tanah/peta, pewarnaan ulang, dan render ala PS1 (resolusi rendah, nearest, cahaya, bayangan). (4) AI text-to-3D boleh dicoba lagi untuk landmark/karakter final (P7/P12) bila tersedia token HF & rig.
+- **Alasan**: Animasi & bentuk jauh lebih hidup, legal (CC0), cepat.
+- **Konsekuensi**: Model kode `model.ts`/sprite dihapus. Aset di `public/assets/models/`, lisensi di `public/assets/licenses/`, tercatat di `CREDITS.md`. Anggaran chunk engine 600 → 700 kB (inti Three.js kini memuat skinning & animasi; add-on dipisah ke chunk `three-addons`).
 
 ### ADR-023 · Nama tempat mengikuti Bandung asli (permintaan user, 2026-11-24)
 - **Status**: Diterima

@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 7 | 14 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 7 | 15 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +37,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **22** | **187** | |
+| **Total** | | | **22** | **188** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -49,7 +49,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 
 | Fase | Default | Pengecualian 🔴 High |
 |---|---|---|
-| P1 | 🟢 | P1-04 sprite billboard, P1-05 collision & urutan gambar, P1-06 kamera |
+| P1 | 🟢 | P1-04 karakter 3D, P1-04b tampilan PS1, P1-05 collision, P1-06 kamera |
 | P2 | 🟢 | P2-04 Day Tick, P2-07 skema save & migrasi, P2-08 save/load |
 | P3 | 🟢 | — |
 | P4 | 🟢 | P4-06 karier generik, P4-08 simulasi ekonomi |
@@ -67,7 +67,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
 **Sedang dikerjakan:** —
-**Task berikutnya:** P1-05
+**Task berikutnya:** P1-04b
 
 ---
 
@@ -99,8 +99,9 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-02a** Peta prototipe luar ruang `lembang` & `buahbatu` (kecil) + kit bangunan bervariasi & prop jalanan, daftar area (`AREA_IDS`), generator peta di `scripts/maps/` · Ref: 10 · ✅ 2026-11-24 · kit bangunan + 14 prop, lembang & buahbatu, papan terbaca, AREA_IDS, npm run maps
 - [x] **P1-02b** Interior `kos_a` & rumah Michelle: mode interior (latar gelap, tanpa tanah lanjutan), dinding ruangan, perabot · Ref: 10 · ✅ 2026-11-24 · mode interior, 17 perabot, kos_a & rumah_michelle, keramik/karpet
 - [x] **P1-03** Abstraksi input → Action (keyboard dulu) · Ref: 40 · ✅ 2026-11-24 · InputState + rebind + zod, keyboard (code), Tab/Spasi milik game, lepas saat blur
-- [x] **P1-04** Entity Player: sprite chibi billboard 8 arah, lari, animasi idle/walk (placeholder) · Ref: 15 · ✅ 2026-11-24 · chibi 32×48 berbayangan ala BTN, 8 arah, jalan/lari + jeda belok, kamera 16
-- [ ] **P1-05** Collision berbasis grid & objek + urutan gambar sprite vs bangunan · Ref: 02, 10
+- [x] **P1-04** Entity Player: karakter **3D chibi** (ADR-024/025: Kenney Mini CC0 diwarnai ulang, animasi idle/walk/sprint asli), gerak 8 arah, jalan/lari · Ref: 15 · ✅ 2026-11-24 · karakter 3D Kenney Mini CC0 diwarnai ulang (A & Michelle), animasi asli, kamera 40°
+- [ ] **P1-04b** Tampilan dunia ala PS1 (ADR-024/025): bangunan/prop/alam ke aset 3D CC0 serasi, sudut kamera BTN (sudah 40° di P1-04, poles), bayangan matahari (shadow map), shading kontras, tanah alami (transisi, variasi petak, rumput 3D) · Ref: 42, 10
+- [ ] **P1-05** Collision berbasis grid & objek + pemain tetap terlihat saat tertutup pohon/bangunan (siluet/memudar) · Ref: 02, 10
 - [ ] **P1-06** Kamera 2.5D miring ala Back to Nature: follow pemain, batas peta · Ref: 40
 - [ ] **P1-07** Sistem interaksi: deteksi objek terdekat + prompt "E ..." · Ref: 10, 40
 - [ ] **P1-08** Kotak dialog Preact (typewriter, pilihan, potret placeholder, log) · Ref: 40, 18
@@ -138,7 +139,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [ ] **P3-08** Kotak Kirim + penjualan saat Day Tick + ringkasan · Ref: 12, 13
 - [ ] **P3-09** Pupuk & crafting dasar (meja kerja, penyiram otomatis) · Ref: 12, 20
 - [ ] **P3-10** Ternak: kandang ayam & sapi, makan, elus, hati, produk + test · Ref: 12
-- [ ] **P3-11** Peliharaan (kucing/anjing) + mesin olahan dasar (selai, yogurt) · Ref: 12
+- [ ] **P3-11** Peliharaan (kucing/anjing; termasuk kucing Michelle **Luna** putih & **Ngkok** putih-abu, `docs/43`) + mesin olahan dasar (selai, yogurt) · Ref: 12
 
 **Kriteria selesai P3:** loop tanam → siram → panen → kirim → dapat uang berjalan selama 1 musim penuh.
 

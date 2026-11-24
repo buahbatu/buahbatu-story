@@ -4,7 +4,7 @@ import { PALETTE } from '../config/palette';
 import { DEFAULT_AREA, INTERIOR, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { logger } from '../core/logger';
 import type { Engine, GameScene } from '../engine/engine';
-import { APPEARANCE, PlayerView, stepMotion, type Direction, type PlayerMotion } from '../entities';
+import { APPEARANCE, PlayerView, stepMotion, type Appearance, type Direction, type PlayerMotion } from '../entities';
 import { uiStore } from '../ui/uiState';
 import { buildArea, disposeTree } from '../world/build';
 import { addEnvironment } from '../world/environment';
@@ -29,7 +29,9 @@ export class WorldScene implements GameScene {
   private root: Group | null = null;
   private atlas: Texture | null = null;
   private engine: Engine | null = null;
-  private readonly playerView = new PlayerView(APPEARANCE.A);
+  private readonly playerView = new PlayerView();
+  private look = APPEARANCE.A;
+  private lookReady: Promise<void> | null = null;
   player: PlayerMotion | null = null;
 
   constructor() {
@@ -46,6 +48,7 @@ export class WorldScene implements GameScene {
     this.engine = engine;
     try {
       if (this.area?.id !== this.target.area) await this.load(this.target.area);
+      await (this.lookReady ??= this.playerView.setLook(this.look));
       this.spawn(this.target.spawn);
     } catch (error) {
       logger.error(error);
@@ -57,7 +60,7 @@ export class WorldScene implements GameScene {
     const { area, player, engine } = this;
     if (!area || !player || !engine) return;
     this.player = stepMotion(player, engine.input.move(), engine.input.isDown('run'), dt, area, PLAYER);
-    this.showPlayer();
+    this.showPlayer(dt);
   }
 
   resize(width: number, height: number): void {
@@ -91,10 +94,23 @@ export class WorldScene implements GameScene {
     this.world.scene.fog = new Fog(fog, num(settings.fogNear, fogNear), num(settings.fogFar, indoor ? INTERIOR.fogFar : WORLD_FOG.far));
   }
 
+  async setLook(look: Appearance): Promise<void> {
+    this.look = look;
+    this.lookReady = this.playerView.setLook(look);
+    await this.lookReady;
+    this.showPlayer(null);
+  }
+
+  resetPose(): void {
+    if (!this.player) return;
+    this.player = { ...this.player, animTime: 0 };
+    this.showPlayer(null);
+  }
+
   place(x: number, y: number, facing: Direction): void {
     if (!this.player) return;
     this.player = { ...this.player, x, y, facing, anim: 'idle', animTime: 0 };
-    this.showPlayer();
+    this.showPlayer(null);
   }
 
   private spawn(spawnId?: string): void {
@@ -103,12 +119,12 @@ export class WorldScene implements GameScene {
     const at = (spawnId ? spawns[spawnId] : undefined) ?? spawns.start ?? Object.values(spawns)[0] ?? { x: 0, y: 0 };
     this.player = { x: at.x, y: at.y, facing: 's', anim: 'idle', animTime: 0 };
     this.world.scene.add(this.playerView.object);
-    this.showPlayer();
+    this.showPlayer(null);
   }
 
-  private showPlayer(): void {
+  private showPlayer(dt: number | null): void {
     if (!this.area || !this.player) return;
-    this.playerView.apply(this.player, elevation(this.area, this.player.x, this.player.y));
+    this.playerView.apply(this.player, elevation(this.area, this.player.x, this.player.y), dt);
     this.placeCamera(this.player);
   }
 

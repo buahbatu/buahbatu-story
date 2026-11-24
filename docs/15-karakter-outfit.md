@@ -18,8 +18,8 @@ Dilakukan sekali di awal (bisa diubah lagi di salon/cermin dengan biaya).
 
 **Tujuan: mirip kalian.** Kemiripan di sprite kecil dicapai lewat **ciri khas** (rambut/hijab, kacamata, warna kulit, baju khas). Kemiripan wajah ada di **potret dialog** (§4).
 
-### Status (P1-04): sprite placeholder
-Sebelum sistem berlapis P7, pemain memakai **sprite chibi placeholder** yang dilukis lewat kode (`src/entities/player/sprite.ts`): frame **32×48**, 8 arah (5 dilukis + 3 dicerminkan), 6 kolom (`idle` ×2, `walk`/`run` ×4), bayangan 3 tingkat per warna (cahaya dari kiri atas), outline lembut berwarna (bukan hitam), mata besar mengilap ala BTN. Tampilan A (rambut pendek) & B (rambut panjang) di `APPEARANCE`. Billboard bertumpu di kaki, dimiringkan `CHARACTER_SPRITE.lean` ke arah kamera, dengan bayangan bulat; tinggi 1,7 satuan sehingga 1 piksel sprite ≈ 1 piksel layar pada jarak kamera 16 (`WORLD_CAMERA`). Gerak: `src/entities/player/logic.ts` (8 arah, jalan/lari dari `balance.ts` `PLAYER`, jeda belok 0,06 dtk supaya melepas tombol diagonal tidak membalik arah). Diganti sprite berlapis final di P7.
+### Status (P1-04): karakter 3D (ADR-025)
+Pemain & NPC memakai **Kenney Mini Characters (CC0)**: GLB bertulang dengan animasi (idle, walk, sprint, sit, pick-up, interact, emote, …) di `public/assets/models/characters/`. Tampilan per karakter = `model` + pewarnaan ulang sel palet `colormap.png` (`src/entities/player/appearance.ts`, `character.ts`). Sistem outfit P7 memakai pergantian model/part & palet, bukan layer spritesheet; bagian LPC di bawah usang dan direvisi saat P7.
 
 ## 2. Layered Sprite (Paper Doll)
 Setiap karakter = tumpukan layer spritesheet dengan **frame layout identik** (standar LPC).

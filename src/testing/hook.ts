@@ -1,6 +1,7 @@
 import type { GameRuntime } from '../core/runtime';
 import type { Engine } from '../engine/engine';
 import { createInitialState } from '../core/state';
+import { APPEARANCE } from '../entities';
 import type { WorldScene } from '../scenes';
 import { SCENE } from '../scenes/keys';
 import { uiStore } from '../ui/uiState';
@@ -63,6 +64,9 @@ function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
       });
       return { id, width: area.width, height: area.height, props };
     },
+    async playerLook(look) {
+      await world.setLook(typeof look === 'string' ? APPEARANCE[look] : look);
+    },
     placePlayer(x, y, facing) {
       world.place(x, y, facing);
     },
@@ -70,8 +74,10 @@ function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
     player: () => (world.player && world.area ? { ...world.player, area: world.area.id } : null),
     move: () => engine.input.move(),
     freeze(on) {
-      if (on) engine.freezeAt(0);
-      else engine.wake();
+      if (on) {
+        world.resetPose();
+        engine.freezeAt(0);
+      } else engine.wake();
       document.documentElement.toggleAttribute('data-frozen', on);
     },
   };
