@@ -119,14 +119,14 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 |---|---|
 | `building` | `w`, `d`, `floors` (1–2), `wall` (`planks`/`plaster`/`brick`/`bamboo`), `wallColor` (plester), `roof` (`gable`/`hip`/`flat`; datar dapat toren), `roofColor`, `zinc` (atap seng), `trim`, `doorColor`, `doorX`, `windows`, `shutters`, `awning` (warna kanopi belang), `sign` (kunci i18n), `signColor`, `porch` |
 | `farmhouse` | — (rumah pertanian detail, layar judul & sandbox) |
-| `tree`, `pine`, `rock` | `scale` |
+| `tree`, `pine`, `rock` | `scale` (varian model & putaran dipilih deterministik dari posisi) |
 | `bush` | `scale`, `flowers` (warna) |
 | `fence` | `length`, `style` (`wood`/`bamboo`/`wall` tembok kompleks) |
 | `strawberry_plot` | `cols`, `rows` |
 | `pot` | `flower` (warna) |
 | `food_cart` | `color`, `label` (kunci i18n) |
 | `sign` | `text` (kunci i18n), `color` |
-| `haystack`, `bench`, `street_lamp`, `power_pole` | — |
+| `haystack`, `bench`, `street_lamp`, `power_pole` (tiang PLN custom) | — |
 | `room`, `partition` | lihat Interior |
 | `wall_window` | `curtain` (warna gorden) |
 | `wall_frame`, `bed`, `wardrobe`, `chair`, `sofa` | `color` |
@@ -134,6 +134,7 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | `desk`, `tv`, `coffee_table`, `bookshelf`, `kitchen`, `fridge`, `dining_table`, `vanity` | — |
 
 - **Tampilan ala PS1 (P1-04b)**: bayangan matahari (`SHADOW`, shadow map dasar yang tajam, mengikuti kamera), air = **cekungan** sedalam `WATER_DEPTH` dengan tepi menurun + **permukaan transparan beriak** (`WATER`, mesh `water`, riak bergerak pelan), tanah alami = rotasi tekstur acak per petak untuk tanah organik + variasi terang tipis + **rumput 3D** (instanced, deterministik per petak, tidak di petak terhalang). Semua angka di `config/world.ts`.
+- **Aset 3D CC0 (P1-04c, ADR-025)**: `tree`, `pine`, `bush`, `rock`, `fence` (kayu/bambu), `pot`, `street_lamp` memakai model Kenney (`public/assets/models/`), dipramuat per peta (`PROP_ASSETS`), material Lambert berwarna alami + tekstur pixel proyek (`ASSET_LOOK`), ukuran diseragamkan. Tetap custom: tembok kompleks, tiang PLN, gerobak, papan nama, petak stroberi, jerami (sampai P3), furnitur (P1-04d), bangunan (P1-04e).
 - **Papan nama**: teks dari i18n (`sign.*`), **maksimal ±10 huruf** supaya terbaca di resolusi rendah (font Press Start 2P 8px, papan dimiringkan menghadap kamera). Nama panjang → papan berdiri (`sign`) yang lebih lebar.
 - Peta prototipe yang ada: `sandbox` (40×30), `lembang` (48×36), `buahbatu` (44×34), interior `kos_a` (7×6) & `rumah_michelle` (15×9: kamar Michelle, ruang tamu, dapur).
 

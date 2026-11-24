@@ -163,6 +163,18 @@ export const TEX = {
       px(0, 0, 16, 16, '#7a4b2a');
       for (let i = 0; i < 10; i++) px(Math.floor(rnd() * 16), Math.floor(rnd() * 12), 1, 4, '#5e3820');
     }),
+  rock: () =>
+    make('rock', 32, (px, rnd) => {
+      px(0, 0, 32, 32, '#8f8b86');
+      for (let i = 0; i < 90; i++)
+        px(
+          Math.floor(rnd() * 31),
+          Math.floor(rnd() * 31),
+          2,
+          1 + Math.floor(rnd() * 2),
+          ['#7a7672', '#a39f98', '#86827c'][i % 3] ?? '#7a7672',
+        );
+    }),
   leaves: () =>
     make('leaves', 32, (px, rnd) => {
       px(0, 0, 32, 32, '#3f8f4a');

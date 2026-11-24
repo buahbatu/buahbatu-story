@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 8 | 17 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 8 | 19 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +37,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **23** | **190** | |
+| **Total** | | | **23** | **192** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -49,7 +49,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 
 | Fase | Default | Pengecualian 🔴 High |
 |---|---|---|
-| P1 | 🟢 | P1-04 karakter 3D, P1-04b tampilan PS1, P1-05 collision, P1-06 kamera |
+| P1 | 🟢 | P1-04 karakter 3D, P1-04b tampilan PS1, P1-04c pemuat aset 3D, P1-04e bangunan 3D, P1-05 collision, P1-06 kamera |
 | P2 | 🟢 | P2-04 Day Tick, P2-07 skema save & migrasi, P2-08 save/load |
 | P3 | 🟢 | — |
 | P4 | 🟢 | P4-06 karier generik, P4-08 simulasi ekonomi |
@@ -101,7 +101,9 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-03** Abstraksi input → Action (keyboard dulu) · Ref: 40 · ✅ 2026-11-24 · InputState + rebind + zod, keyboard (code), Tab/Spasi milik game, lepas saat blur
 - [x] **P1-04** Entity Player: karakter **3D chibi** (ADR-024/025: Kenney Mini CC0 diwarnai ulang, animasi idle/walk/sprint asli), gerak 8 arah, jalan/lari · Ref: 15 · ✅ 2026-11-24 · karakter 3D Kenney Mini CC0 diwarnai ulang (A & Michelle), animasi asli, kamera 40°
 - [x] **P1-04b** Tampilan dunia ala PS1 (ADR-024): air bercekungan + permukaan transparan beriak, bayangan matahari (shadow map), tanah alami (variasi warna & rotasi tekstur per petak, rumput 3D), poles papan nama · Ref: 42, 10 · ✅ 2026-11-24 · bayangan matahari, air cekung transparan beriak, rumput 3D, tekstur diputar acak
-- [ ] **P1-04c** Bangunan, prop & alam ke aset 3D CC0 yang serasi dengan karakter (ADR-025), landmark tetap custom · Ref: 42, 10
+- [~] **P1-04c** Pemuat aset 3D CC0 (ADR-025) + alam & jalan: pohon, pinus, semak, batu, pagar, pot, lampu jalan, tiang listrik (Kenney Nature/City Roads, diwarnai alami) · Ref: 42, 10 · 🕐 2026-11-24
+- [ ] **P1-04d** Furnitur interior ke Kenney Furniture Kit (CC0) · Ref: 42, 10
+- [ ] **P1-04e** Bangunan ke aset 3D CC0 (rumah Suburban genteng, ruko Commercial, rumah kebun Fantasy Town), landmark/papan nama/gerobak tetap custom · Ref: 42, 10
 - [ ] **P1-05** Collision berbasis grid & objek + pemain tetap terlihat saat tertutup pohon/bangunan (siluet/memudar) · Ref: 02, 10
 - [ ] **P1-05b** Nyebur ke kolam (permintaan user): air dangkal bisa dimasuki (gerak melambat, karakter terendam sebagian), efek cipratan saat masuk, karakter tampak basah, tetesan air jatuh dari pakaian setelah naik ke darat (beberapa detik); air dalam tetap tidak bisa dimasuki · Ref: 10, 40
 - [ ] **P1-06** Kamera 2.5D miring ala Back to Nature: follow pemain, batas peta, **zoom in/out** (scroll/pinch/`+``-`, dibatasi agar tetap tajam; permintaan user, bentrok scroll-hotbar diputuskan bersama user) · Ref: 40

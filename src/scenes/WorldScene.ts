@@ -19,7 +19,7 @@ import { logger } from '../core/logger';
 import type { Engine, GameScene } from '../engine/engine';
 import { APPEARANCE, PlayerView, stepMotion, type Appearance, type Direction, type PlayerMotion } from '../entities';
 import { uiStore } from '../ui/uiState';
-import { buildArea, disposeTree } from '../world/build';
+import { buildArea, disposeTree, preloadArea } from '../world/build';
 import { addEnvironment, aimSun } from '../world/environment';
 import { elevation, parseArea, type AreaData } from '../world/map/logic';
 import { SCENE } from './keys';
@@ -90,7 +90,7 @@ export class WorldScene implements GameScene {
     if (!response.ok) throw new Error(`peta ${id} tidak ditemukan (${String(response.status)})`);
     const { area, issues } = parseArea(id, await response.json());
     if (!area) throw new Error(`peta ${id} tidak valid: ${issues.join('; ')}`);
-    const atlas = await loadAtlas(new URL(area.tileset.image, url));
+    const [atlas] = await Promise.all([loadAtlas(new URL(area.tileset.image, url)), preloadArea(area)]);
     if (this.root) disposeTree(this.root);
     this.atlas?.dispose();
     this.atlas = atlas;

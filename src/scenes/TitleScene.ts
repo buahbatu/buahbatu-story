@@ -2,7 +2,10 @@ import { IcosahedronGeometry, Mesh, MeshLambertMaterial, PerspectiveCamera, Plan
 import { PALETTE } from '../config/palette';
 import type { GameScene } from '../engine/engine';
 import { addEnvironment } from '../world/environment';
-import { farmhouse, fence, strawberryPlot, tree } from '../world/props/models';
+import { preloadAssets } from '../world/props/assets';
+import { assetsFor } from '../world/props/logic';
+import { farmhouse, strawberryPlot } from '../world/props/models';
+import { fence, tree } from '../world/props/nature';
 import { SCENE } from './keys';
 
 const CAMERA = { fov: 38, distance: 22, height: 7, lookY: 2.5, lookZ: -14, sway: 0.16, speed: 0.12 } as const;
@@ -48,11 +51,18 @@ export class TitleScene implements GameScene {
   readonly key = SCENE.title;
   readonly world: { scene: Scene; camera: PerspectiveCamera };
   private readonly still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  private decorated: Promise<void> | null = null;
 
   constructor() {
     const scene = new Scene();
     addEnvironment(scene, { near: 35, far: 95 });
     scene.add(plane(160, 160, PALETTE.grass, 0, 0, 0), plane(2.2, 40, PALETTE.path, -1.6, 0.01, 4));
+    this.world = { scene, camera: new PerspectiveCamera(CAMERA.fov, 16 / 9, 0.1, 200) };
+    scene.add(placed(farmhouse(), -7, -4, 0.62), placed(strawberryPlot(6, 4), 4, -1), ...hills());
+    this.update(0, 0);
+  }
+
+  private decorate(): void {
     const trees: [number, number, number][] = [
       [-11, -9, 1.2],
       [10, -8, 1],
@@ -70,19 +80,15 @@ export class TitleScene implements GameScene {
       [13, -24, 1.7],
       [-14, -24, 1.7],
     ];
-    scene.add(
-      placed(farmhouse(), -7, -4, 0.62),
-      placed(strawberryPlot(6, 4), 4, -1),
-      placed(fence(7), 4, -3.9),
-      ...trees.map(([x, z, k]) => placed(tree(k), x, z)),
-      ...hills(),
-    );
-    this.world = { scene, camera: new PerspectiveCamera(CAMERA.fov, 16 / 9, 0.1, 200) };
-    this.update(0, 0);
+    this.world.scene.add(placed(fence(7), 4, -3.9), ...trees.map(([x, z, k], i) => placed(tree(k, (i * 0.618) % 1), x, z)));
   }
 
-  enter(): void {
+  async enter(): Promise<void> {
     this.update(0, 0);
+    this.decorated ??= preloadAssets(assetsFor(['tree', 'fence'])).then(() => {
+      this.decorate();
+    });
+    await this.decorated;
   }
 
   resize(width: number, height: number): void {

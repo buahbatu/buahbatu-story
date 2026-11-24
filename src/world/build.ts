@@ -13,7 +13,9 @@ import {
 } from 'three';
 import { WATER, WORLD_SKIRT } from '../config/world';
 import { elevation, isBlocked, type AreaData } from './map/logic';
-import { buildTerrain, buildWater, scatterTufts } from './map/terrain';
+import { buildTerrain, buildWater, scatterTufts, tileHash } from './map/terrain';
+import { preloadAssets } from './props/assets';
+import { assetsFor } from './props/logic';
 import { PROP_FACTORIES, isPropModel } from './props/registry';
 import { TEX, repeated } from './props/textures';
 
@@ -90,6 +92,9 @@ export function skirt(area: Pick<AreaData, 'width' | 'height'>, margin = WORLD_S
   return g;
 }
 
+export const preloadArea = (area: AreaData): Promise<void> =>
+  preloadAssets(assetsFor(area.objects.filter((o) => o.kind === 'prop').map((o) => o.props.model)));
+
 export function buildArea(area: AreaData, atlas: Texture): Group {
   const root = new Group();
   root.name = `area:${area.id}`;
@@ -108,9 +113,9 @@ export function buildArea(area: AreaData, atlas: Texture): Group {
   if (water) root.add(water);
   for (const o of area.objects) {
     if (o.kind !== 'prop' || !isPropModel(o.props.model)) continue;
-    const prop = PROP_FACTORIES[o.props.model](o.props);
     const x = o.x + o.w / 2;
     const z = o.y + o.h / 2;
+    const prop = PROP_FACTORIES[o.props.model](o.props, tileHash(Math.round(x * 4), Math.round(z * 4), 7));
     prop.position.set(x, elevation(area, x, z), z);
     prop.rotation.y = (-Number(o.props.rotation ?? 0) * Math.PI) / 180;
     prop.name = `prop:${o.props.model}`;
@@ -125,7 +130,7 @@ export function buildArea(area: AreaData, atlas: Texture): Group {
 
 export function disposeTree(root: Object3D): void {
   root.traverse((node) => {
-    if (!(node instanceof Mesh)) return;
+    if (!(node instanceof Mesh) || node.userData.shared === true) return;
     (node.geometry as BufferGeometry).dispose();
     const materials: Material[] = Array.isArray(node.material) ? (node.material as Material[]) : [node.material as Material];
     for (const m of materials) m.dispose();

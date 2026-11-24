@@ -1,9 +1,10 @@
 import type { Object3D } from 'three';
-import { PROP_MODELS } from '../../config/world';
+import { PROP_MODELS, type PropModel } from '../../config/world';
 import { isI18nKey, t } from '../../content/i18n';
 import type { Props } from '../map/logic';
 import { DEFAULT_BUILDING, ROOFS, WALLS, building, type BuildingSpec } from './buildings';
-import { FENCE_STYLES, farmhouse, fence, strawberryPlot, tree } from './models';
+import { farmhouse, strawberryPlot } from './models';
+import { FENCE_STYLES, bush, fence, pine, pot, rock, streetLamp, tree } from './nature';
 import {
   bed,
   bookshelf,
@@ -23,9 +24,8 @@ import {
   wallWindow,
   wardrobe,
 } from './furniture';
-import { bench, bush, foodCart, haystack, pine, pot, powerPole, rock, signBoard, streetLamp } from './street';
+import { bench, foodCart, haystack, powerPole, signBoard } from './street';
 
-export type PropModel = (typeof PROP_MODELS)[number];
 type Value = Props[string] | undefined;
 
 const num = (value: Value, fallback: number) => (typeof value === 'number' && Number.isFinite(value) ? value : fallback);
@@ -57,17 +57,17 @@ function buildingSpec(p: Props): Partial<BuildingSpec> {
   };
 }
 
-export const PROP_FACTORIES: Record<PropModel, (props: Props) => Object3D> = {
+export const PROP_FACTORIES: Record<PropModel, (props: Props, seed: number) => Object3D> = {
   farmhouse: () => farmhouse(),
   building: (p) => building(buildingSpec(p)),
-  tree: (p) => tree(num(p.scale, 1)),
-  pine: (p) => pine(num(p.scale, 1)),
-  bush: (p) => bush(num(p.scale, 1), str(p.flowers, '')),
-  rock: (p) => rock(num(p.scale, 1)),
+  tree: (p, seed) => tree(num(p.scale, 1), seed),
+  pine: (p, seed) => pine(num(p.scale, 1), seed),
+  bush: (p, seed) => bush(num(p.scale, 1), str(p.flowers, ''), seed),
+  rock: (p, seed) => rock(num(p.scale, 1), seed),
   fence: (p) => fence(num(p.length, 1), oneOf(FENCE_STYLES, p.style, 'wood')),
   strawberry_plot: (p) => strawberryPlot(num(p.cols, 4), num(p.rows, 3)),
   haystack: () => haystack(),
-  pot: (p) => pot(str(p.flower, '#e04a5a')),
+  pot: (p, seed) => pot(str(p.flower, '#e04a5a'), seed),
   bench: () => bench(),
   street_lamp: () => streetLamp(),
   power_pole: () => powerPole(),

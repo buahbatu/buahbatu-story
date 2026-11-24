@@ -63,6 +63,44 @@ export const PROP_MODELS = [
   'dining_table',
   'vanity',
 ] as const;
+export type PropModel = (typeof PROP_MODELS)[number];
+export const PROP_ASSETS = {
+  tree: ['nature/tree_oak', 'nature/tree_default', 'nature/tree_detailed', 'nature/tree_fat'],
+  pine: ['nature/tree_pineRoundA', 'nature/tree_pineTallA_detailed', 'nature/tree_pineDefaultA'],
+  bush: ['nature/plant_bushDetailed', 'nature/plant_bushLarge', 'nature/flower_redA'],
+  rock: ['nature/stone_largeA', 'nature/stone_largeB', 'nature/stone_largeC', 'nature/stone_largeD'],
+  fence: ['nature/fence_simple'],
+  pot: ['nature/pot_small', 'nature/flower_redA'],
+  street_lamp: ['roads/light-curved'],
+} as const satisfies Partial<Record<PropModel, readonly string[]>>;
+export const ASSET_LOOK = {
+  colors: {
+    leafsGreen: '#5c9a45',
+    leafsDark: '#3d7448',
+    woodBark: '#7a5436',
+    woodBarkDark: '#5e4232',
+    grass: '#5a9a48',
+    stone: '#9c988f',
+    dirt: '#8a6a48',
+    wood: '#a0703f',
+    woodDark: '#6e4a2c',
+    _defaultMat: '#7a5436',
+  } as Record<string, string>,
+  size: { tree: 4, pine: 4.6, bush: 0.9, flower: 0.35, rock: 1.3, fence: 0.9, pot: 0.5, streetLamp: 3.4 },
+  textures: {
+    leafsGreen: { texture: 'leaves', tint: '#c4e0a8' },
+    leafsDark: { texture: 'leaves', tint: '#9cc0a0' },
+    grass: { texture: 'leaves', tint: '#d0e8b8' },
+    woodBark: { texture: 'bark', tint: '#ffffff' },
+    woodBarkDark: { texture: 'bark', tint: '#d8c8c0' },
+    _defaultMat: { texture: 'bark', tint: '#ffffff' },
+    stone: { texture: 'rock', tint: '#ffffff' },
+  } as Record<string, { texture: 'leaves' | 'bark' | 'rock'; tint: string }>,
+  uvDensity: 3,
+  jitter: 0.12,
+  bamboo: { wood: '#c2ad5c', woodDark: '#9a8a45' },
+  clay: { wood: '#b5583d', woodBarkDark: '#8e4a33', _defaultMat: '#6b4a32' },
+} as const;
 export const AREA_IDS = [
   'sandbox',
   'lembang',

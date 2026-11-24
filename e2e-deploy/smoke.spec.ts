@@ -21,15 +21,17 @@ test('aset statis & header keamanan', async ({ request }) => {
   expect(home.headers()['x-frame-options']).toBe('DENY');
 });
 
-test('pratinjau ?area=sandbox memuat peta & atlas tanpa error', async ({ page }) => {
+test('pratinjau ?area=sandbox memuat peta, atlas & model 3D tanpa error', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => (m.type() === 'error' || m.type() === 'warning') && errors.push(`${m.type()}: ${m.text()}`));
   const map = page.waitForResponse((r) => r.url().endsWith('/assets/maps/sandbox.tmj'));
   const atlas = page.waitForResponse((r) => r.url().endsWith('/assets/tilesets/ground.png'));
+  const tree = page.waitForResponse((r) => r.url().endsWith('/assets/models/nature/tree_oak.glb'));
   await page.goto('/?area=sandbox');
   expect((await map).status()).toBe(200);
   expect((await atlas).status()).toBe(200);
+  expect((await tree).status()).toBe(200);
   await expect(page.locator('#game canvas')).toBeVisible({ timeout: 30_000 });
   await expect(page.locator('.fatal')).toHaveCount(0);
   expect(errors).toEqual([]);

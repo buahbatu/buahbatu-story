@@ -3,7 +3,6 @@ import {
   CylinderGeometry,
   DoubleSide,
   Group,
-  IcosahedronGeometry,
   Mesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
@@ -82,45 +81,6 @@ export function farmhouse(): Group {
   const barrel = new Mesh(new CylinderGeometry(0.38, 0.38, 0.8, 8), textured(TEX.planks(), 2, 1));
   barrel.position.set(2.6, base + 0.4 - 0.45, front + 0.7);
   g.add(barrel);
-  return g;
-}
-
-export function tree(scale = 1): Group {
-  const g = new Group();
-  const trunk = new Mesh(new CylinderGeometry(0.22 * scale, 0.32 * scale, 1.8 * scale, 7), textured(TEX.bark(), 2, 2));
-  trunk.position.y = 0.9 * scale;
-  g.add(trunk);
-  const leaves = new MeshLambertMaterial({ map: TEX.leaves(), flatShading: true });
-  for (const [x, y, z, r] of [
-    [0, 2.3, 0, 1.25],
-    [0.55, 2.7, 0.3, 0.9],
-    [-0.5, 2.8, -0.2, 0.85],
-    [0.1, 3.3, 0, 0.75],
-  ] as const) {
-    const blob = new Mesh(new IcosahedronGeometry(r * scale, 1), leaves);
-    blob.position.set(x * scale, y * scale, z * scale);
-    g.add(blob);
-  }
-  return g;
-}
-
-export const FENCE_STYLES = ['wood', 'bamboo', 'wall'] as const;
-
-export function fence(length: number, style: (typeof FENCE_STYLES)[number] = 'wood'): Group {
-  const g = new Group();
-  if (style === 'wall') {
-    g.add(
-      texturedBox(length, 1.1, 0.22, TEX.plasterWhite(), 1, 0, 0.55, 0, '#ece4d2'),
-      box(length + 0.05, 0.1, 0.3, color('#b5583d'), 0, 1.13, 0),
-    );
-    for (let x = -length / 2; x <= length / 2 + 0.01; x += Math.max(1, length / Math.round(length / 2)))
-      g.add(box(0.3, 1.25, 0.3, color('#f4f1ea'), x, 0.62, 0));
-    return g;
-  }
-  const tex = style === 'bamboo' ? TEX.bamboo() : TEX.planks();
-  const posts = Math.max(2, Math.round(length / 1.1) + 1);
-  for (let i = 0; i < posts; i++) g.add(texturedBox(0.16, 0.9, 0.16, tex, 2, (i * length) / (posts - 1) - length / 2, 0.45, 0));
-  for (const y of [0.35, 0.7]) g.add(texturedBox(length, 0.1, 0.08, tex, 1.5, 0, y, 0));
   return g;
 }
 
