@@ -20,7 +20,15 @@ test('Q/R memutar kamera, dan W tetap berarti menjauh dari layar', async ({ game
   const yaw = (await camera(page))?.yaw ?? 0;
   const a = await player(page);
   await page.keyboard.down('KeyW');
-  await page.waitForTimeout(400);
+  await expect
+    .poll(
+      async () => {
+        const p = await player(page);
+        return Math.hypot((p?.x ?? 0) - (a?.x ?? 0), (p?.y ?? 0) - (a?.y ?? 0));
+      },
+      { timeout: 10_000 },
+    )
+    .toBeGreaterThan(0.5);
   await page.keyboard.up('KeyW');
   const b = await player(page);
   const dx = (b?.x ?? 0) - (a?.x ?? 0);
