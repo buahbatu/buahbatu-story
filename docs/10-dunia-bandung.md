@@ -117,7 +117,7 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 
 | Model prop | Properti opsional |
 |---|---|
-| `building` | `w`, `d`, `floors` (1–2), `wall` (`planks`/`plaster`/`brick`/`bamboo`), `wallColor` (plester), `roof` (`gable`/`hip`/`flat`; datar dapat toren), `roofColor`, `zinc` (atap seng), `trim`, `doorColor`, `doorX`, `windows`, `shutters`, `awning` (warna kanopi belang), `sign` (kunci i18n), `signColor`, `porch` |
+| `building` | `w`, `d`, `floors` (1–2), `wall` (`planks`/`plaster`/`brick`/`bamboo`), `wallColor` (plester), `roof` (`gable`/`hip`/`flat`; datar dapat toren), `roofColor`, `zinc` (atap seng), `trim`, `doorColor`, `doorX`, `windows`, `shutters`, `awning` (warna kanopi belang), `sign` (kunci i18n), `signColor`, `porch`, `bars` (teralis jendela), `ac` (unit AC di dinding samping). Otomatis: lisplang, talang + pipa turun (kecuali seng), bubungan atap perisai; rumah berdinding plester/bata tanpa kanopi toko dapat roster di atas pintu & jendela, kotak meteran PLN, dan kanopi beton di atas pintu (kalau tanpa teras) |
 | `farmhouse` | — (rumah pertanian detail, layar judul & sandbox) |
 | `tree`, `pine`, `rock` | `scale` (varian model & putaran dipilih deterministik dari posisi) |
 | `bush` | `scale`, `flowers` (warna) |

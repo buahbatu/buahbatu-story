@@ -56,6 +56,15 @@ export const TEX = {
       for (let i = 0; i < 46; i++) px(Math.floor(rnd() * 32), Math.floor(rnd() * 32), 1, 1, rnd() > 0.5 ? '#e2ddd2' : '#fbf9f4');
       px(0, 31, 32, 1, '#d9d3c6');
     }),
+  roster: () =>
+    make('roster', 16, (px) => {
+      px(0, 0, 16, 16, '#efe9dc');
+      for (const x of [1, 9])
+        for (const y of [1, 9]) {
+          px(x, y, 6, 6, '#4a4038');
+          px(x + 2, y + 2, 2, 2, '#efe9dc');
+        }
+    }),
   brick: () =>
     make('brick', 32, (px, rnd) => {
       px(0, 0, 32, 32, '#b5583d');

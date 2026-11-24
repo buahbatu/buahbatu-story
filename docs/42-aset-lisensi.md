@@ -10,7 +10,7 @@
 | Kebutuhan | Sumber | Lisensi umum |
 |---|---|---|
 | Karakter 3D bertulang + animasi | **Kenney Mini Characters** (kenney.nl), alternatif KayKit / Quaternius | CC0 |
-| Bangunan, prop, alam 3D | Paket 3D Kenney: **Nature Kit** (alam, dipakai), **City Kit Roads** (lampu jalan, dipakai), **Furniture Kit** (perabot interior, dipakai), City Kit Suburban/Commercial & Fantasy Town (P1-04e); alternatif Quaternius, KayKit | CC0 |
+| Bangunan, prop, alam 3D | Paket 3D Kenney: **Nature Kit** (alam, dipakai), **City Kit Roads** (lampu jalan, dipakai), **Furniture Kit** (perabot interior, dipakai), City Kit Suburban/Commercial sudah dicoba untuk bangunan tetapi **tidak dipakai** (keputusan user, ADR-025: bangunan tetap rakitan kode); alternatif Quaternius, KayKit | CC0 |
 | Landmark Bandung | Dirakit custom dari potongan aset / AI text-to-3D lalu dirapikan | Milik proyek (cek ketentuan tool AI) |
 | Ikon item | OpenGameArt, aset LPC item | Beragam |
 | UI pixel | Kenney (pixel UI), OpenGameArt | CC0 |

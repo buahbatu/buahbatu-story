@@ -34,6 +34,8 @@ export interface BuildingSpec {
   sign: string;
   signColor: string;
   porch: boolean;
+  bars: boolean;
+  ac: boolean;
 }
 
 export const DEFAULT_BUILDING: BuildingSpec = {
@@ -54,6 +56,8 @@ export const DEFAULT_BUILDING: BuildingSpec = {
   sign: '',
   signColor: '#2f5d50',
   porch: false,
+  bars: false,
+  ac: false,
 };
 
 const FLOOR_H = 2.4;
@@ -110,8 +114,22 @@ function windowUnit(spec: BuildingSpec): Group {
   const g = new Group();
   g.add(box(1, 1, 0.1, textured(TEX.window())), box(1.2, 0.12, 0.18, color(spec.trim), 0, -0.56, 0.04));
   g.add(box(1.2, 0.1, 0.14, color(spec.trim), 0, 0.55, 0.02));
+  if (spec.bars) {
+    for (const x of [-0.3, -0.1, 0.1, 0.3]) g.add(box(0.04, 0.96, 0.04, color('#2f2a28'), x, 0, 0.09));
+    g.add(box(0.96, 0.04, 0.04, color('#2f2a28'), 0, 0, 0.1));
+  }
   if (spec.shutters) for (const x of [-0.78, 0.78]) g.add(box(0.45, 1, 0.08, textured(TEX.shutter(), 1, 1, spec.shutters), x, 0, 0.04));
   return g;
+}
+
+const GUTTER = '#9aa0a6';
+
+function eaves(g: Group, spec: BuildingSpec, w: number, d: number, y: number, sides: boolean): void {
+  for (const z of [-d / 2, d / 2]) g.add(box(w, 0.2, 0.06, color(spec.trim), 0, y, z));
+  if (sides) for (const x of [-w / 2, w / 2]) g.add(box(0.06, 0.2, d, color(spec.trim), x, y, 0));
+  if (spec.zinc) return;
+  g.add(box(w, 0.12, 0.14, color(GUTTER), 0, y - 0.12, d / 2 + 0.08));
+  g.add(box(0.1, y - 0.12, 0.1, color(GUTTER), w / 2 - 0.2, (y - 0.12) / 2, d / 2 + 0.08));
 }
 
 function roof(spec: BuildingSpec, top: number): Group {
@@ -143,6 +161,9 @@ function roof(spec: BuildingSpec, top: number): Group {
     );
     mesh.position.y = top - 0.05;
     g.add(mesh);
+    eaves(g, spec, W, D, top - 0.08, true);
+    const ridge = Math.max(0, W / 2 - D / 2);
+    g.add(box(ridge * 2 + 0.25, 0.14, 0.22, color(spec.roofColor), 0, top - 0.02 + rise, 0));
     return g;
   }
   const half = D / 2;
@@ -154,6 +175,7 @@ function roof(spec: BuildingSpec, top: number): Group {
     g.add(slab);
   }
   g.add(box(W + 0.05, 0.18, 0.26, color(spec.zinc ? '#858c91' : spec.roofColor), 0, top + rise + 0.02, 0));
+  eaves(g, spec, W, D, top - 0.04, false);
   const endMat = new MeshLambertMaterial({
     map: repeated(WALL_TEX[spec.wall](), spec.d * 0.8, rise * 0.8),
     color: spec.wall === 'plaster' ? spec.wallColor : '#ffffff',
@@ -209,6 +231,28 @@ export function building(input: Partial<BuildingSpec> = {}): Group {
       win.rotation.y = side * (Math.PI / 2);
       g.add(win);
     }
+  const house = !spec.awning && (spec.wall === 'plaster' || spec.wall === 'brick');
+  if (house) {
+    g.add(box(1, 0.22, 0.06, textured(TEX.roster(), 2, 0.5), spec.doorX, BASE_H + 2.22, front + 0.03));
+    for (let i = 0; i < slots; i++) {
+      const x = -usable / 2 + (usable * (i + 0.5)) / slots;
+      if (Math.abs(x - spec.doorX) >= 1.2) g.add(box(0.9, 0.2, 0.06, textured(TEX.roster(), 2, 0.5), x, BASE_H + 2.12, front + 0.03));
+    }
+    g.add(box(0.28, 0.38, 0.12, color('#d9d6cc'), spec.doorX + 0.95, BASE_H + 1.45, front + 0.06));
+    g.add(box(0.18, 0.12, 0.02, color('#2f3a3f'), spec.doorX + 0.95, BASE_H + 1.5, front + 0.13));
+  }
+  if (house && !spec.porch) {
+    g.add(box(1.6, 0.08, 0.75, color('#d8d2c4'), spec.doorX, BASE_H + 2.42, front + 0.38));
+    for (const x of [-0.75, 0.75]) g.add(box(0.06, 0.25, 0.06, color('#b5afa2'), spec.doorX + x, BASE_H + 2.3, front + 0.7));
+  }
+  if (spec.ac) {
+    const y = BASE_H + (spec.floors - 1) * FLOOR_H + 1.6;
+    g.add(box(0.3, 0.55, 0.8, color('#ecebe6'), spec.w / 2 + 0.16, y, -spec.d / 4));
+    const fan = new Mesh(new CylinderGeometry(0.2, 0.2, 0.02, 10), color('#4a4f55'));
+    fan.rotation.z = Math.PI / 2;
+    fan.position.set(spec.w / 2 + 0.32, y, -spec.d / 4 + 0.1);
+    g.add(fan, box(0.05, 0.05, 0.6, color('#ecebe6'), spec.w / 2 + 0.05, y + 0.45, -spec.d / 4 + 0.4));
+  }
   if (spec.porch) {
     g.add(texturedBox(spec.w, 0.2, 1.6, TEX.planks(), 1, 0, 0.1, front + 0.8));
     for (const x of [-spec.w / 2 + 0.2, spec.w / 2 - 0.2]) g.add(box(0.18, 2.3, 0.18, color(spec.trim), x, 1.25, front + 1.45));

@@ -5956,6 +5956,11 @@
        "value": true
       },
       {
+       "name": "ac",
+       "type": "bool",
+       "value": true
+      },
+      {
        "name": "shutters",
        "type": "string",
        "value": "#4f8a5a"
@@ -6092,6 +6097,11 @@
        "value": 4.5
       },
       {
+       "name": "bars",
+       "type": "bool",
+       "value": true
+      },
+      {
        "name": "wall",
        "type": "string",
        "value": "brick"
@@ -6149,6 +6159,11 @@
        "name": "d",
        "type": "float",
        "value": 4.5
+      },
+      {
+       "name": "bars",
+       "type": "bool",
+       "value": true
       },
       {
        "name": "wall",

@@ -37,6 +37,8 @@ function buildingSpec(p: Props): Partial<BuildingSpec> {
     sign: text(p.sign),
     signColor: str(p.signColor, d.signColor),
     porch: p.porch === true,
+    bars: p.bars === true,
+    ac: p.ac === true,
   };
 }
 

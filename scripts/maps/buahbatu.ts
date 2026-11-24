@@ -105,6 +105,7 @@ m.building(
     roof: 'hip',
     roofColor: '#c9473d',
     porch: true,
+    ac: true,
     shutters: '#4f8a5a',
     windows: 3,
     trim: '#ffffff',
@@ -121,8 +122,16 @@ m.building(
     trim: '#f4f1ea',
     shutters: '#6b4223',
   })
-  .building(26, 27.3, 6, 4.5, { wall: 'brick', roof: 'hip', roofColor: '#6b6f78', windows: 2, porch: true, trim: '#e8dcc2' })
-  .building(5.5, 21, 6, 4.5, { wall: 'plaster', wallColor: '#f2f0c4', roof: 'gable', roofColor: '#b5583d', windows: 2, trim: '#ffffff' })
+  .building(26, 27.3, 6, 4.5, { bars: true, wall: 'brick', roof: 'hip', roofColor: '#6b6f78', windows: 2, porch: true, trim: '#e8dcc2' })
+  .building(5.5, 21, 6, 4.5, {
+    bars: true,
+    wall: 'plaster',
+    wallColor: '#f2f0c4',
+    roof: 'gable',
+    roofColor: '#b5583d',
+    windows: 2,
+    trim: '#ffffff',
+  })
   .building(13.5, 21, 6, 4.5, {
     wall: 'plaster',
     wallColor: '#e3d3f0',

@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { AREA_IDS, PROP_MODELS } from '../src/config/world';
 import { isI18nKey } from '../src/content/i18n';
 import { parseArea, type AreaData } from '../src/world/map/logic';
+import { DEFAULT_BUILDING } from '../src/world/props/buildings';
 import { TEXT_PROPS } from '../src/world/props/registry';
 
 const dir = join(import.meta.dirname, '..', 'public', 'assets', 'maps');
@@ -42,6 +43,11 @@ describe('peta di public/assets/maps (docs/10 §6)', () => {
       expect(props.map((o) => o.props.model).filter((m) => !(PROP_MODELS as readonly unknown[]).includes(m))).toEqual([]);
       const texts = props.flatMap((o) => TEXT_PROPS.map((k) => o.props[k]).filter((v) => v !== undefined));
       expect(texts.filter((v) => !isI18nKey(v))).toEqual([]);
+    });
+    it('properti bangunan dikenal kit (tanpa salah ketik)', () => {
+      const known = new Set(['model', 'rotation', ...Object.keys(DEFAULT_BUILDING)]);
+      const keys = objects.filter((o) => o.kind === 'prop' && o.props.model === 'building').flatMap((o) => Object.keys(o.props));
+      expect(keys.filter((k) => !known.has(k))).toEqual([]);
     });
   });
 });
