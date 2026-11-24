@@ -56,6 +56,7 @@ export class WorldScene implements GameScene {
   private wet: WetState = DRY;
   private fxTick = 0;
   private rippleIn = 0;
+  private splashes = 0;
   private look = APPEARANCE.A;
   private lookReady: Promise<void> | null = null;
   player: PlayerMotion | null = null;
@@ -95,8 +96,8 @@ export class WorldScene implements GameScene {
     this.showPlayer(dt);
   }
 
-  waterState(): { inWater: boolean; wetness: number; particles: number; ripples: number } {
-    return { inWater: this.wet.inWater, wetness: this.wet.wetness, ...this.fx.counts() };
+  waterState(): { inWater: boolean; wetness: number; particles: number; ripples: number; splashes: number } {
+    return { inWater: this.wet.inWater, wetness: this.wet.wetness, splashes: this.splashes, ...this.fx.counts() };
   }
 
   private splashAndDrip(area: AreaData, p: PlayerMotion, dt: number): void {
@@ -105,6 +106,7 @@ export class WorldScene implements GameScene {
     this.wet = step.state;
     const rnd = seeded(p.x * 31.7 + p.y * 17.3 + this.fxTick++);
     if (step.splash) {
+      this.splashes++;
       this.fx.add(splashBurst(p.x, WATER.surface, p.y, WATER_FX.splashCount, rnd));
       this.fx.ripple(p.x, WATER.surface + 0.01, p.y);
     }

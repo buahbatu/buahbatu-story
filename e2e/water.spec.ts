@@ -9,13 +9,12 @@ test('nyebur ke air dangkal: cipratan, basah, berhenti sebelum air dalam, menete
     await window.__BB__?.enterArea('sandbox');
     window.__BB__?.placePlayer(31, 16.5, 's');
   });
+  const before = (await water(page))?.splashes ?? 0;
   expect(await water(page)).toMatchObject({ inWater: false, wetness: 0 });
 
   await page.keyboard.down('KeyS');
   await expect.poll(async () => (await water(page))?.inWater, { timeout: 10_000 }).toBe(true);
-  const splash = await water(page);
-  expect(splash?.particles).toBeGreaterThan(5);
-  expect(splash?.ripples).toBeGreaterThan(0);
+  expect((await water(page))?.splashes).toBe(before + 1);
   await page.waitForTimeout(1500);
   await page.keyboard.up('KeyS');
   const wading = await player(page);
