@@ -25,7 +25,8 @@ export interface TestApi {
   actions(): Action[];
   clock(): number;
   occluding(): string[];
-  travel(): { travelling: boolean; trips: number };
+  travel(): { travelling: boolean; trips: number; preloaded: string[] };
+  travelCard(area: string | null): void;
   ground(x: number, y: number): number | null;
   debug(): {
     overlay: { grid: number; boxes: number; cliffs: number; deep: number; gridVisible: boolean; collisionVisible: boolean } | null;

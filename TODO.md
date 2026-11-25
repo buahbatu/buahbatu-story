@@ -66,7 +66,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P15 | 🟢 | P15-02 event tanggal asli (rahasia dari yang berulang tahun) |
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
-**Sedang dikerjakan:** —
+**Sedang dikerjakan:** P1-09b
 **Task berikutnya:** P1-13
 
 ---
@@ -117,7 +117,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-12** Kontur tanah **campuran** (keputusan user 2026-11-25): lereng landai halus untuk bukit/lembah + undakan/tebing bertingkat; kolisi & tinggi pemain mengikuti lereng, petak ladang tetap datar · Ref: 10 · ✅ 2026-11-25 · objek `hill` (bukit/lembah landai) di atas undakan, lereng ber-facet, aturan datar dites; bukit di Lembang & sandbox
 - [ ] **P1-13** Air terjun & sungai antar-ketinggian: air jatuh dari tebing ke kolam, percikan & riak, (suara gemericik menyusul sistem audio) · Ref: 10, 42
 - [ ] **P1-14** Jalan aspal bertekstur (masukan user 2026-11-25: jalan tampak hitam/biru polos): aspal abu hangat dengan butiran, retak & tambalan, **marka** (garis tengah putus-putus, garis tepi), trotoar + kanstin; rapikan pita kebiruan di luar batas peta Buahbatu · Ref: 42, 10
-- [ ] **P1-09b** Transisi & interior lebih jelas (masukan user 2026-11-25): layar transisi menampilkan nama tempat + animasi loading (bukan biru tua polos); **preload peta tetangga** supaya pindah area hampir instan; di dalam ruangan **pintu keluar mudah ditemukan** (kusen + keset + penanda panah bercahaya) & dinding depan tampil rendah supaya batas ruangan terbaca · Ref: 10, 40
+- [~] **P1-09b** Transisi & interior lebih jelas (masukan user 2026-11-25): layar transisi menampilkan nama tempat + animasi loading (bukan biru tua polos); **preload peta tetangga** supaya pindah area hampir instan; di dalam ruangan **pintu keluar mudah ditemukan** (kusen + keset + penanda panah bercahaya) & dinding depan tampil rendah supaya batas ruangan terbaca · Ref: 10, 40 · 🕒 2026-11-25
 
 **Kriteria selesai P1:** bisa jalan di Lembang, masuk/keluar kos, ngobrol dengan papan (dialog), main di HP & laptop.
 

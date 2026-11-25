@@ -8,6 +8,7 @@ import {
   TextureLoader,
   Vector3,
   type Group,
+  type Object3D,
   type Texture,
   type DirectionalLight,
   Mesh,
@@ -18,7 +19,7 @@ import { PALETTE } from '../config/palette';
 import { DEBUG, DEFAULT_AREA, INTERACTION, TRAVEL, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { OcclusionFader } from '../world/occlusion';
 import { WaterFx } from '../world/waterFx';
-import { doorById, edgeAt, enteredEdge } from '../world/travel/logic';
+import { doorById, edgeAt, enteredEdge, neighbours, placeKey } from '../world/travel/logic';
 import type { I18nKey } from '../content/i18n';
 import { dialogFor, keyLabel, nearestInteractable, type Interactable } from '../world/interact/logic';
 import { DialogController } from '../systems/dialog/controller';
@@ -36,9 +37,11 @@ import { addEnvironment, aimSun } from '../world/environment';
 import { bodyBlocked, parseArea, standHeight, walkLevel, waterAt, type AreaData } from '../world/map/logic';
 import { SCENE } from './keys';
 import { DebugOverlay } from '../debug/overlay';
+import { EXIT_MARK } from '../world/props/furniture';
 import { FpsMeter } from '../debug/logic';
 
 const OCCLUSION_POINTS = [0.8, 1.5] as const;
+const wait = (ms: number) => new Promise((done) => setTimeout(done, ms));
 export interface InteractionEvent {
   id: number;
   kind: Interactable['kind'];
@@ -63,7 +66,10 @@ export class WorldScene implements GameScene {
   area: AreaData | null = null;
   private target: { area: string; spawn?: string } = { area: DEFAULT_AREA };
   private root: Group | null = null;
-  private atlas: Texture | null = null;
+  private readonly maps = new Map<string, Promise<AreaData>>();
+  private readonly atlases = new Map<string, Promise<Texture>>();
+  private readonly preloaded = new Set<string>();
+  private exitMarks: { node: Object3D; x: number; z: number }[] = [];
   private engine: Engine | null = null;
   private readonly sun: DirectionalLight;
   private water: Texture | null = null;
@@ -107,11 +113,14 @@ export class WorldScene implements GameScene {
   }
 
   private async runTrip(area: string, spawn: string): Promise<boolean> {
-    uiStore.set({ fade: true, prompt: null });
-    await new Promise((done) => setTimeout(done, TRAVEL.fadeMs));
+    const known = (await this.availableAreas()).has(area);
+    uiStore.set({ fade: true, prompt: null, place: known ? placeKey(area) : null });
+    const shown = wait(TRAVEL.fadeMs + (known ? TRAVEL.holdMs : 0));
+    await wait(TRAVEL.fadeMs);
     let ok = true;
     try {
-      if (!(await this.availableAreas()).has(area)) throw new Error('closed');
+      if (!known) throw new Error('closed');
+      await Promise.all([this.fetchArea(area), shown]);
       if (this.area?.id !== area) await this.load(area);
       this.spawn(spawn);
       this.insideEdge = this.area && this.player ? (edgeAt(this.area, this.player.x, this.player.y)?.objectId ?? null) : null;
@@ -120,7 +129,7 @@ export class WorldScene implements GameScene {
       this.notify('travel.closed');
       ok = false;
     }
-    uiStore.set({ fade: false });
+    uiStore.set({ fade: false, place: null });
     return ok;
   }
 
@@ -131,8 +140,8 @@ export class WorldScene implements GameScene {
     return this.manifest;
   }
 
-  travelState(): { travelling: boolean; trips: number } {
-    return { travelling: this.travelling, trips: this.trips };
+  travelState(): { travelling: boolean; trips: number; preloaded: string[] } {
+    return { travelling: this.travelling, trips: this.trips, preloaded: [...this.preloaded].sort() };
   }
 
   goto(area: string, spawn?: string): void {
@@ -153,6 +162,11 @@ export class WorldScene implements GameScene {
 
   update(dt: number, time: number): void {
     this.water?.offset.set(time * WATER.flow, time * WATER.flow * 0.6);
+    for (const m of this.exitMarks) {
+      m.node.position.y = Number(m.node.userData.baseY) + Math.sin(time * INTERIOR.exit.speed) * INTERIOR.exit.bob;
+      const p = this.player;
+      m.node.visible = !p || Math.hypot(p.x - m.x, p.y - m.z) > INTERIOR.exit.hideNear;
+    }
     const { area, player, engine } = this;
     if (!area || !player || !engine) return;
     this.updateDebug(dt, area, player, engine);
@@ -262,29 +276,76 @@ export class WorldScene implements GameScene {
     this.world.camera.updateProjectionMatrix();
   }
 
-  private async load(id: string): Promise<void> {
+  private fetchArea(id: string): Promise<AreaData> {
+    let p = this.maps.get(id);
+    if (!p) {
+      p = this.readArea(id);
+      p.catch(() => this.maps.delete(id));
+      this.maps.set(id, p);
+    }
+    return p;
+  }
+
+  private async readArea(id: string): Promise<AreaData> {
     const url = mapUrl(id);
     const response = await fetch(url);
     if (!response.ok) throw new Error(`peta ${id} tidak ditemukan (${String(response.status)})`);
     const { area, issues } = parseArea(id, await response.json());
     if (!area) throw new Error(`peta ${id} tidak valid: ${issues.join('; ')}`);
-    const [atlas] = await Promise.all([loadAtlas(new URL(area.tileset.image, url)), preloadArea(area)]);
+    await Promise.all([this.atlasFor(new URL(area.tileset.image, url)), preloadArea(area)]);
+    return area;
+  }
+
+  private atlasFor(url: URL): Promise<Texture> {
+    let p = this.atlases.get(url.href);
+    if (!p) {
+      p = loadAtlas(url);
+      p.catch(() => this.atlases.delete(url.href));
+      this.atlases.set(url.href, p);
+    }
+    return p;
+  }
+
+  private async preloadNeighbours(area: AreaData): Promise<void> {
+    const open = await this.availableAreas();
+    await Promise.all(
+      neighbours(area)
+        .filter((id) => open.has(id))
+        .map((id) =>
+          this.fetchArea(id).then(
+            () => this.preloaded.add(id),
+            (error: unknown) => {
+              logger.warn(error);
+            },
+          ),
+        ),
+    );
+  }
+
+  private async load(id: string): Promise<void> {
+    const area = await this.fetchArea(id);
+    const atlas = await this.atlasFor(new URL(area.tileset.image, mapUrl(id)));
     this.occlusion.clear();
     this.fx.clear();
     this.wet = DRY;
     this.playerView.setWet(0);
     if (this.root) disposeTree(this.root);
-    this.atlas?.dispose();
-    this.atlas = atlas;
     this.root = buildArea(area, atlas);
     this.root.updateMatrixWorld(true);
     this.occlusion.setCandidates(this.root.children.filter((n) => n.name.startsWith('prop:')));
     const water = this.root.getObjectByName('water');
     this.water = water instanceof Mesh && water.material instanceof MeshLambertMaterial ? water.material.map : null;
+    this.exitMarks = [];
+    this.root.traverse((n) => {
+      if (n.name !== EXIT_MARK) return;
+      const at = n.getWorldPosition(new Vector3());
+      this.exitMarks.push({ node: n, x: at.x, z: at.z });
+    });
     this.world.scene.add(this.root);
     this.area = area;
     this.debug?.overlay.build(area);
     this.applySettings(area);
+    void this.preloadNeighbours(area);
   }
 
   private applySettings({ settings }: AreaData): void {

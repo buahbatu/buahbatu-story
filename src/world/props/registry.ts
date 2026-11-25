@@ -6,7 +6,7 @@ import { DEFAULT_BUILDING, ROOFS, WALLS, building, type BuildingSpec } from './b
 import { farmhouse, stairs, strawberryPlot } from './models';
 import { RAMP_DIRS } from '../map/logic';
 import { FENCE_STYLES, bush, fence, pine, pot, rock, streetLamp, tree } from './nature';
-import { furnish, partition, room, wallFrame, wallWindow } from './furniture';
+import { exitDoor, furnish, partition, room, wallFrame, wallWindow } from './furniture';
 import { bench, foodCart, haystack, powerPole, signBoard } from './street';
 
 type Value = Props[string] | undefined;
@@ -60,7 +60,9 @@ export const PROP_FACTORIES: Record<PropModel, (props: Props, seed: number) => O
   power_pole: () => powerPole(),
   food_cart: (p) => foodCart(str(p.color, '#d9534a'), text(p.label)),
   sign: (p) => signBoard(text(p.text), str(p.color, '#2f5d50')),
-  room: (p) => room(num(p.w, 6), num(p.d, 5), str(p.wallColor, '#f1e3c4'), str(p.trim, '#8a5a36')),
+  room: (p) =>
+    room(num(p.w, 6), num(p.d, 5), str(p.wallColor, '#f1e3c4'), str(p.trim, '#8a5a36'), { x: num(p.doorX, 0), w: num(p.doorW, 1.2) }),
+  exit_door: () => exitDoor(),
   partition: (p) => partition(num(p.length, 3), str(p.wallColor, '#f1e3c4'), str(p.trim, '#8a5a36')),
   wall_window: (p) => wallWindow(str(p.curtain, '#e8b4bc')),
   wall_frame: (p) => wallFrame(str(p.color, '#e8b4bc')),

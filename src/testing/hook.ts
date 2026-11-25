@@ -5,6 +5,7 @@ import { APPEARANCE } from '../entities';
 import type { WorldScene } from '../scenes';
 import { SCENE } from '../scenes/keys';
 import { standHeight } from '../world/map/logic';
+import { placeKey } from '../world/travel/logic';
 import { uiStore } from '../ui/uiState';
 import type { TestApi } from './types';
 
@@ -79,6 +80,9 @@ function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
     prompt: () => uiStore.get().prompt,
     dialog: () => world.dialog.snapshot(),
     travel: () => world.travelState(),
+    travelCard(area) {
+      uiStore.set({ fade: area !== null, place: area === null ? null : placeKey(area) });
+    },
     ground: (x, y) => (world.area ? standHeight(world.area, x, y) : null),
     debug: () => ({ overlay: world.debugState(), info: uiStore.get().debug }),
     interactions: () => [...world.interactions()],

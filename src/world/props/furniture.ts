@@ -1,5 +1,5 @@
-import { Color, Group, type Object3D } from 'three';
-import { FURNITURE, type FurniturePart } from '../../config/world';
+import { AdditiveBlending, CircleGeometry, Color, ConeGeometry, Group, Mesh, MeshBasicMaterial, type Object3D } from 'three';
+import { FURNITURE, INTERIOR, type FurniturePart } from '../../config/world';
 import { asset, sizeOf, type Tint } from './assets';
 import { box, color, textured, texturedBox } from './kit';
 import { fitScale } from './logic';
@@ -8,9 +8,23 @@ import { TEX } from './textures';
 export const ROOM_HEIGHT = 2.6;
 const WALL_T = 0.2;
 
-export function room(w: number, d: number, wallColor = '#f1e3c4', trim = '#8a5a36'): Group {
+export const EXIT_MARK = 'exit-mark';
+
+export function room(w: number, d: number, wallColor = '#f1e3c4', trim = '#8a5a36', door = { x: 0, w: 1.2 }): Group {
   const g = new Group();
   const h = ROOM_HEIGHT;
+  const low = INTERIOR.frontWall;
+  const z = d / 2 + WALL_T / 2;
+  const left = -w / 2 - WALL_T;
+  const right = w / 2 + WALL_T;
+  for (const [a, b] of [
+    [left, door.x - door.w / 2],
+    [door.x + door.w / 2, right],
+  ] as const) {
+    if (b - a <= 0) continue;
+    g.add(texturedBox(b - a, low, WALL_T, TEX.plasterWhite(), 0.8, (a + b) / 2, low / 2, z, wallColor));
+    g.add(box(b - a, 0.06, WALL_T + 0.04, color(trim), (a + b) / 2, low, z));
+  }
   g.add(texturedBox(w + WALL_T * 2, h, WALL_T, TEX.plasterWhite(), 0.8, 0, h / 2, -d / 2 - WALL_T / 2, wallColor));
   for (const side of [-1, 1]) g.add(texturedBox(WALL_T, h, d, TEX.plasterWhite(), 0.8, side * (w / 2 + WALL_T / 2), h / 2, 0, wallColor));
   g.add(box(w, 0.14, 0.04, color(trim), 0, 0.07, -d / 2 + 0.02));
@@ -20,6 +34,30 @@ export function room(w: number, d: number, wallColor = '#f1e3c4', trim = '#8a5a3
     box(WALL_T + 0.04, 0.08, d, color(trim), -(w / 2 + WALL_T / 2), h, 0),
   );
   g.add(box(WALL_T + 0.04, 0.08, d, color(trim), w / 2 + WALL_T / 2, h, 0));
+  return g;
+}
+
+export function exitDoor(): Group {
+  const { glow, mat, frame } = INTERIOR.exit;
+  const g = new Group();
+  const z = WALL_T / 2;
+  const post = INTERIOR.frontWall + 0.3;
+  for (const x of [-0.62, 0.62])
+    g.add(box(0.14, post, WALL_T + 0.1, color(frame), x, post / 2, z), box(0.2, 0.06, WALL_T + 0.16, color(frame), x, post, z));
+  g.add(box(1.12, 0.03, WALL_T, color('#d8c7a4'), 0, 0.015, z));
+  g.add(box(1.0, 0.03, 0.62, color('#e7cf9a'), 0, 0.015, -0.4), box(0.84, 0.035, 0.46, color(mat), 0, 0.02, -0.4));
+  const halo = new Mesh(
+    new CircleGeometry(0.55, 16),
+    new MeshBasicMaterial({ color: glow, transparent: true, opacity: 0.25, blending: AdditiveBlending, depthWrite: false }),
+  );
+  halo.rotation.x = -Math.PI / 2;
+  halo.position.set(0, 0.05, -0.3);
+  const arrow = new Mesh(new ConeGeometry(0.26, 0.42, 4), new MeshBasicMaterial({ color: glow }));
+  arrow.rotation.set(Math.PI, Math.PI / 4, 0);
+  arrow.name = EXIT_MARK;
+  arrow.position.set(0, INTERIOR.exit.height, -0.3);
+  arrow.userData.baseY = INTERIOR.exit.height;
+  g.add(halo, arrow);
   return g;
 }
 

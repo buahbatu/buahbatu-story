@@ -119,6 +119,10 @@ export class MapBuilder {
     return this.object('prop', x, y, { model, ...props });
   }
 
+  exit(cx: number, wallY: number, targetArea: string, targetSpawn: string): this {
+    return this.object('door', cx - 0.5, wallY - 0.5, { targetArea, targetSpawn }, 1, 0.5).prop('exit_door', cx, wallY);
+  }
+
   block(x: number, y: number, w: number, h: number): this {
     this.collisions.push({
       id: this.nextId++,

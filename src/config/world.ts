@@ -37,9 +37,11 @@ export const INTERIOR = {
   fogNear: 60,
   fogFar: 120,
   cameraDistance: 15,
-  lookBack: 0.9,
+  lookBack: 0.3,
   minZoom: 0.7,
   maxZoom: 1.3,
+  frontWall: 0.45,
+  exit: { glow: '#ffd166', mat: '#7a4a2c', frame: '#6b4223', bob: 0.1, speed: 3.2, height: 1.1, hideNear: 1.6 },
 } as const;
 export const WATER_FX = {
   dryTime: 8,
@@ -69,9 +71,9 @@ export const INTERACT_PROMPTS = {
   use: 'prompt.use',
 } as const;
 export const HILL = { flat: 0.35, flatTolerance: 0.05, maxGrade: 0.9, solidMin: 1.5 } as const;
-export const TRAVEL = { fadeMs: 260 } as const;
+export const TRAVEL = { fadeMs: 260, holdMs: 450 } as const;
 export const DIALOG = { cps: 40, historySize: 60 } as const;
-export const OCCLUSION = { opacity: 0.3, speed: 5, margin: 0.4, skip: ['room', 'rug', 'stairs'] } as const;
+export const OCCLUSION = { opacity: 0.3, speed: 5, margin: 0.4, skip: ['room', 'rug', 'stairs', 'exit_door'] } as const;
 export const CHARACTER = { height: 1.6, turnSpeed: 16 } as const;
 export const WORLD_FOG = { near: 30, far: 70 } as const;
 export const MAP_LAYERS = ['Ground', 'Height', 'Farmable', 'Collision', 'Objects'] as const;
@@ -108,6 +110,7 @@ export const PROP_MODELS = [
   'partition',
   'wall_window',
   'wall_frame',
+  'exit_door',
   'bed',
   'wardrobe',
   'desk',

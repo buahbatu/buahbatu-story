@@ -11,7 +11,7 @@
  "tilewidth": 16,
  "tileheight": 16,
  "nextlayerid": 6,
- "nextobjectid": 21,
+ "nextobjectid": 22,
  "properties": [
   {
    "name": "interior",
@@ -201,7 +201,7 @@
    "visible": true,
    "objects": [
     {
-     "id": 7,
+     "id": 8,
      "name": "",
      "x": 4,
      "y": 2.3999999999999986,
@@ -212,7 +212,7 @@
      "properties": []
     },
     {
-     "id": 9,
+     "id": 10,
      "name": "",
      "x": 86.39999999999999,
      "y": 1.6000000000000005,
@@ -223,7 +223,7 @@
      "properties": []
     },
     {
-     "id": 11,
+     "id": 12,
      "name": "",
      "x": 48,
      "y": 1.6000000000000005,
@@ -234,7 +234,7 @@
      "properties": []
     },
     {
-     "id": 13,
+     "id": 14,
      "name": "",
      "x": 55.2,
      "y": 16.8,
@@ -245,7 +245,7 @@
      "properties": []
     },
     {
-     "id": 15,
+     "id": 16,
      "name": "",
      "x": 104.8,
      "y": 32,
@@ -256,7 +256,7 @@
      "properties": []
     },
     {
-     "id": 20,
+     "id": 21,
      "name": "",
      "x": 3.2,
      "y": 82.4,
@@ -381,6 +381,25 @@
     {
      "id": 5,
      "name": "",
+     "type": "prop",
+     "x": 56,
+     "y": 96,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "point": true,
+     "properties": [
+      {
+       "name": "model",
+       "type": "string",
+       "value": "exit_door"
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "name": "",
      "type": "interact",
      "x": 14.4,
      "y": 19.2,
@@ -397,7 +416,7 @@
      ]
     },
     {
-     "id": 6,
+     "id": 7,
      "name": "",
      "type": "prop",
      "x": 14.4,
@@ -421,7 +440,7 @@
      ]
     },
     {
-     "id": 8,
+     "id": 9,
      "name": "",
      "type": "prop",
      "x": 97.6,
@@ -440,7 +459,7 @@
      ]
     },
     {
-     "id": 10,
+     "id": 11,
      "name": "",
      "type": "prop",
      "x": 59.2,
@@ -459,7 +478,7 @@
      ]
     },
     {
-     "id": 12,
+     "id": 13,
      "name": "",
      "type": "prop",
      "x": 59.2,
@@ -483,7 +502,7 @@
      ]
     },
     {
-     "id": 14,
+     "id": 15,
      "name": "",
      "type": "prop",
      "x": 108,
@@ -507,7 +526,7 @@
      ]
     },
     {
-     "id": 16,
+     "id": 17,
      "name": "",
      "type": "prop",
      "x": 57.6,
@@ -541,7 +560,7 @@
      ]
     },
     {
-     "id": 17,
+     "id": 18,
      "name": "",
      "type": "prop",
      "x": 35.2,
@@ -565,7 +584,7 @@
      ]
     },
     {
-     "id": 18,
+     "id": 19,
      "name": "",
      "type": "prop",
      "x": 78.4,
@@ -589,7 +608,7 @@
      ]
     },
     {
-     "id": 19,
+     "id": 20,
      "name": "",
      "type": "prop",
      "x": 7.2,

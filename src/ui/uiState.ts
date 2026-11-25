@@ -13,6 +13,7 @@ export interface UiState {
   dialogLog: { speaker: string; text: string }[];
   dialogLogOpen: boolean;
   fade: boolean;
+  place: I18nKey | null;
   touch: boolean;
   debug: DebugInfo | null;
   debugLayers: { collision: boolean; grid: boolean };
@@ -55,6 +56,7 @@ export const uiStore = createStore<UiState>({
   dialogLog: [],
   dialogLogOpen: false,
   fade: false,
+  place: null,
   touch: false,
   debug: null,
   debugLayers: { collision: true, grid: true },

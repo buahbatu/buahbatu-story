@@ -28,6 +28,7 @@ function setup() {
     dialogLog: [],
     dialogLogOpen: false,
     fade: false,
+    place: null,
     touch: false,
     debug: null,
     debugLayers: { collision: true, grid: true },

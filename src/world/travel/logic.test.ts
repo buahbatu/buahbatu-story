@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AreaData, MapObject } from '../map/logic';
-import { destinationOf, doorById, edgeAt, enteredEdge } from './logic';
+import { AREA_IDS } from '../../config/world';
+import { destinationOf, doorById, edgeAt, enteredEdge, neighbours, placeKey } from './logic';
 
 const obj = (id: number, kind: MapObject['kind'], x: number, y: number, w: number, h: number, props: MapObject['props']): MapObject => ({
   id,
@@ -53,5 +54,20 @@ describe('travel', () => {
   it('pintu dicari dari id objek interaksi', () => {
     expect(doorById(a, 2)).toEqual({ objectId: 2, area: 'rumah', spawn: 'pintu' });
     expect(doorById(a, 1)).toBeNull();
+  });
+});
+
+describe('nama tempat & tetangga', () => {
+  it('setiap area punya nama tempat di i18n', () => {
+    expect(AREA_IDS.filter((id) => placeKey(id) === null)).toEqual([]);
+    expect(placeKey('rumah_michelle')).toBe('place.rumahMichelle');
+    expect(placeKey('tidak_ada')).toBeNull();
+  });
+
+  it('tetangga = tujuan pintu & tepi yang unik, tanpa area sendiri', () => {
+    const self = obj(3, 'door', 1, 1, 1, 1, { targetArea: 't', targetSpawn: 'x' });
+    const twin = obj(4, 'edge', 0, 4, 0.5, 2, { targetArea: 'dago', targetSpawn: 'lain' });
+    const spawn = obj(5, 'spawn', 2, 2, 0, 0, { targetArea: 'braga', targetSpawn: 'x' });
+    expect(neighbours(area([edge, door, self, twin, spawn]))).toEqual(['dago', 'rumah']);
   });
 });

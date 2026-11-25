@@ -55,6 +55,9 @@ Wallpaper HP bisa diganti dengan foto dari album 💗.
 ## 4. Menu Lain
 Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kotak Kirim, Penyimpanan, Dekor (overlay grid), Dialog, Ringkasan Hari (saat tidur), Cutscene (letterbox).
 
+### Layar transisi area (P1-09b)
+Saat pindah area layar memudar ke warna malam lalu menampilkan kartu tengah: teks kecil **"Menuju…"**, **nama tempat** besar (font judul, garis bawah merah stroberi), dan tiga titik pixel yang melompat bergantian. Tampil minimal ±0,7 detik supaya terbaca; peta tetangga sudah di-preload sehingga biasanya tidak lebih lama dari itu. Area yang belum dibuka tidak menampilkan kartu (langsung pesan ramah).
+
 ## 5. Kotak Dialog
 - Potret (96px) di kiri, nama, teks dengan efek mengetik + blip.
 - Klik/`E` mempercepat teks; klik lagi lanjut.
