@@ -4,7 +4,7 @@
 
 ## 1. Lokasi & Privasi
 ```
-src/content/personal/          ← masuk .gitignore
+src/content/personal/          ← DI-COMMIT (ADR-033)
 ├─ profile.json                # nama, ultah, anniversary, kesukaan
 ├─ memories.json               # daftar kenangan + syarat terbuka
 ├─ places.json                 # tempat asli kalian di peta
@@ -15,8 +15,8 @@ src/content/personal/          ← masuk .gitignore
 └─ audio/                      # suara kenangan
 src/content/personal.example/  ← DI-COMMIT, berisi contoh placeholder
 ```
-- Repo **public** selama development, **private** saat final (ADR-010). Folder `personal/` tetap di-gitignore, jadi foto/audio/kuesioner tidak pernah masuk repo.
-- Saat build produksi, media personal diambil dari **bucket privat Supabase** (signed URL), bukan di-bundle publik. Jadi walaupun link game tersebar, kenangan tetap aman di balik login.
+- Repo **public** selama development, **private** saat final (ADR-010). **Keputusan user (ADR-033, 2026-11-26)**: isi `personal/` (nama lengkap, tempat, tanggal, kenangan, foto, audio) **di-commit** supaya tidak repot; risikonya sudah dijelaskan (repo & URL deploy publik). Commit hanya yang dipakai game; detail sensitif yang tidak dibutuhkan cerita tidak ditulis. Rahasia (token/kunci) tetap tidak pernah masuk repo.
+- Media personal boleh ikut build; bucket privat Supabase tetap opsi kalau nanti ingin di balik login.
 - Game **harus tetap jalan** walau folder `personal/` kosong (fallback ke `personal.example`).
 
 ## 2. Format

@@ -78,6 +78,8 @@ Gaya: 2.5D low-poly + tekstur pixel, palet hangat, ikuti `42-aset-lisensi.md` (A
 - **Nama tempat (ADR-023)**: nama jalan, landmark, dan kafe/warung/toko lokal memakai **nama asli** (data OpenStreetMap + cek manual); merek besar/waralaba memakai **plesetan** (contoh: SPBU "Pertamani", minimarket "Alfamurah"/"Indomart-mart", kopi waralaba "Starbaks"). Bentuk bangunan bebas.
 - Konsekuensi: kebutuhan art besar; dikerjakan bertahap per area (P1-02 prototipe, P12 & P15 final) dan bergantung pada keputusan gaya grafik (`42`).
 
+> **Sedang diganti (ADR-031/032, fase P1B)**: dunia luar akan menjadi **satu pulau** dari **bentuk vektor** (pantai, dataran, sungai lengkung, danau, jalan) yang dipanggang per chunk; grid hanya untuk logika & ladang. Konvensi petak `.tmj` di bawah berlaku sampai migrasi P1B-10.
+
 ## 6. Konvensi Peta (WAJIB)
 Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-poly (ADR-022). Satu tile = 1 satuan dunia 3D.
 - Tile size: **16×16** (`TILE_PX` di `src/config/world.ts`). Ukuran area outdoor: 60×40 sampai 100×70 tile.

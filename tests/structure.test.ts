@@ -36,7 +36,7 @@ describe('struktur proyek (docs/02 §2)', () => {
   it('tidak ada folder sistem di luar daftar', () => {
     expect(readdirSync(join(root, 'src/systems')).sort()).toEqual(SYSTEMS.map(([name]) => name).sort());
   });
-  it('konten personal tidak pernah ikut di-commit', () => {
-    expect(readFileSync(join(root, '.gitignore'), 'utf8')).toMatch(/^src\/content\/personal\/$/m);
+  it('konten personal di-commit atas keputusan user (ADR-033), bukan di-gitignore', () => {
+    expect(readFileSync(join(root, '.gitignore'), 'utf8')).not.toMatch(/^src\/content\/personal\/$/m);
   });
 });

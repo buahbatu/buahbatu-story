@@ -201,3 +201,5 @@ Dunia 3D (ADR-022): urutan gambar ditentukan depth buffer Three.js; sprite karak
 - Hanya area aktif yang dirender; area lain disimulasikan sebagai **data** (tanaman tetap tumbuh).
 - Object pooling untuk partikel (hujan, daun, kembang api).
 - Target: 60 fps di laptop, ≥30 fps di HP menengah.
+- **Anggaran render (ADR-030)**: ≤ 200 draw call & ≤ 400 rb segitiga terlihat di tingkat kualitas Seimbang. Geometri statis digabung per chunk & per material; objek berulang memakai instancing; efek pasca-proses resolusi setengah di Rendah/Seimbang. Ukuran awal (P1B-01, sebelum batching): Buahbatu 1.092 draw call → wajib turun.
+- **Dunia pulau (ADR-032)**: chunk 64×64 m dimuat di sekitar pemain (cincin 3×3 + LOD jauh), dibuang LRU, pramuat ke arah gerak; interior tetap scene terpisah.

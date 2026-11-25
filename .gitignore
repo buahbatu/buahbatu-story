@@ -15,7 +15,6 @@ blob-report/
 supabase/.temp/
 supabase/.branches/
 
-src/content/personal/
 
 maps/**/*.tiled-session
 maps/**/*.tmx~

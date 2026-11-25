@@ -1,7 +1,7 @@
 # 42 · Aset, Art Direction & Lisensi
 
 ## 1. Art Direction
-- **Gaya**: **3D low-poly ala Harvest Moon: Back to Nature** (ADR-022/024/025): dunia & karakter **model 3D low-poly**, karakter **chibi 3D** (Kenney Mini Characters CC0, diwarnai ulang), kamera miring, render resolusi rendah ala PS1 (filter nearest), palet hangat.
+- **Gaya (ADR-030)**: **bergaya Animal Crossing: New Horizons**: model low-poly **bulat & empuk**, material toon lembut + rim light, tekstur halus bergaya lukis (filter linear), cahaya hangat per jam, karakter **chibi bulat ekspresif**. Bukan pixel kasar, bukan kotak ala Minecraft. Inspirasi gaya saja: tanpa aset/desain Nintendo. *(Gaya PS1 lama: ADR-022/024/025, sedang diganti lewat fase P1B.)*
 - **Konsistensi > kemewahan**: semua aset harus terlihat dari "dunia yang sama". Jangan campur aset 16px dan 32px.
 - **Palet utama**: hijau daun Lembang, krem kolonial Braga, merah stroberi, biru langit Bandung, oranye senja.
 - Landmark & bangunan Bandung dibentuk **custom** (model low-poly modular + tekstur), setiap bangunan berbeda (`10` §5).
@@ -9,8 +9,8 @@
 ## 2. Sumber Aset Gratis
 | Kebutuhan | Sumber | Lisensi umum |
 |---|---|---|
-| Karakter 3D bertulang + animasi | **Kenney Mini Characters** (kenney.nl), alternatif KayKit / Quaternius | CC0 |
-| Bangunan, prop, alam 3D | Paket 3D Kenney: **Nature Kit** (alam, dipakai), **City Kit Roads** (lampu jalan, dipakai), **Furniture Kit** (perabot interior, dipakai), City Kit Suburban/Commercial sudah dicoba untuk bangunan tetapi **tidak dipakai** (keputusan user, ADR-025: bangunan tetap rakitan kode); alternatif Quaternius, KayKit | CC0 |
+| Karakter 3D bertulang + animasi | **Kenney Mini Characters** (sementara); target P1B-08 karakter chibi bulat (KayKit / Quaternius / buatan sendiri) | CC0 |
+| Bangunan, prop, alam 3D | **Target P1B-07: paket stylized bulat** (Quaternius Stylized Nature, KayKit, dll., CC0) + model khas Bandung buatan sendiri. Saat ini paket 3D Kenney: **Nature Kit** (alam, dipakai), **City Kit Roads** (lampu jalan, dipakai), **Furniture Kit** (perabot interior, dipakai), City Kit Suburban/Commercial sudah dicoba untuk bangunan tetapi **tidak dipakai** (keputusan user, ADR-025: bangunan tetap rakitan kode); alternatif Quaternius, KayKit | CC0 |
 | Landmark Bandung | Dirakit custom dari potongan aset / AI text-to-3D lalu dirapikan | Milik proyek (cek ketentuan tool AI) |
 | Ikon item | OpenGameArt, aset LPC item | Beragam |
 | UI pixel | Kenney (pixel UI), OpenGameArt | CC0 |

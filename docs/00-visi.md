@@ -1,9 +1,18 @@
 # 00 · Visi & Pilar Desain
 
 ## 1. Pitch
-**Buahbatu Story** adalah life-sim **2.5D ala Harvest Moon: Back to Nature** (dunia 3D low-poly, karakter sprite chibi, kamera miring; ADR-022) untuk dua orang. Judulnya diambil dari **Buahbatu**, kampung halaman Michelle (Pemain B). Kalian mulai sebagai **dua orang lajang**: Pemain A ngekos di Dago, sedangkan Michelle tinggal di rumah keluarganya di Buahbatu. Dari situ kalian bertani di Lembang, kerja di Braga, belanja di Cihampelas, dan pelan-pelan **kenal → PDKT → pacaran → nikah → punya rumah → punya anak**. Semua dimainkan **berdua secara online**, dan saat dua-duanya online kalian bisa saling ketemu, ngobrol pakai suara, dan bikin kenangan bareng.
+**Buahbatu Story** adalah life-sim 3D untuk dua orang dengan **gameplay dasar Harvest Moon: Back to Nature**, dipadu **The Sims** (rumah, dekor, hubungan) dan **GTA** (satu pulau terbuka tanpa loading, kendaraan, kota hidup), dengan **grafik bergaya Animal Crossing: New Horizons** (bulat, empuk, hangat, halus; tidak kotak & tidak pixel kasar; ADR-030/031/032). Judulnya diambil dari **Buahbatu**, kampung halaman Michelle (Pemain B). Kalian mulai sebagai **dua orang lajang**: Pemain A ngekos di Dago, sedangkan Michelle tinggal di rumah keluarganya di Buahbatu. Dari situ kalian bertani di Lembang, kerja di Braga, belanja di Cihampelas, dan pelan-pelan **kenal → PDKT → pacaran → nikah → punya rumah → punya anak**. Semua dimainkan **berdua secara online**, dan saat dua-duanya online kalian bisa saling ketemu, ngobrol pakai suara, dan bikin kenangan bareng.
 
-> Gameplay **Harvest Moon** × alur hidup **The Sims** × kebebasan **GTA**, dalam dunia Bandung yang hangat.
+> Gameplay **Harvest Moon: Back to Nature** × **The Sims** × **GTA**, digambar seperti **Animal Crossing: New Horizons**, dalam pulau Bandung yang hangat.
+
+| Aspek | Acuan (keputusan user 2026-11-26) |
+|---|---|
+| Gameplay dasar | Harvest Moon: Back to Nature |
+| Perpaduan | The Sims (rumah, dekor, build mode, hubungan) + GTA (dunia pulau terbuka, kendaraan, kota hidup) |
+| Grafik | Animal Crossing: New Horizons (dunia melengkung halus, bentuk bulat, cahaya hangat, air berkilau, vegetasi rimbun, karakter chibi ekspresif) |
+| Isi | Bandung & kisah kalian berdua |
+
+Semuanya **inspirasi**: tanpa menyalin aset, karakter, peta, atau desain game mana pun.
 
 ## 2. Lima Pilar Desain
 Setiap fitur baru harus lolos minimal 3 dari 5 pilar ini.

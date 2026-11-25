@@ -80,7 +80,7 @@ Format baris task:
 - **Tanpa kekerasan, tanpa hukuman berat** (lihat pilar di `docs/00-visi.md`).
 - **Jangan** pakai aset hasil rip dari Harvest Moon/Stardew/Sims. Setiap aset baru wajib dicatat di `CREDITS.md`.
 - **Jangan** commit secret. Semua kunci rahasia lewat env (`.env.local`, Vercel env).
-- **Jangan** commit konten personal (foto, audio, nama asli) ke repo publik. Lihat `docs/43-konten-personal.md`.
+- Konten personal (nama asli, tempat, tanggal, kenangan, foto, audio) **boleh di-commit** di `src/content/personal/` atas keputusan user (ADR-033); commit hanya yang dipakai game, dan teman/keluarga asli tetap minta izin dulu. Lihat `docs/43-konten-personal.md`.
 
 ## 6. Saat Ragu
 - Desain belum jelas atau bertentangan → **tanya user**, beri 2–3 opsi + rekomendasi.

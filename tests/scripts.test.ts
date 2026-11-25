@@ -98,8 +98,9 @@ describe('mask', () => {
 
 describe('urutan task', () => {
   it('parseTaskId', () => {
-    expect(parseTaskId('P0-10a')).toEqual([0, 10, 'a']);
-    expect(parseTaskId('P12-3')).toEqual([12, 3, '']);
+    expect(parseTaskId('P0-10a')).toEqual([0, '', 10, 'a']);
+    expect(parseTaskId('P12-3')).toEqual([12, '', 3, '']);
+    expect(parseTaskId('P1B-01')).toEqual([1, 'B', 1, '']);
     expect(() => parseTaskId('X1')).toThrow();
   });
   it.each([
@@ -108,6 +109,8 @@ describe('urutan task', () => {
     ['P0-10b', 'P0-11'],
     ['P0-13', 'P1-01'],
     ['P9-12', 'P10-01'],
+    ['P1-13b', 'P1B-01'],
+    ['P1B-11', 'P2-01'],
   ])('%s sebelum %s', (a, b) => {
     expect(compareTasks(a, b)).toBeLessThan(0);
     expect(compareTasks(b, a)).toBeGreaterThan(0);
@@ -117,6 +120,7 @@ describe('urutan task', () => {
     expect(currentTask(todo)).toBe('P0-10a');
     expect(currentTask(todo.replace('[~]', '[x]'))).toBe('P0-02');
     expect(currentTask('- [x] **P0-01** a')).toBeUndefined();
+    expect(currentTask(['- [x] **P1-13b** a', '- [~] **P1B-01** b', '- [ ] **P2-01** c'].join('\n'))).toBe('P1B-01');
   });
   it('isRequiredNow', () => {
     expect(isRequiredNow('P0-10a', 'P0-10a')).toBe(true);

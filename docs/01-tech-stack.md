@@ -4,11 +4,12 @@
 | Lapisan | Teknologi | Alasan |
 |---|---|---|
 | Bahasa | **TypeScript** (strict) | Game besar dan jangka panjang butuh tipe yang aman |
-| Engine 3D | **Three.js** (WebGL) | Render dunia 2.5D low-poly ala Back to Nature, ringan, jalan di browser & HP (ADR-022) |
+| Engine 3D | **Three.js** (WebGL) | Render dunia 3D bergaya Animal Crossing (ADR-030), jalan di browser & HP |
+| Efek pasca-proses | **postprocessing** + **n8ao** *(ditambahkan di P1B-02)* | Bloom, SSAO, tilt-shift, color grading yang efisien (ADR-030) |
 | Bundler | **Vite** | Dev server cepat, hot reload |
 | UI menu | **Preact** + CSS | Menu kompleks (inventory, toko, lemari, HP) jauh lebih gampang dibuat dengan DOM |
 | Validasi data | **zod** | Konten JSON & save divalidasi saat load |
-| Peta | **Tiled** (export `.tmj`/JSON) | Standar industri untuk tilemap |
+| Peta | Skrip TypeScript `scripts/maps/` → `.tmj` *(sementara)*; diganti **dunia vektor** `scripts/world/` → data chunk (ADR-031, P1B-04) | Dunia organik bebas grid, mudah dites |
 | Pathfinding NPC | **EasyStar.js** | A* grid ringan |
 | Storage lokal | **IndexedDB** via `idb-keyval` | Kapasitas lebih besar dari localStorage |
 | Backend | **Supabase** | Auth, Postgres, Realtime, Storage dalam satu tempat, gratis |

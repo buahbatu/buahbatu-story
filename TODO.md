@@ -22,6 +22,7 @@
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
 | P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 27 | 27 | ✅ |
+| P1B | Fondasi Dunia Baru (grafik ACNH, medan mulus, pulau) | v0.1 | 0 | 11 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +38,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **42** | **203** | |
+| **Total** | | | **42** | **214** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -50,6 +51,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | Fase | Default | Pengecualian 🔴 High |
 |---|---|---|
 | P1 | 🟢 | P1-04 karakter 3D, P1-04b tampilan PS1, P1-04c pemuat aset 3D, P1-04e bangunan 3D, P1-05 collision, P1-06 kamera |
+| P1B | 🔴 | semua (renderer, medan, air, aset, karakter, streaming, performa) |
 | P2 | 🟢 | P2-04 Day Tick, P2-07 skema save & migrasi, P2-08 save/load |
 | P3 | 🟢 | — |
 | P4 | 🟢 | P4-06 karier generik, P4-08 simulasi ekonomi |
@@ -66,8 +68,8 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P15 | 🟢 | P15-02 event tanggal asli (rahasia dari yang berulang tahun) |
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
-**Sedang dikerjakan:** —
-**Task berikutnya:** ADR & rencana Fondasi Dunia Baru (grafik ala ACNH, medan mulus, dunia pulau)
+**Sedang dikerjakan:** P1B-01
+**Task berikutnya:** P1B-02 (renderer baru)
 
 ---
 
@@ -124,6 +126,21 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 **Kriteria selesai P1:** bisa jalan di Lembang, masuk/keluar kos, ngobrol dengan papan (dialog), main di HP & laptop.
 
 ---
+
+## P1B · Fondasi Dunia Baru (ADR-030/031/032)
+Rumusan user (2026-11-26): **gameplay HM Back to Nature + The Sims & GTA + grafik Animal Crossing NH**; dunia mulus bukan Minecraft; satu pulau tanpa loading.
+
+- [~] **P1B-01** ADR & rencana: arah grafik ACNH, medan bebas grid, dunia pulau; update docs `00`, `01`, `02` §9, `04`, `10`, `42`; ukur performa awal · Ref: 00, 02, 04 · 🕒 2026-11-26
+- [ ] **P1B-02** Renderer baru: resolusi penuh + AA, color grading per jam, bayangan lembut, SSAO, bloom, tilt-shift, kabut & langit gradasi, **lengkung dunia** (Kuat/Halus/Mati; 3 render pembanding untuk user, default Halus), tingkat kualitas otomatis, mode Retro opsional; batching geometri statis & instancing (≤ 200 draw call) · Ref: 04 (ADR-030), 02 §9
+- [ ] **P1B-03** Material & tekstur baru: toon lembut + rim light, tekstur halus bergaya lukis (tanah, rumput, jalan, air, kayu, atap), filter linear; font UI bersih (pixel hanya aksen) · Ref: 42, 40
+- [ ] **P1B-04** Medan mulus: format dunia vektor (`scripts/world/`), pemanggang chunk (heightfield 0,5 m, splat, grid logika 1 m), runtime API logika di atas heightfield, tebing jadi lereng batu alami, grid hanya tampil saat pegang alat · Ref: 04 (ADR-031), 10
+- [ ] **P1B-05** Air lengkung: sungai berkelok (lebar & kedalaman per titik, mengalir, tidak buntu), danau/kolam bentuk bebas dengan tepian landai, shader air ACNH (pantulan langit, kilau, buih tepi, riak), curug & jembatan di atas sistem baru · Ref: 04 (ADR-031), 10
+- [ ] **P1B-06** Vegetasi & hiasan alam: rumput lebat bergoyang angin (instancing), bunga, alang-alang, teratai, batu di spot alami (aturan otomatis + manual) · Ref: 42, 10
+- [ ] **P1B-07** Aset bulat stylized: pohon, semak, batu, pagar, lampu, prop & bangunan bergaya ACNH (paket CC0 + model khas Bandung buatan sendiri), catat `CREDITS.md` · Ref: 42
+- [ ] **P1B-08** Karakter chibi baru pemain A (Aldi) & Michelle: model bulat, wajah ekspresif (mata/mulut berganti), animasi idle/jalan/lari/lompat + emote, pewarnaan & outfit dasar · Ref: 15, 42
+- [ ] **P1B-09** Dunia pulau: satu koordinat dunia, chunk 64 m streaming (cincin 3×3 + LOD jauh, LRU, pramuat), pantai & laut sebagai batas, sungai besar penghubung desa bermuara ke laut, tata letak kasar desa · Ref: 04 (ADR-032), 10
+- [ ] **P1B-10** Migrasi: Lembang, Buahbatu, sandbox & interior ke format baru sebagai pulau awal; pensiunkan `.tmj`/atlas petak/`edge`; tes aturan dunia baru · Ref: 10
+- [ ] **P1B-11** Performa HP: anggaran draw call/segitiga, LOD, instancing, ukuran unduhan; tes FPS & draw call otomatis per tingkat kualitas · Ref: 02 §9, 50
 
 ## P2 · Waktu, Cuaca & Save Lokal
 - [ ] **P2-01** Logic jam & kalender (menit → hari → musim → tahun) + test · Ref: 11
