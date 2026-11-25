@@ -11,6 +11,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - Klik kanan (geser kamera) di HP tidak lagi memicu permintaan layar penuh yang ditolak browser (hanya sentuhan/klik utama).
 
 ### Diubah
+- **P1-10b** Kontrol sentuh didesain ulang (masukan user): gaya modern transparan dengan ikon, joystick tetap di tempat & lebih besar, tombol Aksi/Lompat/Lari (tahan)/Alat, jauh dari tepi layar; tampil otomatis di HP/tablet/iPad, tidak di desktop, dan pindah sendiri mengikuti input terakhir (sentuh ↔ keyboard/mouse). Prompt interaksi di HP memakai ikon tangan.
 - Tombol (keputusan user): **Lompat = Spasi**, **Pakai alat = C**, Push-to-talk tetap V, B kosong.
 
 ### Ditambah

@@ -35,13 +35,14 @@ export const DEFAULT_BINDINGS: Bindings = {
 export const MAX_KEYS_PER_ACTION = 2;
 
 export const TOUCH_CONTROLS = {
-  radius: 30,
-  deadZone: 0.2,
+  radius: 34,
+  deadZone: 0.18,
   runAt: 0.92,
-  promptKey: 'A',
+  mouseMove: 6,
   buttons: [
-    { action: 'interact', key: 'A', label: 'touch.interact', size: 58 },
-    { action: 'useTool', key: 'B', label: 'touch.tool', size: 46 },
-    { action: 'jump', key: '', label: 'touch.jump', size: 46 },
+    { action: 'interact', icon: 'hand', label: 'touch.interact', size: 66 },
+    { action: 'jump', icon: 'jump', label: 'touch.jump', size: 46 },
+    { action: 'run', icon: 'run', label: 'touch.run', size: 46 },
+    { action: 'useTool', icon: 'tool', label: 'touch.tool', size: 46 },
   ],
 } as const;

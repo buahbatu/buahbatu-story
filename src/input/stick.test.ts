@@ -52,6 +52,17 @@ describe('InputState sumber virtual (sentuh)', () => {
     input.keyUp('KeyE');
     expect(input.justReleased('interact')).toBe(true);
   });
+  it('sumber berbeda untuk Action yang sama tidak saling menimpa (tombol Lari + stik)', () => {
+    const input = new InputState(DEFAULT_BINDINGS);
+    input.setVirtual('run', true);
+    input.setVirtual('run', false, 'stick');
+    expect(input.isDown('run')).toBe(true);
+    input.setVirtual('run', true, 'stick');
+    input.setVirtual('run', false);
+    expect(input.isDown('run')).toBe(true);
+    input.setVirtual('run', false, 'stick');
+    expect(input.isDown('run')).toBe(false);
+  });
   it('releaseAll melepas tombol virtual & stik', () => {
     const input = new InputState(DEFAULT_BINDINGS);
     input.setVirtual('jump', true);

@@ -7,7 +7,7 @@ const interactions = (page: Page) => page.evaluate(() => window.__BB__?.interact
 test('prompt muncul di dekat pintu & kasur, hilang saat menjauh, E mencatat interaksi', async ({ game: { page }, isMobile }) => {
   await page.evaluate(() => window.__BB__?.enterArea('kos_a', 'pintu'));
   await expect.poll(() => prompt(page)).toMatchObject({ key: 'E', text: 'prompt.exit' });
-  await expect(page.locator('.interact-prompt')).toHaveText(isMobile ? 'AKeluar' : 'EKeluar');
+  await expect(page.locator('.interact-prompt')).toHaveText(isMobile ? 'Keluar' : 'EKeluar');
 
   await page.evaluate(() => window.__BB__?.placePlayer(2.6, 2.2, 'w'));
   await expect.poll(() => prompt(page)).toMatchObject({ text: 'prompt.sleep' });

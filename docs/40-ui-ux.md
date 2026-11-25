@@ -66,14 +66,14 @@ Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kot
 | Aksi | Keyboard | Mouse | Sentuh | Gamepad |
 |---|---|---|---|---|
 | Gerak | WASD / panah | — | Joystick virtual kiri | Stik kiri |
-| Interaksi | E | Klik kanan | Tombol A (merah) | A |
-| Pakai alat | C (keputusan user) | Klik kiri | Tombol B | X |
+| Interaksi | E | Klik kanan | Tombol Aksi (ikon tangan) | A |
+| Pakai alat | C (keputusan user) | Klik kiri | Tombol Alat | X |
 | Hotbar | 1–0, `[` `]` | — | Ketuk slot | LB/RB |
 | HP | Tab | Ikon | Ikon HP | Start |
-| Lari | Shift | — | Joystick penuh | Stik ditekan |
+| Lari | Shift | — | Joystick penuh / tahan tombol Lari | Stik ditekan |
 | Emote | F | — | Tombol emote | Y |
 | Push-to-talk | V (tahan) | — | Tombol mic | RT |
-| Lompat | Spasi (keputusan user) | — | Tombol Lompat (hijau) | B |
+| Lompat | Spasi (keputusan user) | — | Tombol Lompat | B |
 | Dekor | G | — | Ikon | — |
 | Riwayat obrolan | L | — | — | — |
 | Zoom kamera | `+` / `-` | Scroll | Cubit dua jari | — |
@@ -81,7 +81,7 @@ Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kot
 | Geser pandangan | — | Tahan klik kanan + seret | Geser dua jari | — |
 
 - Semua tombol bisa di-remap (Pengaturan → Kontrol).
-- **Kontrol sentuh (P1-10):** hanya muncul di perangkat sentuh (`(pointer: coarse)`; paksa dengan `?touch=1` / `?touch=0`). Joystick **melayang** di 42% kiri-bawah layar: titik sentuh pertama jadi pusat, kenop tertahan di jari-jari; deadzone 20%, kekuatan analog (dorong sedikit = jalan pelan), didorong ≥92% = **lari**. Tombol kanan-bawah: **A** (Aksi/Interaksi, terbesar), **B** (Alat), **Lompat**; semua ≥44 px. Selama dialog kontrol disembunyikan (ketuk kotak dialog untuk lanjut). Prompt interaksi menampilkan "A" di HP. Dua jari di area dunia tetap untuk zoom/putar/geser kamera. Angka di `TOUCH_CONTROLS` (`config/controls.ts`), logika murni `src/input/stick.ts`, UI `src/ui/touch/`; joystick & tombol masuk `InputState` sebagai stik analog + Action virtual, jadi game tidak membedakan sumber input.
+- **Kontrol sentuh (P1-10, didesain ulang P1-10b atas masukan user):** gaya **modern transparan**: lingkaran kaca gelap tembus pandang, garis putih tipis, ikon putih. **Joystick tetap di tempat** di kiri bawah (±96 px, kenop putih + panah arah samar; area sentuh 170 px di sekitarnya), deadzone 18%, kekuatan analog (geser sedikit = jalan pelan), didorong ≥92% = lari. Tombol kanan bawah: **Aksi** (ikon tangan, terbesar), **Lompat** (panah atas), **Lari** (tahan, »), **Alat** (kunci pas); semua ≥44 px dan menjauh dari tepi/notch (`safe-area-inset`). Prompt interaksi memakai ikon tangan yang sama. Selama dialog kontrol disembunyikan (ketuk kotak dialog untuk lanjut). **Tampil otomatis** (`src/input/mode.ts`): awal mengikuti perangkat (`pointer: coarse` → HP/tablet/iPad tampil, desktop tidak), lalu ikut input terakhir: sentuhan/pena memunculkan, tombol keyboard atau mouse yang digerakkan menyembunyikan (laptop layar sentuh, iPad + keyboard). Paksa dengan `?touch=1` / `?touch=0`. Angka di `TOUCH_CONTROLS` (`config/controls.ts`), logika murni `src/input/stick.ts` & `mode.ts`, UI `src/ui/touch/`; joystick & tombol masuk `InputState` sebagai stik analog + Action virtual per sumber, jadi game tidak membedakan sumber input.
 - **Kamera (P1-06, keputusan user):** scroll = zoom (hotbar tidak memakai scroll), Q/R memutar kamera (E tetap Interaksi), tahan klik kanan + seret menggeser pandangan; pandangan kembali mengikuti pemain begitu pemain berjalan. WASD selalu relatif terhadap kamera (W = menjauh dari layar). Di dalam ruangan kamera tidak bisa diputar/digeser, hanya zoom. Angka di `WORLD_CAMERA` / `INTERIOR` (`config/world.ts`), logika murni `src/world/camera/logic.ts`, input mouse/sentuh `src/input/pointer.ts`.
 - Input diabstraksi menjadi **Action** (`src/input/`), bukan key langsung. **Status (P1-03):** keyboard. Daftar Action di `src/input/actions.ts`, tombol bawaan di `src/config/controls.ts` (`KeyboardEvent.code`, jadi aman untuk layout keyboard apa pun; maks. 2 tombol per Action; `Enter` cadangan Interaksi; hotbar maju/mundur `]`/`[` sampai scroll mouse ditambahkan). `InputState` (`src/input/logic.ts`): ditahan / baru ditekan / baru dilepas per frame, vektor gerak dinormalisasi, `rebind` tanpa bentrok + skema zod (dipakai menu remap P16-03). Tombol milik game tidak menjalankan aksi browser (Tab tidak memindah fokus, Spasi/panah tidak menggulir); kombinasi Ctrl/Alt/Meta & mengetik di kolom teks diabaikan; semua tombol dilepas saat jendela kehilangan fokus.
 

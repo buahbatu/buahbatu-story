@@ -39,7 +39,7 @@ export class InputState {
   private byKey = new Map<string, Action>();
   private bindings: Bindings;
   private gesture = { zoom: 0, panX: 0, panY: 0, twist: 0 };
-  private readonly virtual = new Set<Action>();
+  private readonly virtual = new Map<Action, Set<string>>();
   private stick: MoveVector = { x: 0, y: 0 };
 
   constructor(bindings: Bindings) {
@@ -86,9 +86,12 @@ export class InputState {
     for (const action of before) this.released.add(action);
   }
 
-  setVirtual(action: Action, down: boolean): void {
+  setVirtual(action: Action, down: boolean, source = 'button'): void {
     const was = this.isDown(action);
-    if (down) this.virtual.add(action);
+    const sources = this.virtual.get(action) ?? new Set<string>();
+    if (down) sources.add(source);
+    else sources.delete(source);
+    if (sources.size > 0) this.virtual.set(action, sources);
     else this.virtual.delete(action);
     const now = this.isDown(action);
     if (now && !was) this.pressed.add(action);
