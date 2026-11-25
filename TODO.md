@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 25 | 27 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 26 | 27 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +37,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **40** | **202** | |
+| **Total** | | | **41** | **202** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -66,8 +66,8 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P15 | 🟢 | P15-02 event tanggal asli (rahasia dari yang berulang tahun) |
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
-**Sedang dikerjakan:** P1-13
-**Task berikutnya:** P1-13 (air terjun)
+**Sedang dikerjakan:** —
+**Task berikutnya:** P1-13b (jembatan)
 
 ---
 
@@ -115,7 +115,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-10b** Redesain kontrol sentuh (masukan user 2026-11-25: desain jelek): gaya **modern transparan** (lingkaran gelap tembus pandang, garis putih tipis, ikon), joystick **tetap di tempat** & lebih besar, tidak mepet tepi (safe area), tombol ikon: Aksi (besar), Lompat, Lari (tahan), Alat; **pindah otomatis**: HP/tablet/iPad tampil, desktop tidak, laptop sentuh/iPad+keyboard ikut input terakhir · Ref: 40 · ✅ 2026-11-25 · gaya kaca transparan + ikon, joystick tetap, tombol Aksi/Lompat/Lari/Alat, tampil otomatis sentuh ↔ keyboard/mouse
 - [x] **P1-11** Mode debug `?debug=1` (FPS, collision, grid) · Ref: 50 · ✅ 2026-11-25 · panel FPS/draw call/posisi + overlay Grid & Kolisi (bisa dimatikan), terkunci di Production
 - [x] **P1-12** Kontur tanah **campuran** (keputusan user 2026-11-25): lereng landai halus untuk bukit/lembah + undakan/tebing bertingkat; kolisi & tinggi pemain mengikuti lereng, petak ladang tetap datar · Ref: 10 · ✅ 2026-11-25 · objek `hill` (bukit/lembah landai) di atas undakan, lereng ber-facet, aturan datar dites; bukit di Lembang & sandbox
-- [~] **P1-13** Air terjun & sungai antar-ketinggian: air jatuh dari tebing ke kolam, percikan & riak, (suara gemericik menyusul sistem audio) · Ref: 10, 42 · 🕒 2026-11-25
+- [x] **P1-13** Air terjun & sungai antar-ketinggian: air jatuh dari tebing ke kolam, percikan & riak, (suara gemericik menyusul sistem audio) · Ref: 10, 42 · ✅ 2026-11-26 · permukaan air per tingkat, objek `waterfall` (tirai, bibir, buih, riak, kabut), curug 2 tingkat Lembang, sungai keluar peta + alur di luar peta, dinding batu tepi dataran tinggi
 - [ ] **P1-13b** Jembatan (permintaan user 2026-11-25): prop jembatan kayu & beton (pagar, papan, tiang) yang bisa dilewati di atas air, otomatis di tempat jalan/path memotong sungai; Lembang dapat sungai kedua yang memotong jalan utama + jembatannya · Ref: 10, 42
 - [x] **P1-14** Jalan aspal bertekstur (masukan user 2026-11-25: jalan tampak hitam/biru polos): aspal abu hangat dengan butiran, retak & tambalan, **marka** (garis tengah putus-putus, garis tepi), trotoar + kanstin; rapikan pita kebiruan di luar batas peta Buahbatu · Ref: 42, 10 · ✅ 2026-11-25 · objek `road` jadi lapisan 3D (aspal berbutir+retak+tambalan, marka, kanstin belang), jalan berlanjut ke luar peta; cache lama sudah beres di sisi user
 - [x] **P1-09b** Transisi & interior lebih jelas (masukan user 2026-11-25): layar transisi menampilkan nama tempat + animasi loading (bukan biru tua polos); **preload peta tetangga** supaya pindah area hampir instan; di dalam ruangan **pintu keluar mudah ditemukan** (kusen + keset + penanda panah bercahaya) & dinding depan tampil rendah supaya batas ruangan terbaca · Ref: 10, 40 · ✅ 2026-11-25 · kartu "Menuju… <tempat>" + titik loading, preload peta tetangga, prop `exit_door` (kusen, keset, panah bercahaya) + dinding depan rendah
