@@ -55,6 +55,7 @@ export function exitDoor(): Group {
   const arrow = new Mesh(new ConeGeometry(0.26, 0.42, 4), new MeshBasicMaterial({ color: glow }));
   arrow.rotation.set(Math.PI, Math.PI / 4, 0);
   arrow.name = EXIT_MARK;
+  arrow.userData.dynamic = true;
   arrow.position.set(0, INTERIOR.exit.height, -0.3);
   arrow.userData.baseY = INTERIOR.exit.height;
   g.add(halo, arrow);

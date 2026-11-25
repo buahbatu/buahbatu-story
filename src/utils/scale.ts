@@ -1,32 +1,26 @@
-export interface ViewLimits {
-  baseHeight: number;
-  minHeight: number;
-  maxHeight: number;
-  maxWidth: number;
-}
-
-export interface ViewInput extends ViewLimits {
-  viewportWidth: number;
-  viewportHeight: number;
-  devicePixelRatio: number;
-}
-
 export interface ViewResult {
   zoom: number;
   pixelScale: number;
   width: number;
   height: number;
+  ratio: number;
+}
+
+export interface SmoothInput {
+  viewportWidth: number;
+  viewportHeight: number;
+  devicePixelRatio: number;
+  maxDpr: number;
+  maxAspect: number;
+  scale: number;
 }
 
 const positive = (n: number, fallback: number) => (Number.isFinite(n) && n > 0 ? n : fallback);
 
-export function computeView(input: ViewInput): ViewResult {
+export function computeSmoothView(input: SmoothInput): ViewResult {
   const dpr = positive(input.devicePixelRatio, 1);
-  const deviceW = positive(input.viewportWidth * dpr, input.baseHeight);
-  const deviceH = positive(input.viewportHeight * dpr, input.baseHeight);
-  let k = Math.max(1, Math.round(deviceH / input.baseHeight));
-  while (k > 1 && deviceH / k < input.minHeight) k--;
-  const height = Math.max(1, Math.min(input.maxHeight, Math.floor(deviceH / k)));
-  const width = Math.max(1, Math.min(input.maxWidth, Math.floor(deviceW / k)));
-  return { zoom: k / dpr, pixelScale: k, width, height };
+  const height = Math.max(1, Math.floor(positive(input.viewportHeight, 1)));
+  const width = Math.max(1, Math.floor(Math.min(positive(input.viewportWidth, 1), height * input.maxAspect)));
+  const ratio = Math.round(Math.min(dpr, input.maxDpr) * Math.min(1, Math.max(0.1, input.scale)) * 100) / 100;
+  return { zoom: 1, pixelScale: ratio, width, height, ratio };
 }

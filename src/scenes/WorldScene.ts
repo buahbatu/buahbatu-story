@@ -1,7 +1,6 @@
 import {
   Color,
   Fog,
-  NearestFilter,
   PerspectiveCamera,
   SRGBColorSpace,
   Scene,
@@ -42,6 +41,7 @@ import { SCENE } from './keys';
 import { DebugOverlay } from '../debug/overlay';
 import { EXIT_MARK } from '../world/props/furniture';
 import { FpsMeter } from '../debug/logic';
+import { filterTexture } from '../render/look';
 
 const OCCLUSION_POINTS = [0.8, 1.5] as const;
 const wait = (ms: number) => new Promise((done) => setTimeout(done, ms));
@@ -57,8 +57,7 @@ const mapUrl = (id: string) => new URL(assetUrl(`maps/${id}.tmj`), location.href
 
 async function loadAtlas(url: URL): Promise<Texture> {
   const texture = await new TextureLoader().loadAsync(url.href);
-  texture.magFilter = texture.minFilter = NearestFilter;
-  texture.generateMipmaps = false;
+  filterTexture(texture, false);
   texture.colorSpace = SRGBColorSpace;
   return texture;
 }

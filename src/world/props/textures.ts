@@ -1,4 +1,5 @@
-import { CanvasTexture, NearestFilter, RepeatWrapping, SRGBColorSpace, type Texture } from 'three';
+import { CanvasTexture, RepeatWrapping, SRGBColorSpace, type Texture } from 'three';
+import { filterTexture } from '../../render/look';
 
 type Paint = (px: (x: number, y: number, w: number, h: number, color: string) => void, rnd: () => number) => void;
 
@@ -18,8 +19,7 @@ function make(key: string, size: number, paint: Paint): Texture {
     g.fillRect(x, y, w, h);
   }, rnd);
   const texture = new CanvasTexture(canvas);
-  texture.magFilter = texture.minFilter = NearestFilter;
-  texture.generateMipmaps = false;
+  filterTexture(texture);
   texture.wrapS = texture.wrapT = RepeatWrapping;
   texture.colorSpace = SRGBColorSpace;
   cache.set(key, texture);
@@ -293,8 +293,7 @@ export function signTexture(text: string, background: string, ink: string): Text
   g.textBaseline = 'top';
   g.fillText(text, 3, 2);
   const texture = new CanvasTexture(canvas);
-  texture.magFilter = texture.minFilter = NearestFilter;
-  texture.generateMipmaps = false;
+  filterTexture(texture, false);
   texture.colorSpace = SRGBColorSpace;
   cache.set(key, texture);
   return texture;

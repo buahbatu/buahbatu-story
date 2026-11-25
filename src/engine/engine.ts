@@ -1,4 +1,4 @@
-import { BasicShadowMap, WebGLRenderer, type Camera, type Scene } from 'three';
+import { PCFShadowMap, WebGLRenderer, type Camera, type Scene } from 'three';
 import type { InputState } from '../input/logic';
 import type { SceneKey } from '../scenes/keys';
 import { setActiveScene } from '../ui/uiState';
@@ -25,11 +25,10 @@ export class Engine {
 
   constructor(parent: HTMLElement, scenes: GameScene[], view: ViewResult, input: InputState) {
     this.input = input;
-    this.renderer = new WebGLRenderer({ antialias: false, powerPreference: 'low-power' });
-    this.renderer.setPixelRatio(1);
+    this.renderer = new WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    this.renderer.setPixelRatio(view.ratio);
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = BasicShadowMap;
-    this.renderer.domElement.style.imageRendering = 'pixelated';
+    this.renderer.shadowMap.type = PCFShadowMap;
     this.renderer.domElement.style.display = 'block';
     parent.append(this.renderer.domElement);
     for (const scene of scenes) this.scenes.set(scene.key, scene);
@@ -58,6 +57,7 @@ export class Engine {
 
   resize(view: ViewResult): void {
     this.view = view;
+    this.renderer.setPixelRatio(view.ratio);
     this.renderer.setSize(view.width, view.height, false);
     this.renderer.domElement.style.width = `${view.width * view.zoom}px`;
     this.renderer.domElement.style.height = `${view.height * view.zoom}px`;
@@ -88,11 +88,14 @@ export class Engine {
     else this.renderer.clear();
   }
 
+  onFrame: (dt: number) => void = () => undefined;
+
   private readonly tick = (now: number): void => {
     if (!this.running) return;
     const dt = this.last === 0 ? 0 : Math.min(0.1, (now - this.last) / 1000);
     this.last = now;
     this.time += dt;
+    this.onFrame(dt);
     this.current?.update?.(dt, this.time);
     this.input.endFrame();
     this.render();

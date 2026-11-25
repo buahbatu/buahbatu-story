@@ -105,7 +105,25 @@ export const BRIDGE = {
 } as const;
 export const TRAVEL = { fadeMs: 260, holdMs: 450 } as const;
 export const DIALOG = { cps: 40, historySize: 60 } as const;
-export const OCCLUSION = { opacity: 0.3, speed: 5, margin: 0.4, skip: ['room', 'rug', 'stairs', 'exit_door'] } as const;
+export const OCCLUSION = {
+  opacity: 0.3,
+  speed: 5,
+  margin: 0.4,
+  fade: [
+    'farmhouse',
+    'building',
+    'tree',
+    'pine',
+    'partition',
+    'wardrobe',
+    'bookshelf',
+    'kitchen',
+    'fridge',
+    'food_cart',
+    'haystack',
+    'sign',
+  ],
+} as const;
 export const CHARACTER = { height: 1.6, turnSpeed: 16 } as const;
 export const WORLD_FOG = { near: 30, far: 70 } as const;
 export const MAP_LAYERS = ['Ground', 'Height', 'Farmable', 'Collision', 'Objects'] as const;

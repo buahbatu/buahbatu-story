@@ -9,7 +9,9 @@ import { mountUi } from './ui';
 import { installTouchFullscreen } from './ui/fullscreen';
 import { connectTouch } from './ui/touch/bridge';
 import { debugRequested } from './debug/logic';
+import { initGraphics, watchFrameRate } from './render/setup';
 
+const graphics = initGraphics();
 const createdAt = new Date().toISOString();
 const runtime = GameRuntime.create({ householdId: 'local', seed: hashSeed(createdAt), createdAt });
 const uiRoot = document.getElementById('ui');
@@ -27,6 +29,7 @@ world.notify = (key) => {
 if (debugRequested(location.search, __DEBUG_ALLOWED__)) world.enableDebug();
 const engine = new Engine(gameRoot, scenes, currentView(), input);
 installViewScaling(engine);
+watchFrameRate(engine, graphics.forced);
 installTouchFullscreen();
 void engine.start(SCENE.boot);
 

@@ -11,8 +11,11 @@ import {
   type Material,
   type Texture,
 } from 'three';
-import { WATER, WATER_DEPTH, WORLD_SKIRT } from '../config/world';
+import { OCCLUSION, WATER, WATER_DEPTH, WORLD_SKIRT } from '../config/world';
 import { edgeWalls, skirtLayout } from './water/logic';
+import { mergeStatic } from '../render/merge';
+
+const MERGED = ['prop:', 'road', 'bridge:', 'skirt'] as const;
 import { bridgesOf, elevation, isBlocked, type AreaData } from './map/logic';
 import { buildTerrain, buildWater, scatterTufts, tileHash } from './map/terrain';
 import { preloadAssets } from './props/assets';
@@ -159,6 +162,23 @@ export function buildArea(area: AreaData, atlas: Texture): Group {
     });
     root.add(prop);
   }
+  const statics = new Group();
+  statics.name = 'statics';
+  root.add(statics);
+  root.updateMatrixWorld(true);
+  for (const child of [...root.children]) {
+    if (child === statics) continue;
+    const fades = OCCLUSION.fade.some((m) => child.name === `prop:${m}`);
+    if (fades) mergeStatic(child);
+    else if (MERGED.some((p) => child.name.startsWith(p))) {
+      const meshes: Object3D[] = [];
+      child.traverse((n) => {
+        if (n instanceof Mesh && n.userData.dynamic !== true) meshes.push(n);
+      });
+      for (const m of meshes) statics.attach(m);
+    }
+  }
+  mergeStatic(statics);
   return root;
 }
 
@@ -167,7 +187,7 @@ export function disposeTree(root: Object3D): void {
     if (!(node instanceof Mesh) || node.userData.shared === true) return;
     (node.geometry as BufferGeometry).dispose();
     const materials: Material[] = Array.isArray(node.material) ? (node.material as Material[]) : [node.material as Material];
-    for (const m of materials) m.dispose();
+    for (const m of materials) if (m.userData.shared !== true) m.dispose();
   });
   root.removeFromParent();
 }

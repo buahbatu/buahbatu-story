@@ -48,7 +48,7 @@ export class OcclusionFader {
 
   setCandidates(props: readonly Object3D[]): void {
     this.clear();
-    this.candidates = props.filter((p) => !OCCLUSION.skip.some((model) => p.name === `prop:${model}`));
+    this.candidates = props.filter((p) => OCCLUSION.fade.some((model) => p.name === `prop:${model}`));
     this.roots = new Set(this.candidates);
   }
 

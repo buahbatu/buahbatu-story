@@ -6,7 +6,6 @@ import {
   Mesh,
   MeshLambertMaterial,
   MeshStandardMaterial,
-  NearestFilter,
   Vector3,
   type BufferGeometry,
   type Material,
@@ -15,6 +14,7 @@ import {
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { ASSET_LOOK } from '../../config/world';
 import { assetUrl } from '../../core/assetUrl';
+import { filterTexture } from '../../render/look';
 import { fitScale, projectUVs } from './logic';
 import { TEX } from './textures';
 
@@ -60,9 +60,7 @@ function lambert(source: Material, tint: Tint): MeshLambertMaterial {
   const base = source instanceof MeshStandardMaterial ? source : null;
   const map = look ? TEX[look.texture]() : (base?.map ?? null);
   if (map) {
-    map.magFilter = map.minFilter = NearestFilter;
-    map.generateMipmaps = false;
-    map.needsUpdate = true;
+    filterTexture(map, look !== undefined);
   }
   const created = new MeshLambertMaterial({
     color: hex ? new Color(hex) : (base?.color.clone() ?? new Color('#ffffff')),

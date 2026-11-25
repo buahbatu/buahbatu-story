@@ -20,7 +20,7 @@ export interface TestApi {
   emit(event: GameEvent): void;
   scene(): SceneKey | null;
   freeze(on: boolean): void;
-  view(): { width: number; height: number; zoom: number; pixelScale: number };
+  view(): { width: number; height: number; zoom: number; pixelScale: number; ratio: number };
   enterArea(id: string, spawn?: string): Promise<AreaInfo | null>;
   actions(): Action[];
   clock(): number;
@@ -28,6 +28,7 @@ export interface TestApi {
   travel(): { travelling: boolean; trips: number; preloaded: string[] };
   travelCard(area: string | null): void;
   ground(x: number, y: number): number | null;
+  renderStats(): { calls: number; triangles: number };
   debug(): {
     overlay: { grid: number; boxes: number; cliffs: number; deep: number; gridVisible: boolean; collisionVisible: boolean } | null;
     info: { fps: number; ms: number; calls: number; triangles: number; area: string; x: number; y: number; height: number } | null;

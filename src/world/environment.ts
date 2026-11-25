@@ -1,6 +1,7 @@
 import { Color, DirectionalLight, Fog, HemisphereLight, type Scene } from 'three';
 import { PALETTE } from '../config/palette';
 import { SHADOW } from '../config/world';
+import { profile } from '../render/look';
 
 const SUN_OFFSET = { x: 10, y: 20, z: 8 } as const;
 
@@ -11,7 +12,8 @@ export function addEnvironment(scene: Scene, fog: { near: number; far: number },
   sun.position.set(SUN_OFFSET.x, SUN_OFFSET.y, SUN_OFFSET.z);
   if (shadows) {
     sun.castShadow = true;
-    sun.shadow.mapSize.set(SHADOW.mapSize, SHADOW.mapSize);
+    const size = profile().shadowMap;
+    sun.shadow.mapSize.set(size, size);
     sun.shadow.bias = SHADOW.bias;
     const cam = sun.shadow.camera;
     cam.left = cam.bottom = -SHADOW.extent;

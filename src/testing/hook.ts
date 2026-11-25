@@ -54,6 +54,7 @@ function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
     },
     scene: () => uiStore.get().scene,
     view: () => ({ ...engine.view }),
+    renderStats: () => ({ calls: engine.renderer.info.render.calls, triangles: engine.renderer.info.render.triangles }),
     async enterArea(id, spawn) {
       world.goto(id, spawn);
       await engine.start(SCENE.world);
