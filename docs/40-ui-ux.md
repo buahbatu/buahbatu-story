@@ -55,6 +55,12 @@ Wallpaper HP bisa diganti dengan foto dari album 💗.
 ## 4. Menu Lain
 Inventory (grid + tas), Lemari, Toko (beli/jual + preview), Crafting, Masak, Kotak Kirim, Penyimpanan, Dekor (overlay grid), Dialog, Ringkasan Hari (saat tidur), Cutscene (letterbox).
 
+### Layar judul & logo (P1-15)
+- **Logo** `src/ui/title/GameLogo.tsx`: desain original (bukan tiruan logo game lain) bernuansa game bertani jadul: "Buahbatu" huruf gemuk melengkung (isi gradasi krim→kuning→oranye, garis tepi kayu tebal, efek 3D, kilau putih), papan kayu **"STORY"** bergantung dua tali, hiasan sprite pixel (stroberi + daun, bunga, kilau berkedip, kupu-kupu terbang) dari `src/ui/title/sprites.ts`. Dibuat HTML/CSS + SVG sehingga tajam di semua ukuran & teksnya dari i18n (`title.logoTop`, `title.logoBottom`).
+- **Animasi**: logo jatuh & memantul saat muncul, lalu bergoyang pelan; huruf bergelombang bergantian; papan berayun. Semua mati otomatis bila `prefers-reduced-motion`.
+- **Adegan 3D**: karakter A & Michelle (model 3D asli, animasi idle) berdiri berhadapan di depan rumah.
+- **Mulai**: "Tekan tombol apa saja" (desktop) / "Ketuk layar untuk mulai" (HP) berkedip; tombol/ketukan pertama masuk ke Buahbatu (`TITLE_START`). Sementara, sampai menu login/household di P5-04.
+
 ### Layar transisi area (P1-09b)
 Saat pindah area layar memudar ke warna malam lalu menampilkan kartu tengah: teks kecil **"Menuju…"**, **nama tempat** besar (font judul, garis bawah merah stroberi), dan tiga titik pixel yang melompat bergantian. Tampil minimal ±0,7 detik supaya terbaca; peta tetangga sudah di-preload sehingga biasanya tidak lebih lama dari itu. Area yang belum dibuka tidak menampilkan kartu (langsung pesan ramah).
 

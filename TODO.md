@@ -66,7 +66,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P15 | 🟢 | P15-02 event tanggal asli (rahasia dari yang berulang tahun) |
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
-**Sedang dikerjakan:** —
+**Sedang dikerjakan:** P1-15
 **Task berikutnya:** P1-15 (logo judul), lalu P1-13
 
 ---
@@ -118,7 +118,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [ ] **P1-13** Air terjun & sungai antar-ketinggian: air jatuh dari tebing ke kolam, percikan & riak, (suara gemericik menyusul sistem audio) · Ref: 10, 42
 - [x] **P1-14** Jalan aspal bertekstur (masukan user 2026-11-25: jalan tampak hitam/biru polos): aspal abu hangat dengan butiran, retak & tambalan, **marka** (garis tengah putus-putus, garis tepi), trotoar + kanstin; rapikan pita kebiruan di luar batas peta Buahbatu · Ref: 42, 10 · ✅ 2026-11-25 · objek `road` jadi lapisan 3D (aspal berbutir+retak+tambalan, marka, kanstin belang), jalan berlanjut ke luar peta; cache lama sudah beres di sisi user
 - [x] **P1-09b** Transisi & interior lebih jelas (masukan user 2026-11-25): layar transisi menampilkan nama tempat + animasi loading (bukan biru tua polos); **preload peta tetangga** supaya pindah area hampir instan; di dalam ruangan **pintu keluar mudah ditemukan** (kusen + keset + penanda panah bercahaya) & dinding depan tampil rendah supaya batas ruangan terbaca · Ref: 10, 40 · ✅ 2026-11-25 · kartu "Menuju… <tempat>" + titik loading, preload peta tetangga, prop `exit_door` (kusen, keset, panah bercahaya) + dinding depan rendah
-- [ ] **P1-15** Logo judul game (permintaan user 2026-11-25): logo pixel-art original bernuansa game bertani jadul (huruf melengkung krim-kayu, papan "STORY" bergantung, stroberi/daun/bunga, kilau), animasi masuk memantul + goyang pelan, karakter A & Michelle (model 3D asli) idle di layar judul, "Tekan tombol apa saja" berkedip; bukan tiruan logo game lain · Ref: 40, 42
+- [~] **P1-15** Logo judul game (permintaan user 2026-11-25): logo pixel-art original bernuansa game bertani jadul (huruf melengkung krim-kayu, papan "STORY" bergantung, stroberi/daun/bunga, kilau), animasi masuk memantul + goyang pelan, karakter A & Michelle (model 3D asli) idle di layar judul, "Tekan tombol apa saja" berkedip; bukan tiruan logo game lain · Ref: 40, 42 · 🕒 2026-11-25
 
 **Kriteria selesai P1:** bisa jalan di Lembang, masuk/keluar kos, ngobrol dengan papan (dialog), main di HP & laptop.
 
@@ -385,7 +385,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - Kafe milik sendiri bisa didekor penuh
 - Mini "TikTok" in-game: rekam GIF momen berdua
 - *(teknis, dari P0-08)* Teks Phaser pakai **BitmapText** (font pixel di-bake jadi atlas) supaya tepi huruf 100% tajam; `fillText` canvas masih memberi antialias 1 px di tepi glyph. Cocok digarap bareng pipeline aset P1-01.
-- *(dari user, dikerjakan bareng P5-04)* Layar judul beranimasi: huruf judul bergelombang pelan, subtitle muncul pelan, awan/parallax & kilau stroberi; hormati `prefers-reduced-motion`.
+- *(dari user, dikerjakan bareng P5-04)* Layar judul beranimasi: huruf judul bergelombang pelan, subtitle muncul pelan, awan/parallax & kilau stroberi; hormati `prefers-reduced-motion`. *(sebagian sudah di P1-15: huruf bergelombang, kilau, logo memantul; sisa: subtitle muncul pelan, awan/parallax)*
 - *(dari user, 2026-11-24)* **Warga figuran ala GTA**: orang-orang tanpa nama yang jalan kaki, nongkrong, naik motor/angkot di kota (Braga, Alun-alun, Dago) supaya Bandung terasa ramai; beda dari NPC bernama di `18` (P8). Bisa disapa singkat, tanpa hubungan/quest. Perlu dibahas: kepadatan per area & jam, sinkron 2 pemain (cukup deterministik dari seed, tidak dikirim lewat jaringan), batas performa HP. Kandidat fase: P12 (kendaraan & peta Bandung).
 - *(dari user, 2026-11-25)* **Dunia luar menyambung tanpa loading (open world)**: area luar jadi satu dunia ber-*chunk* yang dimuat/dibuang otomatis sambil berjalan; interior tetap transisi. Alasan user: daerah terpotong loading bikin 2 pemain di tempat berbeda terasa sepi; dunia menyambung = bisa saling menyusul/papasan. Konsep user: **dunia pulau tanpa ujung jalan** (seperti GTA / game farming klasik), batas dunia = pantai & laut, bukan tembok/ujung peta. Keputusan arsitektur besar (pipeline peta, kamera, sinkron 2 pemain beda chunk, performa HP, jarak Bandung dipadatkan) → **putuskan + ADR sebelum peta luar berikutnya dibuat** (bukan menunggu P12).
 - *(dari user, 2026-11-25)* **Duduk di kursi/bangku** (taman, kafe, rumah): interaksi "Duduk" + animasi duduk, 2 pemain bisa duduk bersebelahan, kamera mendekat; cocok untuk momen berdua.

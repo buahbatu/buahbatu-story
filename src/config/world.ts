@@ -30,6 +30,7 @@ export const WORLD_CAMERA = {
   edgeInset: 3,
 } as const;
 export const DEFAULT_AREA = 'sandbox';
+export const TITLE_START = { area: 'buahbatu', spawn: 'start' } as const;
 export const AREA_ID_PATTERN = /^[a-z0-9_]+$/;
 export const WORLD_SKIRT = 40;
 export const INTERIOR = {

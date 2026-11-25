@@ -1,6 +1,10 @@
 import { IcosahedronGeometry, Mesh, MeshLambertMaterial, PerspectiveCamera, PlaneGeometry, Scene, type Object3D } from 'three';
 import { PALETTE } from '../config/palette';
-import type { GameScene } from '../engine/engine';
+import type { Engine, GameScene } from '../engine/engine';
+import { APPEARANCE } from '../entities';
+import { createCharacter, type Character } from '../entities/player/character';
+import { TITLE_START } from '../config/world';
+import type { WorldScene } from './WorldScene';
 import { addEnvironment } from '../world/environment';
 import { preloadAssets } from '../world/props/assets';
 import { assetsFor } from '../world/props/logic';
@@ -9,6 +13,10 @@ import { fence, tree } from '../world/props/nature';
 import { SCENE } from './keys';
 
 const CAMERA = { fov: 38, distance: 22, height: 7, lookY: 2.5, lookZ: -14, sway: 0.16, speed: 0.12 } as const;
+const CAST = [
+  { look: 'A', x: -3.3, z: 3.2, yaw: 0.4 },
+  { look: 'B', x: 0.1, z: 3.4, yaw: -0.4 },
+] as const;
 const materials = new Map<number, MeshLambertMaterial>();
 function mat(color: number): MeshLambertMaterial {
   const cached = materials.get(color);
@@ -52,8 +60,13 @@ export class TitleScene implements GameScene {
   readonly world: { scene: Scene; camera: PerspectiveCamera };
   private readonly still = window.matchMedia('(prefers-reduced-motion: reduce)');
   private decorated: Promise<void> | null = null;
+  private cast: Character[] = [];
+  private engine: Engine | null = null;
+  private visits = 0;
+  private readonly world3d: WorldScene;
 
-  constructor() {
+  constructor(world: WorldScene) {
+    this.world3d = world;
     const scene = new Scene();
     addEnvironment(scene, { near: 35, far: 95 });
     scene.add(plane(160, 160, PALETTE.grass, 0, 0, 0), plane(2.2, 40, PALETTE.path, -1.6, 0.01, 4));
@@ -83,12 +96,44 @@ export class TitleScene implements GameScene {
     this.world.scene.add(placed(fence(7), 4, -3.9), ...trees.map(([x, z, k], i) => placed(tree(k, (i * 0.618) % 1), x, z)));
   }
 
-  async enter(): Promise<void> {
+  async enter(engine: Engine): Promise<void> {
     this.update(0, 0);
-    this.decorated ??= preloadAssets(assetsFor(['tree', 'fence'])).then(() => {
+    const visit = ++this.visits;
+    this.decorated ??= Promise.all([preloadAssets(assetsFor(['tree', 'fence'])), this.addCast()]).then(() => {
       this.decorate();
     });
     await this.decorated;
+    if (visit !== this.visits) return;
+    this.engine = engine;
+    window.addEventListener('keydown', this.begin);
+    window.addEventListener('pointerdown', this.begin);
+  }
+
+  exit(): void {
+    this.visits++;
+    this.engine = null;
+    window.removeEventListener('keydown', this.begin);
+    window.removeEventListener('pointerdown', this.begin);
+  }
+
+  private readonly begin = (event: KeyboardEvent | PointerEvent): void => {
+    const engine = this.engine;
+    if (!engine || ('repeat' in event && event.repeat) || ('button' in event && event.button > 0)) return;
+    this.exit();
+    this.world3d.goto(TITLE_START.area, TITLE_START.spawn);
+    void engine.start(SCENE.world);
+  };
+
+  private async addCast(): Promise<void> {
+    this.cast = await Promise.all(
+      CAST.map(async ({ look, x, z, yaw }) => {
+        const c = await createCharacter(APPEARANCE[look]);
+        c.root.position.set(x, 0, z);
+        c.root.rotation.y = yaw;
+        this.world.scene.add(c.root);
+        return c;
+      }),
+    );
   }
 
   resize(width: number, height: number): void {
@@ -97,6 +142,9 @@ export class TitleScene implements GameScene {
   }
 
   update(_dt: number, time: number): void {
+    this.cast.forEach((c, i) => {
+      c.play('idle', time + i * 0.7);
+    });
     const angle = this.still.matches ? 0 : Math.sin(time * CAMERA.speed) * CAMERA.sway;
     const { camera } = this.world;
     camera.position.set(Math.sin(angle) * CAMERA.distance, CAMERA.height, Math.cos(angle) * CAMERA.distance);

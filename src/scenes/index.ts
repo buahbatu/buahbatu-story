@@ -9,5 +9,5 @@ export type { WorldScene } from './WorldScene';
 
 export function createScenes(): { scenes: GameScene[]; world: WorldScene } {
   const world = new WorldScene();
-  return { scenes: [new BootScene(), new PreloadScene(world), new TitleScene(), world], world };
+  return { scenes: [new BootScene(), new PreloadScene(world), new TitleScene(world), world], world };
 }
