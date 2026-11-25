@@ -142,6 +142,7 @@ AI selesai task
 **Implementasi (P0-12)** `.github/workflows/ci.yml`:
 - Job `verify`: gitleaks (seluruh riwayat) → lint → typecheck → unit → build → E2E. Job `deploy` jalan hanya kalau `verify` hijau dan bukan PR: `vercel pull/build/deploy --prebuilt` (production untuk `main`, preview untuk branch lain).
 - Smoke test `playwright.deploy.config.ts` + `e2e-deploy/` ke URL hasil deploy, dengan header `x-vercel-protection-bypass` (secret `VERCEL_AUTOMATION_BYPASS_SECRET`) supaya bisa membuka Preview yang dilindungi login Vercel.
+- Setelah smoke lolos, `node scripts/vercel-prune.ts` menghapus deploy lama: simpan 3 production & 2 preview READY terbaru (ADR-029). Bisa dijalankan manual dengan `VERCEL_TOKEN`/`VERCEL_PROJECT_ID`/`VERCEL_ORG_ID` di env.
 - Rollback: sebelum deploy production, ID production aktif dicatat; kalau smoke gagal → `vercel rollback <id>`.
 - Action pihak ketiga dipin ke **commit SHA** (repo public). Versi saat P0-12: `actions/checkout` v7.0.1, `actions/setup-node` v7.1.0, `actions/upload-artifact` v7.0.2. Vercel CLI dipin `59.5.0`.
 - Baseline snapshot Linux: kalau belum ada, CI membuatnya dan mengunggah artifact `snapshots-linux`. AI mengunduh, menilai gambarnya, lalu meng-commit-nya. Workflow manual `snapshots.yml` melakukan hal yang sama untuk pembaruan tampilan berikutnya. Bot CI tidak pernah push ke repo.

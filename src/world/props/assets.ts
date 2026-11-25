@@ -14,10 +14,10 @@ import {
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { ASSET_LOOK } from '../../config/world';
+import { assetUrl } from '../../core/assetUrl';
 import { fitScale, projectUVs } from './logic';
 import { TEX } from './textures';
 
-const BASE = `${import.meta.env.BASE_URL}assets/models/`;
 const pending = new Map<string, Promise<void>>();
 const loaded = new Map<string, Object3D>();
 const materials = new Map<string, MeshLambertMaterial>();
@@ -28,7 +28,7 @@ export function preloadAssets(files: readonly string[]): Promise<void> {
     files.map((file) => {
       let p = pending.get(file);
       if (!p) {
-        p = new GLTFLoader().loadAsync(`${BASE}${file}.glb`).then((gltf) => {
+        p = new GLTFLoader().loadAsync(assetUrl(`models/${file}.glb`)).then((gltf) => {
           loaded.set(file, prepare(gltf.scene));
         });
         pending.set(file, p);

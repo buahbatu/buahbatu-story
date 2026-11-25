@@ -40,7 +40,7 @@ describe('vercel.json', () => {
     git?: { deploymentEnabled?: boolean };
     outputDirectory?: string;
     crons?: { path: string }[];
-    headers?: { source: string; headers: { key: string; value: string }[] }[];
+    headers?: { source: string; has?: { type: string; key: string }[]; headers: { key: string; value: string }[] }[];
   };
   it('deploy hanya lewat CI yang sudah dites (docs/51 §6)', () => {
     expect(vercel.git?.deploymentEnabled).toBe(false);
@@ -48,11 +48,14 @@ describe('vercel.json', () => {
   it('output sesuai build Vite', () => {
     expect(vercel.outputDirectory).toBe('dist');
   });
-  it('cache immutable hanya untuk file ber-hash di /_app/', () => {
+  it('cache immutable hanya untuk file ber-hash di /_app/ & aset berversi ?v= (ADR-029)', () => {
     const immutable = (vercel.headers ?? []).filter((h) =>
       h.headers.some((x) => x.key === 'Cache-Control' && x.value.includes('immutable')),
     );
-    expect(immutable.map((h) => h.source)).toEqual(['/_app/(.*)']);
+    expect(immutable.map((h) => [h.source, h.has ?? []])).toEqual([
+      ['/_app/(.*)', []],
+      ['/assets/(.*)', [{ type: 'query', key: 'v' }]],
+    ]);
   });
   it('setiap cron menunjuk fungsi yang benar-benar ada (deploy gagal kalau tidak)', () => {
     for (const cron of vercel.crons ?? []) {

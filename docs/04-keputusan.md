@@ -180,6 +180,13 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Alasan**: pemain harus merasa dilihat & aman; pilihan hidup tetap milik pemain.
 - **Konsekuensi**: docs `12` §7, `17`, `18` diperbarui; task baru P3-11b; P14-01 diberi syarat opsional. Detail pribadi tetap di `personal/` (tidak di repo).
 
+### ADR-029 · Hemat Vercel: aset berversi + bersih-bersih deploy otomatis (keputusan user, 2026-11-25)
+- **Status**: Diterima
+- **Konteks**: jatah Vercel (jumlah deploy, bandwidth, request) terbatas; riwayat deploy menumpuk tiap push. Aset di `public/assets/` tidak ber-hash, sehingga cache 1 hari pernah membuat browser user memakai `ground.png` lama (jalan tampak hitam/biru).
+- **Keputusan**: (1) semua aset game dimuat lewat `assetUrl()`/`versioned()` (`src/core/assetUrl.ts`) dengan `?v=<hash isi public/assets>` (dihitung saat build di `vite.config.ts`); `vercel.json` memberi URL berversi `Cache-Control: immutable` 1 tahun, URL tanpa versi tetap 1 hari + SWR; (2) job deploy CI menjalankan `scripts/vercel-prune.ts` setelah smoke test lolos: simpan **3 production** (termasuk target rollback) & **2 preview** READY terbaru, hapus sisanya, deploy yang sedang dibangun tidak disentuh.
+- **Alasan**: aset hanya diunduh ulang kalau benar-benar berubah, tanpa risiko cache basi; jumlah deploy tetap kecil tanpa langkah manual.
+- **Konsekuensi**: aset baru wajib dimuat lewat `assetUrl()`; smoke test deploy memeriksa `?v=` & header `immutable`; E2E memeriksa semua request aset berversi.
+
 ---
 
 ## Template ADR Baru

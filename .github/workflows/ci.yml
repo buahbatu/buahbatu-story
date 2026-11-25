@@ -105,6 +105,8 @@ jobs:
         env:
           DEPLOY_URL: ${{ steps.deploy.outputs.url }}
         run: npx playwright test --config playwright.deploy.config.ts
+      - name: Bersihkan deploy lama (simpan 3 production & 2 preview)
+        run: node scripts/vercel-prune.ts
       - name: Rollback production
         if: failure() && steps.smoke.outcome == 'failure' && env.TARGET == 'production'
         env:

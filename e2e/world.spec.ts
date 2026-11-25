@@ -42,3 +42,14 @@ base('area yang tidak ada menampilkan pesan ramah, bukan layar kosong', async ({
   await page.goto('/?area=tidak_ada');
   await expect(page.locator('.fatal')).toHaveText('Area ini gagal dimuat. Coba muat ulang halaman, ya.');
 });
+
+test('aset peta, atlas & model diminta dengan versi (?v=) supaya cache tidak basi', async ({ game: { page } }) => {
+  const urls: string[] = [];
+  page.on('request', (r) => {
+    if (r.url().includes('/assets/') && !r.url().includes('/assets/fonts/') && !r.url().includes('/assets/ui/')) urls.push(r.url());
+  });
+  await page.evaluate(() => window.__BB__?.enterArea('lembang'));
+  const kinds = ['.tmj', '.png', '.glb'].map((ext) => urls.filter((u) => new URL(u).pathname.endsWith(ext)));
+  for (const list of kinds) expect(list.length).toBeGreaterThan(0);
+  expect(urls.filter((u) => !/^[0-9a-f]{10}$/.test(new URL(u).searchParams.get('v') ?? ''))).toEqual([]);
+});

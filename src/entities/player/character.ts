@@ -16,10 +16,10 @@ import {
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { CHARACTER, WATER_FX } from '../../config/world';
+import { assetUrl } from '../../core/assetUrl';
 import type { Appearance, PaletteCell } from './appearance';
 import type { PlayerAnim } from './logic';
 
-const BASE = `${import.meta.env.BASE_URL}assets/models/characters/`;
 const CELL_W = 32;
 const CELL_H = 128;
 const CLIP: Record<PlayerAnim, string> = { idle: 'idle', walk: 'walk', run: 'sprint', jump: 'jump' };
@@ -32,13 +32,13 @@ let palette: Promise<HTMLImageElement> | null = null;
 export const loadModel = (name: string): Promise<GLTF> => {
   let p = models.get(name);
   if (!p) {
-    p = modelLoader.loadAsync(`${BASE}${name}.glb`);
+    p = modelLoader.loadAsync(assetUrl(`models/characters/${name}.glb`));
     models.set(name, p);
   }
   return p;
 };
 
-const loadPalette = () => (palette ??= new ImageLoader().loadAsync(`${BASE}Textures/colormap.png`));
+const loadPalette = () => (palette ??= new ImageLoader().loadAsync(assetUrl('models/characters/Textures/colormap.png')));
 
 function recolor(image: HTMLImageElement, colors: Appearance['colors']): Texture {
   const canvas = document.createElement('canvas');

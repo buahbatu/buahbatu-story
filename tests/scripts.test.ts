@@ -5,6 +5,7 @@ import { envsToSync, isProjectHelperList, nodeMajor } from '../scripts/setup.ts'
 import { exitCode, formatReport, gate } from '../scripts/lib/report.ts';
 import { compareTasks, currentTask, isRequiredNow, parseTaskId } from '../scripts/lib/tasks.ts';
 import { gitleaksAsset, parseChecksums } from '../scripts/tools.ts';
+import { prunable, type Deployment } from '../scripts/vercel-prune.ts';
 
 describe('parseEnv', () => {
   it('membaca KEY=nilai, mengabaikan komentar & nilai kosong', () => {
@@ -181,5 +182,34 @@ describe('nodeMajor', () => {
     ['^24.1.0', '24.x'],
   ])('%s → %s', (engines, major) => {
     expect(nodeMajor(engines)).toBe(major);
+  });
+});
+
+describe('prunable (bersih-bersih deploy Vercel)', () => {
+  const d = (uid: string, created: number, target: string | null, state = 'READY'): Deployment => ({ uid, created, target, state });
+  const all = [
+    d('p1', 10, 'production'),
+    d('p2', 20, 'production'),
+    d('p3', 30, 'production'),
+    d('p4', 40, 'production'),
+    d('pe', 45, 'production', 'ERROR'),
+    d('v1', 11, null),
+    d('v2', 21, 'preview'),
+    d('v3', 31, null),
+    d('vb', 50, null, 'BUILDING'),
+    d('vc', 5, null, 'CANCELED'),
+  ];
+  it('simpan 3 production & 2 preview READY terbaru; yang gagal/batal ikut dihapus', () => {
+    expect(
+      prunable(all)
+        .map((x) => x.uid)
+        .sort(),
+    ).toEqual(['p1', 'pe', 'v1', 'vc']);
+  });
+  it('deploy yang sedang dibangun tidak pernah dihapus', () => {
+    expect(prunable(all, { production: 0, preview: 0 }).map((x) => x.uid)).not.toContain('vb');
+  });
+  it('readyState dipakai kalau state tidak ada', () => {
+    expect(prunable([{ uid: 'a', created: 1, readyState: 'READY', target: 'production' }])).toEqual([]);
   });
 });

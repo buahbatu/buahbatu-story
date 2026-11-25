@@ -7,6 +7,9 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 
 ## [Unreleased]
 
+### Infrastruktur
+- **Hemat Vercel** (ADR-029): aset game (peta, atlas, model 3D) dimuat dengan versi `?v=<hash isi aset>` dan di-cache `immutable` 1 tahun: hanya diunduh ulang kalau berubah, dan tidak bisa basi lagi (kasus jalan hitam/biru). CI otomatis menghapus deploy lama setelah deploy sukses (simpan 3 production + 2 preview). Unit test pemilihan deploy & URL berversi, E2E semua request aset berversi, smoke test deploy memeriksa header cache.
+
 ### Diperbaiki
 - Pindah otomatis dari kontrol sentuh ke keyboard tidak lagi ikut melepas tombol keyboard yang baru ditekan (hanya input sentuh yang dilepas); tes gerak pemain menunggu pemain mulai bergerak sebelum mengukur (stabil di emulasi HP).
 - Model karakter tidak lagi mengunduh tekstur bawaan `colormap.png` yang tak terpakai (warna dibuat dari palet); menghilangkan error console `GLTFLoader: Couldn't load texture` yang sesekali muncul saat perangkat sibuk.

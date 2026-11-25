@@ -25,13 +25,17 @@ test('pratinjau ?area=sandbox memuat peta, atlas & model 3D tanpa error', async 
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => (m.type() === 'error' || m.type() === 'warning') && errors.push(`${m.type()}: ${m.text()}`));
-  const map = page.waitForResponse((r) => r.url().endsWith('/assets/maps/sandbox.tmj'));
-  const atlas = page.waitForResponse((r) => r.url().endsWith('/assets/tilesets/ground.png'));
-  const tree = page.waitForResponse((r) => r.url().endsWith('/assets/models/nature/tree_oak.glb'));
+  const map = page.waitForResponse((r) => new URL(r.url()).pathname.endsWith('/assets/maps/sandbox.tmj'));
+  const atlas = page.waitForResponse((r) => new URL(r.url()).pathname.endsWith('/assets/tilesets/ground.png'));
+  const tree = page.waitForResponse((r) => new URL(r.url()).pathname.endsWith('/assets/models/nature/tree_oak.glb'));
   await page.goto('/?area=sandbox');
   expect((await map).status()).toBe(200);
   expect((await atlas).status()).toBe(200);
   expect((await tree).status()).toBe(200);
+  for (const r of [await map, await atlas, await tree]) {
+    expect(new URL(r.url()).searchParams.get('v')).toMatch(/^[0-9a-f]{10}$/);
+    expect(r.headers()['cache-control']).toContain('immutable');
+  }
   await expect(page.locator('#game canvas')).toBeVisible({ timeout: 30_000 });
   await expect(page.locator('.fatal')).toHaveCount(0);
   expect(errors).toEqual([]);

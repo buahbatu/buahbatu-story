@@ -33,11 +33,11 @@
 | P10 | Aktivitas | v0.7 | 0 | 11 | ⬜ |
 | P11 | Voice | v0.8 | 0 | 8 | ⬜ |
 | P12 | Kendaraan & Peta Bandung | v0.9 | 0 | 10 | ⬜ |
-| P13 | Properti, Kredit & Pernikahan | v0.10 | 0 | 13 | ⬜ |
+| P13 | Properti, Kredit & Pernikahan | v0.10 | 0 | 15 | ⬜ |
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **39** | **198** | |
+| **Total** | | | **39** | **200** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -312,7 +312,9 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [ ] **P13-01** Sistem kredit (DP, tenor, cicilan Senin, denda, skor bank) + test lengkap · Ref: 14, 13
 - [ ] **P13-02** Bank (Pak Dadang) + app Bank: tabungan, transfer, kredit · Ref: 13
 - [ ] **P13-03** Sewa/beli hunian: kos → kontrakan → rumah · Ref: 14
-- [ ] **P13-04** Mode dekor ala Sims (grid, rotasi, undo, wallpaper/lantai, realtime berdua) · Ref: 14
+- [ ] **P13-04** Mode dekor ala Sims (grid, rotasi, **drag & drop** mouse/jari, undo, wallpaper/**cat dinding**/lantai per ruangan, realtime berdua) · Ref: 14
+- [ ] **P13-04b** Build Mode ala Sims (keputusan user 2026-11-25, opsi A): gambar/hapus dinding, bentuk ruangan, pasang pintu & jendela, denah bisa diubah di rumah milik sendiri (bukan kos/sewa) · Ref: 14
+- [ ] **P13-04c** Renovasi/upgrade lewat tukang ala HM (Mang Engkos): tambah kamar, dapur, kamar mandi, lantai 2; bayar tunai/kredit, selesai 2–7 hari game · Ref: 14
 - [ ] **P13-05** `furniture.json` (≥ 80) + toko furnitur + skor rumah · Ref: 14
 - [ ] **P13-06** Berkunjung ke rumah pasangan (ketuk pintu, izin) · Ref: 14
 - [ ] **P13-07** Beli tanah + konstruksi bangunan (kandang, greenhouse, gudang) · Ref: 14

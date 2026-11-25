@@ -16,8 +16,17 @@
 ## 2. Mode Dekor (ala Sims)
 - Masuk lewat HP → app **Rumahku** atau dengan menekan tombol `B` di dalam rumah sendiri.
 - **Grid 32px**, furnitur punya ukuran (1×1, 2×1, 2×2, …) dan 4 arah rotasi.
-- Fitur: pindah, putar, simpan ke gudang, jual kembali (refund 50%), **undo/redo** (tanpa batas selama sesi dekor).
-- Ganti **wallpaper & lantai per ruangan**.
+- Fitur: pindah (**drag & drop** dengan mouse atau jari, atau tombol), putar, simpan ke gudang, jual kembali (refund 50%), **undo/redo** (tanpa batas selama sesi dekor).
+- Ganti **wallpaper / cat dinding & lantai per ruangan**.
+
+### Build Mode (P13-04b, keputusan user 2026-11-25)
+- Hanya di rumah **milik sendiri** (rumah tipe 36 ke atas & Rumah Impian), bukan kos/kontrakan.
+- Gambar & hapus **dinding** di grid, bentuk ruangan baru, pasang/pindah **pintu & jendela**; biaya per segmen dinding dipotong dari dompet.
+- Batas: luas tanah/lantai rumah; furnitur yang terhalang dinding baru otomatis masuk gudang.
+
+### Renovasi lewat Tukang (P13-04c)
+- Jalur gampang ala HM: pesan ke **Mang Engkos** → pilih paket (tambah kamar, dapur, kamar mandi, lantai 2) → bayar tunai atau kredit → selesai 2–7 hari game.
+- Paket renovasi memakai template denah yang rapi; setelah jadi tetap bisa diubah lewat Build Mode.
 - Katalog dari Toko Furnitur Braga, toko online, hadiah quest, dan crafting.
 - **Berdua**: keduanya bisa mendekor bersamaan; perubahan muncul realtime. Item yang sedang dipegang seseorang dikunci untuk pemain lain.
 

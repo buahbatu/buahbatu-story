@@ -29,6 +29,7 @@ import { t } from '../content/i18n';
 import { NEUTRAL, cameraOffset, rotateVec, stepCamera, type CameraInput, type CameraRig } from '../world/camera/logic';
 import { DRY, drip, seeded, splashBurst, stepWet, type WetState } from '../entities/player/wet';
 import { logger } from '../core/logger';
+import { assetUrl, versioned } from '../core/assetUrl';
 import type { Engine, GameScene } from '../engine/engine';
 import { APPEARANCE, PlayerView, jumpHeight, stepJump, stepMotion, type Appearance, type Direction, type PlayerMotion } from '../entities';
 import { uiStore } from '../ui/uiState';
@@ -50,7 +51,7 @@ export interface InteractionEvent {
 }
 const STILL: CameraInput = { rotate: 0, zoom: 0, pan: { x: 0, y: 0 }, twist: 0 };
 
-const mapUrl = (id: string) => new URL(`${import.meta.env.BASE_URL}assets/maps/${id}.tmj`, location.href);
+const mapUrl = (id: string) => new URL(assetUrl(`maps/${id}.tmj`), location.href);
 
 async function loadAtlas(url: URL): Promise<Texture> {
   const texture = await new TextureLoader().loadAsync(url.href);
@@ -134,7 +135,7 @@ export class WorldScene implements GameScene {
   }
 
   private availableAreas(): Promise<Set<string>> {
-    this.manifest ??= fetch(new URL(`${import.meta.env.BASE_URL}assets/maps/index.json`, location.href))
+    this.manifest ??= fetch(new URL(assetUrl('maps/index.json'), location.href))
       .then((r) => r.json() as Promise<{ areas: string[] }>)
       .then((m) => new Set(m.areas));
     return this.manifest;
@@ -292,7 +293,7 @@ export class WorldScene implements GameScene {
     if (!response.ok) throw new Error(`peta ${id} tidak ditemukan (${String(response.status)})`);
     const { area, issues } = parseArea(id, await response.json());
     if (!area) throw new Error(`peta ${id} tidak valid: ${issues.join('; ')}`);
-    await Promise.all([this.atlasFor(new URL(area.tileset.image, url)), preloadArea(area)]);
+    await Promise.all([this.atlasFor(versioned(new URL(area.tileset.image, url))), preloadArea(area)]);
     return area;
   }
 
@@ -324,7 +325,7 @@ export class WorldScene implements GameScene {
 
   private async load(id: string): Promise<void> {
     const area = await this.fetchArea(id);
-    const atlas = await this.atlasFor(new URL(area.tileset.image, mapUrl(id)));
+    const atlas = await this.atlasFor(versioned(new URL(area.tileset.image, mapUrl(id))));
     this.occlusion.clear();
     this.fx.clear();
     this.wet = DRY;
