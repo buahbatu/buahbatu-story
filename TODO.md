@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 24 | 25 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 24 | 26 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +37,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **39** | **200** | |
+| **Total** | | | **39** | **201** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -67,7 +67,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
 **Sedang dikerjakan:** —
-**Task berikutnya:** chore Vercel hemat, lalu P1-13
+**Task berikutnya:** P1-15 (logo judul), lalu P1-13
 
 ---
 
@@ -118,6 +118,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [ ] **P1-13** Air terjun & sungai antar-ketinggian: air jatuh dari tebing ke kolam, percikan & riak, (suara gemericik menyusul sistem audio) · Ref: 10, 42
 - [x] **P1-14** Jalan aspal bertekstur (masukan user 2026-11-25: jalan tampak hitam/biru polos): aspal abu hangat dengan butiran, retak & tambalan, **marka** (garis tengah putus-putus, garis tepi), trotoar + kanstin; rapikan pita kebiruan di luar batas peta Buahbatu · Ref: 42, 10 · ✅ 2026-11-25 · objek `road` jadi lapisan 3D (aspal berbutir+retak+tambalan, marka, kanstin belang), jalan berlanjut ke luar peta; cache lama sudah beres di sisi user
 - [x] **P1-09b** Transisi & interior lebih jelas (masukan user 2026-11-25): layar transisi menampilkan nama tempat + animasi loading (bukan biru tua polos); **preload peta tetangga** supaya pindah area hampir instan; di dalam ruangan **pintu keluar mudah ditemukan** (kusen + keset + penanda panah bercahaya) & dinding depan tampil rendah supaya batas ruangan terbaca · Ref: 10, 40 · ✅ 2026-11-25 · kartu "Menuju… <tempat>" + titik loading, preload peta tetangga, prop `exit_door` (kusen, keset, panah bercahaya) + dinding depan rendah
+- [ ] **P1-15** Logo judul game (permintaan user 2026-11-25): logo pixel-art original bernuansa game bertani jadul (huruf melengkung krim-kayu, papan "STORY" bergantung, stroberi/daun/bunga, kilau), animasi masuk memantul + goyang pelan, karakter A & Michelle (model 3D asli) idle di layar judul, "Tekan tombol apa saja" berkedip; bukan tiruan logo game lain · Ref: 40, 42
 
 **Kriteria selesai P1:** bisa jalan di Lembang, masuk/keluar kos, ngobrol dengan papan (dialog), main di HP & laptop.
 
