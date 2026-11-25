@@ -1,4 +1,4 @@
-import { HEIGHT_STEP, HILL, MAP_LAYERS, OBJECT_RULES, TILE_PX, WATER_DEPTH } from '../../config/world';
+import { BRIDGE, HEIGHT_STEP, HILL, MAP_LAYERS, OBJECT_RULES, TILE_PX, WATER_DEPTH } from '../../config/world';
 import { tiledMapSchema, type PropertyValue, type TiledMap, type TiledObject } from './schema';
 
 export type ObjectKind = keyof typeof OBJECT_RULES;
@@ -225,7 +225,37 @@ export function rampProgress(r: Ramp, x: number, y: number): number {
 
 const inside = (r: Rect, x: number, y: number) => x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h;
 
+export interface Bridge extends Rect {
+  along: 'x' | 'y';
+  deck: number;
+  style: string;
+}
+
+const bridgeCache = new WeakMap<AreaData, Bridge[]>();
+
+export function bridgesOf(area: AreaData): Bridge[] {
+  const cached = bridgeCache.get(area);
+  if (cached) return cached;
+  const bridges = area.objects
+    .filter((o) => o.kind === 'bridge')
+    .map((o) => {
+      const along = o.w >= o.h ? 'x' : 'y';
+      const [ax, ay, bx, by] =
+        along === 'x'
+          ? [o.x - 0.5, o.y + o.h / 2, o.x + o.w + 0.5, o.y + o.h / 2]
+          : [o.x + o.w / 2, o.y - 0.5, o.x + o.w / 2, o.y + o.h + 0.5];
+      const deck = Math.max(elevation(area, ax, ay), elevation(area, bx, by)) + BRIDGE.deck;
+      return { x: o.x, y: o.y, w: o.w, h: o.h, along, deck, style: String(o.props.style ?? 'wood') } as const;
+    });
+  bridgeCache.set(area, bridges);
+  return bridges;
+}
+
+export const bridgeAt = (area: AreaData, x: number, y: number): Bridge | null => bridgesOf(area).find((b) => inside(b, x, y)) ?? null;
+
 export function standHeight(area: AreaData, x: number, y: number): number {
+  const bridge = bridgeAt(area, x, y);
+  if (bridge) return bridge.deck;
   const ramp = rampsOf(area).find((r) => inside(r, x, y));
   return ramp ? ramp.base + rampProgress(ramp, x, y) * ramp.rise : elevation(area, x, y);
 }
@@ -273,6 +303,8 @@ export function waterAt(area: AreaData, x: number, y: number, shallowTiles: numb
 }
 
 export function walkLevel(area: AreaData, x: number, y: number): number {
+  const bridge = bridgeAt(area, x, y);
+  if (bridge) return bridge.deck;
   const lowered = area.terrain[tileIndex(area, Math.floor(x), Math.floor(y))] === 'water' ? WATER_DEPTH : 0;
   return standHeight(area, x, y) + (x >= 0 && y >= 0 && x < area.width && y < area.height ? lowered : 0);
 }
@@ -283,9 +315,10 @@ export function bodyBlocked(area: AreaData, x: number, y: number, from: number, 
   const here = walkLevel(area, x, y);
   if (Math.abs(here - from) > body.maxStep) return true;
   const shore = shoreDistance(area);
-  for (let ty = Math.floor(y - r); ty <= Math.floor(y + r - 1e-6); ty++)
-    for (let tx = Math.floor(x - r); tx <= Math.floor(x + r - 1e-6); tx++)
-      if ((shore[tileIndex(area, tx, ty)] ?? 0) > body.shallowTiles) return true;
+  if (!bridgeAt(area, x, y))
+    for (let ty = Math.floor(y - r); ty <= Math.floor(y + r - 1e-6); ty++)
+      for (let tx = Math.floor(x - r); tx <= Math.floor(x + r - 1e-6); tx++)
+        if ((shore[tileIndex(area, tx, ty)] ?? 0) > body.shallowTiles) return true;
   for (const [dx, dy] of [
     [-r, -r],
     [r, -r],

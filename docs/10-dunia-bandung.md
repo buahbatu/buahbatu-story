@@ -22,7 +22,7 @@ Bandung versi 2.5D low-poly (ala Back to Nature) yang hangat dan sedikit "fantas
 | `pasar_baru` | Pasar Baru | Penjahit, kain, bahan masak murah | Bab 2 cerita |
 | `ciwidey` | Ciwidey · Kebun Teh · Kawah Putih | Kencan, petik stroberi, lamaran | Proyek "Ciwidey Asri" |
 | `situ_patenggang` | Situ Patenggang | Mancing danau, perahu, legenda cinta | Proyek "Ciwidey Asri" |
-| `tangkuban` | Tangkuban Perahu | Eksplorasi gua kawah (mineral, fosil) | Proyek "Kawah Lestari" |
+| `tangkuban` | Tangkuban Perahu | Eksplorasi gua kawah (mineral, fosil) + **pemandian air hangat** di lerengnya (kolam berbatu beruap, berendam pulihkan stamina, berendam berdua) | Proyek "Kawah Lestari" |
 | `udjo` | Saung Angklung Udjo | Minigame ritme angklung, festival musik | Proyek "Angklung Lestari" |
 | `kampus` | Kawasan Kampus | Karier pendidikan, perpustakaan | Tahun 1 Gugur |
 | `sekolah` | Sekolah (TK/SD) | Sekolah anak | Saat punya anak |
@@ -106,6 +106,7 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | `npc_anchor` | `id` (titik referensi jadwal NPC) |
 | `zone` | `name` (misal `fishing:river`, `music:cafe`) |
 | `waterfall` | `dir` (`n`/`s`/`e`/`w`, arah aliran). **P1-13**: kotak di tepi tebing; wajib ada petak air di atas & di bawah, dan air di atas lebih tinggi (dites `tests/maps.test.ts`). Digambar tirai air bertekstur mengalir + bibir melengkung, buih menggelembung, riak & kabut di kaki air terjun (`WATERFALL`, `src/world/water/`) |
+| `bridge` | `style` (`wood` desa / `concrete` kota). **P1-13b**: kotak di atas air; lantai otomatis setinggi tepian kedua ujung (`BRIDGE.deck`), pemain berjalan di lantai & air dalam di bawahnya tidak menghalangi. Helper `bridge(x, y, w, h, style)` di `scripts/maps/lib.ts` sekaligus memasang pagar sebagai kotak tabrakan. Wajib melintasi air & kedua ujung di darat (dites) |
 | `road` | — (area yang bisa dilewati kendaraan). **P1-14**: kotak jalan digambar sebagai lapisan 3D: aspal bertekstur (abu hangat, butiran, retak, tambalan, noda oli; `TEX.asphalt` 4×4 petak), marka **garis tengah putus-putus** + **garis tepi**, dan **kanstin** belang hitam-putih di kedua sisi panjang (`ROAD` di `config/world.ts`, logika `src/world/road/logic.ts`). Opsional: `markings` (bawaan `true`), `curb` (bawaan `true`), `sidewalk` (lebar trotoar dalam petak). Jalan yang menyentuh tepi peta **diteruskan ke luar peta** sejauh `WORLD_SKIRT` bersama marka, kanstin & trotoarnya, jadi dunia tidak terasa buntu |
 | `bus_stop` | `stopId` |
 | `prop` | `model` ∈ `PROP_MODELS` (lihat tabel prop di bawah); opsional `rotation` (derajat) |
@@ -161,6 +162,7 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 - Permukaan air mengikuti tingkat petaknya (`waterSurface`): sungai bisa mengalir di dataran tinggi lalu jatuh lewat objek `waterfall` ke kolam di bawah. Pemain bisa mengarungi sungai dangkal di atas, tapi tidak bisa ikut jatuh lewat tebing.
 - **Sungai tidak boleh buntu** (keputusan user): air setinggi tanah dasar yang menyentuh tepi peta diteruskan ke luar peta sebagai alur sungai (dasar biru + tebing tanah) sejauh `WORLD_SKIRT`, sampai hilang di kabut; sungai dari dataran tinggi di tepi peta tampil sebagai mata air. Nanti di dunia pulau, sungai antar-area menyambung & bermuara ke laut.
 - Petak tinggi di tepi peta diberi dinding batu di sisi luarnya supaya tidak tembus ke langit.
+- Lembang punya **dua sungai**: sungai curug (ke barat) dan sungai di sisi jalan setapak utara yang memotong jalan utama di bawah **jembatan kayu**, masuk kolam selatan lalu keluar peta lewat sisi selatan. Sandbox: contoh **jembatan beton** di atas kolam.
 - Lembang: **curug dua tingkat** (dataran 2 → 1 → kolam di samping Toko Bibit), sungainya mengalir ke barat keluar peta; zona `fishing:curug`.
 
 ## Kontur Tanah (P1-12, ADR-026)

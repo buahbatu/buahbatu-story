@@ -123,6 +123,12 @@ export class MapBuilder {
     return this.object('door', cx - 0.5, wallY - 0.5, { targetArea, targetSpawn }, 1, 0.5).prop('exit_door', cx, wallY);
   }
 
+  bridge(x: number, y: number, w: number, h: number, style: 'wood' | 'concrete' = 'wood'): this {
+    this.object('bridge', x, y, { style }, w, h);
+    const t = 0.12;
+    return w >= h ? this.block(x, y, w, t).block(x, y + h - t, w, t) : this.block(x, y, t, h).block(x + w - t, y, t, h);
+  }
+
   block(x: number, y: number, w: number, h: number): this {
     this.collisions.push({
       id: this.nextId++,

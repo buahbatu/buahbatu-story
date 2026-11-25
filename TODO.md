@@ -30,14 +30,14 @@
 | P7 | Karakter & Outfit | v0.4 | 0 | 9 | ⬜ |
 | P8 | HP, NPC, Dialog & Quest | v0.5 | 0 | 14 | ⬜ |
 | P9 | Kebutuhan, Mood & Hubungan | v0.6 | 0 | 12 | ⬜ |
-| P10 | Aktivitas | v0.7 | 0 | 11 | ⬜ |
+| P10 | Aktivitas | v0.7 | 0 | 12 | ⬜ |
 | P11 | Voice | v0.8 | 0 | 8 | ⬜ |
 | P12 | Kendaraan & Peta Bandung | v0.9 | 0 | 10 | ⬜ |
 | P13 | Properti, Kredit & Pernikahan | v0.10 | 0 | 15 | ⬜ |
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **41** | **202** | |
+| **Total** | | | **41** | **203** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -66,7 +66,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P15 | 🟢 | P15-02 event tanggal asli (rahasia dari yang berulang tahun) |
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
-**Sedang dikerjakan:** —
+**Sedang dikerjakan:** P1-13b
 **Task berikutnya:** P1-13b (jembatan)
 
 ---
@@ -116,7 +116,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-11** Mode debug `?debug=1` (FPS, collision, grid) · Ref: 50 · ✅ 2026-11-25 · panel FPS/draw call/posisi + overlay Grid & Kolisi (bisa dimatikan), terkunci di Production
 - [x] **P1-12** Kontur tanah **campuran** (keputusan user 2026-11-25): lereng landai halus untuk bukit/lembah + undakan/tebing bertingkat; kolisi & tinggi pemain mengikuti lereng, petak ladang tetap datar · Ref: 10 · ✅ 2026-11-25 · objek `hill` (bukit/lembah landai) di atas undakan, lereng ber-facet, aturan datar dites; bukit di Lembang & sandbox
 - [x] **P1-13** Air terjun & sungai antar-ketinggian: air jatuh dari tebing ke kolam, percikan & riak, (suara gemericik menyusul sistem audio) · Ref: 10, 42 · ✅ 2026-11-26 · permukaan air per tingkat, objek `waterfall` (tirai, bibir, buih, riak, kabut), curug 2 tingkat Lembang, sungai keluar peta + alur di luar peta, dinding batu tepi dataran tinggi
-- [ ] **P1-13b** Jembatan (permintaan user 2026-11-25): prop jembatan kayu & beton (pagar, papan, tiang) yang bisa dilewati di atas air, otomatis di tempat jalan/path memotong sungai; Lembang dapat sungai kedua yang memotong jalan utama + jembatannya · Ref: 10, 42
+- [~] **P1-13b** Jembatan (permintaan user 2026-11-25): prop jembatan kayu & beton (pagar, papan, tiang) yang bisa dilewati di atas air, otomatis di tempat jalan/path memotong sungai; Lembang dapat sungai kedua yang memotong jalan utama + jembatannya · Ref: 10, 42 · 🕒 2026-11-26
 - [x] **P1-14** Jalan aspal bertekstur (masukan user 2026-11-25: jalan tampak hitam/biru polos): aspal abu hangat dengan butiran, retak & tambalan, **marka** (garis tengah putus-putus, garis tepi), trotoar + kanstin; rapikan pita kebiruan di luar batas peta Buahbatu · Ref: 42, 10 · ✅ 2026-11-25 · objek `road` jadi lapisan 3D (aspal berbutir+retak+tambalan, marka, kanstin belang), jalan berlanjut ke luar peta; cache lama sudah beres di sisi user
 - [x] **P1-09b** Transisi & interior lebih jelas (masukan user 2026-11-25): layar transisi menampilkan nama tempat + animasi loading (bukan biru tua polos); **preload peta tetangga** supaya pindah area hampir instan; di dalam ruangan **pintu keluar mudah ditemukan** (kusen + keset + penanda panah bercahaya) & dinding depan tampil rendah supaya batas ruangan terbaca · Ref: 10, 40 · ✅ 2026-11-25 · kartu "Menuju… <tempat>" + titik loading, preload peta tetangga, prop `exit_door` (kusen, keset, panah bercahaya) + dinding depan rendah
 - [x] **P1-15** Logo judul game (permintaan user 2026-11-25): logo pixel-art original bernuansa game bertani jadul (huruf melengkung krim-kayu, papan "STORY" bergantung, stroberi/daun/bunga, kilau), animasi masuk memantul + goyang pelan, karakter A & Michelle (model 3D asli) idle di layar judul, "Tekan tombol apa saja" berkedip; bukan tiruan logo game lain · Ref: 40, 42 · ✅ 2026-11-25 · logo HTML/CSS + sprite pixel (huruf bergelombang, papan STORY berayun, stroberi/bunga/kilau/kupu-kupu), karakter 3D asli idle, tekan/ketuk untuk mulai → Buahbatu
@@ -273,6 +273,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [ ] **P10-07** Museum Geologi (donasi + hadiah) · Ref: 20
 - [ ] **P10-08** Upgrade alat di pandai besi · Ref: 12
 - [ ] **P10-09** Minigame Balok Braga + papan skor rumah · Ref: 20
+- [ ] **P10-09b** **Pemandian air hangat** (permintaan user 2026-11-26), terinspirasi pemandian air panas sekitar Tangkuban/Ciater: kolam berbatu beruap di lereng gunung, berendam memulihkan stamina & mengurangi capek, hangat sampai malam; berendam berdua menaikkan kedekatan (+ event malam berbintang); buka sepanjang tahun, paling ramai musim hujan · Ref: 10, 20
 - [ ] **P10-10** Minigame Catur/Congklak & Tebak Gambar (versus pasangan) · Ref: 20
 - [ ] **P10-11** Serangga & forage · Ref: 20
 

@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { AREA_IDS, HILL, PROP_MODELS } from '../src/config/world';
 import { isI18nKey } from '../src/content/i18n';
 import { PLAYER } from '../src/config/balance';
-import { bodyBlocked, cornerHill, parseArea, tileIndex, walkLevel, type AreaData } from '../src/world/map/logic';
+import { bodyBlocked, bridgesOf, cornerHill, parseArea, tileIndex, walkLevel, type AreaData } from '../src/world/map/logic';
 import { DEFAULT_BUILDING } from '../src/world/props/buildings';
 import { TEXT_PROPS } from '../src/world/props/registry';
 import { waterfallOf } from '../src/world/water/logic';
@@ -91,6 +91,19 @@ describe('peta di public/assets/maps (docs/10 §6)', () => {
       if (!area) return;
       const falls = objects.filter((o) => o.kind === 'waterfall');
       expect(falls.filter((o) => waterfallOf(area, o) === null).map((o) => `${String(o.x)},${String(o.y)}`)).toEqual([]);
+    });
+    it('jembatan melintasi air & kedua ujungnya di darat', () => {
+      if (!area) return;
+      const isWater = (x: number, y: number) => area.terrain[tileIndex(area, Math.floor(x), Math.floor(y))] === 'water';
+      const bad = bridgesOf(area).filter((b) => {
+        const mid = b.along === 'x' ? b.y + b.h / 2 : b.x + b.w / 2;
+        const len = b.along === 'x' ? b.w : b.h;
+        const start = b.along === 'x' ? b.x : b.y;
+        const at = (t: number) => (b.along === 'x' ? isWater(t, mid) : isWater(mid, t));
+        const spans = Array.from({ length: Math.ceil(len) }, (_, i) => at(start + i + 0.5)).some(Boolean);
+        return !spans || at(start - 0.3) || at(start + len + 0.3);
+      });
+      expect(bad.map((b) => `${String(b.x)},${String(b.y)}`)).toEqual([]);
     });
     it('properti bangunan dikenal kit (tanpa salah ketik)', () => {
       const known = new Set(['model', 'rotation', ...Object.keys(DEFAULT_BUILDING)]);

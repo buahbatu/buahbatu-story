@@ -13,6 +13,7 @@ m.sprinkle('grass_flowers', 0.07)
   .raise(2, 4, 22, 5, 4)
   .hill(36, 7, 3.5, 4, 1.3, 0.2)
   .hill(23, 26.5, 2.5, 2, -0.6, 0.2);
+m.bridge(33.4, 18.5, 2, 7, 'concrete');
 m.prop('stairs', 13, 21, { w: 2, d: 2, dir: 'w', rise: 1 }).prop('stairs', 10, 24, { w: 2, d: 2, dir: 'w', rise: 1 });
 m.object('spawn', 20.5, 17.5, { id: 'start' })
   .object('spawn', 9.5, 12, { id: 'depan_rumah' })

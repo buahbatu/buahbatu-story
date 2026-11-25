@@ -94,6 +94,15 @@ export const WATERFALL = {
   opacity: 0.88,
   colors: { curtain: '#d9f0ff', foam: '#ffffff', mist: '#eef8ff' },
 } as const;
+export const BRIDGE = {
+  deck: 0.1,
+  thickness: 0.16,
+  rail: 0.7,
+  railInset: 0.06,
+  postEvery: 1,
+  styles: ['wood', 'concrete'],
+  colors: { wood: '#9a6a3f', woodDark: '#6b4223', concrete: '#c9c4b8', concreteDark: '#8f8a80', stripe: '#2f2f33' },
+} as const;
 export const TRAVEL = { fadeMs: 260, holdMs: 450 } as const;
 export const DIALOG = { cps: 40, historySize: 60 } as const;
 export const OCCLUSION = { opacity: 0.3, speed: 5, margin: 0.4, skip: ['room', 'rug', 'stairs', 'exit_door'] } as const;
@@ -106,6 +115,7 @@ export const OBJECT_RULES = {
   edge: ['targetArea', 'targetSpawn'],
   hill: ['height'],
   waterfall: ['dir'],
+  bridge: ['style'],
   interact: ['action'],
   npc_anchor: ['id'],
   zone: ['name'],

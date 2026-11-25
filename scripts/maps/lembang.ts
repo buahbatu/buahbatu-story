@@ -27,7 +27,9 @@ m.sprinkle('grass_flowers', 0.05)
   .hill(3.3, 13.2, 2.6, 2.2, 0.9)
   .hill(21.5, 14, 2.8, 3, 1.2, 0.2)
   .hill(43.7, 12, 3.6, 3.5, 1.2, 0.2)
-  .hill(25.5, 24, 2.6, 2, -0.6, 0.2);
+  .paint('water', 25, 0, 2, 36)
+  .paint('sand', 24, 32, 1, 4)
+  .paint('sand', 27, 32, 1, 4);
 
 m.object('spawn', 23.5, 21.5, { id: 'start' })
   .object('spawn', 46, 19, { id: 'dari_dago' })
@@ -37,7 +39,7 @@ m.object('spawn', 23.5, 21.5, { id: 'start' })
   .object('spawn', 36.5, 26.6, { id: 'depan_kandang' })
   .object('spawn', 11.5, 21.5, { id: 'kebun' })
   .object('edge', 47.5, 18, { targetArea: 'dago', targetSpawn: 'dari_lembang' }, 0.5, 2)
-  .object('edge', 22, 0, { targetArea: 'tangkuban', targetSpawn: 'dari_lembang' }, 4, 0.5)
+  .object('edge', 22, 0, { targetArea: 'tangkuban', targetSpawn: 'dari_lembang' }, 3, 0.5)
   .object('waterfall', 14, 3.5, { dir: 's' }, 2, 0.5)
   .object('waterfall', 14, 7.5, { dir: 's' }, 2, 0.5)
   .object('zone', 0, 7.9, { name: 'fishing:curug' }, 18.8, 3.8)
@@ -98,6 +100,7 @@ m.building(
     { targetArea: 'kandang_sapi', targetSpawn: 'pintu', doorX: -0.5 },
   );
 
+m.bridge(24.6, 18, 2.8, 2, 'wood');
 m.fence(3, 22.5, 10.5, 22.5)
   .fence(12.5, 22.5, 21, 22.5)
   .fence(3, 22.5, 3, 30)
@@ -153,7 +156,7 @@ for (const [x, y, s] of [
 for (const [x, y, s] of [
   [27, 15.6, 1.1],
   [28, 12, 1],
-  [26.5, 25, 1],
+  [34, 21.6, 1],
   [21.5, 33.5, 1.2],
 ] as const)
   m.tree('tree', x, y, s);
@@ -162,7 +165,7 @@ for (const [x, y, f] of [
   [14.5, 16, ''],
   [31, 16, '#e04a5a'],
   [42.5, 13, ''],
-  [26, 22, '#f2c94c'],
+  [28, 21.5, '#f2c94c'],
   [1.5, 21, ''],
 ] as const)
   m.solid('bush', x, y, 0.9, { flowers: f });
