@@ -19,6 +19,8 @@ import { PALETTE } from '../config/palette';
 import { DEBUG, DEFAULT_AREA, INTERACTION, TRAVEL, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { OcclusionFader } from '../world/occlusion';
 import { WaterFx } from '../world/waterFx';
+import { WaterfallView } from '../world/water/mesh';
+import { waterSurface } from '../world/water/logic';
 import { doorById, edgeAt, enteredEdge, neighbours, placeKey } from '../world/travel/logic';
 import type { I18nKey } from '../content/i18n';
 import { dialogFor, keyLabel, nearestInteractable, type Interactable } from '../world/interact/logic';
@@ -77,6 +79,7 @@ export class WorldScene implements GameScene {
   private readonly playerView = new PlayerView();
   readonly occlusion = new OcclusionFader();
   private readonly fx = new WaterFx();
+  private readonly falls = new WaterfallView();
   private wet: WetState = DRY;
   private fxTick = 0;
   private rippleIn = 0;
@@ -163,6 +166,7 @@ export class WorldScene implements GameScene {
 
   update(dt: number, time: number): void {
     this.water?.offset.set(time * WATER.flow, time * WATER.flow * 0.6);
+    this.falls.update(time);
     for (const m of this.exitMarks) {
       m.node.position.y = Number(m.node.userData.baseY) + Math.sin(time * INTERIOR.exit.speed) * INTERIOR.exit.bob;
       const p = this.player;
@@ -247,8 +251,14 @@ export class WorldScene implements GameScene {
     return { ...this.rig, focus: { ...this.rig.focus }, pan: { ...this.rig.pan } };
   }
 
-  waterState(): { inWater: boolean; wetness: number; particles: number; ripples: number; splashes: number } {
-    return { inWater: this.wet.inWater, wetness: this.wet.wetness, splashes: this.splashes, ...this.fx.counts() };
+  waterState(): { inWater: boolean; wetness: number; particles: number; ripples: number; splashes: number; waterfalls: number } {
+    return {
+      inWater: this.wet.inWater,
+      wetness: this.wet.wetness,
+      splashes: this.splashes,
+      waterfalls: this.falls.count(),
+      ...this.fx.counts(),
+    };
   }
 
   private splashAndDrip(area: AreaData, p: PlayerMotion, dt: number): void {
@@ -258,12 +268,12 @@ export class WorldScene implements GameScene {
     const rnd = seeded(p.x * 31.7 + p.y * 17.3 + this.fxTick++);
     if (step.splash) {
       this.splashes++;
-      this.fx.add(splashBurst(p.x, WATER.surface, p.y, WATER_FX.splashCount, rnd));
-      this.fx.ripple(p.x, WATER.surface + 0.01, p.y);
+      this.fx.add(splashBurst(p.x, waterSurface(area, p.x, p.y), p.y, WATER_FX.splashCount, rnd));
+      this.fx.ripple(p.x, waterSurface(area, p.x, p.y) + 0.01, p.y);
     }
     this.rippleIn -= dt;
     if (inWater && p.anim !== 'idle' && this.rippleIn <= 0) {
-      this.fx.ripple(p.x, WATER.surface + 0.01, p.y);
+      this.fx.ripple(p.x, waterSurface(area, p.x, p.y) + 0.01, p.y);
       this.rippleIn = WATER_FX.rippleEvery;
     }
     const ground = standHeight(area, p.x, p.y);
@@ -342,7 +352,8 @@ export class WorldScene implements GameScene {
       const at = n.getWorldPosition(new Vector3());
       this.exitMarks.push({ node: n, x: at.x, z: at.z });
     });
-    this.world.scene.add(this.root);
+    this.falls.build(area);
+    this.world.scene.add(this.root, this.falls.object);
     this.area = area;
     this.debug?.overlay.build(area);
     this.applySettings(area);

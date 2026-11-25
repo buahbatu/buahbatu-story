@@ -226,6 +226,25 @@ export const TEX = {
       }
       for (let i = 0; i < 26; i++) px(28 + r(9) - 4, 50 + r(7) - 3, 1, 1, '#4a4847');
     }),
+  fall: () =>
+    make('fall', 32, (px, rnd) => {
+      px(0, 0, 32, 32, '#bfe3f7');
+      for (let x = 0; x < 32; x += 2) {
+        const tone = ['#e9f7ff', '#9fd0ee', '#d4effc', '#ffffff'][Math.floor(rnd() * 4)] ?? '#ffffff';
+        const y = Math.floor(rnd() * 32);
+        const len = 6 + Math.floor(rnd() * 14);
+        px(x, y, 1 + Math.floor(rnd() * 2), len, tone);
+        if (y + len > 32) px(x, 0, 1, y + len - 32, tone);
+      }
+      for (let i = 0; i < 18; i++) px(Math.floor(rnd() * 32), Math.floor(rnd() * 32), 1, 2, '#ffffff');
+    }),
+  foam: () =>
+    make('foam', 32, (px, rnd) => {
+      for (let i = 0; i < 70; i++) {
+        const s = 1 + Math.floor(rnd() * 3);
+        px(Math.floor(rnd() * 32), Math.floor(rnd() * 32), s, s, rnd() > 0.35 ? '#ffffff' : '#d8eefb');
+      }
+    }),
   curb: () =>
     make('curb', 16, (px, rnd) => {
       px(0, 0, 8, 16, '#2f2f33');

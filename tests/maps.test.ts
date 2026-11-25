@@ -7,6 +7,7 @@ import { PLAYER } from '../src/config/balance';
 import { bodyBlocked, cornerHill, parseArea, tileIndex, walkLevel, type AreaData } from '../src/world/map/logic';
 import { DEFAULT_BUILDING } from '../src/world/props/buildings';
 import { TEXT_PROPS } from '../src/world/props/registry';
+import { waterfallOf } from '../src/world/water/logic';
 
 const dir = join(import.meta.dirname, '..', 'public', 'assets', 'maps');
 const files = readdirSync(dir).filter((f) => f.endsWith('.tmj'));
@@ -85,6 +86,11 @@ describe('peta di public/assets/maps (docs/10 §6)', () => {
       for (let y = 0; y < area.height; y++)
         for (let x = 0; x <= area.width; x++) if (Math.abs(h(x, y + 1) - h(x, y)) > HILL.maxGrade) bad.push(`curam ${x},${y}`);
       expect(bad).toEqual([]);
+    });
+    it('air terjun sah: ada air di atas & di bawah tebing, dan air jatuh ke bawah', () => {
+      if (!area) return;
+      const falls = objects.filter((o) => o.kind === 'waterfall');
+      expect(falls.filter((o) => waterfallOf(area, o) === null).map((o) => `${String(o.x)},${String(o.y)}`)).toEqual([]);
     });
     it('properti bangunan dikenal kit (tanpa salah ketik)', () => {
       const known = new Set(['model', 'rotation', ...Object.keys(DEFAULT_BUILDING)]);

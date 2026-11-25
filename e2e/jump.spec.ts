@@ -5,9 +5,15 @@ test('tombol Spasi membuat pemain melompat lalu mendarat, bisa sambil berjalan',
   const start = await page.evaluate(() => window.__BB__?.player());
   await page.keyboard.down('KeyD');
   await page.keyboard.press('Space');
-  await expect.poll(async () => (await page.evaluate(() => window.__BB__?.player()))?.anim, { timeout: 5_000 }).toBe('jump');
-  const air = await page.evaluate(() => window.__BB__?.player());
-  expect(air?.air).toBeGreaterThanOrEqual(0);
+  await expect
+    .poll(
+      async () => {
+        const p = await page.evaluate(() => window.__BB__?.player());
+        return p?.anim === 'jump' && typeof p.air === 'number' && p.air >= 0;
+      },
+      { timeout: 5_000 },
+    )
+    .toBe(true);
   await expect.poll(async () => (await page.evaluate(() => window.__BB__?.player()))?.anim, { timeout: 5_000 }).toBe('walk');
   await page.keyboard.up('KeyD');
   const landed = await page.evaluate(() => window.__BB__?.player());

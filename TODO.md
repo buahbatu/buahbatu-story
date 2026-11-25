@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 25 | 26 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 25 | 27 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +37,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **40** | **201** | |
+| **Total** | | | **40** | **202** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -66,7 +66,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P15 | 🟢 | P15-02 event tanggal asli (rahasia dari yang berulang tahun) |
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
-**Sedang dikerjakan:** —
+**Sedang dikerjakan:** P1-13
 **Task berikutnya:** P1-13 (air terjun)
 
 ---
@@ -115,7 +115,8 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-10b** Redesain kontrol sentuh (masukan user 2026-11-25: desain jelek): gaya **modern transparan** (lingkaran gelap tembus pandang, garis putih tipis, ikon), joystick **tetap di tempat** & lebih besar, tidak mepet tepi (safe area), tombol ikon: Aksi (besar), Lompat, Lari (tahan), Alat; **pindah otomatis**: HP/tablet/iPad tampil, desktop tidak, laptop sentuh/iPad+keyboard ikut input terakhir · Ref: 40 · ✅ 2026-11-25 · gaya kaca transparan + ikon, joystick tetap, tombol Aksi/Lompat/Lari/Alat, tampil otomatis sentuh ↔ keyboard/mouse
 - [x] **P1-11** Mode debug `?debug=1` (FPS, collision, grid) · Ref: 50 · ✅ 2026-11-25 · panel FPS/draw call/posisi + overlay Grid & Kolisi (bisa dimatikan), terkunci di Production
 - [x] **P1-12** Kontur tanah **campuran** (keputusan user 2026-11-25): lereng landai halus untuk bukit/lembah + undakan/tebing bertingkat; kolisi & tinggi pemain mengikuti lereng, petak ladang tetap datar · Ref: 10 · ✅ 2026-11-25 · objek `hill` (bukit/lembah landai) di atas undakan, lereng ber-facet, aturan datar dites; bukit di Lembang & sandbox
-- [ ] **P1-13** Air terjun & sungai antar-ketinggian: air jatuh dari tebing ke kolam, percikan & riak, (suara gemericik menyusul sistem audio) · Ref: 10, 42
+- [~] **P1-13** Air terjun & sungai antar-ketinggian: air jatuh dari tebing ke kolam, percikan & riak, (suara gemericik menyusul sistem audio) · Ref: 10, 42 · 🕒 2026-11-25
+- [ ] **P1-13b** Jembatan (permintaan user 2026-11-25): prop jembatan kayu & beton (pagar, papan, tiang) yang bisa dilewati di atas air, otomatis di tempat jalan/path memotong sungai; Lembang dapat sungai kedua yang memotong jalan utama + jembatannya · Ref: 10, 42
 - [x] **P1-14** Jalan aspal bertekstur (masukan user 2026-11-25: jalan tampak hitam/biru polos): aspal abu hangat dengan butiran, retak & tambalan, **marka** (garis tengah putus-putus, garis tepi), trotoar + kanstin; rapikan pita kebiruan di luar batas peta Buahbatu · Ref: 42, 10 · ✅ 2026-11-25 · objek `road` jadi lapisan 3D (aspal berbutir+retak+tambalan, marka, kanstin belang), jalan berlanjut ke luar peta; cache lama sudah beres di sisi user
 - [x] **P1-09b** Transisi & interior lebih jelas (masukan user 2026-11-25): layar transisi menampilkan nama tempat + animasi loading (bukan biru tua polos); **preload peta tetangga** supaya pindah area hampir instan; di dalam ruangan **pintu keluar mudah ditemukan** (kusen + keset + penanda panah bercahaya) & dinding depan tampil rendah supaya batas ruangan terbaca · Ref: 10, 40 · ✅ 2026-11-25 · kartu "Menuju… <tempat>" + titik loading, preload peta tetangga, prop `exit_door` (kusen, keset, panah bercahaya) + dinding depan rendah
 - [x] **P1-15** Logo judul game (permintaan user 2026-11-25): logo pixel-art original bernuansa game bertani jadul (huruf melengkung krim-kayu, papan "STORY" bergantung, stroberi/daun/bunga, kilau), animasi masuk memantul + goyang pelan, karakter A & Michelle (model 3D asli) idle di layar judul, "Tekan tombol apa saja" berkedip; bukan tiruan logo game lain · Ref: 40, 42 · ✅ 2026-11-25 · logo HTML/CSS + sprite pixel (huruf bergelombang, papan STORY berayun, stroberi/bunga/kilau/kupu-kupu), karakter 3D asli idle, tekan/ketuk untuk mulai → Buahbatu
@@ -387,5 +388,5 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - *(teknis, dari P0-08)* Teks Phaser pakai **BitmapText** (font pixel di-bake jadi atlas) supaya tepi huruf 100% tajam; `fillText` canvas masih memberi antialias 1 px di tepi glyph. Cocok digarap bareng pipeline aset P1-01.
 - *(dari user, dikerjakan bareng P5-04)* Layar judul beranimasi: huruf judul bergelombang pelan, subtitle muncul pelan, awan/parallax & kilau stroberi; hormati `prefers-reduced-motion`. *(sebagian sudah di P1-15: huruf bergelombang, kilau, logo memantul; sisa: subtitle muncul pelan, awan/parallax)*
 - *(dari user, 2026-11-24)* **Warga figuran ala GTA**: orang-orang tanpa nama yang jalan kaki, nongkrong, naik motor/angkot di kota (Braga, Alun-alun, Dago) supaya Bandung terasa ramai; beda dari NPC bernama di `18` (P8). Bisa disapa singkat, tanpa hubungan/quest. Perlu dibahas: kepadatan per area & jam, sinkron 2 pemain (cukup deterministik dari seed, tidak dikirim lewat jaringan), batas performa HP. Kandidat fase: P12 (kendaraan & peta Bandung).
-- *(dari user, 2026-11-25)* **Dunia luar menyambung tanpa loading (open world)**: area luar jadi satu dunia ber-*chunk* yang dimuat/dibuang otomatis sambil berjalan; interior tetap transisi. Alasan user: daerah terpotong loading bikin 2 pemain di tempat berbeda terasa sepi; dunia menyambung = bisa saling menyusul/papasan. Konsep user: **dunia pulau tanpa ujung jalan** (seperti GTA / game farming klasik), batas dunia = pantai & laut, bukan tembok/ujung peta. Keputusan arsitektur besar (pipeline peta, kamera, sinkron 2 pemain beda chunk, performa HP, jarak Bandung dipadatkan) → **putuskan + ADR sebelum peta luar berikutnya dibuat** (bukan menunggu P12).
+- *(dari user, 2026-11-25)* **Dunia luar menyambung tanpa loading (open world)**: area luar jadi satu dunia ber-*chunk* yang dimuat/dibuang otomatis sambil berjalan; interior tetap transisi. Alasan user: daerah terpotong loading bikin 2 pemain di tempat berbeda terasa sepi; dunia menyambung = bisa saling menyusul/papasan. Konsep user: **dunia pulau tanpa ujung jalan** (seperti GTA / game farming klasik), batas dunia = pantai & laut, bukan tembok/ujung peta. Keputusan arsitektur besar (pipeline peta, kamera, sinkron 2 pemain beda chunk, performa HP, jarak Bandung dipadatkan) → **putuskan + ADR sebelum peta luar berikutnya dibuat** (bukan menunggu P12). **Air (user 2026-11-25)**: sungai tidak boleh buntu; jaringan sungai antar-area menyambung, ada **sungai besar penghubung antar desa** (dilintasi jembatan), semuanya **bermuara ke laut** yang mengelilingi pulau.
 - *(dari user, 2026-11-25)* **Duduk di kursi/bangku** (taman, kafe, rumah): interaksi "Duduk" + animasi duduk, 2 pemain bisa duduk bersebelahan, kamera mendekat; cocok untuk momen berdua.

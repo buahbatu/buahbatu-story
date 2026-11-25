@@ -3,7 +3,7 @@ import { MapBuilder } from './lib.ts';
 const m = new MapBuilder(48, 36, 7, { sky: '#b9d3e3', fog: '#dfe9ee', fogNear: 16, fogFar: 46 });
 m.sprinkle('grass_flowers', 0.05)
   .raise(1, 0, 0, 21, 8)
-  .raise(2, 0, 0, 13, 4)
+  .raise(2, 0, 0, 16, 4)
   .raise(1, 27, 0, 21, 8)
   .raise(2, 34, 0, 14, 4)
   .paint('dirt', 21, 0, 6, 8)
@@ -20,9 +20,12 @@ m.sprinkle('grass_flowers', 0.05)
   .paint('path', 31, 20, 1, 7)
   .paint('path', 31, 26, 6, 1)
   .ellipse('water', 25, 30, 3, 2.3, 'sand')
+  .ellipse('water', 15.8, 9.9, 3, 1.9, 'sand')
+  .paint('water', 14, 0, 2, 8)
+  .paint('water', 0, 8, 14, 2)
   .hill(38, 4.5, 7, 3.8, 1.4, 0.2)
-  .hill(3.3, 11.5, 2.6, 3.4, 0.9)
-  .hill(17.5, 12.5, 4.5, 3.5, 1.3, 0.2)
+  .hill(3.3, 13.2, 2.6, 2.2, 0.9)
+  .hill(21.5, 14, 2.8, 3, 1.2, 0.2)
   .hill(43.7, 12, 3.6, 3.5, 1.2, 0.2)
   .hill(25.5, 24, 2.6, 2, -0.6, 0.2);
 
@@ -35,6 +38,9 @@ m.object('spawn', 23.5, 21.5, { id: 'start' })
   .object('spawn', 11.5, 21.5, { id: 'kebun' })
   .object('edge', 47.5, 18, { targetArea: 'dago', targetSpawn: 'dari_lembang' }, 0.5, 2)
   .object('edge', 22, 0, { targetArea: 'tangkuban', targetSpawn: 'dari_lembang' }, 4, 0.5)
+  .object('waterfall', 14, 3.5, { dir: 's' }, 2, 0.5)
+  .object('waterfall', 14, 7.5, { dir: 's' }, 2, 0.5)
+  .object('zone', 0, 7.9, { name: 'fishing:curug' }, 18.8, 3.8)
   .object('zone', 4, 23, { name: 'farm:kebun_warga' }, 16, 6)
   .object('npc_anchor', 33.5, 16.5, { id: 'kang_asep_rumah' })
   .object('npc_anchor', 11, 16.5, { id: 'kang_asep_toko' });
@@ -127,7 +133,7 @@ for (const [x, y, s] of [
   [10, 2.5, 1.2],
   [3, 6, 1],
   [8, 6.5, 1.1],
-  [14, 5, 1],
+  [17.5, 5, 1],
   [18, 2, 1.2],
   [18, 6.5, 0.9],
   [29, 2, 1.1],
@@ -145,7 +151,7 @@ for (const [x, y, s] of [
 ] as const)
   m.tree('pine', x, y, s);
 for (const [x, y, s] of [
-  [17, 13, 1.1],
+  [27, 15.6, 1.1],
   [28, 12, 1],
   [26.5, 25, 1],
   [21.5, 33.5, 1.2],

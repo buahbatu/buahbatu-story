@@ -11,7 +11,8 @@ import {
   type Material,
   type Texture,
 } from 'three';
-import { WATER, WORLD_SKIRT } from '../config/world';
+import { WATER, WATER_DEPTH, WORLD_SKIRT } from '../config/world';
+import { edgeWalls, skirtLayout } from './water/logic';
 import { elevation, isBlocked, type AreaData } from './map/logic';
 import { buildTerrain, buildWater, scatterTufts, tileHash } from './map/terrain';
 import { preloadAssets } from './props/assets';
@@ -36,7 +37,7 @@ export function terrainMesh(area: AreaData, atlas: Texture): Mesh {
 }
 
 export function waterMesh(area: AreaData): Mesh | null {
-  const data = buildWater(area);
+  const data = buildWater(area, area.settings.interior === true ? 0 : WORLD_SKIRT);
   if (data.indices.length === 0) return null;
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new Float32BufferAttribute(data.positions, 3));
@@ -75,20 +76,49 @@ export function tuftMesh(area: AreaData): InstancedMesh | null {
   return mesh;
 }
 
-export function skirt(area: Pick<AreaData, 'width' | 'height'>, margin = WORLD_SKIRT): Group {
+export function skirt(area: Pick<AreaData, 'width' | 'height' | 'terrain' | 'heights'>, margin = WORLD_SKIRT): Group {
   const g = new Group();
   g.name = 'skirt';
-  const { width: W, height: H } = area;
-  for (const [x0, z0, w, d] of [
-    [-margin, -margin, W + margin * 2, margin],
-    [-margin, H, W + margin * 2, margin],
-    [-margin, 0, margin, H],
-    [W, 0, margin, H],
-  ] as const) {
-    const plane = new Mesh(new PlaneGeometry(w, d), new MeshLambertMaterial({ map: repeated(TEX.grass(), w, d) }));
+  const { grass, beds } = skirtLayout(area, margin);
+  const flat = (r: { x: number; z: number; w: number; d: number }, y: number, map: Texture) => {
+    const plane = new Mesh(new PlaneGeometry(r.w, r.d), new MeshLambertMaterial({ map: repeated(map, r.w, r.d) }));
     plane.rotation.x = -Math.PI / 2;
-    plane.position.set(x0 + w / 2, 0, z0 + d / 2);
-    g.add(plane);
+    plane.position.set(r.x + r.w / 2, y, r.z + r.d / 2);
+    return plane;
+  };
+  for (const r of grass) g.add(flat(r, 0, TEX.grass()));
+  for (const w of edgeWalls(area)) {
+    const length = w.to - w.from;
+    const wall = new Mesh(
+      new PlaneGeometry(length, w.height),
+      new MeshLambertMaterial({ map: repeated(TEX.rock(), length, w.height), side: DoubleSide }),
+    );
+    const mid = (w.from + w.to) / 2;
+    if (w.side === 'n' || w.side === 's') wall.position.set(mid, w.height / 2, w.side === 'n' ? 0 : area.height);
+    else {
+      wall.rotation.y = Math.PI / 2;
+      wall.position.set(w.side === 'w' ? 0 : area.width, w.height / 2, mid);
+    }
+    g.add(wall);
+  }
+  for (const b of beds) {
+    const bed = flat(b, -WATER_DEPTH, TEX.soil());
+    bed.material = new MeshLambertMaterial({ color: WATER.bed });
+    g.add(bed);
+    const alongX = b.w > b.d;
+    for (const side of [0, 1]) {
+      const length = alongX ? b.w : b.d;
+      const wall = new Mesh(
+        new PlaneGeometry(length, WATER_DEPTH),
+        new MeshLambertMaterial({ map: repeated(TEX.soil(), length, WATER_DEPTH), side: DoubleSide }),
+      );
+      if (alongX) wall.position.set(b.x + b.w / 2, -WATER_DEPTH / 2, b.z + side * b.d);
+      else {
+        wall.rotation.y = Math.PI / 2;
+        wall.position.set(b.x + side * b.w, -WATER_DEPTH / 2, b.z + b.d / 2);
+      }
+      g.add(wall);
+    }
   }
   return g;
 }

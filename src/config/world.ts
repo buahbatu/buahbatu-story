@@ -1,7 +1,7 @@
 export const TILE_PX = 16;
 export const HEIGHT_STEP = 1;
 export const WATER_DEPTH = 0.55;
-export const WATER = { surface: -0.14, opacity: 0.62, color: '#5aa6d6', flow: 0.05 } as const;
+export const WATER = { surface: -0.14, opacity: 0.62, color: '#5aa6d6', flow: 0.05, bed: '#4f86b8' } as const;
 export const TERRAIN_LOOK = {
   jitter: 0.02,
   sideShade: 0.8,
@@ -82,6 +82,18 @@ export const ROAD = {
   colors: { line: '#eeeae0', curb: '#c9c4b8', curbDark: '#2f2f33' },
   textureTiles: 4,
 } as const;
+export const WATERFALL = {
+  out: 0.06,
+  lip: 0.35,
+  flow: 1.6,
+  foamRadius: 0.9,
+  puffs: 7,
+  puffSize: 0.22,
+  rings: 3,
+  ringLife: 1.6,
+  opacity: 0.88,
+  colors: { curtain: '#d9f0ff', foam: '#ffffff', mist: '#eef8ff' },
+} as const;
 export const TRAVEL = { fadeMs: 260, holdMs: 450 } as const;
 export const DIALOG = { cps: 40, historySize: 60 } as const;
 export const OCCLUSION = { opacity: 0.3, speed: 5, margin: 0.4, skip: ['room', 'rug', 'stairs', 'exit_door'] } as const;
@@ -93,6 +105,7 @@ export const OBJECT_RULES = {
   door: ['targetArea', 'targetSpawn'],
   edge: ['targetArea', 'targetSpawn'],
   hill: ['height'],
+  waterfall: ['dir'],
   interact: ['action'],
   npc_anchor: ['id'],
   zone: ['name'],

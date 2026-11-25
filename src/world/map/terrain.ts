@@ -1,5 +1,6 @@
 import { ATLAS_INSET, HEIGHT_STEP, TERRAIN_LOOK, WATER } from '../../config/world';
 import { cornerHill, elevation, tileIndex, tileLevel, type AreaData } from './logic';
+import { exitRect, riverExits } from '../water/logic';
 
 export interface TerrainMesh {
   positions: number[];
@@ -133,11 +134,30 @@ export interface WaterMesh {
   indices: number[];
 }
 
-export function buildWater(area: Pick<AreaData, 'width' | 'height' | 'terrain'>): WaterMesh {
+export function buildWater(area: Pick<AreaData, 'width' | 'height' | 'terrain' | 'heights'>, margin = 0): WaterMesh {
   const mesh: WaterMesh = { positions: [], uvs: [], indices: [] };
+  const quad = (x0: number, z0: number, x1: number, z1: number, y: number) => {
+    const base = mesh.positions.length / 3;
+    for (const [cx, cz] of [
+      [x0, z0],
+      [x0, z1],
+      [x1, z1],
+      [x1, z0],
+    ] as const) {
+      mesh.positions.push(cx, y, cz);
+      mesh.uvs.push(cx, -cz);
+    }
+    mesh.indices.push(base, base + 1, base + 2, base, base + 2, base + 3);
+  };
+  if (margin > 0)
+    for (const e of riverExits(area)) {
+      const r = exitRect(e, area, margin);
+      quad(r.x, r.z, r.x + r.w, r.z + r.d, WATER.surface);
+    }
   for (let y = 0; y < area.height; y++)
     for (let x = 0; x < area.width; x++) {
       if (area.terrain[tileIndex(area, x, y)] !== 'water') continue;
+      const surface = (area.heights[tileIndex(area, x, y)] ?? 0) * HEIGHT_STEP + WATER.surface;
       const base = mesh.positions.length / 3;
       for (const [cx, cy] of [
         [x, y],
@@ -145,7 +165,7 @@ export function buildWater(area: Pick<AreaData, 'width' | 'height' | 'terrain'>)
         [x + 1, y + 1],
         [x + 1, y],
       ] as const) {
-        mesh.positions.push(cx, WATER.surface, cy);
+        mesh.positions.push(cx, surface, cy);
         mesh.uvs.push(cx, -cy);
       }
       mesh.indices.push(base, base + 1, base + 2, base, base + 2, base + 3);

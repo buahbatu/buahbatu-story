@@ -109,6 +109,12 @@ describe('tampilan tanah alami (P1-04b)', () => {
     expect(WATER.surface).toBeLessThan(0);
     expect(WATER.surface).toBeGreaterThan(-WATER_DEPTH);
   });
+  it('air di dataran tinggi (sungai antar-ketinggian) ikut naik sesuai tingkatnya', () => {
+    const water = buildWater(area(['water', 'water'], [2, 0]));
+    const ys = water.positions.filter((_, i) => i % 3 === 1);
+    expect(ys.slice(0, 4).every((y) => Math.abs(y - (2 * HEIGHT_STEP + WATER.surface)) < 1e-9)).toBe(true);
+    expect(ys.slice(4).every((y) => y === WATER.surface)).toBe(true);
+  });
   it('rumput 3D hanya di petak rumput, tidak di petak terhalang, & deterministik', () => {
     const a = area(['grass', 'dirt', 'grass_flowers', 'water'], [0, 0, 0, 0]);
     const tufts = scatterTufts(a, () => false, 1);

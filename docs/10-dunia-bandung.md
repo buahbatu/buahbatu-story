@@ -105,6 +105,7 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | `interact` | `action` (misal `shop:seed_shop`, `bed`, `shipping_bin`, `board`) |
 | `npc_anchor` | `id` (titik referensi jadwal NPC) |
 | `zone` | `name` (misal `fishing:river`, `music:cafe`) |
+| `waterfall` | `dir` (`n`/`s`/`e`/`w`, arah aliran). **P1-13**: kotak di tepi tebing; wajib ada petak air di atas & di bawah, dan air di atas lebih tinggi (dites `tests/maps.test.ts`). Digambar tirai air bertekstur mengalir + bibir melengkung, buih menggelembung, riak & kabut di kaki air terjun (`WATERFALL`, `src/world/water/`) |
 | `road` | — (area yang bisa dilewati kendaraan). **P1-14**: kotak jalan digambar sebagai lapisan 3D: aspal bertekstur (abu hangat, butiran, retak, tambalan, noda oli; `TEX.asphalt` 4×4 petak), marka **garis tengah putus-putus** + **garis tepi**, dan **kanstin** belang hitam-putih di kedua sisi panjang (`ROAD` di `config/world.ts`, logika `src/world/road/logic.ts`). Opsional: `markings` (bawaan `true`), `curb` (bawaan `true`), `sidewalk` (lebar trotoar dalam petak). Jalan yang menyentuh tepi peta **diteruskan ke luar peta** sejauh `WORLD_SKIRT` bersama marka, kanstin & trotoarnya, jadi dunia tidak terasa buntu |
 | `bus_stop` | `stopId` |
 | `prop` | `model` ∈ `PROP_MODELS` (lihat tabel prop di bawah); opsional `rotation` (derajat) |
@@ -155,6 +156,12 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | Buahbatu ⭐ | Akustik hangat (tema Michelle) | Kompleks rumah, anak main, tukang jualan lewat | Lampu teras sore, wangi jajanan malam |
 | Gedung Sate | Orkestra ringan | Burung merpati | Festival |
 | Alun-alun | Angklung modern | Anak-anak main | Jajanan malam |
+
+## Air Antar-Ketinggian (P1-13)
+- Permukaan air mengikuti tingkat petaknya (`waterSurface`): sungai bisa mengalir di dataran tinggi lalu jatuh lewat objek `waterfall` ke kolam di bawah. Pemain bisa mengarungi sungai dangkal di atas, tapi tidak bisa ikut jatuh lewat tebing.
+- **Sungai tidak boleh buntu** (keputusan user): air setinggi tanah dasar yang menyentuh tepi peta diteruskan ke luar peta sebagai alur sungai (dasar biru + tebing tanah) sejauh `WORLD_SKIRT`, sampai hilang di kabut; sungai dari dataran tinggi di tepi peta tampil sebagai mata air. Nanti di dunia pulau, sungai antar-area menyambung & bermuara ke laut.
+- Petak tinggi di tepi peta diberi dinding batu di sisi luarnya supaya tidak tembus ke langit.
+- Lembang: **curug dua tingkat** (dataran 2 → 1 → kolam di samping Toko Bibit), sungainya mengalir ke barat keluar peta; zona `fishing:curug`.
 
 ## Kontur Tanah (P1-12, ADR-026)
 - **Campuran**: undakan/tebing (`Height`) + bukit & lembah landai (objek `hill`). Tinggi lereng dihitung per **sudut petak** (`hillGrid`, cache per area) lalu diinterpolasi persis mengikuti 2 segitiga mesh (`elevation`), jadi kolisi, tinggi pemain, prop, rumput, & overlay debug ikut lereng tanpa celah.
