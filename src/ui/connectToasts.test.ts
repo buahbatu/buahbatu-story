@@ -29,6 +29,8 @@ function setup() {
     dialogLogOpen: false,
     fade: false,
     touch: false,
+    debug: null,
+    debugLayers: { collision: true, grid: true },
   });
   connectToasts(bus, store, clock);
   return { bus, store, advance };

@@ -12,6 +12,7 @@ export default defineConfig({
   plugins: [preact()],
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
+    __DEBUG_ALLOWED__: JSON.stringify(process.env.VERCEL_ENV !== 'production'),
   },
   build: {
     target: 'es2022',

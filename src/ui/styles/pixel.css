@@ -505,3 +505,40 @@
   font-size: var(--text-s);
   margin-top: calc(var(--px) * 2);
 }
+
+.debug-panel {
+  position: absolute;
+  top: calc(var(--px) * 6);
+  right: calc(var(--px) * 6);
+  padding: calc(var(--px) * 4) calc(var(--px) * 6);
+  background: rgb(20 16 32 / 0.78);
+  color: #e8f0ff;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: calc(var(--px) * 7);
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.debug-fps {
+  color: #9dff8a;
+  font-weight: 700;
+}
+
+.debug-toggles {
+  display: flex;
+  gap: calc(var(--px) * 4);
+  margin-top: calc(var(--px) * 3);
+}
+
+.debug-toggles button {
+  font: inherit;
+  color: #e8f0ff;
+  background: transparent;
+  border: calc(var(--px) * 1) solid #6a7390;
+  padding: calc(var(--px) * 1) calc(var(--px) * 4);
+}
+
+.debug-toggles button.on {
+  background: #3a5fbf;
+  border-color: #9db6ff;
+}

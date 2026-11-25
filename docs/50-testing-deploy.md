@@ -102,6 +102,8 @@ Diukur otomatis oleh `e2e/perf.spec.ts` (CPU throttling ×4 untuk meniru HP), la
 ## 7. Mode Debug
 URL `?debug=1` mengaktifkan: overlay FPS, collision, grid, tombol cheat (tambah uang, majukan hari, ganti musim/cuaca, unlock tahap). **Dinonaktifkan** di build produksi kecuali untuk akun A (dev).
 
+**Status (P1-11):** panel kanan atas (FPS & ms rata-rata 0,5 dtk, draw call, segitiga, area, posisi, petak, tinggi; diperbarui 4×/dtk) + overlay 3D yang bisa dinyalakan/dimatikan: **Grid** (garis putih per petak mengikuti tinggi tanah) dan **Kolisi** (kotak tabrakan merah, tepi tebing oranye, tangga kuning, petak air dalam biru, kotak badan pemain kuning). Aktif di dev, build test, & Vercel **Preview**; build **Production** dikunci lewat `__DEBUG_ALLOWED__` (`VERCEL_ENV !== 'production'`, `vite.config.ts`). Pengecualian akun A & tombol cheat menyusul setelah ada login/sistem waktu. Kode: logika murni `src/debug/logic.ts`, overlay `src/debug/overlay.ts`, panel `src/ui/debug/DebugPanel.tsx`, angka `DEBUG` (`config/world.ts`). Hook tes: `__BB__.debug()`.
+
 ## 8. CI & Deploy
 Otomatis penuh, lihat **`51-otomasi-akun-env.md` §6**. Ringkasnya:
 - Push → GitHub Actions menjalankan `verify`.

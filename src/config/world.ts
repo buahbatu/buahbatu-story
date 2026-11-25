@@ -251,3 +251,11 @@ export const AREA_IDS = [
   'kandang_sapi',
   'warung_buahbatu',
 ] as const;
+export const DEBUG = {
+  fpsWindow: 0.5,
+  panelHz: 4,
+  lift: 0.03,
+  boxHeight: 1.2,
+  colors: { grid: '#ffffff', collision: '#ff4a4a', cliff: '#ffa030', deep: '#3a7dff', body: '#ffe14a' },
+  gridOpacity: 0.35,
+} as const;

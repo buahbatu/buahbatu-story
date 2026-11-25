@@ -15,7 +15,7 @@ import {
 } from 'three';
 import { PLAYER } from '../config/balance';
 import { PALETTE } from '../config/palette';
-import { DEFAULT_AREA, INTERACTION, TRAVEL, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
+import { DEBUG, DEFAULT_AREA, INTERACTION, TRAVEL, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { OcclusionFader } from '../world/occlusion';
 import { WaterFx } from '../world/waterFx';
 import { doorById, edgeAt, enteredEdge } from '../world/travel/logic';
@@ -35,6 +35,8 @@ import { buildArea, disposeTree, preloadArea } from '../world/build';
 import { addEnvironment, aimSun } from '../world/environment';
 import { bodyBlocked, parseArea, standHeight, walkLevel, waterAt, type AreaData } from '../world/map/logic';
 import { SCENE } from './keys';
+import { DebugOverlay } from '../debug/overlay';
+import { FpsMeter } from '../debug/logic';
 
 const OCCLUSION_POINTS = [0.8, 1.5] as const;
 export interface InteractionEvent {
@@ -78,6 +80,7 @@ export class WorldScene implements GameScene {
   private insideEdge: number | null = null;
   private rig: CameraRig = NEUTRAL;
   private nearby: Interactable | null = null;
+  private debug: { overlay: DebugOverlay; meter: FpsMeter; publishIn: number } | null = null;
   readonly dialog = new DialogController(bookOf(dialogFiles()));
   private done: InteractionEvent[] = [];
   private look = APPEARANCE.A;
@@ -152,6 +155,7 @@ export class WorldScene implements GameScene {
     this.water?.offset.set(time * WATER.flow, time * WATER.flow * 0.6);
     const { area, player, engine } = this;
     if (!area || !player || !engine) return;
+    this.updateDebug(dt, area, player, engine);
     const talking = this.dialog.open;
     this.dialog.update(dt, engine.input);
     const raw = talking ? { x: 0, y: 0 } : rotateVec(engine.input.move(), this.rig.yaw);
@@ -182,6 +186,40 @@ export class WorldScene implements GameScene {
       zoom: g.zoom + key * WORLD_CAMERA.keyZoom * dt,
       pan: { x: g.panX, y: g.panY },
       twist: g.twist,
+    });
+  }
+
+  enableDebug(): void {
+    if (this.debug) return;
+    const overlay = new DebugOverlay();
+    this.debug = { overlay, meter: new FpsMeter(DEBUG.fpsWindow), publishIn: 0 };
+    this.world.scene.add(overlay.root);
+    if (this.area) overlay.build(this.area);
+  }
+
+  debugState(): ReturnType<DebugOverlay['state']> | null {
+    return this.debug?.overlay.state() ?? null;
+  }
+
+  private updateDebug(dt: number, area: AreaData, player: PlayerMotion, engine: Engine): void {
+    const d = this.debug;
+    if (!d) return;
+    d.meter.push(dt);
+    d.overlay.update(area, player, uiStore.get().debugLayers);
+    d.publishIn -= dt;
+    if (d.publishIn > 0) return;
+    d.publishIn = 1 / DEBUG.panelHz;
+    const { render } = engine.renderer.info;
+    uiStore.set({
+      debug: {
+        ...d.meter.read(),
+        calls: render.calls,
+        triangles: render.triangles,
+        area: area.id,
+        x: Math.round(player.x * 100) / 100,
+        y: Math.round(player.y * 100) / 100,
+        height: Math.round(standHeight(area, player.x, player.y) * 100) / 100,
+      },
     });
   }
 
@@ -245,6 +283,7 @@ export class WorldScene implements GameScene {
     this.water = water instanceof Mesh && water.material instanceof MeshLambertMaterial ? water.material.map : null;
     this.world.scene.add(this.root);
     this.area = area;
+    this.debug?.overlay.build(area);
     this.applySettings(area);
   }
 

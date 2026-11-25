@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 19 | 20 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 19 | 23 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +37,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **34** | **193** | |
+| **Total** | | | **34** | **196** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -112,7 +112,10 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-08** Kotak dialog Preact (typewriter, pilihan, potret placeholder, log) · Ref: 40, 18 · ✅ 2026-11-25 · bingkai ornamen, teks mengetik, pilihan (keyboard/angka/klik), riwayat L, papan Kebun Warga bisa dibaca
 - [x] **P1-09** Transisi area (pintu & tepi peta) + fade + spawn point · Ref: 10 · ✅ 2026-11-25 · pintu (E) & tepi (otomatis) + fade, area belum ada → pesan ramah, index.json peta
 - [x] **P1-10** Kontrol sentuh: joystick virtual + tombol aksi (deteksi portrait + layar penuh HP sudah dikerjakan lebih awal, ADR-020) · Ref: 40 · ✅ 2026-11-25 · joystick melayang analog (penuh = lari), tombol A/B/Lompat, prompt "A", sembunyi saat dialog
-- [ ] **P1-11** Mode debug `?debug=1` (FPS, collision, grid) · Ref: 50
+- [ ] **P1-10b** Redesain kontrol sentuh (masukan user 2026-11-25: desain jelek): gaya **modern transparan** (lingkaran gelap tembus pandang, garis putih tipis, ikon), joystick **tetap di tempat** & lebih besar, tidak mepet tepi (safe area), tombol ikon: Aksi (besar), Lompat, Lari (tahan), Alat; **pindah otomatis**: HP/tablet/iPad tampil, desktop tidak, laptop sentuh/iPad+keyboard ikut input terakhir · Ref: 40
+- [~] **P1-11** Mode debug `?debug=1` (FPS, collision, grid) · Ref: 50 · 🚧 2026-11-25
+- [ ] **P1-12** Kontur tanah **campuran** (keputusan user 2026-11-25): lereng landai halus untuk bukit/lembah + undakan/tebing bertingkat; kolisi & tinggi pemain mengikuti lereng, petak ladang tetap datar · Ref: 10
+- [ ] **P1-13** Air terjun & sungai antar-ketinggian: air jatuh dari tebing ke kolam, percikan & riak, (suara gemericik menyusul sistem audio) · Ref: 10, 42
 
 **Kriteria selesai P1:** bisa jalan di Lembang, masuk/keluar kos, ngobrol dengan papan (dialog), main di HP & laptop.
 
@@ -378,5 +381,3 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - *(teknis, dari P0-08)* Teks Phaser pakai **BitmapText** (font pixel di-bake jadi atlas) supaya tepi huruf 100% tajam; `fillText` canvas masih memberi antialias 1 px di tepi glyph. Cocok digarap bareng pipeline aset P1-01.
 - *(dari user, dikerjakan bareng P5-04)* Layar judul beranimasi: huruf judul bergelombang pelan, subtitle muncul pelan, awan/parallax & kilau stroberi; hormati `prefers-reduced-motion`.
 - *(dari user, 2026-11-24)* **Warga figuran ala GTA**: orang-orang tanpa nama yang jalan kaki, nongkrong, naik motor/angkot di kota (Braga, Alun-alun, Dago) supaya Bandung terasa ramai; beda dari NPC bernama di `18` (P8). Bisa disapa singkat, tanpa hubungan/quest. Perlu dibahas: kepadatan per area & jam, sinkron 2 pemain (cukup deterministik dari seed, tidak dikirim lewat jaringan), batas performa HP. Kandidat fase: P12 (kendaraan & peta Bandung).
-- *(dari user, 2026-11-25)* **Kontur tanah tidak rata**: peta jangan datar per level; pakai bukit, lembah, lereng landai (bukan hanya undakan + tangga), terutama Lembang/Dago/Ciwidey. Perlu dibahas: lereng halus per-vertex vs. undakan bertingkat lebih banyak, dampak ke kolisi (`maxStep`) & ladang (tanah tani tetap datar).
-- *(dari user, 2026-11-25)* **Air terjun & tempat alam**: air terjun (mis. Curug Dago/Curug Maribaya ala game), sungai mengalir antar ketinggian, kolam di bawah tebing; efek percikan & suara gemericik. Nyambung dengan ide kontur tanah dan sistem air P1-05b.

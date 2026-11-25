@@ -7,6 +7,7 @@ import { InteractPrompt } from './hud/InteractPrompt';
 import { FadeOverlay } from './components/FadeOverlay';
 import { DialogBox, DialogLog } from './dialog/DialogBox';
 import { TouchControls } from './touch/TouchControls';
+import { DebugPanel } from './debug/DebugPanel';
 import { VersionBadge } from './components/VersionBadge';
 import { uiStore } from './uiState';
 import { useStore } from './useStore';
@@ -27,6 +28,7 @@ export function App() {
       {scene === SCENE.world && <DialogBox />}
       {scene === SCENE.world && <DialogLog />}
       {scene === SCENE.world && <FadeOverlay />}
+      {scene === SCENE.world && <DebugPanel />}
       <ToastHost />
     </div>
   );

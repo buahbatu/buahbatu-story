@@ -14,6 +14,19 @@ export interface UiState {
   dialogLogOpen: boolean;
   fade: boolean;
   touch: boolean;
+  debug: DebugInfo | null;
+  debugLayers: { collision: boolean; grid: boolean };
+}
+
+export interface DebugInfo {
+  fps: number;
+  ms: number;
+  calls: number;
+  triangles: number;
+  area: string;
+  x: number;
+  y: number;
+  height: number;
 }
 
 export interface DialogView {
@@ -43,6 +56,8 @@ export const uiStore = createStore<UiState>({
   dialogLogOpen: false,
   fade: false,
   touch: false,
+  debug: null,
+  debugLayers: { collision: true, grid: true },
 });
 
 export function setActiveScene(scene: SceneKey): void {

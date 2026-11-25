@@ -26,6 +26,10 @@ export interface TestApi {
   clock(): number;
   occluding(): string[];
   travel(): { travelling: boolean; trips: number };
+  debug(): {
+    overlay: { grid: number; boxes: number; cliffs: number; deep: number; gridVisible: boolean; collisionVisible: boolean } | null;
+    info: { fps: number; ms: number; calls: number; triangles: number; area: string; x: number; y: number; height: number } | null;
+  };
   dialog(): { open: boolean; dialogId: string | null; line: number; done: number };
   prompt(): { key: string; text: string; x: number; y: number } | null;
   interactions(): { id: number; kind: string; action: string; area: string }[];

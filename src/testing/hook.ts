@@ -78,6 +78,7 @@ function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
     prompt: () => uiStore.get().prompt,
     dialog: () => world.dialog.snapshot(),
     travel: () => world.travelState(),
+    debug: () => ({ overlay: world.debugState(), info: uiStore.get().debug }),
     interactions: () => [...world.interactions()],
     setCamera(change) {
       world.setCamera(change);

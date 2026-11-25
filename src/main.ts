@@ -8,6 +8,7 @@ import { SCENE, createScenes } from './scenes';
 import { mountUi } from './ui';
 import { installTouchFullscreen } from './ui/fullscreen';
 import { connectTouch } from './ui/touch/bridge';
+import { debugRequested } from './debug/logic';
 
 const createdAt = new Date().toISOString();
 const runtime = GameRuntime.create({ householdId: 'local', seed: hashSeed(createdAt), createdAt });
@@ -23,6 +24,7 @@ connectTouch(input);
 world.notify = (key) => {
   runtime.bus.emit({ type: 'ui/toast', key });
 };
+if (debugRequested(location.search, __DEBUG_ALLOWED__)) world.enableDebug();
 const engine = new Engine(gameRoot, scenes, currentView(), input);
 installViewScaling(engine);
 installTouchFullscreen();
