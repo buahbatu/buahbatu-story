@@ -1,4 +1,4 @@
-import { HEIGHT_STEP, MAP_LAYERS, OBJECT_RULES, TILE_PX, WATER_DEPTH } from '../../config/world';
+import { HEIGHT_STEP, HILL, MAP_LAYERS, OBJECT_RULES, TILE_PX, WATER_DEPTH } from '../../config/world';
 import { tiledMapSchema, type PropertyValue, type TiledMap, type TiledObject } from './schema';
 
 export type ObjectKind = keyof typeof OBJECT_RULES;
@@ -125,11 +125,57 @@ export function parseArea(id: string, input: unknown): ParseResult {
 
 export const tileIndex = (area: Pick<AreaData, 'width'>, x: number, y: number): number => y * area.width + x;
 
-export function elevation(area: Pick<AreaData, 'width' | 'height' | 'heights' | 'terrain'>, x: number, y: number): number {
+type Surface = Pick<AreaData, 'width' | 'height' | 'heights' | 'terrain' | 'objects'>;
+
+export function tileLevel(area: Pick<AreaData, 'width' | 'height' | 'heights' | 'terrain'>, tx: number, ty: number): number {
+  const i = tileIndex(area, Math.min(area.width - 1, Math.max(0, tx)), Math.min(area.height - 1, Math.max(0, ty)));
+  return (area.heights[i] ?? 0) * HEIGHT_STEP - (area.terrain[i] === 'water' ? WATER_DEPTH : 0);
+}
+
+export function hillShape(d: number, flat: number): number {
+  if (d >= 1) return 0;
+  const t = d <= flat ? 1 : (1 - d) / (1 - flat);
+  return t * t * (3 - 2 * t);
+}
+
+const hillCache = new WeakMap<object, Float32Array>();
+
+export function hillGrid(area: Surface): Float32Array {
+  const cached = hillCache.get(area);
+  if (cached) return cached;
+  const W = area.width + 1;
+  const grid = new Float32Array(W * (area.height + 1));
+  for (const o of area.objects) {
+    if (o.kind !== 'hill' || o.w <= 0 || o.h <= 0) continue;
+    const height = Number(o.props.height);
+    const flat = Number(o.props.flat ?? HILL.flat);
+    const [cx, cy, rx, ry] = [o.x + o.w / 2, o.y + o.h / 2, o.w / 2, o.h / 2];
+    for (let y = Math.max(0, Math.floor(o.y)); y <= Math.min(area.height, Math.ceil(o.y + o.h)); y++)
+      for (let x = Math.max(0, Math.floor(o.x)); x <= Math.min(area.width, Math.ceil(o.x + o.w)); x++) {
+        const d = Math.hypot((x - cx) / rx, (y - cy) / ry);
+        grid[y * W + x] = (grid[y * W + x] ?? 0) + height * hillShape(d, flat);
+      }
+  }
+  hillCache.set(area, grid);
+  return grid;
+}
+
+export const cornerHill = (area: Surface, cx: number, cy: number): number => hillGrid(area)[cy * (area.width + 1) + cx] ?? 0;
+
+export function hillAt(area: Surface, x: number, y: number): number {
   const tx = Math.min(area.width - 1, Math.max(0, Math.floor(x)));
   const ty = Math.min(area.height - 1, Math.max(0, Math.floor(y)));
-  const i = tileIndex(area, tx, ty);
-  return (area.heights[i] ?? 0) * HEIGHT_STEP - (area.terrain[i] === 'water' ? WATER_DEPTH : 0);
+  const u = Math.min(1, Math.max(0, x - tx));
+  const v = Math.min(1, Math.max(0, y - ty));
+  const a = cornerHill(area, tx, ty);
+  const b = cornerHill(area, tx, ty + 1);
+  const c = cornerHill(area, tx + 1, ty + 1);
+  const d = cornerHill(area, tx + 1, ty);
+  return v >= u ? a + (c - b) * u + (b - a) * v : a + (d - a) * u + (c - d) * v;
+}
+
+export function elevation(area: Surface, x: number, y: number): number {
+  return tileLevel(area, Math.floor(x), Math.floor(y)) + hillAt(area, x, y);
 }
 
 export function isBlocked(area: AreaData, x: number, y: number): boolean {

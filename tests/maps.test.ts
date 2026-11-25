@@ -1,10 +1,10 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { AREA_IDS, PROP_MODELS } from '../src/config/world';
+import { AREA_IDS, HILL, PROP_MODELS } from '../src/config/world';
 import { isI18nKey } from '../src/content/i18n';
 import { PLAYER } from '../src/config/balance';
-import { bodyBlocked, parseArea, walkLevel, type AreaData } from '../src/world/map/logic';
+import { bodyBlocked, cornerHill, parseArea, tileIndex, walkLevel, type AreaData } from '../src/world/map/logic';
 import { DEFAULT_BUILDING } from '../src/world/props/buildings';
 import { TEXT_PROPS } from '../src/world/props/registry';
 
@@ -53,6 +53,38 @@ describe('peta di public/assets/maps (docs/10 §6)', () => {
       if (!area) return;
       const stuck = Object.entries(area.spawns).filter(([, p]) => bodyBlocked(area, p.x, p.y, walkLevel(area, p.x, p.y), PLAYER));
       expect(stuck.map(([k]) => k)).toEqual([]);
+    });
+    it('kontur: ladang, air, bangunan & tepi peta tetap datar; lereng tidak terlalu curam', () => {
+      if (!area) return;
+      const h = (x: number, y: number) => cornerHill(area, x, y);
+      const spread = (x0: number, y0: number, x1: number, y1: number) => {
+        const v: number[] = [];
+        for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) v.push(h(x, y));
+        return Math.max(...v) - Math.min(...v);
+      };
+      const bad: string[] = [];
+      for (let y = 0; y < area.height; y++)
+        for (let x = 0; x < area.width; x++) {
+          const i = tileIndex(area, x, y);
+          if (area.farmable[i] && spread(x, y, x + 1, y + 1) > HILL.flatTolerance) bad.push(`ladang ${x},${y}`);
+          if (
+            area.terrain[i] === 'water' &&
+            Math.max(...[h(x, y), h(x + 1, y), h(x, y + 1), h(x + 1, y + 1)].map(Math.abs)) > HILL.flatTolerance
+          )
+            bad.push(`air ${x},${y}`);
+        }
+      for (let x = 0; x <= area.width; x++)
+        for (const y of [0, area.height]) if (Math.abs(h(x, y)) > HILL.flatTolerance) bad.push(`tepi ${x},${y}`);
+      for (let y = 0; y <= area.height; y++)
+        for (const x of [0, area.width]) if (Math.abs(h(x, y)) > HILL.flatTolerance) bad.push(`tepi ${x},${y}`);
+      for (const c of area.collisions.filter((r) => r.w >= HILL.solidMin && r.h >= HILL.solidMin))
+        if (spread(Math.floor(c.x), Math.floor(c.y), Math.ceil(c.x + c.w), Math.ceil(c.y + c.h)) > HILL.flatTolerance)
+          bad.push(`bangunan ${c.x},${c.y}`);
+      for (let y = 0; y <= area.height; y++)
+        for (let x = 0; x < area.width; x++) if (Math.abs(h(x + 1, y) - h(x, y)) > HILL.maxGrade) bad.push(`curam ${x},${y}`);
+      for (let y = 0; y < area.height; y++)
+        for (let x = 0; x <= area.width; x++) if (Math.abs(h(x, y + 1) - h(x, y)) > HILL.maxGrade) bad.push(`curam ${x},${y}`);
+      expect(bad).toEqual([]);
     });
     it('properti bangunan dikenal kit (tanpa salah ketik)', () => {
       const known = new Set(['model', 'rotation', ...Object.keys(DEFAULT_BUILDING)]);

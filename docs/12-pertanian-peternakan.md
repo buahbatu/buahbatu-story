@@ -116,5 +116,6 @@ Contoh skema:
 
 ## 7. Peliharaan
 - Kucing atau anjing (pilih di awal tahun 1; bisa disamakan dengan peliharaan asli kalian).
+- **Rumah penuh kucing (ADR-028)**: boleh punya banyak kucing. **Beli** di pet shop → langsung beri nama. **Kucing kampung** bisa didekati & dibawa pulang; namanya baru bisa diberikan setelah **meter Nyaman** penuh (beberapa hari diberi makan, dielus, punya tempat tidur). Kucing suka ikan hasil mancing (`20`).
 - Dielus setiap hari → hati naik → peliharaan kadang membawa "hadiah" kecil.
 - Setelah menikah, peliharaan ikut pindah ke rumah bersama.

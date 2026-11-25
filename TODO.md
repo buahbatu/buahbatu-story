@@ -21,7 +21,7 @@
 | Fase | Nama | Versi | Selesai | Total | Status |
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
-| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 21 | 23 | 🟡 |
+| P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 21 | 25 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -37,7 +37,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 10 | ⬜ |
-| **Total** | | | **36** | **196** | |
+| **Total** | | | **36** | **198** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -114,8 +114,10 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [x] **P1-10** Kontrol sentuh: joystick virtual + tombol aksi (deteksi portrait + layar penuh HP sudah dikerjakan lebih awal, ADR-020) · Ref: 40 · ✅ 2026-11-25 · joystick melayang analog (penuh = lari), tombol A/B/Lompat, prompt "A", sembunyi saat dialog
 - [x] **P1-10b** Redesain kontrol sentuh (masukan user 2026-11-25: desain jelek): gaya **modern transparan** (lingkaran gelap tembus pandang, garis putih tipis, ikon), joystick **tetap di tempat** & lebih besar, tidak mepet tepi (safe area), tombol ikon: Aksi (besar), Lompat, Lari (tahan), Alat; **pindah otomatis**: HP/tablet/iPad tampil, desktop tidak, laptop sentuh/iPad+keyboard ikut input terakhir · Ref: 40 · ✅ 2026-11-25 · gaya kaca transparan + ikon, joystick tetap, tombol Aksi/Lompat/Lari/Alat, tampil otomatis sentuh ↔ keyboard/mouse
 - [x] **P1-11** Mode debug `?debug=1` (FPS, collision, grid) · Ref: 50 · ✅ 2026-11-25 · panel FPS/draw call/posisi + overlay Grid & Kolisi (bisa dimatikan), terkunci di Production
-- [ ] **P1-12** Kontur tanah **campuran** (keputusan user 2026-11-25): lereng landai halus untuk bukit/lembah + undakan/tebing bertingkat; kolisi & tinggi pemain mengikuti lereng, petak ladang tetap datar · Ref: 10
+- [~] **P1-12** Kontur tanah **campuran** (keputusan user 2026-11-25): lereng landai halus untuk bukit/lembah + undakan/tebing bertingkat; kolisi & tinggi pemain mengikuti lereng, petak ladang tetap datar · Ref: 10 · 🚧 2026-11-25
 - [ ] **P1-13** Air terjun & sungai antar-ketinggian: air jatuh dari tebing ke kolam, percikan & riak, (suara gemericik menyusul sistem audio) · Ref: 10, 42
+- [ ] **P1-14** Jalan aspal bertekstur (masukan user 2026-11-25: jalan tampak hitam/biru polos): aspal abu hangat dengan butiran, retak & tambalan, **marka** (garis tengah putus-putus, garis tepi), trotoar + kanstin; rapikan pita kebiruan di luar batas peta Buahbatu · Ref: 42, 10
+- [ ] **P1-09b** Transisi & interior lebih jelas (masukan user 2026-11-25): layar transisi menampilkan nama tempat + animasi loading (bukan biru tua polos); **preload peta tetangga** supaya pindah area hampir instan; di dalam ruangan **pintu keluar mudah ditemukan** (kusen + keset + penanda panah bercahaya) & dinding depan tampil rendah supaya batas ruangan terbaca · Ref: 10, 40
 
 **Kriteria selesai P1:** bisa jalan di Lembang, masuk/keluar kos, ngobrol dengan papan (dialog), main di HP & laptop.
 
@@ -148,6 +150,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [ ] **P3-09** Pupuk & crafting dasar (meja kerja, penyiram otomatis) · Ref: 12, 20
 - [ ] **P3-10** Ternak: kandang ayam & sapi, makan, elus, hati, produk + test · Ref: 12
 - [ ] **P3-11** Peliharaan (kucing/anjing; termasuk kucing Michelle **Luna** putih & **Ngkok** putih-abu, `docs/43`) + mesin olahan dasar (selai, yogurt) · Ref: 12
+- [ ] **P3-11b** **Rumah penuh kucing** (keputusan user 2026-11-25): bisa punya **banyak kucing**; **beli** di pet shop → langsung diberi nama; **bawa pulang kucing kampung** (diberi makan/didekati beberapa hari) → nama baru bisa diberikan setelah **meter Nyaman** penuh (betah di rumah); kucing bisa diberi ikan (P10-01), dielus, tidur di rumah · Ref: 12
 
 **Kriteria selesai P3:** loop tanam → siram → panen → kirim → dapat uang berjalan selama 1 musim penuh.
 
@@ -229,11 +232,11 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - [ ] **P8-06** Pertemanan NPC + hadiah (loved..hated) + ultah NPC · Ref: 18
 - [ ] **P8-07** Quest engine (objectives via event, rewards, state machine) + test · Ref: 19
 - [ ] **P8-08** Quest harian + papan warga Alun-alun · Ref: 19
-- [ ] **P8-09** Cutscene engine (script JSON, sinkron host) · Ref: 19
+- [ ] **P8-09** Cutscene engine (script JSON, sinkron host); **keputusan user 2026-11-25: cutscene TIDAK bisa di-skip** saat bermain (input dikunci, letterbox), termasuk **intro pembuka** & adegan **walkthrough** di momen pertama penting (bertani, ke kota, dll.); tonton ulang dari Album boleh ditutup kapan saja → perbarui docs/19 §4 (aturan skip lama) + ADR · Ref: 19
 - [ ] **P8-10** 10 NPC pertama dengan jadwal & dialog (termasuk Mamah & Papah Michelle) · Ref: 18
 - [ ] **P8-11** Isi kuesioner personal + `personal/` + fallback `personal.example` · Ref: 43
 - [ ] **P8-12** Bab 1 "Pendatang Baru" · Ref: 19
-- [ ] **P8-13** Bab 2 "Kebetulan yang Disengaja" (cutscene ketemu, co-op) · Ref: 19, 16
+- [ ] **P8-13** Bab 2 "Kebetulan yang Disengaja" (cutscene ketemu, co-op); adaptasi kisah asli: kenal lewat **siaran langsung di app HP** → komentar → ketemu langsung (detail privat di `personal/`) · Ref: 19, 16
 - [ ] **P8-14** Bab 3 "Ngopi di Braga" · Ref: 19
 
 **Kriteria selesai P8:** kota terasa hidup, ada cerita yang bisa diikuti sampai Bab 3. 🎉 **Rilis v0.5**
@@ -259,7 +262,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 ---
 
 ## P10 · Aktivitas
-- [ ] **P10-01** Mancing: minigame + `fish.json` (≥ 30) + test seleksi ikan · Ref: 20
+- [ ] **P10-01** Mancing: minigame + `fish.json` (≥ 30) + test seleksi ikan; ikan bisa **dijual, dimasak, dihadiahkan ke pasangan, atau diberi ke kucing** (masukan user 2026-11-25) · Ref: 20
 - [ ] **P10-02** Masak: dapur, resep Sunda (≥ 20 awal), buff, masak berdua · Ref: 20
 - [ ] **P10-03** Crafting lengkap (kategori, resep terbuka via skill) · Ref: 20
 - [ ] **P10-04** Mode foto (pose, filter, bingkai) + simpan album + sinkron Storage · Ref: 20
@@ -325,7 +328,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 ---
 
 ## P14 · Keluarga & Anak
-- [ ] **P14-01** Keputusan punya anak / adopsi (persetujuan berdua) · Ref: 17
+- [ ] **P14-01** Keputusan punya anak / adopsi (persetujuan berdua); **opsional sepenuhnya** (ADR-028): tanpa desakan NPC/quest, jalur tanpa anak sama lengkap & bahagia (rumah penuh kucing, kebun, jalan-jalan berdua) · Ref: 17
 - [ ] **P14-02** Masa penantian + quest persiapan + cutscene kelahiran · Ref: 17
 - [ ] **P14-03** Bayi: kebutuhan, perawatan, babysitter · Ref: 17
 - [ ] **P14-04** Tumbuh kembang (bayi → balita → anak → remaja) + test · Ref: 17
@@ -381,3 +384,5 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 - *(teknis, dari P0-08)* Teks Phaser pakai **BitmapText** (font pixel di-bake jadi atlas) supaya tepi huruf 100% tajam; `fillText` canvas masih memberi antialias 1 px di tepi glyph. Cocok digarap bareng pipeline aset P1-01.
 - *(dari user, dikerjakan bareng P5-04)* Layar judul beranimasi: huruf judul bergelombang pelan, subtitle muncul pelan, awan/parallax & kilau stroberi; hormati `prefers-reduced-motion`.
 - *(dari user, 2026-11-24)* **Warga figuran ala GTA**: orang-orang tanpa nama yang jalan kaki, nongkrong, naik motor/angkot di kota (Braga, Alun-alun, Dago) supaya Bandung terasa ramai; beda dari NPC bernama di `18` (P8). Bisa disapa singkat, tanpa hubungan/quest. Perlu dibahas: kepadatan per area & jam, sinkron 2 pemain (cukup deterministik dari seed, tidak dikirim lewat jaringan), batas performa HP. Kandidat fase: P12 (kendaraan & peta Bandung).
+- *(dari user, 2026-11-25)* **Dunia luar menyambung tanpa loading (open world)**: area luar jadi satu dunia ber-*chunk* yang dimuat/dibuang otomatis sambil berjalan; interior tetap transisi. Alasan user: daerah terpotong loading bikin 2 pemain di tempat berbeda terasa sepi; dunia menyambung = bisa saling menyusul/papasan. Konsep user: **dunia pulau tanpa ujung jalan** (seperti GTA / game farming klasik), batas dunia = pantai & laut, bukan tembok/ujung peta. Keputusan arsitektur besar (pipeline peta, kamera, sinkron 2 pemain beda chunk, performa HP, jarak Bandung dipadatkan) → **putuskan + ADR sebelum peta luar berikutnya dibuat** (bukan menunggu P12).
+- *(dari user, 2026-11-25)* **Duduk di kursi/bangku** (taman, kafe, rumah): interaksi "Duduk" + animasi duduk, 2 pemain bisa duduk bersebelahan, kamera mendekat; cocok untuk momen berdua.

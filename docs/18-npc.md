@@ -34,9 +34,10 @@
 | `npc_friend_*` | (teman asli) | Teman kalian | Sesuai isi |
 
 > Nama, sifat, dan kebiasaan keluarga Michelle diisi dari kuesioner (`43`). Mintalah persetujuan Michelle sebelum memasukkan keluarganya.
+> Orang tua Michelle ditampilkan **sesuai data personal** (boleh tinggal di rumah berbeda, ADR-028); keduanya tetap hangat & hadir, restu datang dari keduanya.
 > Orang tua Michelle punya **meter "Restu"** khusus (0–10 hati) untuk Pemain A, naik lewat main ke rumah, bawa oleh-oleh, bantu tugas rumah, dan ngobrol. Restu ≥ 6 hati jadi syarat lamaran (`16`).
 
-Target v1.0: **20–25 NPC** dengan jadwal penuh.
+Target rilis (v1.0, ADR-027): **±25 NPC** hidup penuh (jadwal, dialog, heart event, hadiah, ulang tahun). Cadangan bila terpaksa rilis lebih awal: minimal **15 NPC** + peta sudah luas. Usulan tambahan (2026-11-25): **peternak sapi perah** (Lembang) & **pemancing + toko alat pancing** (situ). Potret: pixel art 64×64, 5 ekspresi (biasa, senang, sedih, kaget, marah). Slot teman asli: data dikumpulkan user, diminta sebelum P8.
 
 ## 3. Jadwal
 Jadwal per hari dalam seminggu, bisa di-override oleh musim, cuaca, dan festival.

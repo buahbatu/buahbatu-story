@@ -17,6 +17,7 @@ async function speed(page: Page, keys: string[]) {
 
 async function hold(page: Page, keys: string[], ms: number) {
   for (const k of keys) await page.keyboard.down(k);
+  await page.waitForFunction(() => window.__BB__?.player()?.anim !== 'idle', null, { timeout: 10_000 });
   await page.waitForTimeout(ms);
   const during = await player(page);
   await page.evaluate((codes) => {

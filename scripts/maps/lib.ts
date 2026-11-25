@@ -88,6 +88,10 @@ export class MapBuilder {
     return this;
   }
 
+  hill(cx: number, cy: number, rx: number, ry: number, height: number, flat?: number): this {
+    return this.object('hill', cx - rx, cy - ry, flat === undefined ? { height } : { height, flat }, rx * 2, ry * 2);
+  }
+
   farmland(x0: number, y0: number, w: number, h: number): this {
     this.paint('tilled', x0, y0, w, h);
     for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + w; x++) this.set(this.farm, x, y, FARM_TILE + 1);

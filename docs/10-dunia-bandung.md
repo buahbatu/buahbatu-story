@@ -88,7 +88,7 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | Layer | Tipe | Isi |
 |---|---|---|
 | `Ground` | tile | jenis permukaan; **setiap** tile wajib punya properti `terrain` (`grass`, `grass_flowers`, `dirt`, `path`, `tilled`, `sand`, `water`, `stone`, `wood_floor`, `cliff`). `water` otomatis tidak bisa dilewati |
-| `Height` | tile | ketinggian dataran: tile berproperti `height` = 1/2/3 (× `HEIGHT_STEP` 1 satuan = setinggi 1 tile); kosong = 0. Beda tinggi jadi tebing |
+| `Height` | tile | ketinggian dataran: tile berproperti `height` = 1/2/3 (× `HEIGHT_STEP` 1 satuan = setinggi 1 tile); kosong = 0. Beda tinggi jadi tebing. Lereng halus di atasnya memakai objek `hill` (lihat Objects) |
 | `Farmable` | tile | penanda tile yang bisa dicangkul (properti `farmable=true`) |
 | `Collision` | object | rectangle tabrakan (bangunan, batang pohon, batu) |
 | `Objects` | object | spawn, pintu, interactable, zona, **prop 3D** |
@@ -101,6 +101,7 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | `spawn` | `id` (unik; minimal satu per peta) |
 | `door` | `targetArea`, `targetSpawn` |
 | `edge` | `targetArea`, `targetSpawn` (transisi ujung peta) |
+| `hill` | `height` (satuan tinggi; negatif = lembah), `flat` opsional (0–1, bagian puncak yang datar, bawaan 0,35). Objek elips/persegi = jangkauan bukit. **Kontur campuran (P1-12, ADR-026)**: lereng halus ditambahkan di atas undakan `Height` |
 | `interact` | `action` (misal `shop:seed_shop`, `bed`, `shipping_bin`, `board`) |
 | `npc_anchor` | `id` (titik referensi jadwal NPC) |
 | `zone` | `name` (misal `fishing:river`, `music:cafe`) |
@@ -154,3 +155,9 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | Buahbatu ⭐ | Akustik hangat (tema Michelle) | Kompleks rumah, anak main, tukang jualan lewat | Lampu teras sore, wangi jajanan malam |
 | Gedung Sate | Orkestra ringan | Burung merpati | Festival |
 | Alun-alun | Angklung modern | Anak-anak main | Jajanan malam |
+
+## Kontur Tanah (P1-12, ADR-026)
+- **Campuran**: undakan/tebing (`Height`) + bukit & lembah landai (objek `hill`). Tinggi lereng dihitung per **sudut petak** (`hillGrid`, cache per area) lalu diinterpolasi persis mengikuti 2 segitiga mesh (`elevation`), jadi kolisi, tinggi pemain, prop, rumput, & overlay debug ikut lereng tanpa celah.
+- Tampilan: petak di lereng dibelah 2 segitiga dengan normal sendiri (facet ala PS1), puncak lebih terang (`TERRAIN_LOOK.hillTint`), lereng lebih gelap sesuai kemiringan (`slopeShade`). Dinding tebing ikut terangkat bila tebing berada di lereng.
+- **Aturan peta (dites `tests/maps.test.ts`)**: petak ladang datar, air & tepi peta tanpa lereng, tapak bangunan/benda besar (≥1,5 petak) datar, beda tinggi antar sudut ≤ `HILL.maxGrade` (0,9) supaya lereng tetap bisa didaki. Lereng yang lebih curam dari batas langkah pemain otomatis tidak bisa didaki.
+- Pembuat peta: `MapBuilder.hill(cx, cy, rx, ry, height, flat?)` (`scripts/maps/lib.ts`).

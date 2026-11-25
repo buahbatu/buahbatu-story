@@ -19,7 +19,12 @@ m.sprinkle('grass_flowers', 0.05)
   .paint('dirt', 29, 28, 16, 7)
   .paint('path', 31, 20, 1, 7)
   .paint('path', 31, 26, 6, 1)
-  .ellipse('water', 25, 30, 3, 2.3, 'sand');
+  .ellipse('water', 25, 30, 3, 2.3, 'sand')
+  .hill(38, 4.5, 7, 3.8, 1.4, 0.2)
+  .hill(3.3, 11.5, 2.6, 3.4, 0.9)
+  .hill(17.5, 12.5, 4.5, 3.5, 1.3, 0.2)
+  .hill(43.7, 12, 3.6, 3.5, 1.2, 0.2)
+  .hill(25.5, 24, 2.6, 2, -0.6, 0.2);
 
 m.object('spawn', 23.5, 21.5, { id: 'start' })
   .object('spawn', 46, 19, { id: 'dari_dago' })

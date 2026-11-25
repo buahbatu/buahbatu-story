@@ -86,6 +86,13 @@ export class InputState {
     for (const action of before) this.released.add(action);
   }
 
+  releaseVirtual(): void {
+    const before = this.down();
+    this.virtual.clear();
+    this.stick = { x: 0, y: 0 };
+    for (const action of before) if (!this.isDown(action)) this.released.add(action);
+  }
+
   setVirtual(action: Action, down: boolean, source = 'button'): void {
     const was = this.isDown(action);
     const sources = this.virtual.get(action) ?? new Set<string>();

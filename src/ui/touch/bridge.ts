@@ -15,7 +15,7 @@ export function connectTouch(input: InputState): () => void {
   const apply = () => {
     const touch = forced === null ? mode === 'touch' : forced === '1';
     if (uiStore.get().touch === touch) return;
-    if (!touch) target?.releaseAll();
+    if (!touch) target?.releaseVirtual();
     uiStore.set({ touch });
   };
   const signal = (s: InputSignal) => {

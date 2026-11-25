@@ -8,6 +8,8 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 ## [Unreleased]
 
 ### Diperbaiki
+- Pindah otomatis dari kontrol sentuh ke keyboard tidak lagi ikut melepas tombol keyboard yang baru ditekan (hanya input sentuh yang dilepas); tes gerak pemain menunggu pemain mulai bergerak sebelum mengukur (stabil di emulasi HP).
+- Model karakter tidak lagi mengunduh tekstur bawaan `colormap.png` yang tak terpakai (warna dibuat dari palet); menghilangkan error console `GLTFLoader: Couldn't load texture` yang sesekali muncul saat perangkat sibuk.
 - Klik kanan (geser kamera) di HP tidak lagi memicu permintaan layar penuh yang ditolak browser (hanya sentuhan/klik utama).
 
 ### Diubah
@@ -15,6 +17,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - Tombol (keputusan user): **Lompat = Spasi**, **Pakai alat = C**, Push-to-talk tetap V, B kosong.
 
 ### Ditambah
+- **P1-12** Kontur tanah **campuran** (keputusan user, ADR-026): objek peta `hill` untuk bukit & lembah landai di atas undakan/tebing; permukaan kontinu dipakai kolisi, tinggi pemain, pohon/prop & rumput; mesh lereng ber-facet dengan puncak lebih terang & lereng lebih gelap; dinding tebing ikut lereng. Bukit & lembah di Lembang dan sandbox; tes aturan peta (ladang/air/bangunan/tepi datar, kemiringan ≤ 0,9). E2E naik bukit, turun lembah, snapshot kontur.
 - **P1-11** Mode debug `?debug=1`: panel FPS/ms, draw call, segitiga, area, posisi/petak/tinggi + overlay 3D **Grid** & **Kolisi** (kotak tabrakan, tepi tebing, tangga, air dalam, badan pemain) yang bisa dinyalakan/dimatikan; tidak aktif di Production. E2E `e2e/debug.spec.ts`.
 - **P1-10** Kontrol sentuh untuk HP: joystick virtual melayang (analog, dorong penuh = lari) di kiri, tombol A (Aksi), B (Alat), dan Lompat di kanan; hanya tampil di perangkat sentuh dan disembunyikan selama dialog. Prompt interaksi menampilkan "A" di HP. `InputState` kini menerima stik analog & Action virtual. E2E `e2e/touch.spec.ts` memakai sentuhan asli (CDP).
 - **P1-09** Transisi area: **pintu** (E) & **tepi peta** (otomatis, sekali per masuk) memindahkan pemain ke area & spawn tujuan dengan **fade** gelap; area yang belum dibuat (Dago, Tangkuban, toko, dll.) memberi pesan ramah dan pemain tetap di tempat (tanpa error 404 berkat `maps/index.json` dari `npm run maps`). Rumah Michelle ↔ Buahbatu kini bisa dimasuki & ditinggalkan. Logika murni `src/world/travel/logic.ts` + unit test, test hook `travel()`, tes data index peta, E2E `e2e/travel.spec.ts`.

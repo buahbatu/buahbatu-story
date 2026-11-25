@@ -8,10 +8,10 @@ import {
   MeshLambertMaterial,
   NearestFilter,
   SRGBColorSpace,
+  Texture,
   Vector3,
   type AnimationAction,
   type Object3D,
-  type Texture,
 } from 'three';
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
@@ -24,13 +24,15 @@ const CELL_W = 32;
 const CELL_H = 128;
 const CLIP: Record<PlayerAnim, string> = { idle: 'idle', walk: 'walk', run: 'sprint', jump: 'jump' };
 
+const unused = new Texture();
+const modelLoader = new GLTFLoader().register(() => ({ name: 'skip_embedded_textures', loadTexture: () => Promise.resolve(unused) }));
 const models = new Map<string, Promise<GLTF>>();
 let palette: Promise<HTMLImageElement> | null = null;
 
 export const loadModel = (name: string): Promise<GLTF> => {
   let p = models.get(name);
   if (!p) {
-    p = new GLTFLoader().loadAsync(`${BASE}${name}.glb`);
+    p = modelLoader.loadAsync(`${BASE}${name}.glb`);
     models.set(name, p);
   }
   return p;

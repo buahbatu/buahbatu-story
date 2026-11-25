@@ -4,6 +4,7 @@
 - Syarat: tahap **Menikah** + tinggal serumah + ada ranjang bayi.
 - **Keputusan bersama**: salah satu memilih "Ngobrol rencana anak" → pasangan harus menyetujui (berdua online).
 - Opsi: **punya anak** atau **adopsi** (via kantor kelurahan).
+- **Sepenuhnya opsional (ADR-028)**: hanya terbuka bila kedua pemain memilih. Tidak ada NPC, quest, atau notifikasi yang mendesak punya anak. Jalur **tanpa anak** adalah akhir yang sama lengkap & bahagia (rumah penuh kucing, kebun, perjalanan berdua, proyek kota), bukan akhir kelas dua.
 - Ditampilkan dengan sopan: event *"Kabar Bahagia"* → masa penantian **14 hari game** dengan quest persiapan (beli perlengkapan, dekor kamar bayi, kelas calon orang tua) → cutscene kelahiran (tidak eksplisit).
 - Jumlah anak maksimum: **3** (bisa diatur di `balance.ts`).
 

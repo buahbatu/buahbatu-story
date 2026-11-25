@@ -63,6 +63,19 @@ describe('InputState sumber virtual (sentuh)', () => {
     input.setVirtual('run', false, 'stick');
     expect(input.isDown('run')).toBe(false);
   });
+  it('pindah ke keyboard hanya melepas input sentuh, tombol keyboard tetap tertahan', () => {
+    const input = new InputState(DEFAULT_BINDINGS);
+    input.keyDown('KeyD');
+    input.setVirtual('jump', true);
+    input.setStick({ x: 0, y: 1 });
+    input.endFrame();
+    input.releaseVirtual();
+    expect(input.isDown('right')).toBe(true);
+    expect(input.isDown('jump')).toBe(false);
+    expect(input.justReleased('jump')).toBe(true);
+    expect(input.justReleased('right')).toBe(false);
+    expect(input.move()).toEqual({ x: 1, y: 0 });
+  });
   it('releaseAll melepas tombol virtual & stik', () => {
     const input = new InputState(DEFAULT_BINDINGS);
     input.setVirtual('jump', true);

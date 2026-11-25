@@ -6,6 +6,8 @@ export const TERRAIN_LOOK = {
   jitter: 0.02,
   sideShade: 0.8,
   tuftDensity: 0.6,
+  hillTint: 0.2,
+  slopeShade: 1.7,
   organic: ['grass', 'grass_flowers', 'dirt', 'sand', 'path'],
 } as const;
 export const SHADOW = { extent: 15, mapSize: 1024, bias: -0.0015 } as const;
@@ -66,6 +68,7 @@ export const INTERACT_PROMPTS = {
   exit: 'prompt.exit',
   use: 'prompt.use',
 } as const;
+export const HILL = { flat: 0.35, flatTolerance: 0.05, maxGrade: 0.9, solidMin: 1.5 } as const;
 export const TRAVEL = { fadeMs: 260 } as const;
 export const DIALOG = { cps: 40, historySize: 60 } as const;
 export const OCCLUSION = { opacity: 0.3, speed: 5, margin: 0.4, skip: ['room', 'rug', 'stairs'] } as const;
@@ -76,6 +79,7 @@ export const OBJECT_RULES = {
   spawn: ['id'],
   door: ['targetArea', 'targetSpawn'],
   edge: ['targetArea', 'targetSpawn'],
+  hill: ['height'],
   interact: ['action'],
   npc_anchor: ['id'],
   zone: ['name'],

@@ -159,6 +159,27 @@ Setiap keputusan teknis/desain penting dicatat di sini supaya tidak diperdebatka
 - **Alasan**: Rasa "Bandung beneran" (pilar visi #3) tanpa risiko merek dagang besar; repo masih publik selama development (ADR-010).
 - **Konsekuensi**: Dikerjakan saat peta final P12-01–03 & P15-06. Nama asli tetap teks i18n `sign.*` (maks. ±10 huruf per papan bangunan; nama panjang → papan berdiri). Daftar nama per area + sumbernya dicatat di `docs/10` saat area itu dikerjakan. Peta prototipe P1 tetap memakai nama umum.
 
+### ADR-026 · Kontur tanah campuran: undakan + bukit/lembah landai (keputusan user, 2026-11-25)
+- **Status**: Diterima
+- **Konteks**: user tidak mau peta datar rata per level ("kita main kontur tanah"). Model awal hanya undakan bulat (`Height` 0–3) + tangga.
+- **Keputusan**: pilihan user **campuran**. Undakan/tebing tetap; ditambah objek peta `hill` (elips, `height` ±, `flat`) yang menambah tinggi halus per sudut petak. Permukaan = level petak + lereng, diinterpolasi per segitiga mesh.
+- **Alasan**: tetap kompatibel dengan peta, kolisi, & tangga yang ada; data-driven (diatur di peta, bukan kode); bukit terlihat alami untuk Lembang/Dago/Ciwidey sementara ladang & bangunan tetap datar.
+- **Konsekuensi**: `elevation()` kini kontinu (dipakai kolisi, prop, rumput, kamera). Aturan datar/kemiringan dijaga tes peta. Mesh terrain sedikit lebih besar (petak miring = 6 titik). Air terjun & sungai antar-ketinggian (P1-13) dibangun di atas ini.
+
+### ADR-027 · Strategi rilis: langsung maksimal; cadangan v1 = 15 warga + peta luas (keputusan user, 2026-11-25)
+- **Status**: Diterima
+- **Konteks**: user tidak mau rilis bertahap yang setengah jadi ("rilis langsung maksimal"). Versi v0.x di TODO adalah tonggak internal untuk dicoba berdua, bukan rilis.
+- **Keputusan**: rilis publik = **v1.0 lengkap** (±25 warga hidup penuh, semua area & fitur). **Cadangan** bila terpaksa rilis lebih awal: v1 minimal **15 warga** + **peta sudah luas**, lalu v2 langsung lengkap. Pengerjaan warga tetap berurutan (inti dulu), tanpa mengurangi target akhir.
+- **Alasan**: kualitas & rasa "dunia hidup" lebih penting dari cepat rilis; tonggak internal tetap ada supaya masukan user bisa masuk tiap fase.
+- **Konsekuensi**: target NPC di `18` = 25 (bukan 20–25); potret warga diputuskan AI: **pixel art 64×64, 5 ekspresi** (biasa, senang, sedih, kaget, marah).
+
+### ADR-028 · Keluarga ditampilkan apa adanya, anak opsional, rumah penuh kucing (keputusan user, 2026-11-25)
+- **Status**: Diterima
+- **Konteks**: konten keluarga & anak menyentuh hal pribadi pemain. Game ini hadiah, jadi harus terasa aman & menghargai pilihan, bukan menggiring.
+- **Keputusan**: (1) keluarga NPC pemain ditampilkan sesuai data personal dengan hangat (boleh tinggal terpisah), tanpa memaksakan gambaran ideal; (2) punya anak **sepenuhnya opsional** & hanya bila keduanya memilih, tanpa desakan dari NPC/quest; jalur tanpa anak setara; (3) **rumah penuh kucing**: beli kucing (langsung diberi nama) atau bawa pulang kucing kampung (diberi nama setelah meter Nyaman penuh).
+- **Alasan**: pemain harus merasa dilihat & aman; pilihan hidup tetap milik pemain.
+- **Konsekuensi**: docs `12` §7, `17`, `18` diperbarui; task baru P3-11b; P14-01 diberi syarat opsional. Detail pribadi tetap di `personal/` (tidak di repo).
+
 ---
 
 ## Template ADR Baru
