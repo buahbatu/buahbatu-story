@@ -71,6 +71,16 @@ export const INTERACT_PROMPTS = {
   use: 'prompt.use',
 } as const;
 export const HILL = { flat: 0.35, flatTolerance: 0.05, maxGrade: 0.9, solidMin: 1.5 } as const;
+export const ROAD = {
+  dash: 1.1,
+  gap: 0.9,
+  line: 0.12,
+  edgeInset: 0.22,
+  curb: { width: 0.2, height: 0.14, stripe: 0.5 },
+  lift: { surface: 0.012, line: 0.022 },
+  colors: { line: '#eeeae0', curb: '#c9c4b8', curbDark: '#2f2f33' },
+  textureTiles: 4,
+} as const;
 export const TRAVEL = { fadeMs: 260, holdMs: 450 } as const;
 export const DIALOG = { cps: 40, historySize: 60 } as const;
 export const OCCLUSION = { opacity: 0.3, speed: 5, margin: 0.4, skip: ['room', 'rug', 'stairs', 'exit_door'] } as const;

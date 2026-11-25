@@ -19,6 +19,7 @@ m.object('spawn', 21, 19.5, { id: 'start' })
   .object('spawn', 13, 10.6, { id: 'depan_warung' })
   .object('spawn', 36.5, 27, { id: 'taman' })
   .object('edge', 0, 12, { targetArea: 'gedung_sate', targetSpawn: 'dari_buahbatu' }, 0.5, 4)
+  .object('road', 0, 12, { sidewalk: 2 }, 44, 4)
   .object('zone', 31, 26, { name: 'park:taman_kompleks' }, 12, 7)
   .object('npc_anchor', 4.5, 30.6, { id: 'mamah_michelle_teras' })
   .object('npc_anchor', 12, 17.2, { id: 'pedagang_batagor' });

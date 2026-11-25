@@ -201,6 +201,50 @@ export const TEX = {
       for (let y = 2; y < 16; y += 5) px(0, y, 16, 2, '#5e3820');
       for (let i = 0; i < 12; i++) px(Math.floor(rnd() * 16), Math.floor(rnd() * 16), 1, 1, '#94603a');
     }),
+  asphalt: () =>
+    make('asphalt', 64, (px, rnd) => {
+      const r = (n: number) => Math.floor(rnd() * n);
+      px(0, 0, 64, 64, '#5e5c59');
+      for (let i = 0; i < 420; i++) px(r(64), r(64), 1, 1, ['#535150', '#696764', '#4b4a48', '#74716c'][i % 4] ?? '#000');
+      for (const [cx, cy, size] of [
+        [13, 42, 6],
+        [46, 14, 5],
+      ] as const)
+        for (let i = 0; i < 9; i++) {
+          const w = 3 + r(size);
+          const h = 2 + r(size - 1);
+          px(cx - r(size) + 2, cy - r(size - 1) + 2, w, h, '#575553');
+        }
+      for (let c = 0; c < 3; c++) {
+        let x = r(64);
+        let y = r(64);
+        for (let k = 0; k < 18; k++) {
+          px(x, y, 1, 1, '#3f3e3c');
+          x = (x + (rnd() < 0.6 ? 1 : 0) + 64) % 64;
+          y = (y + (rnd() < 0.5 ? 1 : -1) + 64) % 64;
+        }
+      }
+      for (let i = 0; i < 26; i++) px(28 + r(9) - 4, 50 + r(7) - 3, 1, 1, '#4a4847');
+    }),
+  curb: () =>
+    make('curb', 16, (px, rnd) => {
+      px(0, 0, 8, 16, '#2f2f33');
+      px(8, 0, 8, 16, '#e9e5da');
+      for (let i = 0; i < 14; i++) {
+        const x = Math.floor(rnd() * 16);
+        px(x, Math.floor(rnd() * 16), 1, 1, x < 8 ? '#3d3d42' : '#d6d1c4');
+      }
+      px(0, 15, 16, 1, '#00000040');
+    }),
+  paving: () =>
+    make('paving', 16, (px, rnd) => {
+      px(0, 0, 16, 16, '#b9aea0');
+      for (const r of [0, 8]) {
+        px(0, r, 16, 1, '#968b7e');
+        for (let k = (r / 8) * 4; k < 16; k += 8) px(k, r, 1, 8, '#968b7e');
+      }
+      for (let i = 0; i < 10; i++) px(Math.floor(rnd() * 16), Math.floor(rnd() * 16), 1, 1, '#c9bfb2');
+    }),
 };
 
 export const awning = (a: string, b: string): Texture =>

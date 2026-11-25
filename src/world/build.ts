@@ -18,6 +18,7 @@ import { preloadAssets } from './props/assets';
 import { assetsFor } from './props/logic';
 import { PROP_FACTORIES, isPropModel } from './props/registry';
 import { TEX, repeated } from './props/textures';
+import { roadMesh } from './road/mesh';
 
 export function terrainMesh(area: AreaData, atlas: Texture): Mesh {
   const data = buildTerrain(area);
@@ -111,6 +112,7 @@ export function buildArea(area: AreaData, atlas: Texture): Group {
   }
   const water = waterMesh(area);
   if (water) root.add(water);
+  for (const o of area.objects) if (o.kind === 'road') root.add(roadMesh(area, o));
   for (const o of area.objects) {
     if (o.kind !== 'prop' || !isPropModel(o.props.model)) continue;
     const x = o.x + o.w / 2;

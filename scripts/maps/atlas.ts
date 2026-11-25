@@ -117,8 +117,8 @@ const png = await page.evaluate(() => {
       for (let r = 3; r < T; r += 5) px(x, y, 2, r, '#fff7e6', 12, 1);
     },
     (x, y) => {
-      fill(x, y, '#55565e');
-      dots(x, y, ['#4a4b52', '#62636b', '#6d6e76'], 34);
+      fill(x, y, '#5e5c59');
+      dots(x, y, ['#535150', '#696764', '#4b4a48', '#74716c'], 40);
     },
     (x, y) => {
       fill(x, y, '#b9aea0');

@@ -105,7 +105,7 @@ Peta digambar di **Tiled** sebagai denah 2D, lalu dibangun jadi dunia 3D low-pol
 | `interact` | `action` (misal `shop:seed_shop`, `bed`, `shipping_bin`, `board`) |
 | `npc_anchor` | `id` (titik referensi jadwal NPC) |
 | `zone` | `name` (misal `fishing:river`, `music:cafe`) |
-| `road` | — (area yang bisa dilewati kendaraan) |
+| `road` | — (area yang bisa dilewati kendaraan). **P1-14**: kotak jalan digambar sebagai lapisan 3D: aspal bertekstur (abu hangat, butiran, retak, tambalan, noda oli; `TEX.asphalt` 4×4 petak), marka **garis tengah putus-putus** + **garis tepi**, dan **kanstin** belang hitam-putih di kedua sisi panjang (`ROAD` di `config/world.ts`, logika `src/world/road/logic.ts`). Opsional: `markings` (bawaan `true`), `curb` (bawaan `true`), `sidewalk` (lebar trotoar dalam petak). Jalan yang menyentuh tepi peta **diteruskan ke luar peta** sejauh `WORLD_SKIRT` bersama marka, kanstin & trotoarnya, jadi dunia tidak terasa buntu |
 | `bus_stop` | `stopId` |
 | `prop` | `model` ∈ `PROP_MODELS` (lihat tabel prop di bawah); opsional `rotation` (derajat) |
 
