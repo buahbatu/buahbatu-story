@@ -9,7 +9,7 @@ export default defineConfig({
   outputDir: 'test-results',
   snapshotPathTemplate: '{testDir}/__screenshots__/{testFileName}/{arg}-{projectName}-{platform}{ext}',
   fullyParallel: true,
-  workers: CI ? undefined : 1,
+  workers: 1,
   timeout: 60_000,
   forbidOnly: CI,
   retries: CI ? 1 : 0,
