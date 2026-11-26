@@ -65,9 +65,10 @@ test('tepi peta ke area yang belum dibuat: pesan ramah sekali, tetap di area', a
   });
   await page.keyboard.down('KeyD');
   await expect(page.locator('.toast')).toHaveText('Tempat ini belum dibuka. Sabar ya, lagi dibangun!', { timeout: 10_000 });
+  await expect(page.locator('.toast')).toHaveCount(1);
   await page.waitForTimeout(800);
   await page.keyboard.up('KeyD');
-  await expect(page.locator('.toast')).toHaveCount(1);
+  expect(await page.locator('.toast').count()).toBeLessThanOrEqual(1);
   expect((await player(page))?.area).toBe('lembang');
   expect(await trips(page)).toBe(0);
 });

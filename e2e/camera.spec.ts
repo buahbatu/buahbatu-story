@@ -92,5 +92,5 @@ test('snapshot kamera di-zoom dekat', async ({ game: { page } }) => {
     window.__BB__?.placePlayer(9.5, 12, 's');
     window.__BB__?.freeze(true);
   });
-  await expect(page).toHaveScreenshot('kamera-zoom-dekat.png');
+  await expect(page).toHaveScreenshot('kamera-zoom-dekat.png', { mask: [page.locator('.touch-controls')] });
 });

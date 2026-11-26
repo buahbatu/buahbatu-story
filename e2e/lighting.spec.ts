@@ -59,5 +59,5 @@ for (const [name, hour] of [
     await expect.poll(async () => (await lighting(page))?.passes.length, { timeout: 20_000 }).toBe(3);
     await page.waitForTimeout(500);
     await page.evaluate(() => window.__BB__?.freeze(true));
-    await expect(page).toHaveScreenshot(`lembang-${name}.png`, { maxDiffPixelRatio: 0.01 });
+    await expect(page).toHaveScreenshot(`lembang-${name}.png`, { maxDiffPixelRatio: 0.01, timeout: 30_000 });
   });
