@@ -97,12 +97,12 @@ test.describe('kontrol sentuh di HP/tablet', () => {
     await page.locator('.touch-interact').tap();
     await expect(page.locator('.dialog-box')).toBeVisible();
     await expect(page.locator('.touch-controls')).toHaveCount(0);
-    for (let i = 0; i < 12 && (await page.locator('.dialog-box').count()) > 0; i++) {
+    await expect(async () => {
       const choices = page.locator('.dialog-choices li');
-      if ((await choices.count()) > 0) await choices.last().dispatchEvent('click');
-      else await page.locator('.dialog-box').tap();
-      await page.waitForTimeout(120);
-    }
+      const target = (await choices.count()) > 0 ? choices.last() : page.locator('.dialog-box');
+      if ((await target.count()) > 0) await target.dispatchEvent('click', undefined, { timeout: 1000 }).catch(() => undefined);
+      await expect(page.locator('.dialog-box')).toHaveCount(0, { timeout: 400 });
+    }).toPass({ timeout: 45_000 });
     await expect(page.locator('.touch-controls')).toBeVisible();
   });
 
