@@ -45,6 +45,7 @@ test('pemain muncul di spawn menghadap kamera, jalan & lari dengan keyboard', as
   expect(walk).toBeCloseTo(PLAYER.walkSpeed, 0);
   expect(-run).toBeCloseTo(PLAYER.runSpeed, 0);
 
+  await page.evaluate(() => window.__BB__?.placePlayer(20.5, 17.5, 's'));
   const diagonal = await hold(page, ['KeyS', 'KeyA'], 300);
   expect(diagonal).toMatchObject({ facing: 'sw', anim: 'walk' });
   expect(await player(page)).toMatchObject({ facing: 'sw', anim: 'idle' });

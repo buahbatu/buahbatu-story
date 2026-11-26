@@ -55,6 +55,8 @@ test('snapshot pemain terendam & basah di air dangkal', async ({ game: { page } 
     window.__BB__?.placePlayer(30.5, 19.5, 's');
   });
   await expect.poll(async () => (await water(page))?.inWater, { timeout: 5_000 }).toBe(true);
+  const t0 = await page.evaluate(() => window.__BB__?.clock() ?? 0);
+  await expect.poll(async () => (await page.evaluate(() => window.__BB__?.clock() ?? 0)) - t0, { timeout: 60_000 }).toBeGreaterThan(2);
   await expect.poll(async () => (await water(page))?.particles ?? 1, { timeout: 30_000 }).toBe(0);
   await expect.poll(async () => (await water(page))?.ripples ?? 1, { timeout: 30_000 }).toBe(0);
   await page.evaluate(() => window.__BB__?.freeze(true));
