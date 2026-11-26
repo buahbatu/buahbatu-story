@@ -37,3 +37,11 @@ Lainnya: masak, mancing (lempar, gigitan, tarik), kamera, kembang api, lonceng f
 - Musik di-stream, SFX di-preload per area.
 - Audio baru diaktifkan setelah interaksi pertama pengguna (kebijakan autoplay browser).
 - Sistem `systems/audio/` mendengarkan GameEvent (misal `farm/harvested` → SFX panen), jadi sistem lain tidak memanggil audio langsung.
+
+## 7. Implementasi (P1B-02d)
+- **Saluran aktif**: `Master`, `Musik`, `Efek suara` (SFX), `Suasana` (ambience); `Suara` & `Blip` menyusul P11. Pengaturan on/off + volume di tab **Suara** menu ⚙, tersimpan di `localStorage` (`bb.audio`), berlaku langsung (ramp halus).
+- **Data**: `src/content/sounds.json` (divalidasi zod `systems/audio/schema.ts`): daftar suara (saluran, varian file, volume, rentang pitch acak, loop), peta jenis tanah → permukaan langkah. Logika murni di `systems/audio/logic.ts`, WebAudio di `engine.ts`, perakitan di `runtime.ts`.
+- **Format**: OGG Vorbis, fallback **M4A/AAC** otomatis bila browser tak bisa OGG (dicek `canPlayType`). File dibuat dengan ffmpeg (trim hening, normalisasi, loop di-crossfade).
+- **Suara kontinu dari adegan, bukan GameEvent**: langkah kaki (irama jalan/lari, varian tak berulang, permukaan rumput/kerikil/kayu/keras/karpet/air) dan gemericik sungai/curug (volume mengikuti jarak ke petak air & air terjun) dikirim `WorldScene` lewat antarmuka `SoundCues`, karena terjadi tiap frame. Event sesaat gameplay (panen, dll.) tetap lewat GameEvent saat sistemnya dibuat.
+- **Autoplay**: AudioContext baru dibuat/dilanjutkan pada interaksi pertama (pointer/tombol/sentuh); dijeda saat tab disembunyikan.
+- **Musik**: saluran siap; musik bawaan bebas lisensi bernuansa BTN di P1B-02e; lagu pilihan user lewat Supabase privat di P5-11.

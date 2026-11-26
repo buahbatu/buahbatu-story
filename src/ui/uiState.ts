@@ -1,6 +1,7 @@
 import type { I18nKey } from '../content/i18n';
 import type { SceneKey } from '../scenes/keys';
 import type { GraphicsSettings } from '../render/settings';
+import type { AudioSettings } from '../config/audio';
 import { createStore } from './store';
 import type { Toast } from './toasts';
 
@@ -19,7 +20,9 @@ export interface UiState {
   debug: DebugInfo | null;
   debugLayers: { collision: boolean; grid: boolean };
   graphics: GraphicsSettings | null;
+  audio: AudioSettings | null;
   settingsOpen: boolean;
+  settingsTab: 'graphics' | 'audio';
 }
 
 export interface DebugInfo {
@@ -64,7 +67,9 @@ export const uiStore = createStore<UiState>({
   debug: null,
   debugLayers: { collision: true, grid: true },
   graphics: null,
+  audio: null,
   settingsOpen: false,
+  settingsTab: 'graphics',
 });
 
 export function setActiveScene(scene: SceneKey): void {

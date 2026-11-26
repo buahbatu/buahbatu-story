@@ -33,6 +33,14 @@ export interface TestApi {
   graphics(): { tier: string; choice: string; fx: boolean; curve: string; bend: number };
   setGraphics(change: { tier?: 'auto' | 'low' | 'balanced' | 'high'; fx?: boolean; curve?: 'strong' | 'soft' | 'off' }): Promise<void>;
   setHour(hour: number): Promise<void>;
+  audio(): {
+    settings: Record<'master' | 'music' | 'sfx' | 'ambience', { on: boolean; volume: number }>;
+    unlocked: boolean;
+    state: string;
+    format: string;
+    played: Record<string, number>;
+    loops: Record<string, number>;
+  };
   lighting(): {
     hour: number;
     phase: string;

@@ -1,6 +1,7 @@
 import type { GameRuntime } from '../core/runtime';
 import type { Engine } from '../engine/engine';
 import type { GraphicsRuntime } from '../render/setup';
+import type { AudioRuntime } from '../systems/audio/runtime';
 import { worldCurve } from '../render/curve';
 import { createInitialState } from '../core/state';
 import { APPEARANCE } from '../entities';
@@ -17,6 +18,7 @@ interface TestHookContext {
   runtime: GameRuntime;
   world: WorldScene;
   graphics: GraphicsRuntime;
+  audio: AudioRuntime;
 }
 
 const nextFrame = () =>
@@ -40,7 +42,7 @@ function waitForTitle(): Promise<void> {
   });
 }
 
-function createTestApi({ engine, runtime, world, graphics }: TestHookContext): TestApi {
+function createTestApi({ engine, runtime, world, graphics, audio }: TestHookContext): TestApi {
   return {
     async ready() {
       await waitForTitle();
@@ -76,6 +78,7 @@ function createTestApi({ engine, runtime, world, graphics }: TestHookContext): T
       await engine.whenFxReady();
       await nextFrame();
     },
+    audio: () => ({ settings: structuredClone(audio.settings), ...audio.engine.stats() }),
     lighting: () => {
       const light = world.environment.light;
       return {

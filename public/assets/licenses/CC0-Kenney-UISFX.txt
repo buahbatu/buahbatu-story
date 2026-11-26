@@ -1,0 +1,11 @@
+UI SFX Set by Kenney Vleugels (www.kenney.nl)
+Source: https://opengameart.org/content/51-ui-sound-effects-buttons-switches-and-clicks
+
+License: Creative Commons Zero (CC0 1.0 Universal)
+https://creativecommons.org/publicdomain/zero/1.0/
+
+"You may use these sounds in personal and commercial projects.
+Credit (www.kenney.nl) would be nice but is not mandatory."
+
+Used in Buahbatu Story: click3.wav -> audio/sfx/ui-click.(ogg|m4a)
+Modifications: leading silence trimmed, peak normalized, mono, re-encoded to Ogg Vorbis & AAC.

@@ -1,0 +1,9 @@
+"Stream Sounds" by kurt
+Source: https://opengameart.org/content/stream-sounds
+License: Creative Commons Attribution 3.0 (CC BY 3.0) https://creativecommons.org/licenses/by/3.0/
+
+Used in Buahbatu Story:
+- stream1.ogg    -> audio/ambience/stream.(ogg|m4a)
+- waterfall2.ogg -> audio/ambience/waterfall.(ogg|m4a)
+Modifications: trimmed to 30 s, loudness normalized, end crossfaded into start for a seamless loop,
+re-encoded to Ogg Vorbis & AAC.

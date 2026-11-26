@@ -4,16 +4,21 @@ test('tombol Spasi membuat pemain melompat lalu mendarat, bisa sambil berjalan',
   await page.evaluate(() => window.__BB__?.enterArea('sandbox'));
   const start = await page.evaluate(() => window.__BB__?.player());
   await page.keyboard.down('KeyD');
+  const saw = page.evaluate(
+    () =>
+      new Promise<boolean>((resolve) => {
+        const until = performance.now() + 5000;
+        const check = () => {
+          const p = window.__BB__?.player();
+          if (p?.anim === 'jump' && typeof p.air === 'number' && p.air >= 0) resolve(true);
+          else if (performance.now() > until) resolve(false);
+          else requestAnimationFrame(check);
+        };
+        check();
+      }),
+  );
   await page.keyboard.press('Space');
-  await expect
-    .poll(
-      async () => {
-        const p = await page.evaluate(() => window.__BB__?.player());
-        return p?.anim === 'jump' && typeof p.air === 'number' && p.air >= 0;
-      },
-      { timeout: 5_000 },
-    )
-    .toBe(true);
+  expect(await saw).toBe(true);
   await expect.poll(async () => (await page.evaluate(() => window.__BB__?.player()))?.anim, { timeout: 5_000 }).toBe('walk');
   await page.keyboard.up('KeyD');
   const landed = await page.evaluate(() => window.__BB__?.player());

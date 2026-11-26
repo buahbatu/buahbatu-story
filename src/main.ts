@@ -10,7 +10,8 @@ import { installTouchFullscreen } from './ui/fullscreen';
 import { connectTouch } from './ui/touch/bridge';
 import { debugRequested } from './debug/logic';
 import { GraphicsRuntime } from './render/setup';
-import { connectGraphics } from './ui/graphicsBridge';
+import { connectAudio, connectGraphics } from './ui/graphicsBridge';
+import { AudioRuntime } from './systems/audio/runtime';
 import { uiStore } from './ui/uiState';
 
 const graphics = new GraphicsRuntime();
@@ -37,11 +38,15 @@ if (graphics.hour !== null) world.setHour(graphics.hour);
 installViewScaling(engine);
 graphics.attach(engine, [world.environment, title.environment]);
 connectGraphics(graphics);
+const audio = new AudioRuntime();
+audio.install();
+world.sound = audio;
+connectAudio(audio);
 installTouchFullscreen();
 void engine.start(SCENE.boot);
 
 if (import.meta.env.MODE === 'test' || (import.meta.env.DEV && new URLSearchParams(location.search).has('test'))) {
   void import('./testing/hook').then(({ installTestHook }) => {
-    installTestHook({ engine, runtime, world, graphics });
+    installTestHook({ engine, runtime, world, graphics, audio });
   });
 }

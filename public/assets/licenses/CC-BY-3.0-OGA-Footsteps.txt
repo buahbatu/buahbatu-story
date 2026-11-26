@@ -1,0 +1,16 @@
+"Footsteps on different surfaces" compiled by congusbongus
+Source: https://opengameart.org/content/footsteps-on-different-surfaces
+License: Creative Commons Attribution 3.0 (CC BY 3.0) https://creativecommons.org/licenses/by/3.0/
+
+Original recordings (Freesound):
+- grass  -> footstep-grass.wav by swuing (CC BY 3.0) https://freesound.org/people/swuing/sounds/38874/
+- gravel -> Pack: Gravel Footsteps by Ali_6868 (CC0 1.0) https://freesound.org/people/Ali_6868/packs/21608/
+- wood   -> footstep-wood.wav by swuing (CC BY 3.0) https://freesound.org/people/swuing/sounds/38876/
+- tile   -> footstep-concrete.wav by swuing (CC BY 3.0) https://freesound.org/people/swuing/sounds/38873/
+            + Squeaky footstep.wav by ceberation https://freesound.org/people/ceberation/sounds/235524/
+- water  -> Water Footsteps by EminYILDIRIM https://freesound.org/people/EminYILDIRIM/sounds/608663/
+            + footstep-concrete.wav by swuing (CC BY 3.0)
+
+Used in Buahbatu Story as audio/sfx/step-{grass,gravel,wood,hard,water}-{0..3}.(ogg|m4a)
+(variants 0-3 of grass, gravel, wood, tile -> "hard", water).
+Modifications: leading silence trimmed, peak normalized, mono, re-encoded to Ogg Vorbis & AAC.

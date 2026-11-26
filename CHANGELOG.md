@@ -26,6 +26,12 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - Tombol (keputusan user): **Lompat = Spasi**, **Pakai alat = C**, Push-to-talk tetap V, B kosong.
 
 ### Ditambah
+- **P1B-02d** Sistem audio & tab **Suara** (permintaan user, docs/41 §7):
+  - Saluran **Semua suara / Musik / Efek suara / Suasana** dengan on/off + volume di menu ⚙ (tab Grafis & Suara), tersimpan di perangkat, langsung berlaku.
+  - **Langkah kaki** mengikuti permukaan (rumput, kerikil/tanah, kayu & jembatan, aspal/paving/keramik, karpet, cipratan saat di air dangkal), irama jalan/lari, variasi tanpa pengulangan & pitch acak.
+  - **Gemericik sungai & suara curug** makin keras saat mendekat (loop mulus), **klik** untuk tombol UI.
+  - Audio mulai setelah interaksi pertama (aturan autoplay browser), dijeda saat tab disembunyikan; format OGG + M4A (iPhone/Safari).
+  - Aset CC0/CC BY 3.0 dari OpenGameArt (Kenney, congusbongus/Freesound, kurt) tercatat di CREDITS.md + teks lisensi.
 - **P1B-02c** Lengkung dunia & menu Pengaturan Grafis (ADR-030):
   - **Lengkung dunia** bergaya "kayu bergulir": cakrawala melengkung seperti planet kecil, hanya tampilan (gerak, tabrakan, dan bayangan tetap datar). Mode **Kuat / Halus / Mati**; **Halus** jadi bawaan atas pilihan user setelah melihat 3 render pembanding. Di dalam rumah otomatis datar, dan pergantian mode beralih halus.
   - Bidang dan kotak panjang (tanah judul, jalan, trotoar, dinding tepi, dasar sungai) dipecah per 2 m supaya ikut melengkung mulus, tidak patah.

@@ -33,7 +33,9 @@ function setup() {
     debug: null,
     debugLayers: { collision: true, grid: true },
     graphics: null,
+    audio: null,
     settingsOpen: false,
+    settingsTab: 'graphics',
   });
   connectToasts(bus, store, clock);
   return { bus, store, advance };

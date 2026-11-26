@@ -1,0 +1,90 @@
+{
+  "sounds": [
+    {
+      "id": "ui_click",
+      "channel": "sfx",
+      "files": ["sfx/ui-click"],
+      "volume": 0.55
+    },
+    {
+      "id": "step_grass",
+      "channel": "sfx",
+      "files": ["sfx/step-grass-0", "sfx/step-grass-1", "sfx/step-grass-2", "sfx/step-grass-3"],
+      "volume": 0.32,
+      "rate": [0.94, 1.06]
+    },
+    {
+      "id": "step_gravel",
+      "channel": "sfx",
+      "files": ["sfx/step-gravel-0", "sfx/step-gravel-1", "sfx/step-gravel-2", "sfx/step-gravel-3"],
+      "volume": 0.3,
+      "rate": [0.94, 1.06]
+    },
+    {
+      "id": "step_wood",
+      "channel": "sfx",
+      "files": ["sfx/step-wood-0", "sfx/step-wood-1", "sfx/step-wood-2", "sfx/step-wood-3"],
+      "volume": 0.36,
+      "rate": [0.95, 1.05]
+    },
+    {
+      "id": "step_hard",
+      "channel": "sfx",
+      "files": ["sfx/step-hard-0", "sfx/step-hard-1", "sfx/step-hard-2", "sfx/step-hard-3"],
+      "volume": 0.3,
+      "rate": [0.95, 1.05]
+    },
+    {
+      "id": "step_soft",
+      "channel": "sfx",
+      "files": ["sfx/step-grass-0", "sfx/step-grass-1", "sfx/step-grass-2", "sfx/step-grass-3"],
+      "volume": 0.14,
+      "rate": [0.85, 0.95]
+    },
+    {
+      "id": "step_water",
+      "channel": "sfx",
+      "files": ["sfx/step-water-0", "sfx/step-water-1", "sfx/step-water-2", "sfx/step-water-3"],
+      "volume": 0.42,
+      "rate": [0.93, 1.07]
+    },
+    {
+      "id": "amb_stream",
+      "channel": "ambience",
+      "files": ["ambience/stream"],
+      "volume": 0.55,
+      "loop": true
+    },
+    {
+      "id": "amb_waterfall",
+      "channel": "ambience",
+      "files": ["ambience/waterfall"],
+      "volume": 0.75,
+      "loop": true
+    }
+  ],
+  "steps": {
+    "grass": "step_grass",
+    "gravel": "step_gravel",
+    "wood": "step_wood",
+    "hard": "step_hard",
+    "soft": "step_soft",
+    "water": "step_water"
+  },
+  "terrain": {
+    "grass": "grass",
+    "grass_flowers": "grass",
+    "dirt": "gravel",
+    "path": "gravel",
+    "tilled": "gravel",
+    "sand": "gravel",
+    "stone": "hard",
+    "asphalt": "hard",
+    "paving": "hard",
+    "ceramic": "hard",
+    "cliff": "hard",
+    "wood_floor": "wood",
+    "carpet": "soft",
+    "water": "water"
+  }
+}

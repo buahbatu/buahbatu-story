@@ -7,7 +7,7 @@ const choice = (page: Page, setting: string, value: string) =>
 
 test('menu grafis di layar judul: buka tanpa memulai game, ganti lengkung, tersimpan setelah muat ulang', async ({ game: { page } }) => {
   await page.locator('.settings-button').click();
-  await expect(page.getByRole('dialog', { name: 'Pengaturan Grafis' })).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Pengaturan' })).toBeVisible();
   await page.keyboard.press('KeyA');
   expect(await page.evaluate(() => window.__BB__?.scene())).toBe('Title');
   await expect(choice(page, 'curve', 'soft')).toHaveAttribute('aria-pressed', 'true');

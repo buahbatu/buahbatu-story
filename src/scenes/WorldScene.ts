@@ -32,7 +32,9 @@ import { APPEARANCE, PlayerView, jumpHeight, stepJump, stepMotion, type Appearan
 import { uiStore } from '../ui/uiState';
 import { buildArea, disposeTree, preloadArea } from '../world/build';
 import { Environment, type Grade } from '../world/environment';
-import { bodyBlocked, parseArea, standHeight, walkLevel, waterAt, type AreaData } from '../world/map/logic';
+import { bodyBlocked, bridgeAt, parseArea, standHeight, tileIndex, walkLevel, waterAt, type AreaData } from '../world/map/logic';
+import { nearest, stepClock, waterBoxes, type Box, type StepClock } from '../systems/audio/logic';
+import type { SoundCues } from '../systems/audio/runtime';
 import { SCENE } from './keys';
 import { DebugOverlay } from '../debug/overlay';
 import { EXIT_MARK } from '../world/props/furniture';
@@ -48,6 +50,7 @@ export interface InteractionEvent {
   action: string;
   area: string;
 }
+const SILENT: SoundCues = { step: () => undefined, water: () => undefined, silence: () => undefined };
 const STILL: CameraInput = { rotate: 0, zoom: 0, pan: { x: 0, y: 0 }, twist: 0 };
 
 const mapUrl = (id: string) => new URL(assetUrl(`maps/${id}.tmj`), location.href);
@@ -92,6 +95,9 @@ export class WorldScene implements GameScene {
   private look = APPEARANCE.A;
   private lookReady: Promise<void> | null = null;
   player: PlayerMotion | null = null;
+  sound: SoundCues = SILENT;
+  private steps: StepClock = { left: 0 };
+  private waterZones: { stream: Box[]; falls: Box[] } = { stream: [], falls: [] };
 
   constructor() {
     const scene = new Scene();
@@ -190,6 +196,7 @@ export class WorldScene implements GameScene {
       bodyBlocked(area, x, y, walkLevel(area, fx, fy), body),
     );
     this.player = stepJump(moved, !talking && engine.input.justPressed('jump'), dt, PLAYER);
+    this.cueSound(area, player, this.player, dt, engine.input.isDown('run'));
     if (this.travelling) return;
     const crossed = enteredEdge(area, this.player.x, this.player.y, this.insideEdge);
     this.insideEdge = crossed.inside;
@@ -339,8 +346,29 @@ export class WorldScene implements GameScene {
     );
   }
 
+  private cueSound(area: AreaData, before: PlayerMotion, after: PlayerMotion, dt: number, running: boolean): void {
+    const speed = dt > 0 ? Math.hypot(after.x - before.x, after.y - before.y) / dt : 0;
+    const tick = stepClock(this.steps, dt, after.air ? 0 : speed, running);
+    this.steps = tick.clock;
+    if (tick.step) {
+      const { x, y } = after;
+      this.sound.step({
+        terrain: area.terrain[tileIndex(area, Math.floor(x), Math.floor(y))],
+        bridge: bridgeAt(area, x, y) !== null,
+        wading: waterAt(area, x, y, PLAYER.shallowTiles) !== 'none',
+      });
+    }
+    this.sound.water(nearest(after.x, after.y, this.waterZones.stream), nearest(after.x, after.y, this.waterZones.falls));
+  }
+
+  exit(): void {
+    this.sound.silence();
+  }
+
   private async load(id: string): Promise<void> {
     const area = await this.fetchArea(id);
+    this.sound.silence();
+    this.waterZones = { stream: waterBoxes(area), falls: area.objects.filter((o) => o.kind === 'waterfall') };
     const atlas = await this.atlasFor(versioned(new URL(area.tileset.image, mapUrl(id))));
     this.occlusion.clear();
     this.fx.clear();

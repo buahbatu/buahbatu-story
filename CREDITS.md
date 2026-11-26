@@ -21,7 +21,9 @@ Setiap aset pihak ketiga **wajib** dicatat di sini (lihat `docs/42-aset-lisensi.
 ## Audio
 | Aset (path) | Pembuat | Sumber (URL) | Lisensi | Modifikasi |
 |---|---|---|---|---|
-| — | — | — | — | — |
+| `public/assets/audio/sfx/ui-click.*` (klik tombol UI) | Kenney Vleugels (www.kenney.nl), UI SFX Set | https://opengameart.org/content/51-ui-sound-effects-buttons-switches-and-clicks | CC0 1.0 (`public/assets/licenses/CC0-Kenney-UISFX.txt`) | Hening awal dipotong, dinormalisasi, mono, OGG + M4A |
+| `public/assets/audio/sfx/step-*.*` (langkah kaki: rumput, kerikil, kayu, keras, air) | Kumpulan oleh congusbongus ("Footsteps on different surfaces"); rekaman asli swuing, Ali_6868, ceberation, EminYILDIRIM (Freesound) | https://opengameart.org/content/footsteps-on-different-surfaces | CC BY 3.0 (kerikil: CC0) (`public/assets/licenses/CC-BY-3.0-OGA-Footsteps.txt`) | Hening awal dipotong, dinormalisasi, mono, OGG + M4A |
+| `public/assets/audio/ambience/stream.*`, `waterfall.*` (gemericik sungai & curug, loop) | kurt ("Stream Sounds") | https://opengameart.org/content/stream-sounds | CC BY 3.0 (`public/assets/licenses/CC-BY-3.0-OGA-StreamSounds.txt`) | Dipotong 30 dtk, loudness dinormalisasi, ujung di-crossfade ke awal (loop mulus), OGG + M4A |
 
 ## Font
 | Font | Pembuat | Sumber | Lisensi |

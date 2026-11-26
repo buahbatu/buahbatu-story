@@ -647,6 +647,51 @@
   color: var(--color-wood-dark);
 }
 
+.settings-tabs {
+  display: flex;
+  gap: calc(var(--px) * 3);
+  margin-bottom: calc(var(--px) * 8);
+  border-bottom: var(--px) solid var(--color-wood);
+}
+
+.settings-tab {
+  padding: calc(var(--px) * 2) calc(var(--px) * 8);
+  border: var(--px) solid var(--color-wood);
+  border-bottom: none;
+  border-radius: calc(var(--px) * 4) calc(var(--px) * 4) 0 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--text-s);
+  cursor: pointer;
+}
+
+.settings-tab[aria-selected='true'] {
+  background: var(--color-wood);
+  color: var(--color-cream);
+}
+
+.settings-tab:focus-visible,
+.settings-volume:focus-visible {
+  outline: calc(var(--px) * 2) solid var(--color-strawberry);
+  outline-offset: var(--px);
+}
+
+.settings-volume {
+  width: calc(var(--px) * 110);
+  accent-color: var(--color-wood);
+  cursor: pointer;
+}
+
+.settings-volume:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.settings-toggle {
+  min-width: calc(var(--px) * 40);
+}
+
 .settings-row {
   display: flex;
   align-items: center;
@@ -725,6 +770,17 @@
 
   .settings-note {
     font-size: var(--text-m);
+  }
+
+  .settings-tab {
+    min-height: calc(var(--px) * 26);
+    padding: calc(var(--px) * 4) calc(var(--px) * 10);
+    font-size: var(--text-m);
+  }
+
+  .settings-volume {
+    width: calc(var(--px) * 140);
+    height: calc(var(--px) * 24);
   }
 }
 
