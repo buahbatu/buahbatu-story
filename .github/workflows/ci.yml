@@ -18,10 +18,10 @@ env:
   VERCEL_CLI_VERSION: '65.12.1'
 
 jobs:
-  verify:
-    name: Verify (gitleaks · lint · typecheck · unit · build · E2E)
+  checks:
+    name: Cek (gitleaks · lint · typecheck · unit · build)
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 20
     steps:
       - run: git config --global init.defaultBranch main
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -38,9 +38,27 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+
+  e2e:
+    name: E2E bagian ${{ matrix.shard }}/${{ strategy.job-total }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - run: git config --global init.defaultBranch main
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
       - run: npx playwright install --with-deps chromium
       - name: Baseline snapshot Linux (hanya kalau belum ada)
         id: baseline
+        if: matrix.shard == 1
         run: |
           if ls e2e/__screenshots__/*/*-linux.png >/dev/null 2>&1; then echo "created=false" >> "$GITHUB_OUTPUT"; exit 0; fi
           npx playwright test e2e/visual.spec.ts e2e/orientation.spec.ts --update-snapshots=all
@@ -52,20 +70,35 @@ jobs:
           name: snapshots-linux
           path: e2e/__screenshots__/**/*-linux.png
           retention-days: 14
-      - run: npm run e2e
+      - run: npx playwright test --shard=${{ matrix.shard }}/${{ strategy.job-total }}
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: failure()
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.shard }}
           path: |
             playwright-report/
             test-results/
           retention-days: 7
 
+  verify:
+    name: Verify (gitleaks · lint · typecheck · unit · build · E2E)
+    needs: [checks, e2e]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Semua cek & semua bagian E2E wajib hijau
+        env:
+          CHECKS: ${{ needs.checks.result }}
+          E2E: ${{ needs.e2e.result }}
+        run: |
+          echo "checks=$CHECKS e2e=$E2E"
+          [ "$CHECKS" = success ] && [ "$E2E" = success ]
+
   deploy:
     name: Deploy ${{ github.ref == 'refs/heads/main' && 'Production' || 'Preview' }}
     needs: verify
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && needs.verify.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:

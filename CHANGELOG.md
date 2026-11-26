@@ -12,6 +12,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - **P1B-01** Arah baru (keputusan user): **gameplay Harvest Moon: Back to Nature + The Sims & GTA + grafik bergaya Animal Crossing: New Horizons**. ADR-030 (renderer & gaya ACNH, lengkung dunia halus, tingkat kualitas, anggaran ≤ 200 draw call), ADR-031 (medan bebas grid dari bentuk vektor, grid hanya logika, sungai tidak buntu), ADR-032 (satu pulau tanpa loading, chunk 64 m, pantai & laut sebagai batas). Fase baru **P1B** (11 task). Docs `00`, `01`, `02` §9, `10`, `42` diperbarui. Pengukuran awal: Buahbatu 1.092 draw call (wajib dibatch sebelum efek baru). Parser ID task (`doctor`) kini mengenal fase bersufiks seperti `P1B-01`.
 
 ### Infrastruktur
+- **CI lebih cepat** (permintaan user): E2E dibagi ke 4 mesin paralel (`--shard`) dan berjalan bersamaan dengan lint/typecheck/unit/build; semua tes tetap wajib hijau sebelum deploy (job `Verify` tetap). Workflow snapshot Linux hanya menjalankan spec bersnapshot, dibagi 3 mesin, dan hanya mengunggah snapshot yang berubah.
 - **Hemat Vercel** (ADR-029): aset game (peta, atlas, model 3D) dimuat dengan versi `?v=<hash isi aset>` dan di-cache `immutable` 1 tahun: hanya diunduh ulang kalau berubah, dan tidak bisa basi lagi (kasus jalan hitam/biru). CI otomatis menghapus deploy lama setelah deploy sukses (simpan 3 production + 2 preview). Unit test pemilihan deploy & URL berversi, E2E semua request aset berversi, smoke test deploy memeriksa header cache.
 
 ### Diperbaiki
