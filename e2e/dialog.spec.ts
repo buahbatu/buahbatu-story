@@ -5,14 +5,14 @@ const dialog = (page: Page) => page.evaluate(() => window.__BB__?.dialog() ?? nu
 const player = (page: Page) => page.evaluate(() => window.__BB__?.player() ?? null);
 const box = (page: Page) => page.locator('.dialog-box');
 
-const boxText = (page: Page) => page.evaluate(() => document.querySelector('.dialog-box')?.textContent ?? '');
-
 async function untilChoices(page: Page, step: () => Promise<void>) {
   const choices = box(page).locator('.dialog-choices li');
-  for (let i = 0; i < 12 && (await choices.count()) === 0; i++) {
-    const before = await boxText(page);
+  const next = box(page).locator('.dialog-next');
+  for (let i = 0; i < 12; i++) {
+    await expect(next.or(choices.first())).toBeVisible({ timeout: 20_000 });
+    if ((await choices.count()) > 0) break;
     await step();
-    await expect.poll(() => boxText(page), { timeout: 15_000 }).not.toBe(before);
+    await expect(next).toHaveCount(0, { timeout: 20_000 });
   }
   await expect(choices).toHaveCount(3);
 }
@@ -68,7 +68,7 @@ test('selama dialog pemain diam; klik kotak dialog melanjutkan; pilihan bisa dik
   await page.waitForTimeout(400);
   await page.keyboard.up('KeyD');
   expect((await player(page))?.x).toBe(before?.x);
-  await untilChoices(page, () => box(page).click());
+  await untilChoices(page, () => box(page).click({ position: { x: 12, y: 12 } }));
   await box(page).locator('.dialog-choices li').nth(2).click();
   await expect(box(page)).toHaveCount(0);
 });
