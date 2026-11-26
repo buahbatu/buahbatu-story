@@ -9,6 +9,7 @@ import { DialogBox, DialogLog } from './dialog/DialogBox';
 import { TouchControls } from './touch/TouchControls';
 import { DebugPanel } from './debug/DebugPanel';
 import { VersionBadge } from './components/VersionBadge';
+import { GraphicsMenu, SettingsButton } from './menus/GraphicsMenu';
 import { uiStore } from './uiState';
 import { useStore } from './useStore';
 
@@ -29,6 +30,8 @@ export function App() {
       {scene === SCENE.world && <DialogLog />}
       {scene === SCENE.world && <FadeOverlay />}
       {scene === SCENE.world && <DebugPanel />}
+      {(scene === SCENE.title || scene === SCENE.world) && <SettingsButton />}
+      <GraphicsMenu />
       <ToastHost />
     </div>
   );

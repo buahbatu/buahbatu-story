@@ -30,6 +30,8 @@ export interface TestApi {
   ground(x: number, y: number): number | null;
   renderStats(): { calls: number; triangles: number };
   setFx(on: boolean): Promise<void>;
+  graphics(): { tier: string; choice: string; fx: boolean; curve: string; bend: number };
+  setGraphics(change: { tier?: 'auto' | 'low' | 'balanced' | 'high'; fx?: boolean; curve?: 'strong' | 'soft' | 'off' }): Promise<void>;
   setHour(hour: number): Promise<void>;
   lighting(): {
     hour: number;

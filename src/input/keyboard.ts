@@ -3,9 +3,9 @@ import type { InputState } from './logic';
 const isTyping = (target: EventTarget | null) =>
   target instanceof HTMLElement && (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName));
 
-export function attachKeyboard(input: InputState, target: Window = window): () => void {
+export function attachKeyboard(input: InputState, target: Window = window, blocked: () => boolean = () => false): () => void {
   const down = (e: KeyboardEvent) => {
-    if (isTyping(e.target) || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (blocked() || isTyping(e.target) || e.ctrlKey || e.metaKey || e.altKey) return;
     if (input.keyDown(e.code)) e.preventDefault();
   };
   const up = (e: KeyboardEvent) => {

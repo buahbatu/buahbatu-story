@@ -24,6 +24,11 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - Tombol (keputusan user): **Lompat = Spasi**, **Pakai alat = C**, Push-to-talk tetap V, B kosong.
 
 ### Ditambah
+- **P1B-02c** Lengkung dunia & menu Pengaturan Grafis (ADR-030):
+  - **Lengkung dunia** bergaya "kayu bergulir": cakrawala melengkung seperti planet kecil, hanya tampilan (gerak, tabrakan, dan bayangan tetap datar). Mode **Kuat / Halus / Mati**; **Halus** jadi bawaan atas pilihan user setelah melihat 3 render pembanding. Di dalam rumah otomatis datar, dan pergantian mode beralih halus.
+  - Bidang dan kotak panjang (tanah judul, jalan, trotoar, dinding tepi, dasar sungai) dipecah per 2 m supaya ikut melengkung mulus, tidak patah.
+  - **Menu ⚙ Pengaturan Grafis** di layar judul dan di dalam game: Kualitas (Otomatis/Rendah/Seimbang/Tinggi), Efek cahaya (Nyala/Mati), Lengkung dunia (Kuat/Halus/Mati). Langsung berlaku tanpa muat ulang (resolusi, bayangan, efek) dan tersimpan di perangkat. Saat menu terbuka, tombol keyboard tidak memulai game atau menggerakkan pemain; tombol diperbesar di layar sentuh.
+  - `?curve=strong|soft|off`; hook tes `graphics()`/`setGraphics()`; E2E menu, simpan/muat ulang, interior datar, snapshot menu & lengkung.
 - **P1B-02b** Cahaya & efek bergaya ACNH (ADR-030):
   - **Cahaya per jam**: titik kunci subuh, terbit, pagi, siang, sore keemasan, senja, dan malam biru (`src/config/lighting.ts`), diinterpolasi halus (`lightingAt`). Arah matahari/bulan, warna, ambient, kabut, dan grading ikut berubah.
   - **Langit gradasi** (kubah shader dengan cahaya matahari) dan **kabut atmosferik** yang menyatu dengan cakrawala; warna khas area (kabut Lembang) dicampur saat siang.

@@ -1,5 +1,6 @@
 import type { I18nKey } from '../content/i18n';
 import type { SceneKey } from '../scenes/keys';
+import type { GraphicsSettings } from '../render/settings';
 import { createStore } from './store';
 import type { Toast } from './toasts';
 
@@ -17,6 +18,8 @@ export interface UiState {
   touch: boolean;
   debug: DebugInfo | null;
   debugLayers: { collision: boolean; grid: boolean };
+  graphics: GraphicsSettings | null;
+  settingsOpen: boolean;
 }
 
 export interface DebugInfo {
@@ -60,6 +63,8 @@ export const uiStore = createStore<UiState>({
   touch: false,
   debug: null,
   debugLayers: { collision: true, grid: true },
+  graphics: null,
+  settingsOpen: false,
 });
 
 export function setActiveScene(scene: SceneKey): void {

@@ -1,5 +1,7 @@
 import type { GameRuntime } from '../core/runtime';
 import type { Engine } from '../engine/engine';
+import type { GraphicsRuntime } from '../render/setup';
+import { worldCurve } from '../render/curve';
 import { createInitialState } from '../core/state';
 import { APPEARANCE } from '../entities';
 import type { WorldScene } from '../scenes';
@@ -14,6 +16,7 @@ interface TestHookContext {
   engine: Engine;
   runtime: GameRuntime;
   world: WorldScene;
+  graphics: GraphicsRuntime;
 }
 
 const nextFrame = () =>
@@ -37,7 +40,7 @@ function waitForTitle(): Promise<void> {
   });
 }
 
-function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
+function createTestApi({ engine, runtime, world, graphics }: TestHookContext): TestApi {
   return {
     async ready() {
       await waitForTitle();
@@ -64,6 +67,13 @@ function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
     },
     async setHour(hour) {
       world.setHour(hour);
+      await nextFrame();
+    },
+    graphics: () => ({ ...graphics.settings, tier: graphics.tier, choice: graphics.settings.tier, bend: worldCurve.bend }),
+    async setGraphics(change) {
+      graphics.update({ ...graphics.settings, ...change });
+      uiStore.set({ graphics: graphics.settings });
+      await engine.whenFxReady();
       await nextFrame();
     },
     lighting: () => {

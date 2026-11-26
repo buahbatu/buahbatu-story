@@ -1,4 +1,5 @@
-import { Group, Mesh, MeshLambertMaterial, PlaneGeometry, type Texture } from 'three';
+import { Group, Mesh, MeshLambertMaterial, type Texture } from 'three';
+import { bendablePlane } from '../../render/segments';
 import { ROAD, WORLD_SKIRT } from '../../config/world';
 import { elevation, type AreaData, type MapObject, type Rect } from '../map/logic';
 import { texturedBox } from '../props/kit';
@@ -6,7 +7,7 @@ import { TEX, repeated } from '../props/textures';
 import { roadLayout, type Axis } from './logic';
 
 function flat(area: AreaData, r: Rect, lift: number, material: MeshLambertMaterial): Mesh {
-  const mesh = new Mesh(new PlaneGeometry(r.w, r.h), material);
+  const mesh = new Mesh(bendablePlane(r.w, r.h), material);
   mesh.rotation.x = -Math.PI / 2;
   const cx = r.x + r.w / 2;
   const cz = r.y + r.h / 2;

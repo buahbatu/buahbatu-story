@@ -38,6 +38,7 @@ import { DebugOverlay } from '../debug/overlay';
 import { EXIT_MARK } from '../world/props/furniture';
 import { FpsMeter } from '../debug/logic';
 import { filterTexture } from '../render/look';
+import { worldCurve } from '../render/curve';
 
 const OCCLUSION_POINTS = [0.8, 1.5] as const;
 const wait = (ms: number) => new Promise((done) => setTimeout(done, ms));
@@ -168,6 +169,8 @@ export class WorldScene implements GameScene {
   }
 
   update(dt: number, time: number): void {
+    worldCurve.attach(this.world.scene);
+    worldCurve.update(dt);
     this.water?.offset.set(time * WATER.flow, time * WATER.flow * 0.6);
     this.falls.update(time);
     for (const m of this.exitMarks) {
@@ -368,6 +371,7 @@ export class WorldScene implements GameScene {
     const indoor = settings.interior === true;
     const text = (v: unknown) => (typeof v === 'string' ? v : undefined);
     const fog = text(settings.fog);
+    worldCurve.setFlat(indoor, true);
     this.environment.setAtmosphere({
       sky: text(settings.sky),
       fog,
@@ -464,5 +468,6 @@ export class WorldScene implements GameScene {
     camera.position.set(focus.x + o.x, y + o.y, focus.y + o.z);
     camera.lookAt(focus.x, y, focus.y);
     this.environment.aim(focus.x, y, focus.y);
+    worldCurve.focus(focus.x, focus.y, -o.x, -o.z);
   }
 }

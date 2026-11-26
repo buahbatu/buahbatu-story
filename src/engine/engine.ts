@@ -86,6 +86,10 @@ export class Engine {
     else this.disposePipelines();
   }
 
+  rebuildFx(): void {
+    this.disposePipelines();
+  }
+
   get stats(): RenderStats {
     const world = this.current?.world;
     const pipeline = world && this.fxOn ? this.pipelines.get(world.scene) : undefined;

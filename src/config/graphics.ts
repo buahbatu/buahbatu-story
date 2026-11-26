@@ -1,5 +1,7 @@
 export const TIERS = ['low', 'balanced', 'high'] as const;
 export type Tier = (typeof TIERS)[number];
+export const CURVES = ['strong', 'soft', 'off'] as const;
+export type Curve = (typeof CURVES)[number];
 
 export interface FxProfile {
   ssao: 'off' | 'half' | 'full';
@@ -24,6 +26,13 @@ export const GRAPHICS = {
   storageKey: 'bb.graphics',
   dynamic: { window: 2, lowFps: 40, highFps: 56, step: 0.1, minScale: 0.6, cooldown: 3 },
   auto: { lowMemoryGb: 3, lowCores: 4 },
+  curve: { default: 'soft', bend: { strong: 0.016, soft: 0.007, off: 0 }, side: 0.25, ease: 4, step: 2 } satisfies {
+    default: Curve;
+    bend: Record<Curve, number>;
+    side: number;
+    ease: number;
+    step: number;
+  },
 } as const;
 
 export const FX = {

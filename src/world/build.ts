@@ -11,6 +11,7 @@ import {
   type Material,
   type Texture,
 } from 'three';
+import { bendablePlane } from '../render/segments';
 import { OCCLUSION, WATER, WATER_DEPTH, WORLD_SKIRT } from '../config/world';
 import { edgeWalls, skirtLayout } from './water/logic';
 import { mergeStatic } from '../render/merge';
@@ -85,7 +86,7 @@ export function skirt(area: Pick<AreaData, 'width' | 'height' | 'terrain' | 'hei
   g.name = 'skirt';
   const { grass, beds } = skirtLayout(area, margin);
   const flat = (r: { x: number; z: number; w: number; d: number }, y: number, map: Texture) => {
-    const plane = new Mesh(new PlaneGeometry(r.w, r.d), new MeshLambertMaterial({ map: repeated(map, r.w, r.d) }));
+    const plane = new Mesh(bendablePlane(r.w, r.d), new MeshLambertMaterial({ map: repeated(map, r.w, r.d) }));
     plane.rotation.x = -Math.PI / 2;
     plane.position.set(r.x + r.w / 2, y, r.z + r.d / 2);
     return plane;
@@ -94,7 +95,7 @@ export function skirt(area: Pick<AreaData, 'width' | 'height' | 'terrain' | 'hei
   for (const w of edgeWalls(area)) {
     const length = w.to - w.from;
     const wall = new Mesh(
-      new PlaneGeometry(length, w.height),
+      bendablePlane(length, w.height),
       new MeshLambertMaterial({ map: repeated(TEX.rock(), length, w.height), side: DoubleSide }),
     );
     const mid = (w.from + w.to) / 2;
@@ -113,7 +114,7 @@ export function skirt(area: Pick<AreaData, 'width' | 'height' | 'terrain' | 'hei
     for (const side of [0, 1]) {
       const length = alongX ? b.w : b.d;
       const wall = new Mesh(
-        new PlaneGeometry(length, WATER_DEPTH),
+        bendablePlane(length, WATER_DEPTH),
         new MeshLambertMaterial({ map: repeated(TEX.soil(), length, WATER_DEPTH), side: DoubleSide }),
       );
       if (alongX) wall.position.set(b.x + b.w / 2, -WATER_DEPTH / 2, b.z + side * b.d);

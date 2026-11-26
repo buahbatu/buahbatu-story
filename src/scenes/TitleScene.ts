@@ -1,4 +1,4 @@
-import { IcosahedronGeometry, Mesh, MeshLambertMaterial, PerspectiveCamera, PlaneGeometry, Scene, type Object3D } from 'three';
+import { IcosahedronGeometry, Mesh, MeshLambertMaterial, PerspectiveCamera, Scene, type Object3D } from 'three';
 import { PALETTE } from '../config/palette';
 import type { Engine, GameScene } from '../engine/engine';
 import { APPEARANCE } from '../entities';
@@ -7,13 +7,16 @@ import { TITLE_START } from '../config/world';
 import type { WorldScene } from './WorldScene';
 import { Environment, type Grade } from '../world/environment';
 import { LIGHTING } from '../config/lighting';
+import { worldCurve } from '../render/curve';
+import { uiStore } from '../ui/uiState';
+import { bendablePlane } from '../render/segments';
 import { preloadAssets } from '../world/props/assets';
 import { assetsFor } from '../world/props/logic';
 import { farmhouse, strawberryPlot } from '../world/props/models';
 import { fence, tree } from '../world/props/nature';
 import { SCENE } from './keys';
 
-const CAMERA = { fov: 38, distance: 22, height: 7, lookY: 2.5, lookZ: -14, sway: 0.16, speed: 0.12 } as const;
+const CAMERA = { fov: 38, distance: 22, height: 7, lookY: 2.5, lookZ: -14, focusZ: 3, sway: 0.16, speed: 0.12 } as const;
 const CAST = [
   { look: 'A', x: -3.3, z: 3.2, yaw: 0.4 },
   { look: 'B', x: 0.1, z: 3.4, yaw: -0.4 },
@@ -34,7 +37,7 @@ function placed<T extends Object3D>(object: T, x: number, z: number, rotY = 0): 
 }
 
 function plane(w: number, d: number, color: number, x: number, y: number, z: number): Mesh {
-  const mesh = new Mesh(new PlaneGeometry(w, d), mat(color));
+  const mesh = new Mesh(bendablePlane(w, d), mat(color));
   mesh.rotation.x = -Math.PI / 2;
   mesh.position.set(x, y, z);
   return mesh;
@@ -65,6 +68,7 @@ export class TitleScene implements GameScene {
   private engine: Engine | null = null;
   private visits = 0;
   private readonly world3d: WorldScene;
+  readonly environment: Environment;
 
   constructor(world: WorldScene) {
     this.world3d = world;
@@ -72,6 +76,7 @@ export class TitleScene implements GameScene {
     const environment = new Environment(scene, { near: 35, far: 95 }, true);
     environment.setHour(LIGHTING.titleHour);
     environment.aim(0, 0, -4);
+    this.environment = environment;
     scene.add(plane(160, 160, PALETTE.grass, 0, 0, 0), plane(2.2, 40, PALETTE.path, -1.6, 0.01, 4));
     this.world = { scene, camera: new PerspectiveCamera(CAMERA.fov, 16 / 9, 0.1, 200), grade: environment.grade };
     scene.add(placed(farmhouse(), -7, -4, 0.62), placed(strawberryPlot(6, 4), 4, -1), ...hills());
@@ -100,6 +105,7 @@ export class TitleScene implements GameScene {
   }
 
   async enter(engine: Engine): Promise<void> {
+    worldCurve.setFlat(false, true);
     this.update(0, 0);
     const visit = ++this.visits;
     this.decorated ??= Promise.all([preloadAssets(assetsFor(['tree', 'fence'])), this.addCast()]).then(() => {
@@ -121,7 +127,7 @@ export class TitleScene implements GameScene {
 
   private readonly begin = (event: KeyboardEvent | PointerEvent): void => {
     const engine = this.engine;
-    if (!engine || ('repeat' in event && event.repeat) || ('button' in event && event.button > 0)) return;
+    if (!engine || uiStore.get().settingsOpen || ('repeat' in event && event.repeat) || ('button' in event && event.button > 0)) return;
     this.exit();
     this.world3d.goto(TITLE_START.area, TITLE_START.spawn);
     void engine.start(SCENE.world);
@@ -144,7 +150,7 @@ export class TitleScene implements GameScene {
     this.world.camera.updateProjectionMatrix();
   }
 
-  update(_dt: number, time: number): void {
+  update(dt: number, time: number): void {
     this.cast.forEach((c, i) => {
       c.play('idle', time + i * 0.7);
     });
@@ -152,5 +158,8 @@ export class TitleScene implements GameScene {
     const { camera } = this.world;
     camera.position.set(Math.sin(angle) * CAMERA.distance, CAMERA.height, Math.cos(angle) * CAMERA.distance);
     camera.lookAt(0, CAMERA.lookY, CAMERA.lookZ);
+    worldCurve.attach(this.world.scene);
+    worldCurve.focus(0, CAMERA.focusZ, -camera.position.x, CAMERA.lookZ - camera.position.z);
+    worldCurve.update(dt);
   }
 }

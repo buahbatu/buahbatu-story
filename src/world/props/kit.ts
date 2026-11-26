@@ -1,5 +1,6 @@
-import { BoxGeometry, Color, Group, Mesh, MeshBasicMaterial, MeshLambertMaterial, type Material, type Texture } from 'three';
+import { Color, Group, Mesh, MeshBasicMaterial, MeshLambertMaterial, type Material, type Texture } from 'three';
 import { repeated } from './textures';
+import { bendableBox } from '../../render/segments';
 
 const flat = new Map<string, MeshLambertMaterial>();
 
@@ -16,7 +17,7 @@ export const textured = (texture: Texture, rx = 1, ry = 1, tint?: string): MeshL
   new MeshLambertMaterial({ map: repeated(texture, rx, ry), ...(tint ? { color: new Color(tint) } : {}) });
 
 export function box(w: number, h: number, d: number, material: Material | Material[], x = 0, y = 0, z = 0): Mesh {
-  const mesh = new Mesh(new BoxGeometry(w, h, d), material);
+  const mesh = new Mesh(bendableBox(w, h, d), material);
   mesh.position.set(x, y, z);
   return mesh;
 }

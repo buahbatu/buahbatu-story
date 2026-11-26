@@ -32,7 +32,7 @@ test('baca papan: teks mengetik, E mempercepat & lanjut, pilihan, dialog lanjuta
   await expect(box(page).locator('.dialog-name')).toHaveText('Papan Pengumuman');
   await expect(page.locator('.interact-prompt')).toHaveCount(0);
   const text = box(page).locator('.dialog-text');
-  await expect.poll(async () => (await text.textContent())?.length ?? 0).toBeGreaterThan(0);
+  await expect.poll(async () => (await text.textContent())?.length ?? 0, { intervals: [30] }).toBeGreaterThan(0);
   const partial = (await text.textContent()) ?? '';
   expect(partial.length).toBeLessThan(70);
 

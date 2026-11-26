@@ -53,11 +53,9 @@ export class Environment {
     this.sun = new DirectionalLight(0xffffff, 1);
     if (shadows) {
       this.sun.castShadow = true;
-      const { shadowMap, shadowRadius } = profile();
-      this.sun.shadow.mapSize.set(shadowMap, shadowMap);
+      this.applyProfile();
       this.sun.shadow.bias = SHADOW.bias;
       this.sun.shadow.normalBias = SHADOW.normalBias;
-      this.sun.shadow.radius = shadowRadius;
       const cam = this.sun.shadow.camera;
       cam.left = cam.bottom = -SHADOW.extent;
       cam.right = cam.top = SHADOW.extent;
@@ -70,6 +68,18 @@ export class Environment {
     scene.add(this.ambient, this.sun, this.sun.target, this.sky.mesh);
     this.state = lightingAt(this.hourValue, LIGHTING.keys);
     this.apply();
+  }
+
+  applyProfile(): void {
+    if (!this.sun.castShadow) return;
+    const { shadowMap, shadowRadius } = profile();
+    const { shadow } = this.sun;
+    if (shadow.mapSize.x !== shadowMap) {
+      shadow.map?.dispose();
+      shadow.map = null;
+      shadow.mapSize.set(shadowMap, shadowMap);
+    }
+    shadow.radius = shadowRadius;
   }
 
   get hour(): number {

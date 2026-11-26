@@ -594,6 +594,137 @@
   text-shadow: var(--px) var(--px) 0 var(--color-night);
 }
 
+.settings-button {
+  position: absolute;
+  top: calc(var(--px) * 8);
+  left: calc(var(--px) * 8);
+  width: calc(var(--px) * 24);
+  height: calc(var(--px) * 24);
+  padding: calc(var(--px) * 4);
+  border: calc(var(--px) * 2) solid var(--color-wood);
+  border-radius: calc(var(--px) * 6);
+  background: rgb(244 233 209 / 85%);
+  color: var(--color-wood-dark);
+  box-shadow: var(--px) var(--px) 0 0 var(--color-wood-dark);
+  cursor: pointer;
+}
+
+.settings-button[aria-expanded='true'] {
+  background: var(--color-wood);
+  color: var(--color-cream);
+}
+
+.settings-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.settings-backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(29 26 47 / 45%);
+  animation: toast-in var(--dur-fast) steps(2, end);
+}
+
+.settings-panel {
+  min-width: calc(var(--px) * 240);
+  max-width: 92%;
+  padding: calc(var(--px) * 8) calc(var(--px) * 10);
+  border-radius: calc(var(--px) * 6);
+}
+
+.settings-title {
+  margin: 0 0 calc(var(--px) * 8);
+  font-family: var(--font-title);
+  font-size: var(--text-s);
+  color: var(--color-wood-dark);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--px) * 8);
+  margin-bottom: calc(var(--px) * 6);
+}
+
+.settings-label {
+  font-weight: 700;
+}
+
+.settings-choices {
+  display: flex;
+  gap: calc(var(--px) * 3);
+}
+
+.settings-choice,
+.settings-close {
+  padding: calc(var(--px) * 2) calc(var(--px) * 5);
+  border: var(--px) solid var(--color-wood);
+  border-radius: calc(var(--px) * 4);
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: var(--text-s);
+  cursor: pointer;
+}
+
+.settings-choice[aria-pressed='true'] {
+  background: var(--color-wood);
+  color: var(--color-cream);
+}
+
+.settings-choice:focus-visible,
+.settings-close:focus-visible,
+.settings-button:focus-visible {
+  outline: calc(var(--px) * 2) solid var(--color-strawberry);
+  outline-offset: var(--px);
+}
+
+.settings-note {
+  margin: calc(var(--px) * 4) 0 calc(var(--px) * 6);
+  font-size: var(--text-s);
+  opacity: 0.75;
+}
+
+.settings-close {
+  display: block;
+  margin-left: auto;
+  background: var(--color-wood-dark);
+  color: var(--color-cream);
+}
+
+@media (pointer: coarse) {
+  .settings-button {
+    width: calc(var(--px) * 34);
+    height: calc(var(--px) * 34);
+    padding: calc(var(--px) * 6);
+  }
+
+  .settings-panel {
+    font-size: var(--text-l);
+  }
+
+  .settings-title {
+    font-size: var(--text-m);
+  }
+
+  .settings-choice,
+  .settings-close {
+    min-height: calc(var(--px) * 28);
+    padding: calc(var(--px) * 4) calc(var(--px) * 8);
+    font-size: var(--text-m);
+  }
+
+  .settings-note {
+    font-size: var(--text-m);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
