@@ -49,8 +49,10 @@ export function GameLogo() {
                   transform: `translateY(calc(var(--px) * ${((i - mid) ** 2 * ARC).toFixed(2)})) rotate(${((i - mid) * TILT).toFixed(1)}deg)`,
                 }}
               >
-                <span class="logo-glyph" data-ch={ch}>
-                  {ch}
+                <span class="logo-bob">
+                  <span class="logo-glyph" data-ch={ch}>
+                    {ch}
+                  </span>
                 </span>
               </span>
             ))}

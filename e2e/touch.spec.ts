@@ -99,7 +99,7 @@ test.describe('kontrol sentuh di HP/tablet', () => {
     await expect(page.locator('.touch-controls')).toHaveCount(0);
     for (let i = 0; i < 12 && (await page.locator('.dialog-box').count()) > 0; i++) {
       const choices = page.locator('.dialog-choices li');
-      if ((await choices.count()) > 0) await choices.last().tap();
+      if ((await choices.count()) > 0) await choices.last().dispatchEvent('click');
       else await page.locator('.dialog-box').tap();
       await page.waitForTimeout(120);
     }

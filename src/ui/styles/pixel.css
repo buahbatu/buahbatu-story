@@ -361,6 +361,10 @@
 .logo-letter {
   display: inline-block;
 }
+.logo-bob {
+  display: inline-block;
+  animation: logo-wave 2.8s ease-in-out calc(var(--i) * -0.2s) infinite;
+}
 .logo-glyph {
   position: relative;
   display: inline-block;
@@ -369,7 +373,6 @@
   background: linear-gradient(180deg, #fffdf0 0 28%, #ffe783 46%, #fbc44f 74%, #f0973a 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  animation: logo-wave 2.8s ease-in-out calc(var(--i) * -0.2s) infinite;
 }
 .logo-glyph::before {
   content: attr(data-ch);

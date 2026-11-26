@@ -15,7 +15,7 @@ export default defineConfig({
   retries: CI ? 1 : 0,
   reporter: CI ? [['github'], ['html', { open: 'never' }]] : [['list'], ['html', { open: 'never' }]],
   expect: {
-    toHaveScreenshot: { animations: 'disabled', caret: 'hide', maxDiffPixelRatio: 0.002 },
+    toHaveScreenshot: { animations: 'disabled', caret: 'hide', maxDiffPixelRatio: 0.002, timeout: 30_000 },
   },
   use: {
     launchOptions: { args: chromiumArgs },

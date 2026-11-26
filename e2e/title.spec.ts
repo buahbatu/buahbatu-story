@@ -50,3 +50,42 @@ test('setelah masuk dunia, tombol & ketukan tidak memicu "mulai" lagi (tidak kem
   expect(await area(page)).toBe('lembang');
   expect((await page.evaluate(() => window.__BB__?.travel()))?.trips).toBe(0);
 });
+
+test('logo tetap emas & terbaca saat animasi berjalan (bukan hanya saat gerak dikurangi)', async ({ game: { page } }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.reload();
+  await page.waitForFunction(() => window.__BB__ !== undefined);
+  await page.evaluate(() => window.__BB__?.ready());
+  await page.waitForTimeout(1500);
+  expect(
+    await page
+      .locator('.logo-glyph')
+      .first()
+      .evaluate((el) => getComputedStyle(el).animationName),
+  ).toBe('none');
+  expect(
+    await page
+      .locator('.logo-bob')
+      .first()
+      .evaluate((el) => getComputedStyle(el).animationName),
+  ).toBe('logo-wave');
+  const clip = await page.locator('.logo-word').boundingBox();
+  expect(clip).not.toBeNull();
+  const shot = (await page.screenshot({ animations: 'allow', ...(clip ? { clip } : {}) })).toString('base64');
+  const gold = await page.evaluate(async (data) => {
+    const blob = await (await fetch(`data:image/png;base64,${data}`)).blob();
+    const bitmap = await createImageBitmap(blob);
+    const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return 0;
+    ctx.drawImage(bitmap, 0, 0);
+    const px = ctx.getImageData(0, 0, bitmap.width, bitmap.height).data;
+    let hits = 0;
+    for (let i = 0; i < px.length; i += 4) {
+      const [r = 0, g = 0, b = 0] = [px[i], px[i + 1], px[i + 2]];
+      if (r > 220 && g > 150 && b < 170) hits++;
+    }
+    return hits / (px.length / 4);
+  }, shot);
+  expect(gold).toBeGreaterThan(0.12);
+});
