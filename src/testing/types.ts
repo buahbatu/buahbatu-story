@@ -40,6 +40,7 @@ export interface TestApi {
     format: string;
     played: Record<string, number>;
     loops: Record<string, number>;
+    music: { mood: string | null; track: string | null; playing: boolean };
   };
   lighting(): {
     hour: number;

@@ -61,6 +61,13 @@
       "files": ["ambience/waterfall"],
       "volume": 0.75,
       "loop": true
+    },
+    {
+      "id": "amb_pond",
+      "channel": "ambience",
+      "files": ["ambience/pond"],
+      "volume": 0.4,
+      "loop": true
     }
   ],
   "steps": {
@@ -86,5 +93,40 @@
     "wood_floor": "wood",
     "carpet": "soft",
     "water": "water"
+  },
+  "music": {
+    "tracks": [
+      {
+        "id": "title",
+        "file": "music/title",
+        "volume": 0.85
+      },
+      {
+        "id": "day_fields",
+        "file": "music/day-fields",
+        "volume": 0.8
+      },
+      {
+        "id": "day_shepherd",
+        "file": "music/day-shepherd",
+        "volume": 0.8
+      },
+      {
+        "id": "evening_pastoral",
+        "file": "music/evening-pastoral",
+        "volume": 0.8
+      },
+      {
+        "id": "night_bedtime",
+        "file": "music/night-bedtime",
+        "volume": 0.85
+      }
+    ],
+    "moods": {
+      "title": ["title"],
+      "day": ["day_fields", "day_shepherd"],
+      "evening": ["evening_pastoral"],
+      "night": ["night_bedtime"]
+    }
   }
 }

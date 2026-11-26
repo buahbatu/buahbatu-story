@@ -9,6 +9,7 @@ import { Environment, type Grade } from '../world/environment';
 import { LIGHTING } from '../config/lighting';
 import { worldCurve } from '../render/curve';
 import { uiStore } from '../ui/uiState';
+import type { SoundCues } from '../systems/audio/runtime';
 import { bendablePlane } from '../render/segments';
 import { preloadAssets } from '../world/props/assets';
 import { assetsFor } from '../world/props/logic';
@@ -69,6 +70,7 @@ export class TitleScene implements GameScene {
   private visits = 0;
   private readonly world3d: WorldScene;
   readonly environment: Environment;
+  sound: Pick<SoundCues, 'music'> = { music: () => undefined };
 
   constructor(world: WorldScene) {
     this.world3d = world;
@@ -151,6 +153,7 @@ export class TitleScene implements GameScene {
   }
 
   update(dt: number, time: number): void {
+    this.sound.music('title');
     this.cast.forEach((c, i) => {
       c.play('idle', time + i * 0.7);
     });

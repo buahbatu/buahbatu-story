@@ -135,10 +135,10 @@ Rumusan user (2026-11-26): **gameplay HM Back to Nature + The Sims & GTA + grafi
 - [x] **P1B-02b** Cahaya & efek: langit gradasi, kabut atmosferik, bayangan lembut, SSAO, bloom, tilt-shift, color grading per jam · Ref: 04 (ADR-030) · ✅ 2026-11-26 · cahaya 7 titik kunci per jam, kubah langit, kabut menyatu cakrawala, PCF lembut, pipeline lazy (MSAA+SSAO n8ao+tilt-shift+bloom+grading) per tingkat; jam dari `?hour=` sampai P2-03
 - [x] **P1B-02c** Lengkung dunia Kuat/Halus/Mati (3 render pembanding, default Halus) + pengaturan grafis di UI · Ref: 04 (ADR-030) · ✅ 2026-11-26 · user pilih Halus; shader lengkung (bayangan & logika datar, interior datar), geometri panjang dipecah 2 m, menu ⚙ Kualitas/Efek/Lengkung tersimpan & langsung berlaku; + perbaikan logo judul saat animasi
 - [x] **P1B-02d** Sistem audio dasar + pengaturan suara (permintaan user): WebAudio dengan saluran Musik / Efek suara / Suasana, tab **Suara** di menu ⚙ (on/off + volume, tersimpan), efek suara & suasana CC0 (gemericik air & air terjun, langkah kaki, klik UI); audio lengkap tetap P16-01 · Ref: 40, 41 · ✅ 2026-11-27 · WebAudio 3 saluran + Master, tab Suara (tersimpan), langkah 6 permukaan, gemericik sungai/curug by jarak, klik UI; OGG+M4A; aset CC0/CC BY di CREDITS
-- [ ] **P1B-02e** Musik bawaan bernuansa Harvest Moon BTN (permintaan user): musik bebas lisensi (CC0/CC-BY) gaya game bertani jadul yang hangat untuk layar judul, siang, malam & tiap musim, crossfade antar suasana; contoh didengar & disetujui user dulu, kredit di CREDITS.md. Lagu asli BTN (berhak cipta) tidak dimasukkan ke repo/build · Ref: 41
+- [~] **P1B-02e** Musik bawaan bernuansa Harvest Moon BTN (permintaan user): musik bebas lisensi (CC0/CC-BY) gaya game bertani jadul yang hangat untuk layar judul, siang, malam & tiap musim, crossfade antar suasana; contoh didengar & disetujui user dulu, kredit di CREDITS.md. Lagu asli BTN (berhak cipta) tidak dimasukkan ke repo/build · Ref: 41 · 🚧 2026-11-27
 - [ ] **P1B-03** Material & tekstur baru (user: "grafik bagus, tekstur bagus, bump, map, bukan game burik"): tekstur resolusi tinggi bergaya lukis (tanah, rumput, jalan, batu, kayu, atap, kain, air) + **normal/bump map** (serat kayu, nat batu, genteng, kerikil) + **roughness** per bahan, material toon lembut + rim light, filter linear + mipmap; font UI bersih (pixel hanya aksen) · Ref: 42, 40
 - [ ] **P1B-04** Medan mulus (user: **tidak boleh ada yang flat/datar**, termasuk tanah, dataran, rumput): **kontur campuran bisa/tidak dilewati** (user: jangan semua tidak bisa dilewati = cacat): sebagian besar lereng bisa didaki (melambat saat menanjak), tebing batu curam hanya di spot tertentu sebagai pembatas alami, setiap dataran punya akses naik (lereng/setapak/tangga/jalan), undakan rendah bisa dilompati, tes otomatis semua dataran terjangkau dari titik awal; gelombang alami kecil & besar di seluruh tanah (ladang & pondasi hanya dilandaikan, tidak rata licin); format dunia vektor (`scripts/world/`), pemanggang chunk (heightfield 0,5 m, splat, grid logika 1 m), runtime API logika di atas heightfield, tebing jadi lereng batu alami, grid hanya tampil saat pegang alat · Ref: 04 (ADR-031), 10
-- [ ] **P1B-05** Air lengkung: sungai berkelok (lebar & kedalaman per titik, mengalir, tidak buntu), danau/kolam bentuk bebas dengan tepian landai, shader air ACNH (pantulan langit, kilau, buih tepi, riak), curug & jembatan di atas sistem baru · Ref: 04 (ADR-031), 10
+- [ ] **P1B-05** Air lengkung: sungai berkelok (lebar & kedalaman per titik, mengalir, tidak buntu), danau/kolam bentuk bebas dengan tepian landai, shader air ACNH (pantulan langit, kilau, buih tepi, riak), curug & jembatan di atas sistem baru; **jembatan kayu melengkung** ke atas (permintaan user, mis. jembatan Lembang): dek berbentuk busur, tinggi pijakan pemain ikut lengkungan · Ref: 04 (ADR-031), 10
 - [ ] **P1B-06** Vegetasi & hiasan alam (padang rumput lebat bertekstur, bukan bidang hijau polos; user: **rumput = aset 3D sungguhan, bukan garis/bidang tipis**: gerumbul rumput stylized bervolume beberapa variasi, instancing, bergoyang angin, menyibak saat dilewati): rumput lebat bergoyang angin (instancing), bunga, alang-alang, teratai, batu di spot alami (aturan otomatis + manual) · Ref: 42, 10
 - [ ] **P1B-07** Aset bulat stylized: pohon, semak, batu, pagar, lampu, prop & bangunan bergaya ACNH (paket CC0 + model khas Bandung buatan sendiri), catat `CREDITS.md` · Ref: 42
 - [ ] **P1B-08** Karakter chibi baru pemain A (Aldi) & Michelle: model bulat, wajah ekspresif (mata/mulut berganti), animasi idle/jalan/lari/lompat + emote, pewarnaan & outfit dasar · Ref: 15, 42
@@ -163,15 +163,15 @@ Rumusan user (2026-11-26): **gameplay HM Back to Nature + The Sims & GTA + grafi
 
 ## P3 · Pertanian, Ternak & Inventory
 - [ ] **P3-01** Skema & data `items.json` + loader zod + validasi ID unik · Ref: 12, 02
-- [ ] **P3-02** Inventory (tas + hotbar 10 slot) logic + test · Ref: 12
+- [ ] **P3-02** Inventory (tas + hotbar 10 slot) logic + test; **kulkas** di rumah untuk menyimpan hasil panen & bahan masakan (terpisah dari tas, kapasitas besar, permintaan user 2026-11-27) · Ref: 12
 - [ ] **P3-03** UI inventory & hotbar (drag-drop, tooltip) · Ref: 40
 - [ ] **P3-04** Alat (cangkul, penyiram, sabit, kapak, beliung) + sistem energi · Ref: 12, 16
 - [ ] **P3-05** Status tanah (gembur, tersiram, reset harian) via Command · Ref: 12
-- [ ] **P3-06** Tanaman: tanam, tumbuh per hari, layu, regrow, kualitas + test · Ref: 12
+- [ ] **P3-06** Tanaman: tanam, tumbuh per hari, layu, regrow, kualitas + test; **kebun pohon terpisah** dari lahan sayur (permintaan user): pohon buah ditanam di lahan khusus, tumbuh lebih lama, panen musiman berulang · Ref: 12
 - [ ] **P3-07** Data `crops.json` minimal 16 tanaman + sprite tahap tumbuh · Ref: 12
 - [ ] **P3-08** Kotak Kirim + penjualan saat Day Tick + ringkasan · Ref: 12, 13
 - [ ] **P3-09** Pupuk & crafting dasar (meja kerja, penyiram otomatis) · Ref: 12, 20
-- [ ] **P3-10** Ternak: kandang ayam & sapi, makan, elus, hati, produk + test · Ref: 12
+- [ ] **P3-10** Ternak: kandang ayam & sapi, makan, elus, hati, produk + test; **ayam bertelur** tiap hari: telur bisa **dimasak** atau **dierami** (dimasukkan ke inkubator/dierami induk → menetas jadi anak ayam beberapa hari kemudian), permintaan user · Ref: 12
 - [ ] **P3-11** Peliharaan (kucing/anjing; termasuk kucing Michelle **Luna** putih & **Ngkok** putih-abu, `docs/43`) + mesin olahan dasar (selai, yogurt) · Ref: 12
 - [ ] **P3-11b** **Rumah penuh kucing** (keputusan user 2026-11-25): bisa punya **banyak kucing**; **beli** di pet shop → langsung diberi nama; **bawa pulang kucing kampung** (diberi makan/didekati beberapa hari) → nama baru bisa diberikan setelah **meter Nyaman** penuh (betah di rumah); kucing bisa diberi ikan (P10-01), dielus, tidur di rumah · Ref: 12
 
@@ -287,7 +287,7 @@ Rumusan user (2026-11-26): **gameplay HM Back to Nature + The Sims & GTA + grafi
 
 ## P10 · Aktivitas
 - [ ] **P10-01** Mancing: minigame + `fish.json` (≥ 30) + test seleksi ikan; ikan bisa **dijual, dimasak, dihadiahkan ke pasangan, atau diberi ke kucing** (masukan user 2026-11-25) · Ref: 20
-- [ ] **P10-02** Masak: dapur, resep Sunda (≥ 20 awal), buff, masak berdua · Ref: 20
+- [ ] **P10-02** Masak: dapur, resep Sunda (≥ 20 awal), buff, masak berdua; bahan dari **hasil panen sayur, buah & hewani** (telur, susu, ikan); **buku resep** (resep terbuka dari NPC/TV/coba-coba, tercatat di buku); ambil bahan langsung dari kulkas (permintaan user: selayaknya kehidupan nyata) · Ref: 20
 - [ ] **P10-03** Crafting lengkap (kategori, resep terbuka via skill) · Ref: 20
 - [ ] **P10-04** Mode foto (pose, filter, bingkai) + simpan album + sinkron Storage · Ref: 20
 - [ ] **P10-05** Ensiklopedia koleksi · Ref: 21

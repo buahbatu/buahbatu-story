@@ -1,0 +1,29 @@
+Music used in Buahbatu Story (all from OpenGameArt.org)
+
+1. "4 Music Box Tracks" - musicbox2_cute_tune.ogg -> audio/music/title.(ogg|m4a)
+   Author: Aureolus_Omicron
+   Source: https://opengameart.org/content/4-music-box-tracks
+   License: CC0 1.0 https://creativecommons.org/publicdomain/zero/1.0/
+
+2. "Fields of Cabbage" -> audio/music/day-fields.(ogg|m4a)
+   Author: ARoachIFoundOnMyPillow
+   Source: https://opengameart.org/content/fields-of-cabbage
+   License: CC0 1.0 https://creativecommons.org/publicdomain/zero/1.0/
+
+3. "Shepherd Dog - Day 13" -> audio/music/day-shepherd.(ogg|m4a)
+   Author: Zane
+   Source: https://opengameart.org/content/shepherd-dog-day-13
+   License: CC0 1.0 https://creativecommons.org/publicdomain/zero/1.0/
+
+4. "Pastoral" -> audio/music/evening-pastoral.(ogg|m4a)
+   Author: Yubatake
+   Source: https://opengameart.org/content/pastoral
+   License: CC BY 4.0 https://creativecommons.org/licenses/by/4.0/
+   Modification: first 200 s used with a 5 s fade-out.
+
+5. "Bedtime Music Box" (bedtime_story) -> audio/music/night-bedtime.(ogg|m4a)
+   Author: Machine
+   Source: https://opengameart.org/content/bedtime-music-box
+   License: CC BY 3.0 https://creativecommons.org/licenses/by/3.0/
+
+All tracks: loudness normalized (-18 LUFS), re-encoded to Ogg Vorbis & AAC.

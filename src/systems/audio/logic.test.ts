@@ -4,6 +4,8 @@ import { soundFileSchema } from './schema';
 import sounds from '../../content/sounds.json';
 import {
   channelGain,
+  moodAt,
+  nextTrack,
   defaultAudio,
   distanceToBox,
   nearest,
@@ -14,6 +16,7 @@ import {
   serializeAudio,
   stepClock,
   surfaceOf,
+  waterBodies,
   waterBoxes,
 } from './logic';
 
@@ -149,6 +152,59 @@ describe('isi sounds.json', () => {
 
   it('menolak langkah yang menunjuk suara tak ada', () => {
     const broken = { ...sounds, steps: { ...sounds.steps, grass: 'tidak_ada' } };
+    expect(soundFileSchema.safeParse(broken).success).toBe(false);
+  });
+});
+
+describe('air mengalir vs air diam', () => {
+  const grid = (rows: string[]) => ({
+    width: rows[0]?.length ?? 0,
+    height: rows.length,
+    terrain: rows.flatMap((r) => Array.from(r).map((c) => (c === '~' ? 'water' : 'grass'))),
+  });
+
+  it('kolam tertutup = diam, sungai sampai tepi peta = mengalir', () => {
+    const area = grid(['~.....', '~..~~.', '~..~~.', '~.....']);
+    const b = waterBodies(area, []);
+    expect(b.flowing).toHaveLength(4);
+    expect(b.still).toHaveLength(4);
+    expect(b.still.every((t) => t.x >= 3)).toBe(true);
+  });
+
+  it('kolam yang tersambung curug ikut mengalir', () => {
+    const area = grid(['......', '..~~..', '..~~..', '......']);
+    expect(waterBodies(area, []).still).toHaveLength(4);
+    expect(waterBodies(area, [{ x: 2, y: 0, w: 2, h: 0.5 }]).flowing).toHaveLength(4);
+  });
+
+  it('tanpa air kosong', () => {
+    expect(waterBodies(grid(['...', '...']), [])).toEqual({ flowing: [], still: [] });
+  });
+});
+
+describe('musik per suasana', () => {
+  it('moodAt membagi hari jadi siang, sore, malam', () => {
+    expect(moodAt(6)).toBe('day');
+    expect(moodAt(12)).toBe('day');
+    expect(moodAt(17)).toBe('evening');
+    expect(moodAt(19)).toBe('night');
+    expect(moodAt(2)).toBe('night');
+    expect(moodAt(5.9)).toBe('night');
+    expect(moodAt(30)).toBe('day');
+  });
+
+  it('nextTrack tidak mengulang lagu yang sama bila ada pilihan lain', () => {
+    expect(nextTrack(['a', 'b'], 'a', 0)).toBe('b');
+    expect(nextTrack(['a', 'b'], 'b', 0.99)).toBe('a');
+    expect(nextTrack(['a'], 'a', 0.5)).toBe('a');
+    expect(nextTrack([], null, 0.5)).toBeNull();
+    expect(nextTrack(['a', 'b', 'c'], null, 1)).toBe('c');
+  });
+
+  it('semua suasana punya lagu yang ada', () => {
+    const file = soundFileSchema.parse(sounds);
+    for (const mood of ['title', 'day', 'evening', 'night'] as const) expect(file.music.moods[mood].length).toBeGreaterThan(0);
+    const broken = { ...sounds, music: { ...sounds.music, moods: { ...sounds.music.moods, night: ['tidak_ada'] } } };
     expect(soundFileSchema.safeParse(broken).success).toBe(false);
   });
 });

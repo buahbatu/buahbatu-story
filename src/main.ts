@@ -41,6 +41,7 @@ connectGraphics(graphics);
 const audio = new AudioRuntime();
 audio.install();
 world.sound = audio;
+title.sound = audio;
 connectAudio(audio);
 installTouchFullscreen();
 void engine.start(SCENE.boot);

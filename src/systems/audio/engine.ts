@@ -2,6 +2,7 @@ import { AUDIO, type AudioSettings } from '../../config/audio';
 import { assetUrl } from '../../core/assetUrl';
 import { logger } from '../../core/logger';
 import { levelOf, pickVariant, rateFor } from './logic';
+import { MusicPlayer, type MusicStats } from './music';
 import { CHANNELS, type Channel, type SoundDef, type SoundFile } from './schema';
 
 interface LoopVoice {
@@ -16,6 +17,7 @@ export interface AudioStats {
   format: string;
   played: Record<string, number>;
   loops: Record<string, number>;
+  music: MusicStats;
 }
 
 function pickFormat(): string {
@@ -36,11 +38,13 @@ export class AudioEngine {
   private settings: AudioSettings;
   private readonly format = pickFormat();
   private readonly random: () => number;
+  readonly music: MusicPlayer;
 
   constructor(file: SoundFile, settings: AudioSettings, random: () => number = Math.random) {
     this.defs = new Map(file.sounds.map((s) => [s.id, s]));
     this.settings = settings;
     this.random = random;
+    this.music = new MusicPlayer(file, this.format, random);
   }
 
   get unlocked(): boolean {
@@ -54,6 +58,7 @@ export class AudioEngine {
       format: this.format,
       played: { ...this.played },
       loops: Object.fromEntries([...this.loops].map(([id, v]) => [id, v.source ? v.level : 0])),
+      music: this.music.stats(),
     };
   }
 
@@ -71,9 +76,12 @@ export class AudioEngine {
       this.ctx = ctx;
       this.master = master;
       this.apply(this.settings, true);
+      const musicOut = this.channels.get('music');
+      if (musicOut) this.music.attach(ctx, musicOut);
       for (const def of this.defs.values()) for (const f of def.files) void this.buffer(f);
     }
     if (this.ctx.state === 'suspended') void this.ctx.resume().catch(() => undefined);
+    this.music.resume();
   }
 
   suspend(): void {

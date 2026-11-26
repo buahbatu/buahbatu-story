@@ -33,7 +33,7 @@ import { uiStore } from '../ui/uiState';
 import { buildArea, disposeTree, preloadArea } from '../world/build';
 import { Environment, type Grade } from '../world/environment';
 import { bodyBlocked, bridgeAt, parseArea, standHeight, tileIndex, walkLevel, waterAt, type AreaData } from '../world/map/logic';
-import { nearest, stepClock, waterBoxes, type Box, type StepClock } from '../systems/audio/logic';
+import { moodAt, nearest, stepClock, waterBodies, type Box, type StepClock } from '../systems/audio/logic';
 import type { SoundCues } from '../systems/audio/runtime';
 import { SCENE } from './keys';
 import { DebugOverlay } from '../debug/overlay';
@@ -50,7 +50,7 @@ export interface InteractionEvent {
   action: string;
   area: string;
 }
-const SILENT: SoundCues = { step: () => undefined, water: () => undefined, silence: () => undefined };
+const SILENT: SoundCues = { step: () => undefined, water: () => undefined, silence: () => undefined, music: () => undefined };
 const STILL: CameraInput = { rotate: 0, zoom: 0, pan: { x: 0, y: 0 }, twist: 0 };
 
 const mapUrl = (id: string) => new URL(assetUrl(`maps/${id}.tmj`), location.href);
@@ -97,7 +97,7 @@ export class WorldScene implements GameScene {
   player: PlayerMotion | null = null;
   sound: SoundCues = SILENT;
   private steps: StepClock = { left: 0 };
-  private waterZones: { stream: Box[]; falls: Box[] } = { stream: [], falls: [] };
+  private waterZones: { stream: Box[]; still: Box[]; falls: Box[] } = { stream: [], still: [], falls: [] };
 
   constructor() {
     const scene = new Scene();
@@ -175,6 +175,7 @@ export class WorldScene implements GameScene {
   }
 
   update(dt: number, time: number): void {
+    this.sound.music(moodAt(this.environment.hour));
     worldCurve.attach(this.world.scene);
     worldCurve.update(dt);
     this.water?.offset.set(time * WATER.flow, time * WATER.flow * 0.6);
@@ -358,7 +359,8 @@ export class WorldScene implements GameScene {
         wading: waterAt(area, x, y, PLAYER.shallowTiles) !== 'none',
       });
     }
-    this.sound.water(nearest(after.x, after.y, this.waterZones.stream), nearest(after.x, after.y, this.waterZones.falls));
+    const z = this.waterZones;
+    this.sound.water(nearest(after.x, after.y, z.stream), nearest(after.x, after.y, z.falls), nearest(after.x, after.y, z.still));
   }
 
   exit(): void {
@@ -368,7 +370,9 @@ export class WorldScene implements GameScene {
   private async load(id: string): Promise<void> {
     const area = await this.fetchArea(id);
     this.sound.silence();
-    this.waterZones = { stream: waterBoxes(area), falls: area.objects.filter((o) => o.kind === 'waterfall') };
+    const falls = area.objects.filter((o) => o.kind === 'waterfall');
+    const bodies = waterBodies(area, falls);
+    this.waterZones = { stream: bodies.flowing, still: bodies.still, falls };
     const atlas = await this.atlasFor(versioned(new URL(area.tileset.image, mapUrl(id))));
     this.occlusion.clear();
     this.fx.clear();

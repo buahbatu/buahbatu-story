@@ -43,8 +43,12 @@ test('langkah kaki berbunyi mengikuti permukaan: rumput di darat, cipratan di ai
   await expect.poll(async () => (await audio(page))?.unlocked, { timeout: 10_000 }).toBe(true);
   await page.keyboard.down('KeyS');
   await expect.poll(() => played(page, 'step_grass'), { timeout: 15_000 }).toBeGreaterThan(0);
-  await expect.poll(() => played(page, 'step_water'), { timeout: 15_000 }).toBeGreaterThan(0);
   await page.keyboard.up('KeyS');
+  await page.evaluate(() => window.__BB__?.placePlayer(28.5, 19.5, 'e'));
+  await expect.poll(async () => (await page.evaluate(() => window.__BB__?.water()))?.inWater, { timeout: 10_000 }).toBe(true);
+  await page.keyboard.down('KeyD');
+  await expect.poll(() => played(page, 'step_water'), { timeout: 15_000 }).toBeGreaterThan(0);
+  await page.keyboard.up('KeyD');
   const still = await played(page, 'step_');
   await page.waitForTimeout(800);
   expect(await played(page, 'step_')).toBe(still);
@@ -63,6 +67,32 @@ test('gemericik sungai makin keras saat mendekat, curug terdengar di dekat air t
   await expect.poll(() => level('amb_stream'), { timeout: 10_000 }).toBeGreaterThan(0.6);
   await place(15, 5.5);
   await expect.poll(() => level('amb_waterfall'), { timeout: 10_000 }).toBeGreaterThan(0.6);
+});
+
+test('kolam taman Buahbatu bunyi riak tenang, bukan gemericik sungai', async ({ game: { page } }) => {
+  await page.evaluate(() => window.__BB__?.enterArea('buahbatu', 'start'));
+  await page.keyboard.press('KeyQ');
+  await expect.poll(async () => (await audio(page))?.unlocked, { timeout: 10_000 }).toBe(true);
+  await page.evaluate(() => window.__BB__?.placePlayer(39.5, 28.5, 's'));
+  await expect.poll(async () => (await audio(page))?.loops.amb_pond ?? 0, { timeout: 10_000 }).toBeGreaterThan(0.3);
+  expect((await audio(page))?.loops.amb_stream ?? 0).toBe(0);
+});
+
+test('musik: lagu judul di layar judul, lalu berganti mengikuti jam di dunia', async ({ game: { page } }) => {
+  const music = async () => (await audio(page))?.music;
+  await page.locator('.settings-button').click();
+  await page.locator('.settings-close').click();
+  await expect.poll(async () => (await music())?.mood, { timeout: 10_000 }).toBe('title');
+  await expect.poll(async () => (await music())?.playing, { timeout: 15_000 }).toBe(true);
+  expect((await music())?.track).toBe('title');
+  await page.evaluate(() => window.__BB__?.enterArea('lembang', 'start'));
+  await expect.poll(async () => (await music())?.mood, { timeout: 10_000 }).toBe('day');
+  expect(['day_fields', 'day_shepherd']).toContain((await music())?.track);
+  await page.evaluate(() => window.__BB__?.setHour(17.5));
+  await expect.poll(async () => (await music())?.track, { timeout: 10_000 }).toBe('evening_pastoral');
+  await page.evaluate(() => window.__BB__?.setHour(22));
+  await expect.poll(async () => (await music())?.track, { timeout: 10_000 }).toBe('night_bedtime');
+  await expect.poll(async () => (await music())?.playing, { timeout: 15_000 }).toBe(true);
 });
 
 test('snapshot tab Suara', async ({ game: { page } }) => {

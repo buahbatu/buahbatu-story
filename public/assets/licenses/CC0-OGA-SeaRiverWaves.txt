@@ -1,0 +1,7 @@
+"Sea and river wave sounds" by RandomMind (recorded on the Vistula river)
+Source: https://opengameart.org/content/sea-and-river-wave-sounds
+License: CC0 1.0 https://creativecommons.org/publicdomain/zero/1.0/
+
+Used in Buahbatu Story: VistulaShort.mp3 (122 s - 147 s) -> audio/ambience/pond.(ogg|m4a)
+Modifications: low-pass 3.2 kHz, loudness normalized, end crossfaded into start for a seamless loop,
+re-encoded to Ogg Vorbis & AAC.

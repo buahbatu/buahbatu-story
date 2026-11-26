@@ -1,5 +1,5 @@
 import { AUDIO, type AudioSettings, type ChannelSetting } from '../../config/audio';
-import type { Channel, Surface } from './schema';
+import type { Channel, Mood, Surface } from './schema';
 
 type Key = keyof AudioSettings;
 const KEYS: readonly Key[] = ['master', 'music', 'sfx', 'ambience'];
@@ -35,6 +35,20 @@ export function parseAudio(raw: string | null): AudioSettings {
   } catch {
     return base;
   }
+}
+
+export function moodAt(hour: number): Exclude<Mood, 'title'> {
+  const h = ((hour % 24) + 24) % 24;
+  const { morning, evening, night } = AUDIO.music;
+  if (h >= morning && h < evening) return 'day';
+  if (h >= evening && h < night) return 'evening';
+  return 'night';
+}
+
+export function nextTrack(list: readonly string[], current: string | null, roll: number): string | null {
+  if (list.length === 0) return null;
+  const others = list.length > 1 ? list.filter((id) => id !== current) : list;
+  return others[Math.min(others.length - 1, Math.floor(clamp01(roll) * others.length))] ?? null;
 }
 
 export const serializeAudio = (settings: AudioSettings): string => JSON.stringify(settings);
@@ -102,6 +116,52 @@ export function waterBoxes(area: { width: number; terrain: readonly string[] }):
     if (t === 'water') boxes.push({ x: i % area.width, y: Math.floor(i / area.width), w: 1, h: 1 });
   });
   return boxes;
+}
+
+export interface WaterBodies {
+  flowing: Box[];
+  still: Box[];
+}
+
+export function waterBodies(
+  area: { width: number; height: number; terrain: readonly string[] },
+  falls: readonly Box[],
+  reach = 1.5,
+): WaterBodies {
+  const { width, height, terrain } = area;
+  const seen = new Uint8Array(terrain.length);
+  const out: WaterBodies = { flowing: [], still: [] };
+  terrain.forEach((t, start) => {
+    if (t !== 'water' || seen[start]) return;
+    const tiles: Box[] = [];
+    const queue = [start];
+    seen[start] = 1;
+    let open = false;
+    while (queue.length > 0) {
+      const i = queue.pop() ?? 0;
+      const x = i % width;
+      const y = Math.floor(i / width);
+      const tile = { x, y, w: 1, h: 1 };
+      tiles.push(tile);
+      if (x === 0 || y === 0 || x === width - 1 || y === height - 1) open = true;
+      if (!open && falls.some((f) => distanceToBox(x + 0.5, y + 0.5, f) <= reach)) open = true;
+      for (const [nx, ny] of [
+        [x + 1, y],
+        [x - 1, y],
+        [x, y + 1],
+        [x, y - 1],
+      ] as const) {
+        if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
+        const n = ny * width + nx;
+        if (!seen[n] && terrain[n] === 'water') {
+          seen[n] = 1;
+          queue.push(n);
+        }
+      }
+    }
+    (open ? out.flowing : out.still).push(...tiles);
+  });
+  return out;
 }
 
 export function rateFor(range: readonly [number, number] | undefined, roll: number): number {

@@ -153,7 +153,6 @@ function AudioTab({ audio }: { audio: AudioSettings }) {
           </div>
         );
       })}
-      <p class="settings-note">{t('settings.audio.musicSoon')}</p>
     </>
   );
 }

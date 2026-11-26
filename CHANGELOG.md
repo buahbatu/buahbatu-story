@@ -16,6 +16,8 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - **Hemat Vercel** (ADR-029): aset game (peta, atlas, model 3D) dimuat dengan versi `?v=<hash isi aset>` dan di-cache `immutable` 1 tahun: hanya diunduh ulang kalau berubah, dan tidak bisa basi lagi (kasus jalan hitam/biru). CI otomatis menghapus deploy lama setelah deploy sukses (simpan 3 production + 2 preview). Unit test pemilihan deploy & URL berversi, E2E semua request aset berversi, smoke test deploy memeriksa header cache.
 
 ### Diperbaiki
+- Kolam taman Buahbatu & kolam sandbox tidak lagi berbunyi seperti sungai/air terjun (masukan user): air diam kini berbunyi riak tenang pelan, gemericik hanya untuk sungai yang mengalir.
+- Tes lompat & langkah di air tidak lagi bergantung kecepatan mesin (deteksi per frame di halaman, langkah air diuji di dalam air dangkal).
 - Logo judul "Buahbatu" tidak terbaca (huruf cokelat polos) di browser asli: animasi goyang dipindah ke pembungkus supaya lapisan outline tidak menimpa warna emas; tes E2E baru memeriksa logo saat animasi berjalan.
 - Pindah otomatis dari kontrol sentuh ke keyboard tidak lagi ikut melepas tombol keyboard yang baru ditekan (hanya input sentuh yang dilepas); tes gerak pemain menunggu pemain mulai bergerak sebelum mengukur (stabil di emulasi HP).
 - Model karakter tidak lagi mengunduh tekstur bawaan `colormap.png` yang tak terpakai (warna dibuat dari palet); menghilangkan error console `GLTFLoader: Couldn't load texture` yang sesekali muncul saat perangkat sibuk.
@@ -26,6 +28,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - Tombol (keputusan user): **Lompat = Spasi**, **Pakai alat = C**, Push-to-talk tetap V, B kosong.
 
 ### Ditambah
+- **P1B-02e** Musik bawaan bernuansa Harvest Moon BTN (bebas lisensi, rekomendasi AI disetujui user): kotak musik hangat di layar judul, lagu ceria ladang saat pagi/siang (2 lagu bergantian), pastoral saat sore, kotak musik lembut saat malam; berganti otomatis mengikuti jam dengan crossfade halus, di-stream (hemat memori), diatur di saluran Musik tab Suara. Kredit pencipta di CREDITS.md.
 - **P1B-02d** Sistem audio & tab **Suara** (permintaan user, docs/41 §7):
   - Saluran **Semua suara / Musik / Efek suara / Suasana** dengan on/off + volume di menu ⚙ (tab Grafis & Suara), tersimpan di perangkat, langsung berlaku.
   - **Langkah kaki** mengikuti permukaan (rumput, kerikil/tanah, kayu & jembatan, aspal/paving/keramik, karpet, cipratan saat di air dangkal), irama jalan/lari, variasi tanpa pengulangan & pitch acak.

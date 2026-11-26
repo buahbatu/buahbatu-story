@@ -2,7 +2,7 @@ import { AUDIO, type AudioSettings } from '../../config/audio';
 import { rawContent } from '../../content';
 import { AudioEngine } from './engine';
 import { parseAudio, proximity, serializeAudio, surfaceOf } from './logic';
-import { soundFileSchema, type SoundFile } from './schema';
+import { soundFileSchema, type Mood, type SoundFile } from './schema';
 
 export interface StepCue {
   terrain: string | undefined;
@@ -12,8 +12,9 @@ export interface StepCue {
 
 export interface SoundCues {
   step(cue: StepCue): void;
-  water(streamDistance: number, fallsDistance: number): void;
+  water(streamDistance: number, fallsDistance: number, stillDistance: number): void;
   silence(): void;
+  music(mood: Mood): void;
 }
 
 const UNLOCK_EVENTS = ['pointerdown', 'keydown', 'touchstart'] as const;
@@ -77,12 +78,17 @@ export class AudioRuntime implements SoundCues {
     this.engine.play(this.file.steps[surface]);
   }
 
-  water(streamDistance: number, fallsDistance: number): void {
+  water(streamDistance: number, fallsDistance: number, stillDistance: number): void {
     this.engine.setLoop('amb_stream', proximity(streamDistance, AUDIO.water.near, AUDIO.water.far));
     this.engine.setLoop('amb_waterfall', proximity(fallsDistance, AUDIO.water.fallsNear, AUDIO.water.fallsFar));
+    this.engine.setLoop('amb_pond', proximity(stillDistance, AUDIO.water.stillNear, AUDIO.water.stillFar));
   }
 
   silence(): void {
-    this.water(Infinity, Infinity);
+    this.water(Infinity, Infinity, Infinity);
+  }
+
+  music(mood: Mood): void {
+    this.engine.music.setMood(mood);
   }
 }
