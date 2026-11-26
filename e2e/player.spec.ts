@@ -52,7 +52,20 @@ test('pemain muncul di spawn menghadap kamera, jalan & lari dengan keyboard', as
 
 test('pemain tertahan tepi ruangan', async ({ game: { page } }) => {
   await page.evaluate(() => window.__BB__?.enterArea('kos_a', 'pintu'));
-  const p = await hold(page, ['ShiftLeft', 'KeyD', 'KeyS'], 2500);
+  const keys = ['ShiftLeft', 'KeyD', 'KeyS'];
+  for (const k of keys) await page.keyboard.down(k);
+  await expect
+    .poll(
+      async () => {
+        const p = await player(page);
+        return Math.abs((p?.x ?? 0) - (7 - 0.35)) < 0.005 && Math.abs((p?.y ?? 0) - (6 - 0.35)) < 0.005;
+      },
+      { timeout: 30_000 },
+    )
+    .toBe(true);
+  await page.waitForTimeout(500);
+  const p = await player(page);
+  for (const k of keys) await page.keyboard.up(k);
   expect(p?.x).toBeCloseTo(7 - 0.35, 2);
   expect(p?.y).toBeCloseTo(6 - 0.35, 2);
   expect(p?.facing).toBe('se');

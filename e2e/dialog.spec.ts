@@ -5,11 +5,14 @@ const dialog = (page: Page) => page.evaluate(() => window.__BB__?.dialog() ?? nu
 const player = (page: Page) => page.evaluate(() => window.__BB__?.player() ?? null);
 const box = (page: Page) => page.locator('.dialog-box');
 
+const boxText = (page: Page) => page.evaluate(() => document.querySelector('.dialog-box')?.textContent ?? '');
+
 async function untilChoices(page: Page, step: () => Promise<void>) {
   const choices = box(page).locator('.dialog-choices li');
   for (let i = 0; i < 12 && (await choices.count()) === 0; i++) {
+    const before = await boxText(page);
     await step();
-    await page.waitForTimeout(120);
+    await expect.poll(() => boxText(page), { timeout: 15_000 }).not.toBe(before);
   }
   await expect(choices).toHaveCount(3);
 }
