@@ -10,7 +10,7 @@ export const TERRAIN_LOOK = {
   slopeShade: 1.7,
   organic: ['grass', 'grass_flowers', 'dirt', 'sand', 'path'],
 } as const;
-export const SHADOW = { extent: 15, mapSize: 1024, bias: -0.0015 } as const;
+export const SHADOW = { extent: 15, bias: -0.0015, normalBias: 0.02 } as const;
 export const ATLAS_INSET = 0.01;
 export const WORLD_CAMERA = {
   fov: 30,

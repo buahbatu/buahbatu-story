@@ -2,7 +2,8 @@ import { GRAPHICS } from '../config/graphics';
 import { setDynamicScale, refreshView } from '../config/game';
 import type { Engine } from '../engine/engine';
 import { setTier } from './look';
-import { DynamicResolution, chooseTier } from './quality';
+import { parseHour } from './lighting/logic';
+import { DynamicResolution, chooseTier, chooseFx } from './quality';
 
 function readStored(): string | null {
   try {
@@ -12,18 +13,25 @@ function readStored(): string | null {
   }
 }
 
-export function initGraphics(): { forced: boolean } {
+export interface GraphicsChoice {
+  forced: boolean;
+  fx: boolean;
+  hour: number | null;
+}
+
+export function initGraphics(): GraphicsChoice {
   const stored = readStored();
+  const params = new URLSearchParams(location.search);
   const nav = navigator as Navigator & { deviceMemory?: number };
   const steady = import.meta.env.MODE === 'test';
-  const { tier, forced } = chooseTier(new URLSearchParams(location.search).get('gfx'), steady ? null : stored, {
+  const { tier, forced } = chooseTier(params.get('gfx'), steady ? null : stored, {
     coarse: window.matchMedia('(pointer: coarse)').matches,
     memoryGb: steady ? undefined : nav.deviceMemory,
     cores: steady ? undefined : nav.hardwareConcurrency || undefined,
   });
   setTier(tier);
   document.documentElement.dataset.gfx = tier;
-  return { forced };
+  return { forced, fx: chooseFx(params.get('fx'), steady), hour: parseHour(params.get('hour')) };
 }
 
 export function watchFrameRate(engine: Engine, forced: boolean): void {

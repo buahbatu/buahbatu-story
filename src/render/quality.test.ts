@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DynamicResolution, autoTier, chooseTier, isTier } from './quality';
+import { DynamicResolution, autoTier, chooseFx, chooseTier, isTier } from './quality';
 
 describe('tingkat kualitas grafis', () => {
   it('otomatis: desktop Tinggi, HP/tablet Seimbang, perangkat lemah Rendah', () => {
@@ -50,5 +50,15 @@ describe('resolusi dinamis', () => {
     const d = new DynamicResolution(rules);
     for (let i = 0; i < 100; i++) expect(d.push(0)).toBe(false);
     expect(d.scale).toBe(1);
+  });
+});
+
+describe('efek pasca-proses', () => {
+  it('aktif bawaan, mati di mode tes, bisa dipaksa lewat ?fx', () => {
+    expect(chooseFx(null, false)).toBe(true);
+    expect(chooseFx(null, true)).toBe(false);
+    expect(chooseFx('on', true)).toBe(true);
+    expect(chooseFx('off', false)).toBe(false);
+    expect(chooseFx('aneh', false)).toBe(true);
   });
 });

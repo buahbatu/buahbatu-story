@@ -6,6 +6,7 @@ import type { WorldScene } from '../scenes';
 import { SCENE } from '../scenes/keys';
 import { standHeight } from '../world/map/logic';
 import { placeKey } from '../world/travel/logic';
+import { phaseOf } from '../render/lighting/logic';
 import { uiStore } from '../ui/uiState';
 import type { TestApi } from './types';
 
@@ -54,7 +55,32 @@ function createTestApi({ engine, runtime, world }: TestHookContext): TestApi {
     },
     scene: () => uiStore.get().scene,
     view: () => ({ ...engine.view }),
-    renderStats: () => ({ calls: engine.renderer.info.render.calls, triangles: engine.renderer.info.render.triangles }),
+    renderStats: () => ({ ...engine.stats }),
+    async setFx(on) {
+      engine.fx = on;
+      await engine.whenFxReady();
+      await nextFrame();
+      await nextFrame();
+    },
+    async setHour(hour) {
+      world.setHour(hour);
+      await nextFrame();
+    },
+    lighting: () => {
+      const light = world.environment.light;
+      return {
+        hour: world.environment.hour,
+        phase: phaseOf(world.environment.hour),
+        fx: engine.fx,
+        passes: engine.passes(),
+        sunIntensity: light.sunIntensity,
+        sun: light.sun,
+        fog: light.fog,
+        exposure: light.exposure,
+        shadowRadius: world.environment.sun.shadow.radius,
+        sky: world.world.scene.getObjectByName('sky')?.visible === true,
+      };
+    },
     async enterArea(id, spawn) {
       world.goto(id, spawn);
       await engine.start(SCENE.world);

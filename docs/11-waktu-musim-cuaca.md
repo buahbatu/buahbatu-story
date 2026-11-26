@@ -39,7 +39,7 @@
 | 17:00–19:00 | Senja | Tint oranye |
 | 19:00–02:00 | Malam | Gelap + lampu jalan/jendela menyala (light sprite) |
 
-Implementasi: overlay rectangle dengan blend mode + sprite cahaya additive, interpolasi warna per menit.
+Implementasi (P1B-02b, ADR-030): titik kunci cahaya per jam di `src/config/lighting.ts` (warna langit atas/cakrawala, kabut, matahari/bulan + arah, ambient, grading exposure/tint/saturasi/kontras/vignette, kekuatan bloom), diinterpolasi halus oleh `lightingAt(jam)` (`src/render/lighting/logic.ts`). Warna atmosfer area (mis. kabut Lembang) dicampur sesuai terang siang. Interior memakai cahaya tetap. Jam diambil dari jam game mulai P2-03 (sebelumnya default 10:00, bisa diatur `?hour=`); lampu jalan/jendela menyusul di P2-03.
 
 ## 5. Musim
 | Musim | Nuansa | Tanaman unggulan | Festival (lihat `19`) |

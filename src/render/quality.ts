@@ -63,3 +63,9 @@ export class DynamicResolution {
     return true;
   }
 }
+
+export function chooseFx(param: string | null, steady: boolean): boolean {
+  if (param === 'on') return true;
+  if (param === 'off') return false;
+  return !steady;
+}

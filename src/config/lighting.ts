@@ -1,0 +1,193 @@
+export interface LightKey {
+  hour: number;
+  day: number;
+  skyTop: string;
+  skyHorizon: string;
+  fog: string;
+  sun: string;
+  sunIntensity: number;
+  elevation: number;
+  azimuth: number;
+  ambientSky: string;
+  ambientGround: string;
+  ambient: number;
+  exposure: number;
+  saturation: number;
+  contrast: number;
+  tint: string;
+  lift: string;
+  vignette: number;
+  bloom: number;
+}
+
+const NIGHT: Omit<LightKey, 'hour'> = {
+  day: 0,
+  skyTop: '#0d1736',
+  skyHorizon: '#2b3a6b',
+  fog: '#26335c',
+  sun: '#b8c8ff',
+  sunIntensity: 0.75,
+  elevation: 55,
+  azimuth: 215,
+  ambientSky: '#7a8ccc',
+  ambientGround: '#2a3458',
+  ambient: 1.15,
+  exposure: 1.1,
+  saturation: 0.85,
+  contrast: 1.04,
+  tint: '#c8d4ff',
+  lift: '#101a40',
+  vignette: 0.3,
+  bloom: 0.9,
+};
+
+const KEYS: readonly LightKey[] = [
+  { hour: 0, ...NIGHT },
+  {
+    ...NIGHT,
+    hour: 4.75,
+    skyTop: '#1d2752',
+    skyHorizon: '#5a5f93',
+    fog: '#4b5384',
+    elevation: 8,
+    azimuth: 95,
+    sunIntensity: 0.5,
+    tint: '#b9b8f0',
+  },
+  {
+    hour: 6.25,
+    day: 0.55,
+    skyTop: '#6f9fd8',
+    skyHorizon: '#ffc59a',
+    fog: '#f1c9a8',
+    sun: '#ffb27a',
+    sunIntensity: 1.35,
+    elevation: 12,
+    azimuth: 100,
+    ambientSky: '#c8b4d8',
+    ambientGround: '#5a5048',
+    ambient: 1.05,
+    exposure: 1,
+    saturation: 1.05,
+    contrast: 1.04,
+    tint: '#fff0e2',
+    lift: '#1a1030',
+    vignette: 0.24,
+    bloom: 0.75,
+  },
+  {
+    hour: 8.5,
+    day: 0.9,
+    skyTop: '#5f9fe6',
+    skyHorizon: '#cfe6f6',
+    fog: '#d6e8f2',
+    sun: '#fff0d4',
+    sunIntensity: 1.85,
+    elevation: 38,
+    azimuth: 118,
+    ambientSky: '#dfeeff',
+    ambientGround: '#5f8a4c',
+    ambient: 1.2,
+    exposure: 1.03,
+    saturation: 1.1,
+    contrast: 1.05,
+    tint: '#fff6ea',
+    lift: '#0c1424',
+    vignette: 0.18,
+    bloom: 0.45,
+  },
+  {
+    hour: 12.5,
+    day: 1,
+    skyTop: '#4a92e8',
+    skyHorizon: '#c3e2f7',
+    fog: '#cfe5f2',
+    sun: '#fff8e8',
+    sunIntensity: 2.05,
+    elevation: 62,
+    azimuth: 160,
+    ambientSky: '#e6f2ff',
+    ambientGround: '#5f9150',
+    ambient: 1.22,
+    exposure: 1.04,
+    saturation: 1.12,
+    contrast: 1.06,
+    tint: '#fffaf2',
+    lift: '#0a1424',
+    vignette: 0.16,
+    bloom: 0.4,
+  },
+  {
+    hour: 15.75,
+    day: 0.95,
+    skyTop: '#5795e0',
+    skyHorizon: '#f0e2c6',
+    fog: '#eadcc4',
+    sun: '#ffe2b0',
+    sunIntensity: 1.9,
+    elevation: 34,
+    azimuth: 225,
+    ambientSky: '#f4e6d6',
+    ambientGround: '#64844a',
+    ambient: 1.15,
+    exposure: 1.03,
+    saturation: 1.12,
+    contrast: 1.06,
+    tint: '#fff0dc',
+    lift: '#141020',
+    vignette: 0.2,
+    bloom: 0.5,
+  },
+  {
+    hour: 17.5,
+    day: 0.7,
+    skyTop: '#6a7fc8',
+    skyHorizon: '#ffb46e',
+    fog: '#f3b98a',
+    sun: '#ffbe80',
+    sunIntensity: 1.75,
+    elevation: 18,
+    azimuth: 252,
+    ambientSky: '#f0d0c0',
+    ambientGround: '#6a6048',
+    ambient: 1.15,
+    exposure: 1.05,
+    saturation: 1.08,
+    contrast: 1.04,
+    tint: '#fff0de',
+    lift: '#1c0f24',
+    vignette: 0.26,
+    bloom: 0.8,
+  },
+  {
+    hour: 18.75,
+    day: 0.3,
+    skyTop: '#2f3a7a',
+    skyHorizon: '#d4789a',
+    fog: '#8a6a96',
+    sun: '#ff8a7a',
+    sunIntensity: 0.8,
+    elevation: 4,
+    azimuth: 262,
+    ambientSky: '#8a7ab8',
+    ambientGround: '#2c2638',
+    ambient: 1.05,
+    exposure: 1,
+    saturation: 0.95,
+    contrast: 1.05,
+    tint: '#f0dcee',
+    lift: '#140c30',
+    vignette: 0.32,
+    bloom: 0.9,
+  },
+  { ...NIGHT, hour: 20, elevation: 30, azimuth: 235 },
+];
+
+export const LIGHTING = {
+  defaultHour: 10,
+  titleHour: 16.25,
+  indoorHour: 11,
+  sunDistance: 25,
+  areaBlend: 0.55,
+  keys: KEYS,
+} as const;

@@ -5,7 +5,8 @@ import { APPEARANCE } from '../entities';
 import { createCharacter, type Character } from '../entities/player/character';
 import { TITLE_START } from '../config/world';
 import type { WorldScene } from './WorldScene';
-import { addEnvironment } from '../world/environment';
+import { Environment, type Grade } from '../world/environment';
+import { LIGHTING } from '../config/lighting';
 import { preloadAssets } from '../world/props/assets';
 import { assetsFor } from '../world/props/logic';
 import { farmhouse, strawberryPlot } from '../world/props/models';
@@ -57,7 +58,7 @@ function hills(): Mesh[] {
 
 export class TitleScene implements GameScene {
   readonly key = SCENE.title;
-  readonly world: { scene: Scene; camera: PerspectiveCamera };
+  readonly world: { scene: Scene; camera: PerspectiveCamera; grade: Grade };
   private readonly still = window.matchMedia('(prefers-reduced-motion: reduce)');
   private decorated: Promise<void> | null = null;
   private cast: Character[] = [];
@@ -68,9 +69,11 @@ export class TitleScene implements GameScene {
   constructor(world: WorldScene) {
     this.world3d = world;
     const scene = new Scene();
-    addEnvironment(scene, { near: 35, far: 95 });
+    const environment = new Environment(scene, { near: 35, far: 95 }, true);
+    environment.setHour(LIGHTING.titleHour);
+    environment.aim(0, 0, -4);
     scene.add(plane(160, 160, PALETTE.grass, 0, 0, 0), plane(2.2, 40, PALETTE.path, -1.6, 0.01, 4));
-    this.world = { scene, camera: new PerspectiveCamera(CAMERA.fov, 16 / 9, 0.1, 200) };
+    this.world = { scene, camera: new PerspectiveCamera(CAMERA.fov, 16 / 9, 0.1, 200), grade: environment.grade };
     scene.add(placed(farmhouse(), -7, -4, 0.62), placed(strawberryPlot(6, 4), 4, -1), ...hills());
     this.update(0, 0);
   }

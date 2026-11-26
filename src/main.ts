@@ -28,6 +28,8 @@ world.notify = (key) => {
 };
 if (debugRequested(location.search, __DEBUG_ALLOWED__)) world.enableDebug();
 const engine = new Engine(gameRoot, scenes, currentView(), input);
+engine.fx = graphics.fx;
+if (graphics.hour !== null) world.setHour(graphics.hour);
 installViewScaling(engine);
 watchFrameRate(engine, graphics.forced);
 installTouchFullscreen();

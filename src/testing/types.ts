@@ -29,6 +29,20 @@ export interface TestApi {
   travelCard(area: string | null): void;
   ground(x: number, y: number): number | null;
   renderStats(): { calls: number; triangles: number };
+  setFx(on: boolean): Promise<void>;
+  setHour(hour: number): Promise<void>;
+  lighting(): {
+    hour: number;
+    phase: string;
+    fx: boolean;
+    passes: string[];
+    sunIntensity: number;
+    sun: number;
+    fog: number;
+    exposure: number;
+    shadowRadius: number;
+    sky: boolean;
+  };
   debug(): {
     overlay: { grid: number; boxes: number; cliffs: number; deep: number; gridVisible: boolean; collisionVisible: boolean } | null;
     info: { fps: number; ms: number; calls: number; triangles: number; area: string; x: number; y: number; height: number } | null;

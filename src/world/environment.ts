@@ -1,31 +1,131 @@
 import { Color, DirectionalLight, Fog, HemisphereLight, type Scene } from 'three';
-import { PALETTE } from '../config/palette';
+import { LIGHTING } from '../config/lighting';
 import { SHADOW } from '../config/world';
+import { lightingAt, sunOffset, withAtmosphere, type LightState } from '../render/lighting/logic';
 import { profile } from '../render/look';
+import { SkyDome } from '../render/sky';
 
-const SUN_OFFSET = { x: 10, y: 20, z: 8 } as const;
-
-export function addEnvironment(scene: Scene, fog: { near: number; far: number }, shadows = false): DirectionalLight {
-  scene.background = new Color(PALETTE.sky);
-  scene.fog = new Fog(PALETTE.fog, fog.near, fog.far);
-  const sun = new DirectionalLight(PALETTE.sun, shadows ? 1.9 : 1.4);
-  sun.position.set(SUN_OFFSET.x, SUN_OFFSET.y, SUN_OFFSET.z);
-  if (shadows) {
-    sun.castShadow = true;
-    const size = profile().shadowMap;
-    sun.shadow.mapSize.set(size, size);
-    sun.shadow.bias = SHADOW.bias;
-    const cam = sun.shadow.camera;
-    cam.left = cam.bottom = -SHADOW.extent;
-    cam.right = cam.top = SHADOW.extent;
-    cam.near = 1;
-    cam.far = 60;
-  }
-  scene.add(new HemisphereLight(PALETTE.sun, PALETTE.grassDark, shadows ? 1.25 : 1.6), sun, sun.target);
-  return sun;
+export interface Grade {
+  exposure: number;
+  saturation: number;
+  contrast: number;
+  tint: Color;
+  lift: Color;
+  vignette: number;
+  bloom: number;
+  tilt: number;
 }
 
-export function aimSun(sun: DirectionalLight, x: number, y: number, z: number): void {
-  sun.position.set(x + SUN_OFFSET.x, y + SUN_OFFSET.y, z + SUN_OFFSET.z);
-  sun.target.position.set(x, y, z);
+export interface Atmosphere {
+  sky?: string;
+  fog?: string;
+  near: number;
+  far: number;
+  indoor?: { background: string; fog: string };
+}
+
+const SKY_RADIUS = 90;
+
+export class Environment {
+  readonly sun: DirectionalLight;
+  readonly grade: Grade = {
+    exposure: 1,
+    saturation: 1,
+    contrast: 1,
+    tint: new Color(1, 1, 1),
+    lift: new Color(0, 0, 0),
+    vignette: 0,
+    bloom: 0,
+    tilt: 1,
+  };
+  private readonly ambient: HemisphereLight;
+  private readonly sky = new SkyDome(SKY_RADIUS);
+  private readonly fog: Fog;
+  private readonly scene: Scene;
+  private offset = sunOffset({ elevation: 60, azimuth: 150 }, LIGHTING.sunDistance);
+  private atmosphere: Atmosphere;
+  private hourValue: number = LIGHTING.defaultHour;
+  private state: LightState;
+
+  constructor(scene: Scene, atmosphere: Atmosphere, shadows = false) {
+    this.scene = scene;
+    this.atmosphere = atmosphere;
+    this.sun = new DirectionalLight(0xffffff, 1);
+    if (shadows) {
+      this.sun.castShadow = true;
+      const { shadowMap, shadowRadius } = profile();
+      this.sun.shadow.mapSize.set(shadowMap, shadowMap);
+      this.sun.shadow.bias = SHADOW.bias;
+      this.sun.shadow.normalBias = SHADOW.normalBias;
+      this.sun.shadow.radius = shadowRadius;
+      const cam = this.sun.shadow.camera;
+      cam.left = cam.bottom = -SHADOW.extent;
+      cam.right = cam.top = SHADOW.extent;
+      cam.near = 1;
+      cam.far = 60;
+    }
+    this.ambient = new HemisphereLight(0xffffff, 0x000000, 1);
+    this.fog = new Fog(0xffffff, atmosphere.near, atmosphere.far);
+    scene.fog = this.fog;
+    scene.add(this.ambient, this.sun, this.sun.target, this.sky.mesh);
+    this.state = lightingAt(this.hourValue, LIGHTING.keys);
+    this.apply();
+  }
+
+  get hour(): number {
+    return this.hourValue;
+  }
+
+  get light(): LightState {
+    return this.state;
+  }
+
+  setHour(hour: number): void {
+    this.hourValue = hour;
+    this.apply();
+  }
+
+  setAtmosphere(atmosphere: Atmosphere): void {
+    this.atmosphere = atmosphere;
+    this.apply();
+  }
+
+  aim(x: number, y: number, z: number): void {
+    this.sun.position.set(x + this.offset.x, y + this.offset.y, z + this.offset.z);
+    this.sun.target.position.set(x, y, z);
+  }
+
+  dispose(): void {
+    this.sky.dispose();
+  }
+
+  private apply(): void {
+    const { indoor } = this.atmosphere;
+    const base = lightingAt(indoor ? LIGHTING.indoorHour : this.hourValue, LIGHTING.keys);
+    const light = withAtmosphere(base, this.atmosphere, LIGHTING.areaBlend);
+    this.state = light;
+    this.offset = sunOffset(light, LIGHTING.sunDistance);
+    this.sun.color.setHex(light.sun);
+    this.sun.intensity = light.sunIntensity;
+    this.ambient.color.setHex(light.ambientSky);
+    this.ambient.groundColor.setHex(light.ambientGround);
+    this.ambient.intensity = light.ambient;
+    this.fog.near = this.atmosphere.near;
+    this.fog.far = this.atmosphere.far;
+    this.fog.color.set(indoor ? indoor.fog : light.fog);
+    this.sky.mesh.visible = !indoor;
+    this.scene.background = indoor ? new Color(indoor.background) : new Color(light.fog);
+    this.sky.apply(light, this.offset);
+    const g = this.grade;
+    g.exposure = light.exposure;
+    g.saturation = light.saturation;
+    g.contrast = light.contrast;
+    g.tint.setHex(light.tint);
+    g.lift.setHex(light.lift);
+    g.vignette = light.vignette;
+    g.bloom = light.bloom;
+    g.tilt = indoor ? 0 : 1;
+    const target = this.sun.target.position;
+    this.aim(target.x, target.y, target.z);
+  }
 }

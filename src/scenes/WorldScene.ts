@@ -1,6 +1,4 @@
 import {
-  Color,
-  Fog,
   PerspectiveCamera,
   SRGBColorSpace,
   Scene,
@@ -9,12 +7,10 @@ import {
   type Group,
   type Object3D,
   type Texture,
-  type DirectionalLight,
   Mesh,
   MeshLambertMaterial,
 } from 'three';
 import { PLAYER } from '../config/balance';
-import { PALETTE } from '../config/palette';
 import { DEBUG, DEFAULT_AREA, INTERACTION, TRAVEL, INTERIOR, WATER, WATER_FX, WORLD_CAMERA, WORLD_FOG } from '../config/world';
 import { OcclusionFader } from '../world/occlusion';
 import { WaterFx } from '../world/waterFx';
@@ -35,7 +31,7 @@ import type { Engine, GameScene } from '../engine/engine';
 import { APPEARANCE, PlayerView, jumpHeight, stepJump, stepMotion, type Appearance, type Direction, type PlayerMotion } from '../entities';
 import { uiStore } from '../ui/uiState';
 import { buildArea, disposeTree, preloadArea } from '../world/build';
-import { addEnvironment, aimSun } from '../world/environment';
+import { Environment, type Grade } from '../world/environment';
 import { bodyBlocked, parseArea, standHeight, walkLevel, waterAt, type AreaData } from '../world/map/logic';
 import { SCENE } from './keys';
 import { DebugOverlay } from '../debug/overlay';
@@ -64,7 +60,8 @@ async function loadAtlas(url: URL): Promise<Texture> {
 
 export class WorldScene implements GameScene {
   readonly key = SCENE.world;
-  readonly world: { scene: Scene; camera: PerspectiveCamera };
+  readonly world: { scene: Scene; camera: PerspectiveCamera; grade: Grade };
+  readonly environment: Environment;
   area: AreaData | null = null;
   private target: { area: string; spawn?: string } = { area: DEFAULT_AREA };
   private root: Group | null = null;
@@ -73,7 +70,6 @@ export class WorldScene implements GameScene {
   private readonly preloaded = new Set<string>();
   private exitMarks: { node: Object3D; x: number; z: number }[] = [];
   private engine: Engine | null = null;
-  private readonly sun: DirectionalLight;
   private water: Texture | null = null;
   private readonly playerView = new PlayerView();
   readonly occlusion = new OcclusionFader();
@@ -98,11 +94,19 @@ export class WorldScene implements GameScene {
 
   constructor() {
     const scene = new Scene();
-    this.sun = addEnvironment(scene, WORLD_FOG, true);
-    this.world = { scene, camera: new PerspectiveCamera(WORLD_CAMERA.fov, 16 / 9, WORLD_CAMERA.near, WORLD_CAMERA.far) };
+    this.environment = new Environment(scene, WORLD_FOG, true);
+    this.world = {
+      scene,
+      camera: new PerspectiveCamera(WORLD_CAMERA.fov, 16 / 9, WORLD_CAMERA.near, WORLD_CAMERA.far),
+      grade: this.environment.grade,
+    };
   }
 
   notify: (key: I18nKey) => void = () => undefined;
+
+  setHour(hour: number): void {
+    this.environment.setHour(hour);
+  }
 
   get travelling(): boolean {
     return this.trip !== null;
@@ -227,7 +231,7 @@ export class WorldScene implements GameScene {
     d.publishIn -= dt;
     if (d.publishIn > 0) return;
     d.publishIn = 1 / DEBUG.panelHz;
-    const { render } = engine.renderer.info;
+    const render = engine.stats;
     uiStore.set({
       debug: {
         ...d.meter.read(),
@@ -362,11 +366,15 @@ export class WorldScene implements GameScene {
   private applySettings({ settings }: AreaData): void {
     const num = (v: unknown, d: number) => (typeof v === 'number' ? v : d);
     const indoor = settings.interior === true;
-    const sky = typeof settings.sky === 'string' ? settings.sky : indoor ? INTERIOR.background : PALETTE.sky;
-    const fog = typeof settings.fog === 'string' ? settings.fog : indoor ? INTERIOR.background : PALETTE.fog;
-    const fogNear = indoor ? INTERIOR.fogNear : WORLD_FOG.near;
-    this.world.scene.background = new Color(sky);
-    this.world.scene.fog = new Fog(fog, num(settings.fogNear, fogNear), num(settings.fogFar, indoor ? INTERIOR.fogFar : WORLD_FOG.far));
+    const text = (v: unknown) => (typeof v === 'string' ? v : undefined);
+    const fog = text(settings.fog);
+    this.environment.setAtmosphere({
+      sky: text(settings.sky),
+      fog,
+      near: num(settings.fogNear, indoor ? INTERIOR.fogNear : WORLD_FOG.near),
+      far: num(settings.fogFar, indoor ? INTERIOR.fogFar : WORLD_FOG.far),
+      indoor: indoor ? { background: text(settings.sky) ?? INTERIOR.background, fog: fog ?? INTERIOR.background } : undefined,
+    });
   }
 
   async setLook(look: Appearance): Promise<void> {
@@ -455,6 +463,6 @@ export class WorldScene implements GameScene {
     const { camera } = this.world;
     camera.position.set(focus.x + o.x, y + o.y, focus.y + o.z);
     camera.lookAt(focus.x, y, focus.y);
-    aimSun(this.sun, focus.x, y, focus.y);
+    this.environment.aim(focus.x, y, focus.y);
   }
 }
