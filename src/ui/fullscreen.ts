@@ -19,7 +19,7 @@ export function installTouchFullscreen(): () => void {
       active: document.fullscreenElement !== null,
       installedApp: installed.matches,
     };
-    if (!shouldEnterFullscreen(env)) return;
+    if (!shouldEnterFullscreen(env) || !navigator.userActivation.isActive) return;
     root
       .requestFullscreen({ navigationUI: 'hide' })
       .then(() => screen.orientation.lock('landscape'))

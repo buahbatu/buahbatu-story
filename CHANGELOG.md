@@ -16,6 +16,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - **Hemat Vercel** (ADR-029): aset game (peta, atlas, model 3D) dimuat dengan versi `?v=<hash isi aset>` dan di-cache `immutable` 1 tahun: hanya diunduh ulang kalau berubah, dan tidak bisa basi lagi (kasus jalan hitam/biru). CI otomatis menghapus deploy lama setelah deploy sukses (simpan 3 production + 2 preview). Unit test pemilihan deploy & URL berversi, E2E semua request aset berversi, smoke test deploy memeriksa header cache.
 
 ### Diperbaiki
+- Layar penuh otomatis di HP hanya diminta saat browser masih mengizinkan gesture pengguna, sehingga tidak muncul peringatan `requestFullscreen` di console saat perangkat lambat.
 - Kolam taman Buahbatu & kolam sandbox tidak lagi berbunyi seperti sungai/air terjun (masukan user): air diam kini berbunyi riak tenang pelan, gemericik hanya untuk sungai yang mengalir.
 - Tes lompat & langkah di air tidak lagi bergantung kecepatan mesin (deteksi per frame di halaman, langkah air diuji di dalam air dangkal).
 - Logo judul "Buahbatu" tidak terbaca (huruf cokelat polos) di browser asli: animasi goyang dipindah ke pembungkus supaya lapisan outline tidak menimpa warna emas; tes E2E baru memeriksa logo saat animasi berjalan.
