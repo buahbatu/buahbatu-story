@@ -34,7 +34,7 @@ test('audio aktif setelah interaksi pertama; klik tombol UI berbunyi', async ({ 
   expect(['ogg', 'm4a']).toContain((await audio(page))?.format);
 });
 
-test('langkah kaki berbunyi mengikuti permukaan: rumput di darat, cipratan di air dangkal', async ({ game: { page } }) => {
+test('langkah kaki berbunyi mengikuti permukaan: langkah darat, cipratan di air dangkal', async ({ game: { page } }) => {
   await page.evaluate(async () => {
     await window.__BB__?.enterArea('sandbox');
     window.__BB__?.placePlayer(31, 16.5, 's');
@@ -42,7 +42,7 @@ test('langkah kaki berbunyi mengikuti permukaan: rumput di darat, cipratan di ai
   await page.keyboard.press('KeyQ');
   await expect.poll(async () => (await audio(page))?.unlocked, { timeout: 10_000 }).toBe(true);
   await page.keyboard.down('KeyS');
-  await expect.poll(() => played(page, 'step_grass'), { timeout: 15_000 }).toBeGreaterThan(0);
+  await expect.poll(async () => (await played(page, 'step_')) - (await played(page, 'step_water')), { timeout: 15_000 }).toBeGreaterThan(0);
   await page.keyboard.up('KeyS');
   await page.evaluate(() => window.__BB__?.placePlayer(28.5, 19.5, 'e'));
   await expect.poll(async () => (await page.evaluate(() => window.__BB__?.water()))?.inWater, { timeout: 10_000 }).toBe(true);

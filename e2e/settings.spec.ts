@@ -38,7 +38,7 @@ test('menu grafis di dunia: tombol tidak menggerakkan pemain, kualitas & efek be
   await choice(page, 'tier', 'low').click();
   await expect.poll(async () => (await graphics(page))?.tier).toBe('low');
   expect(await page.evaluate(() => document.documentElement.dataset.gfx)).toBe('low');
-  expect((await page.evaluate(() => window.__BB__?.view()))?.ratio).toBeLessThanOrEqual(1);
+  await expect.poll(async () => (await page.evaluate(() => window.__BB__?.view()))?.ratio, { timeout: 10_000 }).toBeLessThanOrEqual(1);
   await choice(page, 'fx', 'true').click();
   await expect
     .poll(async () => (await page.evaluate(() => window.__BB__?.lighting()))?.passes, { timeout: 20_000 })

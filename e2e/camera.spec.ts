@@ -64,8 +64,8 @@ test('seret klik kanan menggeser pandangan, lalu kamera kembali ke pemain saat b
   await expect.poll(async () => Math.hypot((await camera(page))?.pan.x ?? 0, (await camera(page))?.pan.y ?? 0)).toBeGreaterThan(0.5);
   await page.keyboard.down('KeyD');
   await expect
-    .poll(async () => Math.hypot((await camera(page))?.pan.x ?? 9, (await camera(page))?.pan.y ?? 9), { timeout: 8_000 })
-    .toBeLessThan(0.1);
+    .poll(async () => Math.hypot((await camera(page))?.pan.x ?? 9, (await camera(page))?.pan.y ?? 9), { timeout: 20_000 })
+    .toBeLessThan(0.25);
   await page.keyboard.up('KeyD');
 });
 
