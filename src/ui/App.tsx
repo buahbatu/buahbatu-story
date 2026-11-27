@@ -10,6 +10,7 @@ import { TouchControls } from './touch/TouchControls';
 import { DebugPanel } from './debug/DebugPanel';
 import { VersionBadge } from './components/VersionBadge';
 import { GraphicsMenu, SettingsButton } from './menus/GraphicsMenu';
+import { ControlsHint, HelpButton } from './hud/ControlsHint';
 import { uiStore } from './uiState';
 import { useStore } from './useStore';
 
@@ -31,6 +32,8 @@ export function App() {
       {scene === SCENE.world && <FadeOverlay />}
       {scene === SCENE.world && <DebugPanel />}
       {(scene === SCENE.title || scene === SCENE.world) && <SettingsButton />}
+      {scene === SCENE.world && <HelpButton />}
+      {scene === SCENE.world && <ControlsHint />}
       <GraphicsMenu />
       <ToastHost />
     </div>

@@ -46,3 +46,13 @@ export const TOUCH_CONTROLS = {
     { action: 'useTool', icon: 'tool', label: 'touch.tool', size: 46 },
   ],
 } as const;
+
+export const MOUSE_CAMERA = {
+  twistPerPixel: 0.008,
+  rotateButton: 1,
+  panButton: 2,
+} as const;
+
+export const CONTROLS_HINT = {
+  showMs: 9000,
+} as const;

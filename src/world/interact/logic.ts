@@ -76,7 +76,21 @@ export function nearestInteractable(
 
 export function keyLabel(code: string | undefined): string {
   if (!code) return '?';
-  const named: Record<string, string> = { Space: 'Spasi', Enter: 'Enter', Tab: 'Tab', ShiftLeft: 'Shift', ShiftRight: 'Shift' };
+  const named: Record<string, string> = {
+    Space: 'Spasi',
+    Enter: 'Enter',
+    Tab: 'Tab',
+    ShiftLeft: 'Shift',
+    ShiftRight: 'Shift',
+    ArrowUp: '↑',
+    ArrowDown: '↓',
+    ArrowLeft: '←',
+    ArrowRight: '→',
+    Equal: '+',
+    Minus: '−',
+    NumpadAdd: '+',
+    NumpadSubtract: '−',
+  };
   return named[code] ?? code.replace(/^(Key|Digit|Numpad)/, '');
 }
 

@@ -23,6 +23,8 @@ export interface UiState {
   audio: AudioSettings | null;
   settingsOpen: boolean;
   settingsTab: 'graphics' | 'audio';
+  help: 'auto' | 'open' | null;
+  indoor: boolean;
 }
 
 export interface DebugInfo {
@@ -70,6 +72,8 @@ export const uiStore = createStore<UiState>({
   audio: null,
   settingsOpen: false,
   settingsTab: 'graphics',
+  help: null,
+  indoor: false,
 });
 
 export function setActiveScene(scene: SceneKey): void {

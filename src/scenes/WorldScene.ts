@@ -404,6 +404,7 @@ export class WorldScene implements GameScene {
     const text = (v: unknown) => (typeof v === 'string' ? v : undefined);
     const fog = text(settings.fog);
     worldCurve.setFlat(indoor, true);
+    uiStore.set({ indoor });
     this.environment.setAtmosphere({
       sky: text(settings.sky),
       fog,

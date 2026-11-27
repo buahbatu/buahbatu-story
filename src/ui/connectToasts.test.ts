@@ -36,6 +36,8 @@ function setup() {
     audio: null,
     settingsOpen: false,
     settingsTab: 'graphics',
+    help: null,
+    indoor: false,
   });
   connectToasts(bus, store, clock);
   return { bus, store, advance };

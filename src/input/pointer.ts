@@ -1,10 +1,11 @@
 import type { InputState } from './logic';
+import { dragGesture, dragModeFor, type DragMode } from './mouse';
 
 const WHEEL_STEP = 100;
 
 export function attachPointer(input: InputState, target: HTMLElement): () => void {
   const touches = new Map<number, { x: number; y: number }>();
-  let drag: { x: number; y: number } | null = null;
+  let drag: { x: number; y: number; mode: DragMode } | null = null;
   const pair = () => {
     const [a, b] = [...touches.values()];
     if (!a || !b) return null;
@@ -19,8 +20,10 @@ export function attachPointer(input: InputState, target: HTMLElement): () => voi
       touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
       return;
     }
-    if (e.button !== 2) return;
-    drag = { x: e.clientX, y: e.clientY };
+    const mode = dragModeFor(e.button, e.ctrlKey);
+    if (!mode) return;
+    if (e.button === 1) e.preventDefault();
+    drag = { x: e.clientX, y: e.clientY, mode };
     target.setPointerCapture(e.pointerId);
   };
   const move = (e: PointerEvent) => {
@@ -38,8 +41,8 @@ export function attachPointer(input: InputState, target: HTMLElement): () => voi
       return;
     }
     if (!drag) return;
-    input.addGesture({ panX: e.clientX - drag.x, panY: e.clientY - drag.y });
-    drag = { x: e.clientX, y: e.clientY };
+    input.addGesture(dragGesture(drag.mode, e.clientX - drag.x, e.clientY - drag.y));
+    drag = { ...drag, x: e.clientX, y: e.clientY };
   };
   const up = (e: PointerEvent) => {
     touches.delete(e.pointerId);

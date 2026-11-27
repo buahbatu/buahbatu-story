@@ -28,6 +28,7 @@ Kategori: `Ditambah` · `Diubah` · `Diperbaiki` · `Dihapus` · `Docs`
 - Tombol (keputusan user): **Lompat = Spasi**, **Pakai alat = C**, Push-to-talk tetap V, B kosong.
 
 ### Ditambah
+- **P1B-02f** Kamera & petunjuk kontrol (masukan user "kamera gabisa di-rotate"): kamera kini bisa **diputar dengan mouse** (seret tombol tengah atau Ctrl + seret kiri; klik kanan tetap menggeser), dan **petunjuk kontrol** muncul sekilas saat pertama masuk dunia, bisa dibuka lagi lewat tombol **?** di sebelah ⚙ (Esc menutup). Isinya menyesuaikan perangkat (keyboard/mouse atau sentuh) dan menandai kamera terkunci di dalam rumah; label tombol diambil dari pemetaan kontrol asli.
 - **P1B-02e** Musik bawaan bernuansa Harvest Moon BTN (bebas lisensi, rekomendasi AI disetujui user): kotak musik hangat di layar judul, lagu ceria ladang saat pagi/siang (2 lagu bergantian), pastoral saat sore, kotak musik lembut saat malam; berganti otomatis mengikuti jam dengan crossfade halus, di-stream (hemat memori), diatur di saluran Musik tab Suara. Kredit pencipta di CREDITS.md.
 - **P1B-02d** Sistem audio & tab **Suara** (permintaan user, docs/41 §7):
   - Saluran **Semua suara / Musik / Efek suara / Suasana** dengan on/off + volume di menu ⚙ (tab Grafis & Suara), tersimpan di perangkat, langsung berlaku.

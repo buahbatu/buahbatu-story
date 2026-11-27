@@ -32,9 +32,20 @@ test('baca papan: teks mengetik, E mempercepat & lanjut, pilihan, dialog lanjuta
   await expect(box(page).locator('.dialog-name')).toHaveText('Papan Pengumuman');
   await expect(page.locator('.interact-prompt')).toHaveCount(0);
   const text = box(page).locator('.dialog-text');
-  await expect.poll(async () => (await text.textContent())?.length ?? 0, { intervals: [30] }).toBeGreaterThan(0);
-  const partial = (await text.textContent()) ?? '';
-  expect(partial.length).toBeLessThan(70);
+  const firstSeen = await page.evaluate(
+    () =>
+      new Promise<number>((resolve) => {
+        const until = performance.now() + 15000;
+        const check = () => {
+          const length = document.querySelector('.dialog-box .dialog-text')?.textContent.length ?? 0;
+          if (length > 0 || performance.now() > until) resolve(length);
+          else requestAnimationFrame(check);
+        };
+        check();
+      }),
+  );
+  expect(firstSeen).toBeGreaterThan(0);
+  expect(firstSeen).toBeLessThan(70);
 
   await page.keyboard.press('KeyE');
   await expect
