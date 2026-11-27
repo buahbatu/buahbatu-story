@@ -22,7 +22,7 @@
 |---|---|---|---|---|---|
 | P0 | Setup Proyek & Otomasi | v0.1 | 15 | 15 | ✅ |
 | P1 | Fondasi Dunia 2.5D & Gerak | v0.1 | 27 | 27 | ✅ |
-| P1B | Fondasi Dunia Baru (grafik ACNH, medan mulus, pulau) | v0.1 | 5 | 15 | 🟡 |
+| P1B | Fondasi Dunia Baru (grafik ACNH, medan mulus, pulau) | v0.1 | 6 | 17 | 🟡 |
 | P2 | Waktu, Cuaca & Save Lokal | v0.1 | 0 | 9 | ⬜ |
 | P3 | Pertanian, Ternak & Inventory | v0.2 | 0 | 11 | ⬜ |
 | P4 | Ekonomi, Toko & Karier Dasar | v0.2 | 0 | 8 | ⬜ |
@@ -38,7 +38,7 @@
 | P14 | Keluarga & Anak | v0.11 | 0 | 9 | ⬜ |
 | P15 | Festival, Event & Endgame | v0.12 | 0 | 12 | ⬜ |
 | P16 | Polish & Rilis v1.0 | v1.0 | 0 | 11 | ⬜ |
-| **Total** | | | **47** | **220** | |
+| **Total** | | | **48** | **222** | |
 
 Status: ⬜ belum · 🟡 berjalan · ✅ selesai
 
@@ -69,7 +69,7 @@ AI menulis mode yang disarankan di baris **⏭️ Berikutnya** setiap laporan, d
 | P16 | 🟢 | P16-05 optimasi performa, P16-08 E2E & perf di CI, P16-10 rilis |
 
 **Sedang dikerjakan:** —
-**Task berikutnya:** P1B-02e (musik bawaan bebas lisensi bernuansa BTN)
+**Task berikutnya:** P1B-02f (kamera putar dengan mouse + petunjuk kontrol)
 
 ---
 
@@ -135,12 +135,14 @@ Rumusan user (2026-11-26): **gameplay HM Back to Nature + The Sims & GTA + grafi
 - [x] **P1B-02b** Cahaya & efek: langit gradasi, kabut atmosferik, bayangan lembut, SSAO, bloom, tilt-shift, color grading per jam · Ref: 04 (ADR-030) · ✅ 2026-11-26 · cahaya 7 titik kunci per jam, kubah langit, kabut menyatu cakrawala, PCF lembut, pipeline lazy (MSAA+SSAO n8ao+tilt-shift+bloom+grading) per tingkat; jam dari `?hour=` sampai P2-03
 - [x] **P1B-02c** Lengkung dunia Kuat/Halus/Mati (3 render pembanding, default Halus) + pengaturan grafis di UI · Ref: 04 (ADR-030) · ✅ 2026-11-26 · user pilih Halus; shader lengkung (bayangan & logika datar, interior datar), geometri panjang dipecah 2 m, menu ⚙ Kualitas/Efek/Lengkung tersimpan & langsung berlaku; + perbaikan logo judul saat animasi
 - [x] **P1B-02d** Sistem audio dasar + pengaturan suara (permintaan user): WebAudio dengan saluran Musik / Efek suara / Suasana, tab **Suara** di menu ⚙ (on/off + volume, tersimpan), efek suara & suasana CC0 (gemericik air & air terjun, langkah kaki, klik UI); audio lengkap tetap P16-01 · Ref: 40, 41 · ✅ 2026-11-27 · WebAudio 3 saluran + Master, tab Suara (tersimpan), langkah 6 permukaan, gemericik sungai/curug by jarak, klik UI; OGG+M4A; aset CC0/CC BY di CREDITS
-- [~] **P1B-02e** Musik bawaan bernuansa Harvest Moon BTN (permintaan user): musik bebas lisensi (CC0/CC-BY) gaya game bertani jadul yang hangat untuk layar judul, siang, malam & tiap musim, crossfade antar suasana; contoh didengar & disetujui user dulu, kredit di CREDITS.md. Lagu asli BTN (berhak cipta) tidak dimasukkan ke repo/build · Ref: 41 · 🚧 2026-11-27
+- [x] **P1B-02e** Musik bawaan bernuansa Harvest Moon BTN (permintaan user): musik bebas lisensi (CC0/CC-BY) gaya game bertani jadul yang hangat untuk layar judul, siang, malam & tiap musim, crossfade antar suasana; contoh didengar & disetujui user dulu, kredit di CREDITS.md. Lagu asli BTN (berhak cipta) tidak dimasukkan ke repo/build · Ref: 41 · ✅ 2026-11-27 · 5 lagu CC0/CC BY (judul kotak musik, pagi/siang ×2, sore, malam) stream + crossfade mengikuti jam; + air diam = riak tenang (kolam taman)
+- [ ] **P1B-02f** Kamera & petunjuk kontrol (masukan user 2026-11-27: "kamera gabisa di-rotate"): **putar kamera dengan mouse** (seret tombol tengah / Ctrl + seret kiri), **petunjuk kontrol** singkat yang muncul sekilas saat masuk dunia & bisa dibuka lagi (Q/R putar, scroll zoom, seret geser, Spasi lompat, E aksi; versi sentuh: dua jari putar/zoom); interior tetap terkunci + petunjuknya menyesuaikan · Ref: 40
 - [ ] **P1B-03** Material & tekstur baru (user: "grafik bagus, tekstur bagus, bump, map, bukan game burik"): tekstur resolusi tinggi bergaya lukis (tanah, rumput, jalan, batu, kayu, atap, kain, air) + **normal/bump map** (serat kayu, nat batu, genteng, kerikil) + **roughness** per bahan, material toon lembut + rim light, filter linear + mipmap; font UI bersih (pixel hanya aksen) · Ref: 42, 40
 - [ ] **P1B-04** Medan mulus (user: **tidak boleh ada yang flat/datar**, termasuk tanah, dataran, rumput): **kontur campuran bisa/tidak dilewati** (user: jangan semua tidak bisa dilewati = cacat): sebagian besar lereng bisa didaki (melambat saat menanjak), tebing batu curam hanya di spot tertentu sebagai pembatas alami, setiap dataran punya akses naik (lereng/setapak/tangga/jalan), undakan rendah bisa dilompati, tes otomatis semua dataran terjangkau dari titik awal; gelombang alami kecil & besar di seluruh tanah (ladang & pondasi hanya dilandaikan, tidak rata licin); format dunia vektor (`scripts/world/`), pemanggang chunk (heightfield 0,5 m, splat, grid logika 1 m), runtime API logika di atas heightfield, tebing jadi lereng batu alami, grid hanya tampil saat pegang alat · Ref: 04 (ADR-031), 10
 - [ ] **P1B-05** Air lengkung: sungai berkelok (lebar & kedalaman per titik, mengalir, tidak buntu), danau/kolam bentuk bebas dengan tepian landai, shader air ACNH (pantulan langit, kilau, buih tepi, riak), curug & jembatan di atas sistem baru; **jembatan kayu melengkung** ke atas (permintaan user, mis. jembatan Lembang): dek berbentuk busur, tinggi pijakan pemain ikut lengkungan · Ref: 04 (ADR-031), 10
 - [ ] **P1B-06** Vegetasi & hiasan alam (padang rumput lebat bertekstur, bukan bidang hijau polos; user: **rumput = aset 3D sungguhan, bukan garis/bidang tipis**: gerumbul rumput stylized bervolume beberapa variasi, instancing, bergoyang angin, menyibak saat dilewati): rumput lebat bergoyang angin (instancing), bunga, alang-alang, teratai, batu di spot alami (aturan otomatis + manual) · Ref: 42, 10
-- [ ] **P1B-07** Aset bulat stylized: pohon, semak, batu, pagar, lampu, prop & bangunan bergaya ACNH (paket CC0 + model khas Bandung buatan sendiri), catat `CREDITS.md`; **papan & plang didesain ulang** (masukan user 2026-11-27: yang sekarang datar & kepanjangan): kecil, rapi & masuk konsep game; **nama jalan** ala plang hijau Bandung di tiang, **papan nama tempat** kayu, **papan toko beda-beda sesuai jenisnya** seperti aslinya (warung cat tangan, kafe papan gantung, konter neon box, laundry banner, dll.); setiap info di tempat umum punya **papan buletin** fisik · Ref: 42
+- [ ] **P1B-07** Aset bulat stylized: pohon, semak, batu, pagar, lampu, prop & bangunan bergaya ACNH (paket CC0 + model khas Bandung buatan sendiri), catat `CREDITS.md` · Ref: 42
+- [ ] **P1B-07b** Semua papan sekaligus (masukan user 2026-11-27, dikerjakan berurutan): **papan buletin fisik di semua titik info/"Baca"** (bug: Kebun Warga Lembang punya interaksi "E Baca" tanpa papan) + tes "setiap titik baca wajib punya papan"; **papan nama tempat** kayu kecil & rapi, **nama jalan** ala plang hijau Bandung di tiang, **papan toko beda-beda sesuai jenisnya** seperti aslinya (warung cat tangan, kafe papan gantung, konter neon box, laundry banner, dll.); bukan lagi papan datar memanjang · Ref: 42, 10
 - [ ] **P1B-08** Karakter chibi baru pemain A (Aldi) & Michelle: model bulat, wajah ekspresif (mata/mulut berganti), animasi idle/jalan/lari/lompat + emote, pewarnaan & outfit dasar · Ref: 15, 42
 - [ ] **P1B-09** Dunia pulau: satu koordinat dunia, chunk 64 m streaming (cincin 3×3 + LOD jauh, LRU, pramuat), pantai & laut sebagai batas, sungai besar penghubung desa bermuara ke laut, tata letak kasar desa · Ref: 04 (ADR-032), 10
 - [ ] **P1B-10** Migrasi: Lembang, Buahbatu, sandbox & interior ke format baru sebagai pulau awal; pensiunkan `.tmj`/atlas petak/`edge`; tes aturan dunia baru · Ref: 10
